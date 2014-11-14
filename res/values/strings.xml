@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Général -->
+    <string name="app_name">IIEns</string>
+    <string name="action_settings">Paramètres</string>
+
+    <!-- activity_login.xml -->
+
+    <string name="txt_username">Identifiant ARISE</string>
+    <string name="txt_password">Mot de passe</string>
+    <string name="txt_button">Connexion</string>
+    <string name="anim_connexion">Connexion (bidon) en cours&#8230;</string>
+    <string name="error_incorrect">Erreur d\'identifiants</string>
+    <string name="error_field_required">Champ obligatoire</string>
+    <string name="auto_connect">Connexion automatique</string>
+
+    <!-- activity_main.xml -->
+    <string name="hello_world">Hello world!</string>
+    <string name="txt_menu_profil">Profil</string>
+    <string name="txt_menu_trombi">Trombinoscope</string>
+    <string name="txt_menu_edt">Emploi du temps</string>
+    <string name="open_menu">Ouverture du menu</string>
+    <string name="close_menu">Fermeture du menu</string>
+
+    <!-- fragment_accueil.xml -->
+    <string name="rss_title">Titre flux rss</string>
+    <string name="rss_content">Contenu flux rss</string>
+    <string name="rss_author">Auteur flux rss</string>
+    <string name="description">Description</string>
+    <string name="fetch">Fetch Feed</string>
+    <string name="rss_feed">Problème de réception</string>
+
+    <!-- fragment_photos.xml -->
+    <string name="page_photo">La fonctionnalité d\'affichage des photos n\'est pas encore disponible &#8230;</string>
+    <string name="desc">Photo</string>
+    <string name="download">Télécharger</string>
+
+    <!-- fragment_profil.xml -->
+    <string name="page_profil">La fonctionnalité d\'affichage et modification du profil n\'est pas encore disponible &#8230;</string>
+
+    <!-- fragment_trombi.xml -->
+    <string name="page_trombi">La fonctionnalité d\'affichage du trombi n\'est pas encore disponible &#8230;</string>
+
+    <string-array name="option">
+        <item>commencant par</item>
+        <item>contenant</item>
+    </string-array>
+
+    <string name="trombi_nom">Nom de famille</string>
+    <string name="trombi_prenom">Prénom</string>
+    <string name="trombi_pseudo">Pseudo</string>
+    <string name="trombi_tel">Téléphone</string>
+    <string name="trombi_tel_portable">Portable</string>
+
+    <string-array name="option_tel">
+        <item>portable</item>
+        <item>fixe</item>
+    </string-array>
+
+    <string name="txt_back_button">Retour</string>
+    <string name="txt_dwld_button">Télécharger</string>
+    <string name="sexe">Sexe</string>
+    <string name="masculin">Masculin</string>
+    <string name="feminin">Féminin</string>
+    <string name="promo">Promo</string>
+
+    <string-array name="promo">
+        <item>1A (Promo 2016)</item>
+        <item>2A (Promo 2015)</item>
+        <item>3A (Promo 2014)</item>
+        <item>Viieux</item>
+    </string-array>
+
+    <string name="antenne">Etudie à</string>
+    <string name="antenne_evry">Evry</string>
+    <string name="antenne_stras">Strasbourg</string>
+    <string name="groupe">Groupe</string>
+
+    <string-array name="option_groupe">
+        <item>Tous les groupes</item>
+        <item value="1">Groupe 1</item>
+        <item value="1.1">Groupe 1.1</item>
+        <item value="1.2">Groupe 1.2</item>
+        <item value="2">Groupe 2</item>
+        <item value="2.1">Groupe 2.1</item>
+        <item value="2.2">Groupe 2.2</item>
+        <item value="3">Groupe 3</item>
+        <item value="3.1">Groupe 3.1</item>
+        <item value="3.2">Groupe 3.2</item>
+        <item value="4">Groupe 4</item>
+        <item value="4.1">Groupe 4.1</item>
+        <item value="4.2">Groupe 4.2</item>
+        <item value="5">Groupe 5</item>
+        <item value="6">Groupe 6</item>
+        <item value="FIPA">Groupe FIPA</item>
+    </string-array>
+
+    <string name="logement">Résidence</string>
+
+    <string-array name="option_logement">
+        <item></item>
+        <item>ARPEJ</item>
+        <item>Aston (UK)</item>
+        <item>Autre (Ailleurs)</item>
+        <item>Autre (Evry)</item>
+        <item>Blaise Pascal</item>
+        <item>Chalmers</item>
+        <item>Elsa Triolet</item>
+        <item>Hull (Canada)</item>
+        <item>Hull (UK)</item>
+        <item>Karlsruhe</item>
+        <item>Le dragueur</item>
+        <item>Les Coquibus</item>
+        <item>Les Etudines de la Cathédrale</item>
+        <item>Les Estudines du Parc</item>
+        <item>Manchester</item>
+        <item>Oxford</item>
+        <item>Sherbrooke</item>
+        <item>U6</item>
+    </string-array>
+
+    <string name="clubs">Appartient à</string>
+
+    <string-array name="option_club_services">
+        <item value="arise">ARISE</item>
+        <item value="iiepp">IIE++</item>
+        <item value="diese">Dièse</item>
+        <item value="iimage">IImagE</item>
+        <item value="bar">Le Bar&#169;</item>
+        <item value="resiie">ResIIE</item>
+        <item value="liien">Liien</item>
+        <item value="a3ie">A3IE</item>
+        <item value="cuisine">CuIsInE</item>
+        <item value="aeiie">Bureau des Eleves</item>
+        <item value="cbde">CBDE</item>
+        <item value="aperitife">AperItIfE</item>
+        <item value="cbda">CBDA</item>
+    </string-array>
+    <string-array name="option_club_event">
+        <item value="skiie">SkIIE</item>
+        <item value="forumiie">ForumIIE</item>
+        <item value="kartiie">KartIIE</item>
+        <item value="gala">gala</item>
+        <item value="wei">WEI</item>
+        <item value="soireeor">soireeor</item>
+        <item value="agora">Agora</item>
+        <item value="agora-dev">Agora-dev</item>
+        <item value="misteriie">MisterIIE</item>
+    </string-array>
+    <string-array name="option_club_loisir">
+        <item value="skiie">SkIIE</item>
+        <item value="forumiie">ForumIIE</item>
+        <item value="kartiie">KartIIE</item>
+        <item value="gala">gala</item>
+        <item value="wei">WEI</item>
+        <item value="soireeor">soireeor</item>
+        <item value="agora">Agora</item>
+        <item value="agora-dev">Agora-dev</item>
+        <item value="misteriie">MisterIIE</item>
+    </string-array>
+    <string-array name="option_club_culture">
+        <item value="robot">Club de Robotique</item>
+        <item value="muzzik">Muzzik</item>
+        <item value="iimonde">IImondE</item>
+        <item value="lumiiere">LumIIEre</item>
+        <item value="origamie">OrIgamIE</item>
+        <item value="dansiie">Dansiie</item>
+        <item value="nightiies">Nightiies</item>
+        <item value="cid">CID</item>
+        <item value="i-tv">i-tv</item>
+        <item value="dailiieplanet">Dailiie Planet</item>
+        <item value="siana">SIANA</item>
+        <item value="realitiie">RealitIIE</item>
+        <item value="securitiie">SecuritIIE</item>
+        <item value="cccm">CCCM</item>
+        <item value="radioactive">RadIoactIvE</item>
+    </string-array>
+    <string-array name="option_club_listesBdE">
+        <item value="oq-liste">oq-liste</item>
+        <item value="imagine">ImagInE</item>
+        <item value="listriie">List\'R\'iie</item>
+        <item value="acidalie">Acidalie</item>
+        <item value="dynamiite">DynamIItE</item>
+        <item value="breizhdelist">BreizhDeList</item>
+        <item value="paradiise">ParadIIsE</item>
+        <item value="litriie">Lit\'R\'IIE</item>
+        <item value="evil">Evil</item>
+        <item value="inutiliste">Inutiliste</item>
+        <item value="aliive">ALIIVE</item>
+        <item value="vitamine">ViTAMiNe</item>
+        <item value="bronziie">BronzIIE</item>
+        <item value="baliistemboy">BalIIstEmboy</item>
+        <item value="poniie">PonIIE</item>
+        <item value="francaiise">Françaiise</item>
+        <item value="defaitiiste">DefaitIIstE</item>
+        <item value="sicile">sIcIlE</item>
+        <item value="deciibel">Deciibel</item>
+        <item value="ignite">iGNiTe</item>
+        <item value="tartiine">TartIInE</item>
+        <item value="borderliine">BORDERLiiNe</item>
+        <item value="vikinge">ViKiNGe</item>
+        <item value="metaliiste">METALiiSTe</item>
+        <item value="diiscorde">dIIscordE</item>
+        <item value="anarchiie">AnarchIIE</item>
+        <item value="limite">LiMiTe</item>
+        <item value="riiettes">RIIEttes</item>
+        <item value="iice">iiCe</item>
+        <item value="diictature">ALLiiANCe</item>
+        <item value="boobiies">BOOBiieS</item>
+        <item value="proteiine">NousSommesDésolésIIE</item>
+    </string-array>
+    <string-array name="option_club_sport">
+        <item value="asiie">ASIIE</item>
+    </string-array>
+    <string-array name="option_club_human">
+        <item value="assoce2ie4l">2ie4l</item>
+        <item value="humaniie">HUMANIIE</item>
+    </string-array>
+    <string-array name="option_club_BdA">
+        <item value="extasii">ExtasII</item>
+        <item value="piixarte">PiixARTe</item>
+    </string-array>
+
+    <string name="txt_button2">Rechercher</string>
+
+    <!-- fragment_edt.xml -->
+    <string name="page_edt">La fonctionnalité d\'affichage de l\'emploi du temps n\'est pas encore disponible &#8230;</string>
+    <string name="chk_1A">1A</string>
+    <string name="chk_2A">2A</string>
+    <string name="chk_3A">3A</string>
+    <string name="edt_search_txt">Emploi du temps des : </string>
+    <string name="edt_date_txt">pour la semaine du : </string>
+    <string name="edt_groupe_txt">Groupes -> afficher :</string>
+
+    <!-- activity_preferences.xml -->
+    <string name="pref_edt">Emploi du temps</string>
+    <string name="pref_news">News</string>
+    <string name="pref_ok_button"></string>
+
+    <string-array name="pref_edt_promo">
+        <item value="1">1A</item>
+        <item value="2">2A</item>
+        <item value="3">3A</item>
+    </string-array>
+
+    <string name="pref_edt_alloptions">Toutes les options</string>
+    <string name="pref_edt_myoptions">Seulement mes options</string>
+    <string name="info_ca_arise"><![CDATA[<h2>Accepter la CA (Certificate Authority) d\'Arise</h2> Tu te demandes peut-être pourquoi ton Firefox, ton Chrome, ou même ton Internet Explorer (bouh !) râle lorsque tu veux accéder aux pages d\'iiens.net en https? ? Que signifient ces messages biscornus parlant de “Invalid security certificate” ?<br/>
+Petite explication: Lorsque tu te connectes à des sous-domaines de iiens.net, il est fréquent que le protocole https (http + SSL ce qui permet d\'avoir une connexion sécurisée) soit utilisé. Seulement voilà, pour cela on utilise un certificat d\'authentification, émis par une CA (Certificate Authority) qui est une tierce partie permettant d\'authentifier, dans notre cas, le serveur.<br/>
+Acheter un certificat coûtant plutôt cher, Arise est son propre CA. Mais ton navigateur ne sait pas par défaut que Arise est une CA à qui l\'on peut faire confiance. Il faut donc lui dire.<br/> Tu vas donc procéder à l\'installation du certificat de la CA Arise &#8230; pour faire confiance à Arise !<br/> Pour cela : <ul><li>Clique sur le bouton ci-dessous : le certificat va être téléchargé sur ton smartphone</li><li>Vas dans Paramètres > Sécurité et clique sur "Installer depuis la carte SD"</li> </ul>]]></string>
+
+</resources>

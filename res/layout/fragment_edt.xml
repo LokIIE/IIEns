@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/edt_formulaire"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="left"
+        android:orientation="vertical"
+        android:visibility="visible" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/edt_search_txt"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/chk_promo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal" >
+
+                <RadioButton
+                    android:id="@+id/chk_1A"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chk_1A" />
+
+                <RadioButton
+                    android:id="@+id/chk_2A"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chk_2A" />
+
+                <RadioButton
+                    android:id="@+id/chk_3A"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/chk_3A" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/edt_date_txt"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/edt_picked_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@null"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" />
+
+            <ImageButton
+                android:id="@+id/edt_pick_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:contentDescription="@null"
+                android:cropToPadding="true"
+                android:src="@drawable/ic_calendar" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/edt_groupe_txt" />
+
+            <Spinner
+                android:id="@+id/edt_groupe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:entries="@array/edt_option_groupe"
+                android:padding="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp" >
+            </Spinner>
+        </LinearLayout>
+
+        <include layout="@layout/edt_options2a" />
+
+        <include layout="@layout/edt_options3a" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+            <Button
+                android:id="@+id/edt_search_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@null"
+                android:text="@string/txt_button2" />
+        </LinearLayout>
+    </LinearLayout>
+
+<!--     <include layout="@layout/progress_spinner" /> -->
+
+    <LinearLayout
+        android:id="@+id/edt_result"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/edt_date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/darkorange"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            layout="@layout/fragment_listview" />
+
+        <Button
+            android:id="@+id/edt_newsearch_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@null"
+            android:text="@string/newsearch_button" />
+    </LinearLayout>
+
+</LinearLayout>

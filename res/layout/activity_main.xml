@@ -1,0 +1,23 @@
+<android.support.v4.widget.DrawerLayout android:id="@+id/drawer_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+  	android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.iiens.net.Main"
+    android:background="@color/white" >
+
+ 	<!-- Page principale -->
+	<FrameLayout
+    	android:id="@+id/content"
+    	android:layout_width="match_parent"
+    	android:layout_height="match_parent" />
+  	
+	<!-- Menu de navigation -->
+	<ListView android:id="@+id/menu"
+		android:layout_width="240dp"
+   		android:layout_height="match_parent"
+    	android:layout_gravity="start"
+    	android:background="#F5F5DC"/>
+ 
+</android.support.v4.widget.DrawerLayout>
+    

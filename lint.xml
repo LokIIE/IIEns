@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="ContentDescription" severity="ignore" />
+    <issue id="GifUsage" severity="ignore" />
+    <issue id="IconDensities" severity="ignore" />
+    <issue id="IconExpectedSize" severity="ignore" />
+    <issue id="IconLauncherShape" severity="ignore" />
+    <issue id="IconLocation" severity="ignore" />
+    <issue id="Overdraw" severity="ignore" />
+    <issue id="RtlEnabled" severity="ignore" />
+    <issue id="RtlHardcoded" severity="ignore" />
+    <issue id="SelectableText" severity="ignore" />
+    <issue id="SimpleDateFormat" severity="ignore" />
+    <issue id="UnusedIds" severity="ignore" />
+    <issue id="UnusedResources" severity="ignore" />
+</lint>
