@@ -10,7 +10,7 @@
     </style>
     
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">@color/darkorange</item>
+        <item name="android:background">@color/orange</item>
     </style>
 
     <style name="LoginFormContainer">

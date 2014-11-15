@@ -3,6 +3,7 @@ package com.iiens.net;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
@@ -71,18 +72,25 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 		nameValuePairs.add(new BasicNameValuePair("type","edt"));
 		nameValuePairs.add(new BasicNameValuePair("date", date));
 		nameValuePairs.add(new BasicNameValuePair("promo", promo));
+		
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPost httppost = new HttpPost(scriptURL);
+		
+		try {
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		} catch (UnsupportedEncodingException e) {
+			Log.e("edt_get", "Error in encoding nameValuePairs (unsupported) " + e.toString());
+		}
 
 		// Envoi de la requête au script PHP.
 		try {
-			HttpClient httpclient = new DefaultHttpClient();
-			HttpPost httppost = new HttpPost(scriptURL);
-			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			HttpResponse response = httpclient.execute(httppost);
 			HttpEntity entity = response.getEntity();
-			is = entity.getContent();
-
+			if (entity != null) is = entity.getContent();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
 		} catch (Exception e) {
-			Log.e("log_tag", "Error in http connection " + e.toString());
+			Log.e("edt_get", "Error in http connection " + e.toString());
 		}
 
 		// Conversion de la requête en string
@@ -94,10 +102,13 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 				sb.append(line + "\n");
 			}
 			is.close();
-			result=sb.toString();
-			//Log.d("sdfdsf", "result " + result);
+			result = sb.toString();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			Log.e("edt_get", "Error in encoding InputStreamReader (unsupported) " + e.toString());
 		} catch (Exception e) {
-			Log.e("log_tag", "Error converting result " + e.toString());
+			Log.e("edt_get", "Error converting result " + e.toString());
 		}
 
 		// Parse les données JSON
@@ -107,7 +118,9 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 				JSONObject json_data = jArray.getJSONObject(i);
 				filterItems(json_data, edtItemsList, filtre);
 			}
-		}catch(JSONException e){
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch(JSONException e){
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 

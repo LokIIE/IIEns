@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class EdtItem {
-	private String[] sallesInfo = {"130", "131", "225", "227", "228", "233", "251", "253", "258", "269"};
+	// private String[] sallesInfo = {"130", "131", "225", "227", "228", "233", "251", "253", "258", "269"};
 
 	private String nom_matiere;
 	private String nom_prof;
@@ -40,22 +40,22 @@ public class EdtItem {
 			setType(json_data.getString("nom_type"));
 			setSalle(json_data.getString("salle"));
 			setGroupe(json_data.getString("nom_groupe"));
-			if (isInList(salle, sallesInfo)) {
-				setType("TP");
-			}
+//			if (isInList(salle, sallesInfo)) {
+//				setType("TP");
+//			}
 		} catch(JSONException e){
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 	}
 
-	private boolean isInList (String value, String[] list) {
-		if (value == null) return false;
-
-		for (int i=0; i < list.length; i++) {
-			if (list[i].equals(value)) {
-				return true;
-			}
-		}
-		return false;
-	}
+//	private boolean isInList (String value, String[] list) {
+//		if (value == null) return false;
+//
+//		for (int i=0; i < list.length; i++) {
+//			if (list[i].equals(value)) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 }

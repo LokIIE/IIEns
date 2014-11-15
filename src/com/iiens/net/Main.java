@@ -36,8 +36,8 @@ public class Main extends Activity {
 			new TwitterNews()
 	};
 	private int defaultFragmentNumber = 0; // Number of the fragment to show first after the SplashScreen
-	private String scriptURL = "*****"; // Address of the script to make database queries
-	
+	private String scriptURL = "https://magadeva.iiens.net/middleware.php"; // Address of the script to make database queries
+
 	private ListView menu;
 	private ActionBarDrawerToggle drawerToggle;
 	private DrawerLayout drawerLayout;
@@ -49,6 +49,10 @@ public class Main extends Activity {
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		if (savedInstanceState != null) {
+			currentFragment = savedInstanceState.getInt("currentFragment");
+			mainBundle.putAll(savedInstanceState);
+		}
 		setContentView(R.layout.activity_main);
 
 		drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -57,13 +61,25 @@ public class Main extends Activity {
 		mainBundle.putString("scriptURL", scriptURL);
 		// mainBundle = getIntent().getExtras();
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
 		createMenu();
 		if (currentFragment == -1) openFragment(defaultFragmentNumber);
 		else openFragment(currentFragment);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
+	
+	/* Action after (for ex) the screen orientation has been changed */
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		super.onRestoreInstanceState(savedInstanceState);
 	}
 
 	@Override
@@ -87,17 +103,17 @@ public class Main extends Activity {
 	{
 		super.onSaveInstanceState(outState);
 		outState.putInt("currentFragment", currentFragment);
-		frag.onSaveInstanceState(outState);
 	}
 
-	/* Action after (for ex) the screen orientation has been changed */
 	@Override
-	public void onRestoreInstanceState(Bundle savedInstanceState)
-	{
-		super.onRestoreInstanceState(savedInstanceState);
-		mainBundle.putAll(savedInstanceState);
-		currentFragment = savedInstanceState.getInt("currentFragment");
-		openFragment(currentFragment);
+	protected void onPause(){
+		super.onPause();
+	}
+	
+	@Override
+	protected void onStop(){
+		mainBundle.clear();
+		super.onStop();
 	}
 
 	/* Create the menu and add the items to it */
@@ -108,7 +124,7 @@ public class Main extends Activity {
 		// Menu icon on the action bar
 		drawerToggle = new ActionBarDrawerToggle(this, 
 				drawerLayout, 
-				R.drawable.ic_launcher, 
+				R.drawable.ic_menu, 
 				R.string.open_menu, 
 				R.string.close_menu);
 
@@ -120,7 +136,8 @@ public class Main extends Activity {
 		menu.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override @SuppressWarnings("rawtypes")
 			public void onItemClick(AdapterView parent, View view, int position, long id) {
-				openFragment(position);
+				if (currentFragment != position) openFragment(position);
+				else drawerLayout.closeDrawer(menu);
 			}
 		});	
 	}
@@ -129,24 +146,17 @@ public class Main extends Activity {
 	private void openFragment(int position) {
 		FragmentManager fragmentManager = getFragmentManager();
 
-		if (currentFragment != position) {
-			frag = menuFragments[position];
-			if (frag != null) {
-				currentFragment = position;
-				frag.setArguments(mainBundle);
-				fragmentManager.beginTransaction().replace(R.id.content, frag).commit();
+		frag = menuFragments[position];
+		if (frag != null) {
+			currentFragment = position;
+			frag.setArguments(mainBundle);
+			fragmentManager.beginTransaction().replace(R.id.content, frag).commit();
 
-				// Highlight the selected item, update the title, and close the drawer
-				menu.setItemChecked(position, true);
-				getActionBar().setTitle(menuItems[position]);
-			}
+			// Highlight the selected item, update the title, and close the drawer
+			menu.setItemChecked(position, true);
+			getActionBar().setTitle(menuItems[position]);
 		}
 		drawerLayout.closeDrawer(menu);
 	}
 
-	@Override
-	protected void onStop(){
-		mainBundle.clear();
-		super.onStop();
-	}
 }

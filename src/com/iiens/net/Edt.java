@@ -70,7 +70,7 @@ public class Edt extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		view =  inflater.inflate(R.layout.fragment_edt, container, false);
+		view =  inflater.inflate(R.layout.edt_formulaire, container, false);
 		bundle = this.getArguments();
 		super.onCreate(savedInstanceState);
 
