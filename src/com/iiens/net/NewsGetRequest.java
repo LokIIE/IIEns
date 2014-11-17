@@ -13,6 +13,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,14 +52,26 @@ public class NewsGetRequest extends AsyncTask<Void, Void, ArrayList<NewsItem>> {
 
 		// Envoi de la commande http
 		try {
-			HttpClient httpclient = new DefaultHttpClient();
+			HttpParams httpParameters = new BasicHttpParams();
+			// Set the timeout in milliseconds until a connection is established.
+			// The default value is zero, that means the timeout is not used. 
+			int timeoutConnection = 5000;
+			HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+			// Set the default socket timeout (SO_TIMEOUT) 
+			// in milliseconds which is the timeout for waiting for data.
+			int timeoutSocket = 5000;
+			
+			HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+			HttpClient httpclient = new DefaultHttpClient(httpParameters);
 			HttpPost httppost = new HttpPost(scriptURL);
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 			HttpResponse response = httpclient.execute(httppost);
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();
+		} catch (NullPointerException e) {
+			Log.e("news_get", "Null Pointer Exception " + e.toString());
 		} catch (Exception e) {
-			Log.e("log_tag", "Error in http connection " + e.toString());
+			Log.e("news_get", "Error in http connection " + e.toString());
 		}
 
 		// Conversion de la requête en string
@@ -69,9 +84,8 @@ public class NewsGetRequest extends AsyncTask<Void, Void, ArrayList<NewsItem>> {
 			}
 			is.close();
 			result=sb.toString();
-			//Log.d("sdfdsf", "result " + result);
 		} catch (Exception e) {
-			Log.e("log_tag", "Error converting result " + e.toString());
+			Log.e("news_get", "Error converting result " + e.toString());
 		}
 
 		// Parse les données JSON
@@ -84,7 +98,7 @@ public class NewsGetRequest extends AsyncTask<Void, Void, ArrayList<NewsItem>> {
 				newsItemsList.add(newsItem);
 			}
 		} catch(JSONException e){
-			Log.e("log_tag", "Error parsing data " + e.toString());
+			Log.e("news_get", "Error parsing data " + e.toString());
 		}
 
 		return newsItemsList;

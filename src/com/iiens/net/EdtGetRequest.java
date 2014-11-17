@@ -18,7 +18,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -36,7 +35,6 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 	private String promo;
 	static private String[] filtre;
 	private Context context;
-	private ProgressDialog dialog;
 	private String scriptURL;
 
 	public EdtGetRequest(Context context, String date, String promo, String[] groupFiltre, String scriptURL){
@@ -46,14 +44,7 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 		this.context = context;
 		this.scriptURL = scriptURL;
 	}
-
-	@Override
-	protected void onPreExecute() {
-		dialog = new ProgressDialog(context);
-		dialog.setMessage("Please wait");
-		dialog.show();
-	}
-
+	
 	@Override
 	protected ArrayList<EdtItem> doInBackground(Void... voids) {
 		edtItemsList = getEdtRequest(date, promo, scriptURL);
@@ -64,6 +55,23 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 	public static ArrayList<EdtItem> getEdtRequest(String date, String promo, String scriptURL) {
 
 		ArrayList<EdtItem> edtItemsList = new ArrayList<EdtItem>();
+		
+//		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+//		System.out.println("startdate: " + sdf.format(myCalendar.getTime()));
+//	    Date[] minMaxD = calcDateRangeWeek(myCalendar, Calendar.DAY_OF_WEEK);
+//	    Log.d("Min date", minMaxD[0].toString());
+//	    Log.d("Min date", minMaxD[1].toString());
+//	    
+//		public Date[] calcDateRangeWeek(Calendar c, int day) {
+//		    Date[] dr = new Date[2];
+//		    // setMin
+//		    c.set(day, Calendar.MONDAY);
+//		    dr[0] = c.getTime();
+//		    // setMax
+//		    c.set(day, Calendar.SUNDAY);
+//		    dr[1] = c.getTime();
+//		    return dr;
+//		}
 
 		InputStream is = null;
 		String result = "";
@@ -129,9 +137,6 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 
 	@Override
 	protected void onPostExecute(ArrayList<EdtItem> edtItemList) {
-		if (dialog.isShowing()) {
-			dialog.dismiss();
-		}
 	}
 
 	static private void filterItems(JSONObject json_data, ArrayList<EdtItem> edtItemsList, String[] filtre) {
@@ -165,4 +170,5 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 		}
 		return false;
 	}
+	
 }

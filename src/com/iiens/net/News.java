@@ -3,17 +3,17 @@ package com.iiens.net;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class News extends Fragment {
 
@@ -22,6 +22,13 @@ public class News extends Fragment {
 	// private Context context = new GlobalState();
 	private ArrayList<NewsItem> result = new ArrayList<NewsItem>();
 	private ListView mListView;
+	
+    // News constructor for creating fragment with arguments
+    public static News newInstance(Bundle mainBundle) {
+        News fragment = new News();
+        fragment.setArguments(mainBundle);
+        return fragment;
+    }
 
 	public Bundle getBundle(){
 		return bundle;
@@ -29,14 +36,16 @@ public class News extends Fragment {
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
+		Log.d("News", "onCreate called");
 		super.onCreate(savedInstanceState);
-		bundle = this.getArguments();
+		bundle = this.getArguments(); 
 		// retain this fragment
 		setRetainInstance(true);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
+		Log.d("News", "onActivityCreated called");
 		super.onActivityCreated(savedInstanceState);
 		if (savedInstanceState != null) {
 			// Restauration des données du contexte utilisateur
@@ -46,6 +55,7 @@ public class News extends Fragment {
 
 	@Override
 	public void onResume(){
+		Log.d("News", "onResume called");
 		super.onResume();
 	}
 
@@ -53,8 +63,8 @@ public class News extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
+		Log.d("News", "onCreateView called");
 		View view = inflater.inflate(R.layout.fragment_listview, container, false);
-		bundle = this.getArguments(); 
 		mListView = (ListView) view.findViewById(R.id.listview);
 		mListView.setDivider(null);
 
@@ -74,7 +84,7 @@ public class News extends Fragment {
 
 			NewsItemsAdapter newsAdapter = new NewsItemsAdapter(getActivity().getApplicationContext(), result, newsNumber);
 			mListView.setAdapter(newsAdapter);
-			saveResult(result, bundle, "news");
+			if (result.size() > 0) saveResult(result, bundle, "news");
 		} else {
 			Bundle newsBundle = bundle.getBundle("news");
 			result = new ArrayList<NewsItem>();
@@ -101,23 +111,30 @@ public class News extends Fragment {
 		return false;
 	}
 
-
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
-		switch (item.getItemId()) {
-		//		case R.id.action_refresh:
-		//			Toast.makeText(getActivity().getApplicationContext(), "Action refresh selected", Toast.LENGTH_LONG).show();
-		//			break;
-		case R.id.action_settings:
-			Toast.makeText(getActivity().getApplicationContext(), "Action Settings selected", Toast.LENGTH_LONG).show();
-			break;
-		default:
-			break;
-		}
-
-		return true;
+	public void onAttach(Activity activity) {
+		Log.d("News", "onAttach called");
+		super.onAttach(activity);
 	}
+
+
+	//	@Override
+	//	public boolean onOptionsItemSelected(MenuItem item) {
+	//		Log.d("News", "onOptionsItemSelected called");
+	//		// Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
+	//		switch (item.getItemId()) {
+	//		//		case R.id.action_refresh:
+	//		//			Toast.makeText(getActivity().getApplicationContext(), "Action refresh selected", Toast.LENGTH_LONG).show();
+	//		//			break;
+	//		case R.id.action_settings:
+	//			Toast.makeText(getActivity().getApplicationContext(), "Action Settings selected", Toast.LENGTH_LONG).show();
+	//			break;
+	//		default:
+	//			break;
+	//		}
+	//
+	//		return true;
+	//	}
 
 	private void saveResult(ArrayList<NewsItem> result, Bundle bundle, String key) {
 		int i = 0;
@@ -131,7 +148,7 @@ public class News extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState)
 	{
-		super.onSaveInstanceState(outState);
+		Log.d("News", "onSaveInstanceState called");
 		outState.putAll(bundle);
 	}
 

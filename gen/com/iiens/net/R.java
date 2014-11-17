@@ -19,72 +19,72 @@ public final class R {
         public static final int top_out=0x7f040007;
     }
     public static final class array {
-        public static final int edt_option_groupe=0x7f08000e;
-        public static final int edt_options2A_1=0x7f08000f;
-        public static final int edt_options2A_2=0x7f080010;
-        public static final int edt_options2A_3=0x7f080011;
-        public static final int edt_options2A_4=0x7f080012;
-        public static final int edt_options2A_5=0x7f080013;
-        public static final int edt_options2A_6=0x7f080014;
-        public static final int edt_options3A_1=0x7f080015;
-        public static final int edt_options3A_2=0x7f080016;
-        public static final int edt_options3A_3=0x7f080017;
-        public static final int edt_options3A_4=0x7f080018;
-        public static final int edt_options3A_5=0x7f080019;
-        public static final int edt_options3A_6=0x7f08001a;
-        public static final int option=0x7f080000;
-        public static final int option_club_BdA=0x7f08000c;
-        public static final int option_club_culture=0x7f080008;
-        public static final int option_club_event=0x7f080006;
-        public static final int option_club_human=0x7f08000b;
-        public static final int option_club_listesBdE=0x7f080009;
-        public static final int option_club_loisir=0x7f080007;
-        public static final int option_club_services=0x7f080005;
-        public static final int option_club_sport=0x7f08000a;
-        public static final int option_groupe=0x7f080003;
-        public static final int option_logement=0x7f080004;
-        public static final int option_tel=0x7f080001;
-        public static final int pref_edt_promo=0x7f08000d;
-        public static final int promo=0x7f080002;
+        public static final int edt_option_groupe=0x7f09000e;
+        public static final int edt_options2A_1=0x7f09000f;
+        public static final int edt_options2A_2=0x7f090010;
+        public static final int edt_options2A_3=0x7f090011;
+        public static final int edt_options2A_4=0x7f090012;
+        public static final int edt_options2A_5=0x7f090013;
+        public static final int edt_options2A_6=0x7f090014;
+        public static final int edt_options3A_1=0x7f090015;
+        public static final int edt_options3A_2=0x7f090016;
+        public static final int edt_options3A_3=0x7f090017;
+        public static final int edt_options3A_4=0x7f090018;
+        public static final int edt_options3A_5=0x7f090019;
+        public static final int edt_options3A_6=0x7f09001a;
+        public static final int option=0x7f090000;
+        public static final int option_club_BdA=0x7f09000c;
+        public static final int option_club_culture=0x7f090008;
+        public static final int option_club_event=0x7f090006;
+        public static final int option_club_human=0x7f09000b;
+        public static final int option_club_listesBdE=0x7f090009;
+        public static final int option_club_loisir=0x7f090007;
+        public static final int option_club_services=0x7f090005;
+        public static final int option_club_sport=0x7f09000a;
+        public static final int option_groupe=0x7f090003;
+        public static final int option_logement=0x7f090004;
+        public static final int option_tel=0x7f090001;
+        public static final int pref_edt_promo=0x7f09000d;
+        public static final int promo=0x7f090002;
     }
     public static final class attr {
     }
     public static final class color {
-        public static final int aqua=0x7f050011;
-        public static final int black=0x7f050000;
-        public static final int blue=0x7f050001;
-        public static final int clubback=0x7f05001f;
-        public static final int clubtxt=0x7f050020;
+        public static final int aqua=0x7f060011;
+        public static final int black=0x7f060000;
+        public static final int blue=0x7f060001;
+        public static final int clubback=0x7f06001f;
+        public static final int clubtxt=0x7f060020;
         /**  Couleurs pour l'edt 
          */
-        public static final int coursback=0x7f050017;
-        public static final int courstdback=0x7f05001d;
-        public static final int courstdtxt=0x7f05001e;
-        public static final int courstxt=0x7f050018;
-        public static final int cyan=0x7f050002;
-        public static final int darkorange=0x7f050016;
-        public static final int dkGray=0x7f050003;
-        public static final int fuchsia=0x7f05000c;
-        public static final int gray=0x7f050004;
-        public static final int green=0x7f050005;
-        public static final int lime=0x7f050012;
-        public static final int ltGray=0x7f050006;
-        public static final int magenta=0x7f050007;
-        public static final int maroon=0x7f050010;
-        public static final int navy=0x7f050014;
-        public static final int olive=0x7f05000e;
-        public static final int orange=0x7f050015;
-        public static final int purple=0x7f05000f;
-        public static final int red=0x7f050008;
-        public static final int silver=0x7f05000d;
-        public static final int tdback=0x7f050019;
-        public static final int tdtxt=0x7f05001a;
-        public static final int teal=0x7f050013;
-        public static final int tpback=0x7f05001b;
-        public static final int tptxt=0x7f05001c;
-        public static final int transparent=0x7f050009;
-        public static final int white=0x7f05000a;
-        public static final int yellow=0x7f05000b;
+        public static final int coursback=0x7f060017;
+        public static final int courstdback=0x7f06001d;
+        public static final int courstdtxt=0x7f06001e;
+        public static final int courstxt=0x7f060018;
+        public static final int cyan=0x7f060002;
+        public static final int darkorange=0x7f060016;
+        public static final int dkGray=0x7f060003;
+        public static final int fuchsia=0x7f06000c;
+        public static final int gray=0x7f060004;
+        public static final int green=0x7f060005;
+        public static final int lime=0x7f060012;
+        public static final int ltGray=0x7f060006;
+        public static final int magenta=0x7f060007;
+        public static final int maroon=0x7f060010;
+        public static final int navy=0x7f060014;
+        public static final int olive=0x7f06000e;
+        public static final int orange=0x7f060015;
+        public static final int purple=0x7f06000f;
+        public static final int red=0x7f060008;
+        public static final int silver=0x7f06000d;
+        public static final int tdback=0x7f060019;
+        public static final int tdtxt=0x7f06001a;
+        public static final int teal=0x7f060013;
+        public static final int tpback=0x7f06001b;
+        public static final int tptxt=0x7f06001c;
+        public static final int transparent=0x7f060009;
+        public static final int white=0x7f06000a;
+        public static final int yellow=0x7f06000b;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -94,8 +94,8 @@ public final class R {
          would include 7" and 10" devices in landscape (~960dp and ~1280dp respectively).
     
          */
-        public static final int activity_horizontal_margin=0x7f060000;
-        public static final int activity_vertical_margin=0x7f060001;
+        public static final int activity_horizontal_margin=0x7f070000;
+        public static final int activity_vertical_margin=0x7f070001;
     }
     public static final class drawable {
         public static final int a3ie=0x7f020000;
@@ -160,187 +160,191 @@ public final class R {
         public static final int white=0x7f02003b;
     }
     public static final class id {
-        public static final int Rechercher=0x7f0b0039;
-        public static final int action_settings=0x7f0b0044;
-        public static final int anniv_date=0x7f0b0011;
-        public static final int anniv_person=0x7f0b0012;
-        public static final int antenne_evry=0x7f0b0034;
-        public static final int antenne_stras=0x7f0b0035;
-        public static final int avatar=0x7f0b003e;
-        public static final int certificate_info=0x7f0b0000;
-        public static final int chk_1A=0x7f0b0015;
-        public static final int chk_2A=0x7f0b0016;
-        public static final int chk_3A=0x7f0b0017;
-        public static final int chk_promo=0x7f0b0014;
-        public static final int connexion_button=0x7f0b0009;
-        public static final int content=0x7f0b000b;
-        public static final int drawer_layout=0x7f0b000a;
-        public static final int edt_date=0x7f0b001d;
-        public static final int edt_formulaire=0x7f0b0013;
-        public static final int edt_groupe=0x7f0b001a;
-        public static final int edt_item_content=0x7f0b001f;
-        public static final int edt_newsearch_button=0x7f0b001e;
-        public static final int edt_option1=0x7f0b0021;
-        public static final int edt_option2=0x7f0b0022;
-        public static final int edt_option3=0x7f0b0023;
-        public static final int edt_option4=0x7f0b0024;
-        public static final int edt_option5=0x7f0b0025;
-        public static final int edt_option6=0x7f0b0026;
-        public static final int edt_options2A=0x7f0b0020;
-        public static final int edt_options3A=0x7f0b0027;
-        public static final int edt_pick_date=0x7f0b0019;
-        public static final int edt_picked_date=0x7f0b0018;
-        public static final int edt_result=0x7f0b001c;
-        public static final int edt_search_button=0x7f0b001b;
-        public static final int imgLogo=0x7f0b0010;
-        public static final int listview=0x7f0b0028;
-        public static final int login=0x7f0b0007;
-        public static final int login_form=0x7f0b0004;
-        public static final int login_status=0x7f0b0002;
-        public static final int login_status_message=0x7f0b0003;
-        public static final int menu=0x7f0b000c;
-        public static final int message=0x7f0b0041;
-        public static final int nom=0x7f0b002a;
-        public static final int option_club_ancienBdE=0x7f0b0038;
-        public static final int option_groupe=0x7f0b0036;
-        public static final int option_logement=0x7f0b0037;
-        public static final int option_nom=0x7f0b0029;
-        public static final int option_prenom=0x7f0b002b;
-        public static final int option_pseudo=0x7f0b002d;
-        public static final int option_tel=0x7f0b002f;
-        public static final int pager_header=0x7f0b0043;
-        public static final int password=0x7f0b0006;
-        public static final int pref_ok=0x7f0b000f;
-        public static final int pref_spinner_promo=0x7f0b000e;
-        public static final int prenom=0x7f0b002c;
-        public static final int promo=0x7f0b0033;
-        public static final int pseudo=0x7f0b002e;
-        public static final int publishtime=0x7f0b0040;
-        public static final int remember_login=0x7f0b0008;
-        public static final int rss_description=0x7f0b003c;
-        public static final int rss_header=0x7f0b003b;
-        public static final int sexe_f=0x7f0b0032;
-        public static final int sexe_m=0x7f0b0031;
-        public static final int spinner_layout=0x7f0b003d;
-        public static final int startBtn=0x7f0b0001;
-        public static final int surfView=0x7f0b003a;
-        public static final int switch1=0x7f0b000d;
-        public static final int tel=0x7f0b0030;
-        public static final int useraccount=0x7f0b003f;
-        public static final int username=0x7f0b0005;
-        public static final int vpPager=0x7f0b0042;
+        public static final int Rechercher=0x7f0c0038;
+        public static final int action_settings=0x7f0c0044;
+        public static final int anniv_date=0x7f0c000f;
+        public static final int anniv_person=0x7f0c0010;
+        public static final int antenne_evry=0x7f0c0033;
+        public static final int antenne_stras=0x7f0c0034;
+        public static final int avatar=0x7f0c003f;
+        public static final int chk_1A=0x7f0c0013;
+        public static final int chk_2A=0x7f0c0014;
+        public static final int chk_3A=0x7f0c0015;
+        public static final int chk_promo=0x7f0c0012;
+        public static final int connexion_button=0x7f0c0007;
+        public static final int content=0x7f0c0009;
+        public static final int drawer_layout=0x7f0c0008;
+        public static final int edt_calendar=0x7f0c0017;
+        public static final int edt_date=0x7f0c0023;
+        public static final int edt_formulaire=0x7f0c0011;
+        public static final int edt_groupe=0x7f0c0018;
+        public static final int edt_item_content=0x7f0c001a;
+        public static final int edt_newsearch_button=0x7f0c0024;
+        public static final int edt_option1=0x7f0c001c;
+        public static final int edt_option2=0x7f0c001d;
+        public static final int edt_option3=0x7f0c001e;
+        public static final int edt_option4=0x7f0c001f;
+        public static final int edt_option5=0x7f0c0020;
+        public static final int edt_option6=0x7f0c0021;
+        public static final int edt_options2A=0x7f0c001b;
+        public static final int edt_options3A=0x7f0c0022;
+        public static final int edt_picked_date=0x7f0c0016;
+        public static final int edt_search_button=0x7f0c0019;
+        public static final int imgLogo=0x7f0c000e;
+        public static final int item_subtitle=0x7f0c003c;
+        public static final int item_title=0x7f0c003d;
+        public static final int listview=0x7f0c0025;
+        public static final int login=0x7f0c0005;
+        public static final int login_form=0x7f0c0002;
+        public static final int login_status=0x7f0c0000;
+        public static final int login_status_message=0x7f0c0001;
+        public static final int menu=0x7f0c000a;
+        public static final int message=0x7f0c0042;
+        public static final int nom=0x7f0c0029;
+        public static final int option_club_ancienBdE=0x7f0c0037;
+        public static final int option_groupe=0x7f0c0035;
+        public static final int option_logement=0x7f0c0036;
+        public static final int option_nom=0x7f0c0028;
+        public static final int option_prenom=0x7f0c002a;
+        public static final int option_pseudo=0x7f0c002c;
+        public static final int option_tel=0x7f0c002e;
+        public static final int pager_header=0x7f0c0043;
+        public static final int password=0x7f0c0004;
+        public static final int pref_ok=0x7f0c000d;
+        public static final int pref_spinner_promo=0x7f0c000c;
+        public static final int prenom=0x7f0c002b;
+        public static final int promo=0x7f0c0032;
+        public static final int pseudo=0x7f0c002d;
+        public static final int publishtime=0x7f0c0041;
+        public static final int remember_login=0x7f0c0006;
+        public static final int rss_description=0x7f0c003b;
+        public static final int rss_header=0x7f0c003a;
+        public static final int sexe_f=0x7f0c0031;
+        public static final int sexe_m=0x7f0c0030;
+        public static final int sliding_tabs=0x7f0c0026;
+        public static final int spinner_layout=0x7f0c003e;
+        public static final int surfView=0x7f0c0039;
+        public static final int switch1=0x7f0c000b;
+        public static final int tel=0x7f0c002f;
+        public static final int useraccount=0x7f0c0040;
+        public static final int username=0x7f0c0003;
+        public static final int viewpager=0x7f0c0027;
     }
     public static final class layout {
-        public static final int activity_certificate=0x7f030000;
-        public static final int activity_login=0x7f030001;
-        public static final int activity_main=0x7f030002;
-        public static final int activity_preferences=0x7f030003;
-        public static final int activity_splash=0x7f030004;
-        public static final int anniv_item=0x7f030005;
-        public static final int edt_formulaire=0x7f030006;
-        public static final int edt_item_controle=0x7f030007;
-        public static final int edt_item_cours=0x7f030008;
-        public static final int edt_item_courstd=0x7f030009;
-        public static final int edt_item_td=0x7f03000a;
-        public static final int edt_item_tp=0x7f03000b;
-        public static final int edt_options2a=0x7f03000c;
-        public static final int edt_options3a=0x7f03000d;
-        public static final int edt_result=0x7f03000e;
-        public static final int fragment_listview=0x7f03000f;
+        public static final int activity_login=0x7f030000;
+        public static final int activity_main=0x7f030001;
+        public static final int activity_preferences=0x7f030002;
+        public static final int activity_splash=0x7f030003;
+        public static final int anniv_item=0x7f030004;
+        public static final int edt_formulaire=0x7f030005;
+        public static final int edt_item_controle=0x7f030006;
+        public static final int edt_item_cours=0x7f030007;
+        public static final int edt_item_courstd=0x7f030008;
+        public static final int edt_item_td=0x7f030009;
+        public static final int edt_item_tp=0x7f03000a;
+        public static final int edt_options2a=0x7f03000b;
+        public static final int edt_options3a=0x7f03000c;
+        public static final int edt_result=0x7f03000d;
+        public static final int fragment_listview=0x7f03000e;
+        public static final int fragment_sample=0x7f03000f;
         public static final int fragment_trombi=0x7f030010;
         public static final int mediaplayer=0x7f030011;
         public static final int news_item=0x7f030012;
-        public static final int progress_spinner=0x7f030013;
-        public static final int twitter_item=0x7f030014;
-        public static final int viewpager=0x7f030015;
+        public static final int pager_item=0x7f030013;
+        public static final int progress_spinner=0x7f030014;
+        public static final int twitter_item=0x7f030015;
+        public static final int viewpager=0x7f030016;
     }
     public static final class menu {
-        public static final int login=0x7f0a0000;
-        public static final int main=0x7f0a0001;
+        public static final int login=0x7f0b0000;
+        public static final int main=0x7f0b0001;
+    }
+    public static final class raw {
+        public static final int cacert=0x7f050000;
     }
     public static final class string {
-        public static final int action_settings=0x7f070001;
-        public static final int anim_connexion=0x7f070005;
-        public static final int antenne=0x7f070025;
-        public static final int antenne_evry=0x7f070026;
-        public static final int antenne_stras=0x7f070027;
+        public static final int action_settings=0x7f080001;
+        public static final int anim_connexion=0x7f080005;
+        public static final int antenne=0x7f080025;
+        public static final int antenne_evry=0x7f080026;
+        public static final int antenne_stras=0x7f080027;
         /**  Général 
          */
-        public static final int app_name=0x7f070000;
-        public static final int auto_connect=0x7f070008;
-        public static final int chk_1A=0x7f07002d;
-        public static final int chk_2A=0x7f07002e;
-        public static final int chk_3A=0x7f07002f;
-        public static final int close_menu=0x7f07000e;
-        public static final int clubs=0x7f07002a;
-        public static final int desc=0x7f070016;
-        public static final int description=0x7f070012;
-        public static final int download=0x7f070017;
-        public static final int edt_date_txt=0x7f070031;
-        public static final int edt_groupe_txt=0x7f070032;
-        public static final int edt_option1=0x7f07003a;
-        public static final int edt_option2=0x7f07003b;
-        public static final int edt_option3=0x7f07003c;
-        public static final int edt_option4=0x7f07003d;
-        public static final int edt_option5=0x7f07003e;
-        public static final int edt_option6=0x7f07003f;
-        public static final int edt_search_txt=0x7f070030;
-        public static final int error_field_required=0x7f070007;
-        public static final int error_incorrect=0x7f070006;
-        public static final int feminin=0x7f070023;
-        public static final int fetch=0x7f070013;
-        public static final int groupe=0x7f070028;
+        public static final int app_name=0x7f080000;
+        public static final int auto_connect=0x7f080008;
+        public static final int chk_1A=0x7f08002d;
+        public static final int chk_2A=0x7f08002e;
+        public static final int chk_3A=0x7f08002f;
+        public static final int close_menu=0x7f08000e;
+        public static final int clubs=0x7f08002a;
+        public static final int desc=0x7f080016;
+        public static final int description=0x7f080012;
+        public static final int download=0x7f080017;
+        public static final int edt_date_txt=0x7f080031;
+        public static final int edt_groupe_txt=0x7f080032;
+        public static final int edt_option1=0x7f08003a;
+        public static final int edt_option2=0x7f08003b;
+        public static final int edt_option3=0x7f08003c;
+        public static final int edt_option4=0x7f08003d;
+        public static final int edt_option5=0x7f08003e;
+        public static final int edt_option6=0x7f08003f;
+        public static final int edt_search_txt=0x7f080030;
+        public static final int error_field_required=0x7f080007;
+        public static final int error_incorrect=0x7f080006;
+        public static final int feminin=0x7f080023;
+        public static final int fetch=0x7f080013;
+        public static final int groupe=0x7f080028;
         /**  activity_main.xml 
          */
-        public static final int hello_world=0x7f070009;
-        public static final int info_ca_arise=0x7f070038;
-        public static final int logement=0x7f070029;
-        public static final int masculin=0x7f070022;
-        public static final int newsearch_button=0x7f070039;
-        public static final int open_menu=0x7f07000d;
+        public static final int hello_world=0x7f080009;
+        public static final int info_ca_arise=0x7f080038;
+        public static final int logement=0x7f080029;
+        public static final int masculin=0x7f080022;
+        public static final int newsearch_button=0x7f080039;
+        public static final int open_menu=0x7f08000d;
         /**  fragment_edt.xml 
          */
-        public static final int page_edt=0x7f07002c;
+        public static final int page_edt=0x7f08002c;
         /**  fragment_photos.xml 
          */
-        public static final int page_photo=0x7f070015;
+        public static final int page_photo=0x7f080015;
         /**  fragment_profil.xml 
          */
-        public static final int page_profil=0x7f070018;
+        public static final int page_profil=0x7f080018;
         /**  fragment_trombi.xml 
          */
-        public static final int page_trombi=0x7f070019;
+        public static final int page_trombi=0x7f080019;
         /**  activity_preferences.xml 
          */
-        public static final int pref_edt=0x7f070033;
-        public static final int pref_edt_alloptions=0x7f070036;
-        public static final int pref_edt_myoptions=0x7f070037;
-        public static final int pref_news=0x7f070034;
-        public static final int pref_ok_button=0x7f070035;
-        public static final int promo=0x7f070024;
-        public static final int rss_author=0x7f070011;
-        public static final int rss_content=0x7f070010;
-        public static final int rss_feed=0x7f070014;
+        public static final int pref_edt=0x7f080033;
+        public static final int pref_edt_alloptions=0x7f080036;
+        public static final int pref_edt_myoptions=0x7f080037;
+        public static final int pref_news=0x7f080034;
+        public static final int pref_ok_button=0x7f080035;
+        public static final int promo=0x7f080024;
+        public static final int rss_author=0x7f080011;
+        public static final int rss_content=0x7f080010;
+        public static final int rss_feed=0x7f080014;
         /**  fragment_accueil.xml 
          */
-        public static final int rss_title=0x7f07000f;
-        public static final int sexe=0x7f070021;
-        public static final int trombi_nom=0x7f07001a;
-        public static final int trombi_prenom=0x7f07001b;
-        public static final int trombi_pseudo=0x7f07001c;
-        public static final int trombi_tel=0x7f07001d;
-        public static final int trombi_tel_portable=0x7f07001e;
-        public static final int txt_back_button=0x7f07001f;
-        public static final int txt_button=0x7f070004;
-        public static final int txt_button2=0x7f07002b;
-        public static final int txt_dwld_button=0x7f070020;
-        public static final int txt_menu_edt=0x7f07000c;
-        public static final int txt_menu_profil=0x7f07000a;
-        public static final int txt_menu_trombi=0x7f07000b;
-        public static final int txt_password=0x7f070003;
+        public static final int rss_title=0x7f08000f;
+        public static final int sexe=0x7f080021;
+        public static final int trombi_nom=0x7f08001a;
+        public static final int trombi_prenom=0x7f08001b;
+        public static final int trombi_pseudo=0x7f08001c;
+        public static final int trombi_tel=0x7f08001d;
+        public static final int trombi_tel_portable=0x7f08001e;
+        public static final int txt_back_button=0x7f08001f;
+        public static final int txt_button=0x7f080004;
+        public static final int txt_button2=0x7f08002b;
+        public static final int txt_dwld_button=0x7f080020;
+        public static final int txt_menu_edt=0x7f08000c;
+        public static final int txt_menu_profil=0x7f08000a;
+        public static final int txt_menu_trombi=0x7f08000b;
+        public static final int txt_password=0x7f080003;
         /**  activity_login.xml 
          */
-        public static final int txt_username=0x7f070002;
+        public static final int txt_username=0x7f080002;
     }
     public static final class style {
         /** 
@@ -349,11 +353,11 @@ public final class R {
 
     
          */
-        public static final int AppBaseTheme=0x7f090000;
+        public static final int AppBaseTheme=0x7f0a0000;
         /**  inherit from the material theme 
          */
-        public static final int AppTheme=0x7f090003;
-        public static final int LoginFormContainer=0x7f090002;
-        public static final int MyActionBar=0x7f090001;
+        public static final int AppTheme=0x7f0a0003;
+        public static final int LoginFormContainer=0x7f0a0002;
+        public static final int MyActionBar=0x7f0a0001;
     }
 }

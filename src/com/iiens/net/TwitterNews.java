@@ -23,6 +23,13 @@ public class TwitterNews extends Fragment {
 	private String query = "#ENSIIE OR @ENSIIE OR @A3IE -RT";
 	private int tweetsNumber = 100;
 
+	// newInstance constructor for creating fragment with arguments
+	public static TwitterNews newInstance(Bundle mainBundle) {
+		TwitterNews fragment = new TwitterNews();
+		fragment.setArguments(mainBundle);
+		return fragment;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

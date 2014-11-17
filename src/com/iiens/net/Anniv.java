@@ -21,6 +21,15 @@ public class Anniv extends Fragment {
 	private Bundle bundle = new Bundle();
 	private ArrayList<AnnivItem> result = new ArrayList<AnnivItem>();
 
+	@Override // this method is only called once for this fragment
+	public void onCreate(Bundle savedInstanceState) {
+		Log.d("Anniv", "onCreate called");
+		super.onCreate(savedInstanceState);
+		bundle = this.getArguments(); 
+		// retain this fragment
+		setRetainInstance(true);
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -34,7 +43,7 @@ public class Anniv extends Fragment {
 
 		if (!bundle.containsKey("anniversaires") && isOnline()){
 			AnnivGetRequest getAnniv = new AnnivGetRequest(bundle.getString("scriptURL"));
-			
+
 			try {
 				result = getAnniv.execute().get();
 				AnnivItemsAdapter annivAdapter = new AnnivItemsAdapter(getActivity().getApplicationContext(), result);

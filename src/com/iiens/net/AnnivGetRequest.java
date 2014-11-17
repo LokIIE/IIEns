@@ -28,7 +28,7 @@ public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>>
 	public AnnivGetRequest(String scriptURL){
 		this.scriptURL = scriptURL;
 	}
-	
+
 	@Override
 	protected ArrayList<AnnivItem> doInBackground(Void... voids) {
 		AnnivItemsList = getAnnivRequest(scriptURL);
@@ -54,7 +54,7 @@ public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>>
 			HttpEntity entity = response.getEntity();
 			is = entity.getContent();
 		} catch (Exception e) {
-			Log.e("log_tag", "Error in http connection " + e.toString());
+			Log.e("anniv_get", "Error in http connection " + e.toString());
 		}
 
 		// Conversion de la requête en string
@@ -69,7 +69,7 @@ public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>>
 			result=sb.toString();
 			//Log.d("sdfdsf", "result " + result);
 		} catch (Exception e) {
-			Log.e("log_tag", "Error converting result " + e.toString());
+			Log.e("anniv_get", "Error converting result " + e.toString());
 		}
 
 		// Parse les données JSON
@@ -82,7 +82,7 @@ public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>>
 				AnnivItemsList.add(AnnivItem);
 			}
 		}catch(JSONException e){
-			Log.e("log_tag", "Error parsing data " + e.toString());
+			Log.e("anniv_get", "Error parsing data " + e.toString());
 		}
 
 		return AnnivItemsList;

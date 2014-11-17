@@ -2,14 +2,13 @@ package com.iiens.net;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -24,7 +23,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -33,16 +31,14 @@ import android.widget.Toast;
 
 public class Edt extends Fragment {
 
-	private View view;
-	private TextView mEdtDate, mEdtPickedDate;
+	private TextView mEdtPickedDate;
 	private RadioGroup radioPromoGroup;
 	private RadioButton radio1A, radio2A, radio3A;
 	private ImageButton mEdtCalendar;
 	private Calendar myCalendar = Calendar.getInstance();
-	private LinearLayout mFormulaire, mResult, mOpt2a, mOpt3a;
+	private LinearLayout mOpt2a, mOpt3a;
 	private Spinner mGroupSpinner, mOptSpinner1, mOptSpinner2, mOptSpinner3, mOptSpinner4, mOptSpinner5, mOptSpinner6;
 	private SimpleDateFormat calDateFormater = new SimpleDateFormat("dd-MM-yyyy");
-	private SimpleDateFormat dateFrFormater = new SimpleDateFormat("EEEE dd MMMM yyyy");
 	private SimpleDateFormat rqDateFormater = new SimpleDateFormat("yyyy-MM-dd");
 	private String[] groupes = {"", "GR1", "GR1.1", "GR1.2", "GR2", "GR2.1", "GR2.2", "GR3", "GR3.1", "GR3.2", "GR4", "GR4.1", "GR4.2", "GR5", "FIPA"};
 	private String[][] options2a = { {},
@@ -62,29 +58,28 @@ public class Edt extends Fragment {
 			{"", "op36.1", "op36.2", "op36.3", "op36.3g1", "op36.3g2", "op36.4"}
 	};
 	private String[][] optionsPromo = null;
-	private Button btnSearch, btnNewSearch;
-	private ListView mListView;
+	private Button btnSearch;
 	private Bundle bundle = new Bundle();
+
+	@Override // this method is only called once for this fragment
+	public void onCreate(Bundle savedInstanceState) {
+		Log.d("Edt", "onCreate called");
+		super.onCreate(savedInstanceState);
+		bundle = this.getArguments(); 
+		// retain this fragment
+		setRetainInstance(true);
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
-		view =  inflater.inflate(R.layout.edt_formulaire, container, false);
-		bundle = this.getArguments();
+		Log.d("Edt", "onCreateView called");
+	
 		super.onCreate(savedInstanceState);
 
-		mEdtDate = (TextView) view.findViewById(R.id.edt_date);
+		View view =  inflater.inflate(R.layout.edt_formulaire, container, false);
 		mEdtPickedDate = (TextView) view.findViewById(R.id.edt_picked_date);
-		mEdtCalendar = (ImageButton) view.findViewById(R.id.edt_pick_date);
-		mListView = (ListView) view.findViewById(R.id.listview);
-
-		mFormulaire = (LinearLayout) view.findViewById(R.id.edt_formulaire);
-		mResult = (LinearLayout) view.findViewById(R.id.edt_result);
-		// mSpinner = (LinearLayout) view.findViewById(R.id.spinner_layout);
-
-		btnSearch = (Button) view.findViewById(R.id.edt_search_button);
-		btnNewSearch = (Button) view.findViewById(R.id.edt_newsearch_button);
+		mEdtCalendar = (ImageButton) view.findViewById(R.id.edt_calendar);
 
 		radioPromoGroup = (RadioGroup) view.findViewById(R.id.chk_promo);
 		radio1A = (RadioButton) view.findViewById(R.id.chk_1A);
@@ -94,6 +89,8 @@ public class Edt extends Fragment {
 		mOpt2a = (LinearLayout) view.findViewById(R.id.edt_options2A);
 		mOpt3a = (LinearLayout) view.findViewById(R.id.edt_options3A);
 		mGroupSpinner = (Spinner) view.findViewById(R.id.edt_groupe);
+		
+		btnSearch = (Button) view.findViewById(R.id.edt_search_button);
 
 		// hide/show the options when necessary
 		radio1A.setOnClickListener(new OnClickListener() {
@@ -134,6 +131,7 @@ public class Edt extends Fragment {
 				myCalendar.set(Calendar.YEAR, year);
 				myCalendar.set(Calendar.MONTH, monthOfYear);
 				myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+				myCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 
 				String myFormat = "dd-MM-yyyy";
 				SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);
@@ -153,25 +151,12 @@ public class Edt extends Fragment {
 			}
 		});
 
-
-		// action of the new search button
-		btnNewSearch.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mResult.setVisibility(View.GONE);
-				// mSpinner.setVisibility(View.GONE);
-				mFormulaire.setVisibility(View.VISIBLE);
-			}
-		});
-
 		// action of the search button
 		btnSearch.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
-				// mSpinner.setVisibility(View.VISIBLE);
-				mFormulaire.setVisibility(View.GONE);
-
+				Log.d("Edt", "btnSearch clicked");
+				
 				// get selected radio button from radioGroup
 				int selectedId = radioPromoGroup.getCheckedRadioButtonId();
 				if (!(selectedId > 0)) {
@@ -186,16 +171,15 @@ public class Edt extends Fragment {
 				LinearLayout promoOptsLayout = null;
 
 				if (selectedId == radio1A.getId()) {promo = "1";}
-				if (selectedId == radio2A.getId()) {
+				else if (selectedId == radio2A.getId()) {
 					promo = "2";
 					promoOptsLayout = mOpt2a;
 					optionsPromo = options2a;
-				}
-				if (selectedId == radio3A.getId()) {
+				} else if (selectedId == radio3A.getId()) {
 					promo = "3";
 					promoOptsLayout = mOpt3a;
 					optionsPromo = options3a;
-				}
+				} else {Log.d("Edt", "problème");}
 
 				String selectedGroup = groupes[mGroupSpinner.getSelectedItemPosition()];
 
@@ -221,33 +205,25 @@ public class Edt extends Fragment {
 				// format the date picked to display it in the results and to match the database date format
 				String date = mEdtPickedDate.getText().toString();
 				try {
-					Date dateDate = calDateFormater.parse(date);
-					mEdtDate.setText(dateFrFormater.format(dateDate).toString());	 				
-					date = rqDateFormater.format(dateDate);
+					date = rqDateFormater.format(calDateFormater.parse(date));
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
 
 				// make the request
 				if (isOnline()){
-
-					EdtGetRequest getEdt = new EdtGetRequest(getActivity(), date, promo, filtre, bundle.getString("scriptURL"));
-					ArrayList<EdtItem> result = new ArrayList<EdtItem>();
-					try {						
-						result = getEdt.execute((Void) null).get();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					} catch (ExecutionException e) {
-						e.printStackTrace();
-					}
-
-					mListView.setAdapter(new EdtItemsAdapter(getActivity().getApplicationContext(), result));
-
-					mResult.setVisibility(View.VISIBLE);
-					// mSpinner.setVisibility(View.GONE);
+					FragmentManager fragmentManager = getFragmentManager();
+					Fragment frag = new EdtResult();
+					
+					Log.d("Edt", "date : " + date);
+					Log.d("Edt", "promo : " + promo.isEmpty());
+					bundle.putString("date", date);
+					bundle.putString("promo", promo);
+					bundle.putStringArray("filtre", filtre);
+					frag.setArguments(bundle);
+					
+					fragmentManager.beginTransaction().replace(R.id.content, frag).commit();
 				} else {
-					// mSpinner.setVisibility(View.GONE);
-					mFormulaire.setVisibility(View.VISIBLE);
 					Toast.makeText(getActivity().getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
 				}
 
@@ -268,7 +244,7 @@ public class Edt extends Fragment {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will

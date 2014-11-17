@@ -8,6 +8,7 @@ import android.util.Log;
 public class EdtItem {
 	// private String[] sallesInfo = {"130", "131", "225", "227", "228", "233", "251", "253", "258", "269"};
 
+	private String jour;
 	private String nom_matiere;
 	private String nom_prof;
 	private Integer heure;
@@ -15,6 +16,7 @@ public class EdtItem {
 	private String groupe;
 	private String salle;
 
+	public String getJour() {return jour;}
 	public String getMatiere() {return nom_matiere;}
 	public String getProf() {return nom_prof;}
 	public Integer getHeure() {return heure;}
@@ -22,6 +24,7 @@ public class EdtItem {
 	public String getGroupe() {return groupe;}
 	public String getSalle() {return salle;}
 
+	private void setJour(String jour) {this.jour = jour;}
 	private void setMatiere(String nom_matiere) {this.nom_matiere = nom_matiere;}
 	private void setProf(String nom_prof) {this.nom_prof = nom_prof;}
 	private void setHeure(Integer heure) {this.heure = heure;}
@@ -34,6 +37,7 @@ public class EdtItem {
 
 	public void mapJsonObject(JSONObject json_data) {
 		try {
+			setJour(json_data.getString("jour"));
 			setMatiere(json_data.getString("nom_matiere"));
 			setProf(json_data.getString("nom_prof"));
 			setHeure(json_data.getInt("heure"));

@@ -23,16 +23,16 @@ public class NewsItem {
 	public void setDescription(String description) {this.description = description;}
 	public void setAuthor(String author) {this.author = author;}
 	public void setDate(String date) {this.date = date;}
-	
+
 	public NewsItem(String title, String description, String author, String date){
 		this.title = title;
 		this.description = description;
 		this.author = author;
 		this.date = date;
 	}
-	
+
 	public NewsItem() {}
-	
+
 	public void mapJsonObject(JSONObject json_data) {
 		try {
 			setTitle(json_data.getString("titre"));
@@ -44,25 +44,39 @@ public class NewsItem {
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 	}
-	
+
 	private String formatHtml(String contenu){
 		String formatContenu = contenu;
-		
-		formatContenu = formatContenu.replaceAll(" :bold:", " <b>");
-		formatContenu = formatContenu.replace(":bold:", "</b>");
-		formatContenu = formatContenu.replaceAll(":underlined:", "");
-		
+
+		String pRed = "(?i)(:red.*?:)(.+?)(:red:)";
+		formatContenu = formatContenu.replaceAll(pRed, "<font color=\"red\">" + "$2" + "</font>");
+		String pBlue = "(?i)(:blue.*?:)(.+?)(:blue:)";
+		formatContenu = formatContenu.replaceAll(pBlue, "<font color=\"blue\">" + "$2" + "</font>");
+		String pGreen = "(?i)(:green.*?:)(.+?)(:green:)";
+		formatContenu = formatContenu.replaceAll(pGreen, "<font color=\"green\">" + "$2" + "</font>");
+		String pOrange = "(?i)(:orange.*?:)(.+?)(:orange:)";
+		formatContenu = formatContenu.replaceAll(pOrange, "<font color=\"orange\">" + "$2" + "</font>");
+		String pPurple = "(?i)(:purple.*?:)(.+?)(:purple:)";
+		formatContenu = formatContenu.replaceAll(pPurple, "<font color=\"purple\">" + "$2" + "</font>");
+
+		String pUnderlined = "(?i)(:underlined.*?:)(.+?)(:underlined:)";
+		String pBold = "(?i)(:bold.*?:)(.+?)(:bold:)";
+		String pItalic = "(?i)(:italic.*?:)(.+?)(:italic:)";
+		formatContenu = formatContenu.replaceAll(pUnderlined, "<u>" + "$2" + "</u>");
+		formatContenu = formatContenu.replaceAll(pBold, "<b>" + "$2" + "</b>");
+		formatContenu = formatContenu.replaceAll(pItalic, "<i>" + "$2" + "</i>");
+
 		return formatContenu;
 	}
-	
+
 	public ArrayList<String> toArrayList() {
 		ArrayList<String> result = new ArrayList<String>();
-		
+
 		result.add(title);
 		result.add(description);
 		result.add(author);
 		result.add(date);
-		
+
 		return result;
 	}
 }
