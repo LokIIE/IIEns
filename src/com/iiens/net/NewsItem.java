@@ -7,6 +7,10 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+/** NewsItem
+	Classe stockant les infos pour une news
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
 
 public class NewsItem {
 	private String title;

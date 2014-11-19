@@ -2,6 +2,10 @@ package com.iiens.net;
 
 import java.util.ArrayList;
 
+/** Tweet
+	Classe stockant les infos d'un tweet
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
 
 public class Tweet {
 

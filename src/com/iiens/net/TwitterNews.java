@@ -16,6 +16,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/** TwitterNews
+	Fragment affichant les tweets concernant l'école
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+**/
+
 public class TwitterNews extends Fragment {
 
 	private Bundle bundle = new Bundle();
@@ -42,7 +47,7 @@ public class TwitterNews extends Fragment {
 		final ListView mListView = (ListView) view.findViewById(R.id.listview);
 
 		if (!bundle.containsKey("twitternews") && isOnline()){
-			Log.d("*** DEBUG " , "Récupération twitter internet***");
+			Log.d("twitter_log" , "Récupération twitter internet***");
 			TwitterGetRequest getTweets = new TwitterGetRequest(query, tweetsNumber);
 			try {
 				result = getTweets.execute().get();
@@ -54,7 +59,7 @@ public class TwitterNews extends Fragment {
 			mListView.setAdapter(new TwitterItemsAdapter(getActivity().getApplicationContext(), R.layout.fragment_listview, result));
 			saveResult(result, bundle, "twitternews");
 		} else if (bundle.containsKey("twitternews")) {
-			Log.d("*** DEBUG " , "Récupération twitter bundle***");
+			Log.d("twitter_log" , "Récupération twitter bundle***");
 			Bundle tweetsBundle = bundle.getBundle("twitternews");
 			result = new ArrayList<Tweet>();
 			for (int i=0; i < tweetsBundle.size(); i++) {

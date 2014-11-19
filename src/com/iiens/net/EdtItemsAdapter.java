@@ -11,11 +11,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/** EdtItemsAdapter
+	Classe adaptant les items pour l'affichage de l'edt
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
+
 public class EdtItemsAdapter extends BaseAdapter {
 
 	private List<EdtItem> edtItemsList = new ArrayList<EdtItem>();
-	private String[] heures = {"", "9h00 - 10h45", "11h00 - 12h45", "13h00 - 14h00", "14h00 - 15h45", "16h00 - 17h45", "18h00 - 19h45"};
 	private Context context;
+	private String[] minutes = {"00", "15", "30", "45"};
 
 	public EdtItemsAdapter(Context context, ArrayList<EdtItem> getEdt) {
 		this.edtItemsList = getEdt;
@@ -51,39 +56,56 @@ public class EdtItemsAdapter extends BaseAdapter {
 
 		if (edtItemsList.size() != 0) {
 			EdtItem edtItem = edtItemsList.get(arg0);
-			String horaire  =  heures[edtItem.getHeure()];
+			String hDebut  =  String.valueOf(edtItem.getHeure()/4) + "h" + minutes[edtItem.getHeure()%4];
+			String hFin  =  String.valueOf((edtItem.getDuree() + edtItem.getHeure())/4 % 24) + "h" + minutes[(edtItem.getDuree() + edtItem.getHeure())%4];
+
+			// En fonction du type, on change la ressource affichée
 			String type = edtItem.getType();
-			String matiere = edtItem.getMatiere();
-			String salle = edtItem.getSalle();
-			String prof = edtItem.getProf();
-			String groupe = edtItem.getGroupe();
+			if (type.equals("Cours")) arg1 = inflater.inflate(R.layout.edt_item_cours, arg2, false);
+			else if (type.equals("contrôle")) arg1 = inflater.inflate(R.layout.edt_item_controle, arg2, false);
+			else if (type.equals("Cours_td")) { 
+				arg1 = inflater.inflate(R.layout.edt_item_courstd, arg2,false);
+				type = "Cours-TD";
+			}
+			else if (type.equals("T.P.")) arg1 = inflater.inflate(R.layout.edt_item_tp, arg2, false);
+			else if (type.equals("T.D.")) arg1 = inflater.inflate(R.layout.edt_item_td, arg2, false);
+			else if (type.equals("assoce")) arg1 = inflater.inflate(R.layout.edt_item_club, arg2, false);
 
-			if (salle.equals("2")) {salle = "amphi 2";}
-			if (prof.length() > 0) {prof = " avec " + prof;}
+			// Set titre and take into account special cases
+			String titre = edtItem.getTitre();
+			if (titre.length() > 0) {
+				if (titre.equals("Conférences")) titre = "Cycle de conférences";
+				else if (!type.equals("assoce")) titre = " de " + titre;
+			}
 
-			//if (arg1 == null) {
-				if (type.equals("Cours")) arg1 = inflater.inflate(R.layout.edt_item_cours, arg2,false);
-				else if (type.equals("contrôle")) arg1 = inflater.inflate(R.layout.edt_item_controle, arg2,false);
-				else if (type.equals("Cours_td")) { 
-					arg1 = inflater.inflate(R.layout.edt_item_courstd, arg2,false);
-					type = "Cours-TD";
+			// Set salle and take into account special cases
+			String lieu = edtItem.getLieu();
+			if (lieu.length() > 0) {
+				if (type.equals("assoce") && !lieu.equals("2")) lieu = " au " + lieu;
+				else if (lieu.equals("2")) lieu = " en amphi 2";
+				else lieu = " en " + lieu;
+			}
+
+			// Set prof
+			String auteur = edtItem.getAuteur();
+			if (auteur.length() > 0) {
+				if (type.equals("assoce")) {
+					if (auteur.equals("aeiie")) auteur = "BdE";
+					auteur = " par " + auteur;
 				}
-				else if (type.equals("T.P.")) arg1 = inflater.inflate(R.layout.edt_item_tp, arg2,false);
-				else if (type.equals("T.D.")) arg1 = inflater.inflate(R.layout.edt_item_td, arg2,false);
-			//}
+				else auteur = " avec " + auteur;
+			}
+
+			// Set groupe
+			String groupe = edtItem.getGroupe();
+			if (edtItem.getGroupe().length() > 0) {groupe = " pour " + groupe;}
+			if (edtItem.getGroupe().startsWith("op")) {groupe = "";}
 
 			TextView mEdtItem = (TextView) arg1.findViewById(R.id.edt_item_content);
-
-			if (edtItem.getGroupe().length() > 0) {
-				groupe = " pour " + groupe;
-			}
-			if (edtItem.getGroupe().startsWith("op")) {
-				groupe = "";
-			}
-
-			mEdtItem.setText(Html.fromHtml("<b>" + horaire + "</b>" + " : " + type + " de " + matiere + " en " + salle + prof + groupe));
+			if (type.equals("assoce")) { mEdtItem.setText(Html.fromHtml("<b>" + hDebut + "-" + hFin + "</b>" + " : " + titre + lieu + auteur)); 
+			} else mEdtItem.setText(Html.fromHtml("<b>" + hDebut + "-" + hFin + "</b>" + " : " + type + titre + lieu + auteur + groupe));
 		}
-		
+
 		return arg1;
 
 	}

@@ -16,6 +16,11 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/** Anniv
+	Fragment permettant l'affichage des anniversaires (publics) des iiens
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
+
 public class Anniv extends Fragment {
 
 	private Bundle bundle = new Bundle();

@@ -5,61 +5,54 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
-public class EdtItem {
-	// private String[] sallesInfo = {"130", "131", "225", "227", "228", "233", "251", "253", "258", "269"};
+/** EdtItem
+	Classe permettant stocker les infos concernant un élément de l'edt
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
 
+public class EdtItem {
 	private String jour;
-	private String nom_matiere;
-	private String nom_prof;
-	private Integer heure;
-	private String nom_type;
-	private String groupe;
-	private String salle;
+	private String titre; // ou intitule événement
+	private String auteur; // Cours : prof assurant le cours / Club : club faisant l'événement
+	private Integer heure; // Heure de début en quarts d'heure à partir de minuit (ex : 0h30 <=> 2)
+	private Integer duree; // Cours : 7 (pour 1h45) / Club : nombre de quart d'heures de l'événement
+	private String nom_type; // Cours : T.D., T.P., Cours_td, contrôle, Cours / Club : assoce
+	private String groupe; // Cours : groupe du cours si défini / Club : vide
+	private String lieu; // Lieu du cours ou de l'événement
 
 	public String getJour() {return jour;}
-	public String getMatiere() {return nom_matiere;}
-	public String getProf() {return nom_prof;}
+	public String getTitre() {return titre;}
+	public String getAuteur() {return auteur;}
 	public Integer getHeure() {return heure;}
+	public Integer getDuree() {return duree;}
 	public String getType() {return nom_type;}
 	public String getGroupe() {return groupe;}
-	public String getSalle() {return salle;}
+	public String getLieu() {return lieu;}
 
 	private void setJour(String jour) {this.jour = jour;}
-	private void setMatiere(String nom_matiere) {this.nom_matiere = nom_matiere;}
-	private void setProf(String nom_prof) {this.nom_prof = nom_prof;}
+	private void setTitre(String titre) {this.titre = titre;}
+	private void setAuteur(String auteur) {this.auteur = auteur;}
 	private void setHeure(Integer heure) {this.heure = heure;}
+	private void setDuree(Integer duree) {this.duree = duree;}
 	private void setType(String nom_type) {this.nom_type = nom_type;}
 	private void setGroupe(String groupe) {this.groupe = groupe;}
-	private void setSalle(String salle) {
-		this.salle = salle;
-		if (salle == "2") {this.salle = "amphi " + salle;}
+	private void setLieu(String salle) {
+		this.lieu = salle;
+		if (salle.equals("2")) {this.lieu = "amphi " + salle;}
 	}
 
 	public void mapJsonObject(JSONObject json_data) {
 		try {
 			setJour(json_data.getString("jour"));
-			setMatiere(json_data.getString("nom_matiere"));
-			setProf(json_data.getString("nom_prof"));
+			setTitre(json_data.getString("titre"));
+			setAuteur(json_data.getString("auteur"));
 			setHeure(json_data.getInt("heure"));
+			setDuree(json_data.getInt("duree"));
 			setType(json_data.getString("nom_type"));
-			setSalle(json_data.getString("salle"));
-			setGroupe(json_data.getString("nom_groupe"));
-//			if (isInList(salle, sallesInfo)) {
-//				setType("TP");
-//			}
+			setGroupe(json_data.getString("groupe"));
+			setLieu(json_data.getString("lieu"));
 		} catch(JSONException e){
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 	}
-
-//	private boolean isInList (String value, String[] list) {
-//		if (value == null) return false;
-//
-//		for (int i=0; i < list.length; i++) {
-//			if (list[i].equals(value)) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
 }

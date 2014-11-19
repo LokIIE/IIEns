@@ -14,7 +14,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +21,11 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+/** NewsGetRequest
+	Classe permettant de récupérer les news de la bdd
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
 
 public class NewsGetRequest extends AsyncTask<Void, Void, ArrayList<NewsItem>> {
 
@@ -53,15 +57,16 @@ public class NewsGetRequest extends AsyncTask<Void, Void, ArrayList<NewsItem>> {
 		// Envoi de la commande http
 		try {
 			HttpParams httpParameters = new BasicHttpParams();
-			// Set the timeout in milliseconds until a connection is established.
-			// The default value is zero, that means the timeout is not used. 
-			int timeoutConnection = 5000;
-			HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-			// Set the default socket timeout (SO_TIMEOUT) 
-			// in milliseconds which is the timeout for waiting for data.
-			int timeoutSocket = 5000;
-			
-			HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+
+			//			// Set the timeout in milliseconds until a connection is established.
+			//			// The default value is zero, that means the timeout is not used. 
+			//			int timeoutConnection = 5000;
+			//			HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+			//			// Set the default socket timeout (SO_TIMEOUT) 
+			//			// in milliseconds which is the timeout for waiting for data.
+			//			int timeoutSocket = 5000;
+			//			HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+
 			HttpClient httpclient = new DefaultHttpClient(httpParameters);
 			HttpPost httppost = new HttpPost(scriptURL);
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
@@ -103,10 +108,5 @@ public class NewsGetRequest extends AsyncTask<Void, Void, ArrayList<NewsItem>> {
 
 		return newsItemsList;
 	}
-
-	//	@Override
-	//	protected void onPostExecute(List<String> rssFeed) {
-	//		// Rien à faire
-	//	}
 
 }

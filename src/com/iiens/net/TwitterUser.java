@@ -1,5 +1,10 @@
 package com.iiens.net;
 
+/** TwitterUser
+	Classe permettant stocker les infos concernant l'auteur d'un tweet
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
+
 public class TwitterUser {
 
 	//	@SerializedName("screen_name")

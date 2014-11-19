@@ -11,6 +11,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/** NewsItemsAdapter
+	Classe permettant d'adapter les news pour l'affichage
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
+
 public class NewsItemsAdapter extends BaseAdapter {
 
 	private List<NewsItem> newsItemsList;

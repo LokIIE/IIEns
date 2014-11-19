@@ -29,6 +29,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/** Edt
+	Fragment faisant office de formulaire pour la recherche dans l'edt
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
+
 public class Edt extends Fragment {
 
 	private TextView mEdtPickedDate;
@@ -74,7 +79,7 @@ public class Edt extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Log.d("Edt", "onCreateView called");
-	
+
 		super.onCreate(savedInstanceState);
 
 		View view =  inflater.inflate(R.layout.edt_formulaire, container, false);
@@ -89,7 +94,7 @@ public class Edt extends Fragment {
 		mOpt2a = (LinearLayout) view.findViewById(R.id.edt_options2A);
 		mOpt3a = (LinearLayout) view.findViewById(R.id.edt_options3A);
 		mGroupSpinner = (Spinner) view.findViewById(R.id.edt_groupe);
-		
+
 		btnSearch = (Button) view.findViewById(R.id.edt_search_button);
 
 		// hide/show the options when necessary
@@ -156,7 +161,7 @@ public class Edt extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Log.d("Edt", "btnSearch clicked");
-				
+
 				// get selected radio button from radioGroup
 				int selectedId = radioPromoGroup.getCheckedRadioButtonId();
 				if (!(selectedId > 0)) {
@@ -214,14 +219,14 @@ public class Edt extends Fragment {
 				if (isOnline()){
 					FragmentManager fragmentManager = getFragmentManager();
 					Fragment frag = new EdtResult();
-					
+
 					Log.d("Edt", "date : " + date);
 					Log.d("Edt", "promo : " + promo.isEmpty());
 					bundle.putString("date", date);
 					bundle.putString("promo", promo);
 					bundle.putStringArray("filtre", filtre);
 					frag.setArguments(bundle);
-					
+
 					fragmentManager.beginTransaction().replace(R.id.content, frag).commit();
 				} else {
 					Toast.makeText(getActivity().getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
@@ -244,7 +249,7 @@ public class Edt extends Fragment {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will

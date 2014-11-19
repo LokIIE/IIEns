@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/** AnnivItemsAdapter
+	Classe permettant d'adapter chaque anniversaire à l'affichage
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
+
 public class AnnivItemsAdapter extends BaseAdapter {
 
 	private List<AnnivItem> annivItemsList = new ArrayList<AnnivItem>();
@@ -45,20 +50,20 @@ public class AnnivItemsAdapter extends BaseAdapter {
 		}
 
 		if (annivItemsList.size() > 0) {
-		TextView mAnnivDate = (TextView) arg1.findViewById(R.id.anniv_date);
-		TextView mAnnivPerson = (TextView) arg1.findViewById(R.id.anniv_person);
-		AnnivItem annivItem = annivItemsList.get(arg0);
-		String pseudo = " ";
-		if (annivItem.getPseudo().length() > 0) {
-			pseudo = " '" + annivItem.getPseudo() + "' ";
+			TextView mAnnivDate = (TextView) arg1.findViewById(R.id.anniv_date);
+			TextView mAnnivPerson = (TextView) arg1.findViewById(R.id.anniv_person);
+			AnnivItem annivItem = annivItemsList.get(arg0);
+			String pseudo = " ";
+			if (annivItem.getPseudo().length() > 0) {
+				pseudo = " '" + annivItem.getPseudo() + "' ";
+			}
+
+			String str_anniv = annivItem.getPrenom() + pseudo + annivItem.getNom() + " (" + annivItem.getAge().trim() + " ans)";  
+
+			mAnnivDate.setText(annivItem.getAnniv() + " : ");
+			mAnnivPerson.setText(str_anniv);
 		}
 
-		String str_anniv = annivItem.getPrenom() + pseudo + annivItem.getNom() + " (" + annivItem.getAge().trim() + " ans)";  
-
-		mAnnivDate.setText(annivItem.getAnniv() + " : ");
-		mAnnivPerson.setText(str_anniv);
-		}
-		
 		return arg1;
 	}
 

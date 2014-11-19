@@ -20,7 +20,6 @@ import android.os.AsyncTask;
 /** TwitterGetRequest 
 	Classe permettant de récupérer les tweets à partir de l'API Twitter
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
-	Modifications par : --
  **/
 
 // Uses an AsyncTask to download a Twitter user's timeline

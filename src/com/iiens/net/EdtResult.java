@@ -22,6 +22,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/** EdtResult
+	Fragment affichant les résultats de la recherche sur l'edt
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
+
 public class EdtResult extends Fragment {
 
 	private TextView mEdtDate;
@@ -38,12 +43,12 @@ public class EdtResult extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		Log.d("EdtResult", "onCreate called");
 		super.onCreate(savedInstanceState);
-		
+
 		bundle = this.getArguments(); 
 		this.date = bundle.getString("date");
 		this.promo = bundle.getString("promo");
 		this.filtre = bundle.getStringArray("filtre");
-		
+
 	}
 
 	@Override
@@ -51,7 +56,7 @@ public class EdtResult extends Fragment {
 			Bundle savedInstanceState) {
 		Log.d("EdtResult", "onCreateView called");
 		super.onCreate(savedInstanceState);
-		
+
 		View view =  inflater.inflate(R.layout.edt_result, container, false);
 		mEdtDate = (TextView) view.findViewById(R.id.edt_date);
 		mListView = (ListView) view.findViewById(R.id.listview);
@@ -62,7 +67,7 @@ public class EdtResult extends Fragment {
 		} catch (ParseException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		// action of the new search button
 		btnNewSearch.setOnClickListener(new OnClickListener() {
 			@Override

@@ -15,20 +15,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+/** News 
+	Fragment permettant l'affichage des news des iiens
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
+
 public class News extends Fragment {
 
 	private int newsNumber = 6; // number of news to show
 	private Bundle bundle = new Bundle();
-	// private Context context = new GlobalState();
 	private ArrayList<NewsItem> result = new ArrayList<NewsItem>();
 	private ListView mListView;
-	
-    // News constructor for creating fragment with arguments
-    public static News newInstance(Bundle mainBundle) {
-        News fragment = new News();
-        fragment.setArguments(mainBundle);
-        return fragment;
-    }
+
+	// News constructor for creating fragment with arguments
+	public static News newInstance(Bundle mainBundle) {
+		News fragment = new News();
+		fragment.setArguments(mainBundle);
+		return fragment;
+	}
 
 	public Bundle getBundle(){
 		return bundle;
@@ -116,25 +120,6 @@ public class News extends Fragment {
 		Log.d("News", "onAttach called");
 		super.onAttach(activity);
 	}
-
-
-	//	@Override
-	//	public boolean onOptionsItemSelected(MenuItem item) {
-	//		Log.d("News", "onOptionsItemSelected called");
-	//		// Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
-	//		switch (item.getItemId()) {
-	//		//		case R.id.action_refresh:
-	//		//			Toast.makeText(getActivity().getApplicationContext(), "Action refresh selected", Toast.LENGTH_LONG).show();
-	//		//			break;
-	//		case R.id.action_settings:
-	//			Toast.makeText(getActivity().getApplicationContext(), "Action Settings selected", Toast.LENGTH_LONG).show();
-	//			break;
-	//		default:
-	//			break;
-	//		}
-	//
-	//		return true;
-	//	}
 
 	private void saveResult(ArrayList<NewsItem> result, Bundle bundle, String key) {
 		int i = 0;

@@ -22,10 +22,9 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-/** EdtGetRequest : classe permettant de récupérer l'emploi du temps à partir des serveurs d'Arise et de filtrer les résultats
-	suivant les choix de l'utilisateur
+/** EdtGetRequest 
+	Classe permettant de récupérer l'emploi du temps en bdd et de filtrer les résultats suivant les choix de l'utilisateur
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
-	Modifications par : --
  **/
 
 public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
@@ -34,17 +33,15 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 	private String date;
 	private String promo;
 	static private String[] filtre;
-	private Context context;
 	private String scriptURL;
 
 	public EdtGetRequest(Context context, String date, String promo, String[] groupFiltre, String scriptURL){
 		this.date = date;
 		this.promo = promo;
 		filtre = groupFiltre;
-		this.context = context;
 		this.scriptURL = scriptURL;
 	}
-	
+
 	@Override
 	protected ArrayList<EdtItem> doInBackground(Void... voids) {
 		edtItemsList = getEdtRequest(date, promo, scriptURL);
@@ -55,69 +52,42 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 	public static ArrayList<EdtItem> getEdtRequest(String date, String promo, String scriptURL) {
 
 		ArrayList<EdtItem> edtItemsList = new ArrayList<EdtItem>();
-		
-//		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-//		System.out.println("startdate: " + sdf.format(myCalendar.getTime()));
-//	    Date[] minMaxD = calcDateRangeWeek(myCalendar, Calendar.DAY_OF_WEEK);
-//	    Log.d("Min date", minMaxD[0].toString());
-//	    Log.d("Min date", minMaxD[1].toString());
-//	    
-//		public Date[] calcDateRangeWeek(Calendar c, int day) {
-//		    Date[] dr = new Date[2];
-//		    // setMin
-//		    c.set(day, Calendar.MONDAY);
-//		    dr[0] = c.getTime();
-//		    // setMax
-//		    c.set(day, Calendar.SUNDAY);
-//		    dr[1] = c.getTime();
-//		    return dr;
-//		}
 
-		InputStream is = null;
+		//		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+		//		System.out.println("startdate: " + sdf.format(myCalendar.getTime()));
+		//	    Date[] minMaxD = calcDateRangeWeek(myCalendar, Calendar.DAY_OF_WEEK);
+		//	    Log.d("Min date", minMaxD[0].toString());
+		//	    Log.d("Min date", minMaxD[1].toString());
+		//	    
+		//		public Date[] calcDateRangeWeek(Calendar c, int day) {
+		//		    Date[] dr = new Date[2];
+		//		    // setMin
+		//		    c.set(day, Calendar.MONDAY);
+		//		    dr[0] = c.getTime();
+		//		    // setMax
+		//		    c.set(day, Calendar.SUNDAY);
+		//		    dr[1] = c.getTime();
+		//		    return dr;
+		//		}
+
 		String result = "";
-		// Ajout des paramètres de la requête
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		HttpClient httpclient = new DefaultHttpClient();
+		HttpPost httppost = new HttpPost(scriptURL);
+
+		// Ajout des paramètres de la requête
 		nameValuePairs.add(new BasicNameValuePair("type","edt"));
 		nameValuePairs.add(new BasicNameValuePair("date", date));
 		nameValuePairs.add(new BasicNameValuePair("promo", promo));
-		
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost(scriptURL);
-		
+
 		try {
 			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 		} catch (UnsupportedEncodingException e) {
 			Log.e("edt_get", "Error in encoding nameValuePairs (unsupported) " + e.toString());
 		}
 
-		// Envoi de la requête au script PHP.
-		try {
-			HttpResponse response = httpclient.execute(httppost);
-			HttpEntity entity = response.getEntity();
-			if (entity != null) is = entity.getContent();
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			Log.e("edt_get", "Error in http connection " + e.toString());
-		}
-
-		// Conversion de la requête en string
-		try{
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"),8);
-			StringBuilder sb = new StringBuilder();
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line + "\n");
-			}
-			is.close();
-			result = sb.toString();
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			Log.e("edt_get", "Error in encoding InputStreamReader (unsupported) " + e.toString());
-		} catch (Exception e) {
-			Log.e("edt_get", "Error converting result " + e.toString());
-		}
+		// Envoi de la requête
+		result = httpRequest(httpclient, httppost);
 
 		// Parse les données JSON
 		try{
@@ -133,10 +103,6 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 		}
 
 		return edtItemsList;
-	}
-
-	@Override
-	protected void onPostExecute(ArrayList<EdtItem> edtItemList) {
 	}
 
 	static private void filterItems(JSONObject json_data, ArrayList<EdtItem> edtItemsList, String[] filtre) {
@@ -170,5 +136,41 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 		}
 		return false;
 	}
-	
+
+	private static String httpRequest(HttpClient httpclient, HttpPost httppost) {
+		String result = "";
+		InputStream is = null;
+
+		// Envoi de la requête au script PHP.
+		try {
+			HttpResponse response = httpclient.execute(httppost);
+			HttpEntity entity = response.getEntity();
+			if (entity != null) is = entity.getContent();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e("edt_get", "Error in http connection " + e.toString());
+		}
+
+		// Conversion de la requête en string
+		try{
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"),8);
+			StringBuilder sb = new StringBuilder();
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+			is.close();
+			result = sb.toString();
+			Log.d("result", result);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			Log.e("edt_get", "Error in encoding InputStreamReader (unsupported) " + e.toString());
+		} catch (Exception e) {
+			Log.e("edt_get", "Error converting result " + e.toString());
+		}
+		return result;
+	}
+
 }

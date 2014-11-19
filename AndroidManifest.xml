@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- android:screenOrientation="portrait" pour bloquer en portrait -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.iiens.net"
     android:versionCode="7"
@@ -26,35 +25,23 @@
             android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Login -->
+<!--         Login
         <activity
             android:name="com.iiens.net.Login"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="adjustPan" >
-        </activity>
+        </activity> -->
 
         <!-- Main -->
         <activity
             android:name="com.iiens.net.Main"
             android:label="@string/app_name" >
         </activity>
-        <activity android:name="com.iiens.net.PhotosFullImageActivity" >
-        </activity>
-
-        <!-- Media -->
-        <activity
-            android:name="com.iiens.net.Media"
-            android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" >
-        </activity>
-        
     </application>
 
 </manifest>

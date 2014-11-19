@@ -20,6 +20,11 @@ import org.json.JSONObject;
 import android.os.AsyncTask;
 import android.util.Log;
 
+/** AnnivGetRequest
+	Classe permettant de récupérer les annivs en bdd
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
+
 public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>> {
 
 	private static ArrayList<AnnivItem> AnnivItemsList = new ArrayList<AnnivItem>();

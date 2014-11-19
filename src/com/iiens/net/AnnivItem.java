@@ -7,6 +7,11 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+/** AnnivItem
+	Classe permettant de stocker les infos concernant un anniversaire
+	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
+ **/
+
 public class AnnivItem {
 	String nom;
 	String prenom;

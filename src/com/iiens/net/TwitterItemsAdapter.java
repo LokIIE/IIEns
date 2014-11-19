@@ -14,9 +14,8 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 /** TwitterItemsAdapter 
-	Classe permettant d'afficher les tweets récupérés par TwitterGetRequest
+	Classe permettant d'adapter les tweets récupérés pour l'affichage
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
-	Modifications par : --
  **/
 
 public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {

@@ -15,14 +15,13 @@ import android.widget.Toast;
 /** SplashScreen 
 	Animation lors du lancement de l'appli
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
-	Modifications par : ...
-**/
+ **/
 
 public class SplashScreen extends Activity {
 
 	private static int SPLASH_TIME_OUT = 2000; // Splash screen timer
 	private boolean backPressed = false; // Was back button pressed ?
-	
+
 	/* Determines the view to load for this activity */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +34,7 @@ public class SplashScreen extends Activity {
 	protected void onStart() {
 		super.onStart();
 		StartAnimation();
-		
+
 		// Execute the actions after a certain delay
 		new Handler().postDelayed(new Runnable() {
 			@Override

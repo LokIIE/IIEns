@@ -17,7 +17,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /** Main 
-	Classe permettant de gérer le menu latéral ainsi que les transitions entre les différentes fonctions de l'appli 
+	Activité pricipale 
+	Permet de gérer le menu latéral, certains paramètres généraux ainsi que les transitions entre les différentes fonctions de l'appli 
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
  **/
 

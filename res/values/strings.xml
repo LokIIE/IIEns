@@ -231,7 +231,7 @@
     <string name="chk_3A">3A</string>
     <string name="edt_search_txt">Emploi du temps des : </string>
     <string name="edt_date_txt">pour la semaine du : </string>
-    <string name="edt_groupe_txt">Groupes -> afficher :</string>
+    <string name="edt_groupe_txt">Groupes :</string>
 
     <!-- activity_preferences.xml -->
     <string name="pref_edt">Emploi du temps</string>
