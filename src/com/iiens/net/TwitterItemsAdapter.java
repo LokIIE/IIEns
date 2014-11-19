@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,24 +48,23 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
 
 			if (username != null) {
 				username.setText(tweet.getUser().getName());
-				//				Log.d("Username : ", username.getText().toString());
 			}
 
-			if(message != null) {
-				message.setText(tweet.getText());
-				//				Log.d("Text : ", message.getText().toString());
+			if (message != null) {
+				String tweetTxt = tweet.getText();
+				// tweetTxt = tweetTxt.replaceAll("(.*)(http://[^<>[:space:]]+[[:alnum:]/])(.*)", "$1<a href=\"$2\">$2</a>$3"); // Txt sous URL mais non-cliquable (entraine crash app)
+				message.setText(Html.fromHtml(tweetTxt));
 			}
 
-			if(account != null) {
+			if (account != null) {
 				account.setText("@" + tweet.getUser().getScreenName());
-				//				Log.d("Text : ", message.getText().toString());
 			}
 
 			if(time != null) {
 				String dateCreated = tweet.getDateCreated();
 
 				try {
-					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.FRENCH);
 					String now = sdf.format(new Date());
 
 					SimpleDateFormat sdf2 = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
@@ -78,7 +78,6 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
 					e.printStackTrace();
 				}
 
-				//				Log.d("Text : ", message.getText().toString());
 			}
 
 			// Affichage des images annulé pour le moment car temps de chargement trop long
@@ -90,18 +89,14 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
 		return v;
 	}
 
-	//1 minute = 60 seconds
-	//1 hour = 60 x 60 = 3600
-	//1 day = 3600 x 24 = 86400
+	// 1 minute = 60 seconds
+	// 1 hour = 60 x 60 = 3600
+	// 1 day = 3600 x 24 = 86400
 	public String printDifference(Date startDate, Date endDate){
 		String result = new String();
 
 		//milliseconds
 		long different = endDate.getTime() - startDate.getTime();
-
-		//		System.out.println("startDate : " + startDate);
-		//		System.out.println("endDate : "+ endDate);
-		//		System.out.println("different : " + different);
 
 		long secondsInMilli = 1000;
 		long minutesInMilli = secondsInMilli * 60;
@@ -118,12 +113,6 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
 		different = different % minutesInMilli;
 
 		long elapsedSeconds = different / secondsInMilli;
-
-		//		System.out.printf(
-		//				"%d days, %d hours, %d minutes, %d seconds%n", 
-		//				elapsedDays,
-		//				elapsedHours, elapsedMinutes, elapsedSeconds);
-
 
 		if (elapsedDays > 0) {
 			result = String.valueOf(elapsedDays) + "d";

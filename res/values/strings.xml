@@ -16,7 +16,6 @@
     <string name="auto_connect">Connexion automatique</string>
 
     <!-- activity_main.xml -->
-    <string name="hello_world">Hello world!</string>
     <string name="txt_menu_profil">Profil</string>
     <string name="txt_menu_trombi">Trombinoscope</string>
     <string name="txt_menu_edt">Emploi du temps</string>
@@ -24,9 +23,6 @@
     <string name="close_menu">Fermeture du menu</string>
 
     <!-- fragment_accueil.xml -->
-    <string name="rss_title">Titre flux rss</string>
-    <string name="rss_content">Contenu flux rss</string>
-    <string name="rss_author">Auteur flux rss</string>
     <string name="description">Description</string>
     <string name="fetch">Fetch Feed</string>
     <string name="rss_feed">Problème de réception</string>
@@ -246,8 +242,6 @@
 
     <string name="pref_edt_alloptions">Toutes les options</string>
     <string name="pref_edt_myoptions">Seulement mes options</string>
-    <string name="info_ca_arise"><![CDATA[<h2>Accepter la CA (Certificate Authority) d\'Arise</h2> Tu te demandes peut-être pourquoi ton Firefox, ton Chrome, ou même ton Internet Explorer (bouh !) râle lorsque tu veux accéder aux pages d\'iiens.net en https? ? Que signifient ces messages biscornus parlant de “Invalid security certificate” ?<br/>
-Petite explication: Lorsque tu te connectes à des sous-domaines de iiens.net, il est fréquent que le protocole https (http + SSL ce qui permet d\'avoir une connexion sécurisée) soit utilisé. Seulement voilà, pour cela on utilise un certificat d\'authentification, émis par une CA (Certificate Authority) qui est une tierce partie permettant d\'authentifier, dans notre cas, le serveur.<br/>
-Acheter un certificat coûtant plutôt cher, Arise est son propre CA. Mais ton navigateur ne sait pas par défaut que Arise est une CA à qui l\'on peut faire confiance. Il faut donc lui dire.<br/> Tu vas donc procéder à l\'installation du certificat de la CA Arise &#8230; pour faire confiance à Arise !<br/> Pour cela : <ul><li>Clique sur le bouton ci-dessous : le certificat va être téléchargé sur ton smartphone</li><li>Vas dans Paramètres > Sécurité et clique sur "Installer depuis la carte SD"</li> </ul>]]></string>
-
+	<string name="search_progress">Recherche en cours &#8230;</string>
+	
 </resources>

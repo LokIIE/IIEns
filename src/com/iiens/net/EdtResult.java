@@ -12,7 +12,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,7 +40,6 @@ public class EdtResult extends Fragment {
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
-		Log.d("EdtResult", "onCreate called");
 		super.onCreate(savedInstanceState);
 
 		bundle = this.getArguments(); 
@@ -54,7 +52,6 @@ public class EdtResult extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Log.d("EdtResult", "onCreateView called");
 		super.onCreate(savedInstanceState);
 
 		View view =  inflater.inflate(R.layout.edt_result, container, false);

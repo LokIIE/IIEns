@@ -17,18 +17,17 @@
         android:textOff="Tous"
         android:textOn="Perso" />
 
-    
-    <Spinner android:id="@+id/pref_spinner_promo"
+    <Spinner
+        android:id="@+id/pref_spinner_promo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:drawSelectorOnTop="true" />
-    
-    <Button android:id="@+id/pref_ok"
+
+    <Button
+        android:id="@+id/pref_ok"
         android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_gravity="center|bottom"
-		android:text="@string/pref_ok_button" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:text="@string/pref_ok_button" />
 
-
-    
 </LinearLayout>

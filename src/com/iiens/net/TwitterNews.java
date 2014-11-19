@@ -8,7 +8,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,14 +18,12 @@ import android.widget.Toast;
 /** TwitterNews
 	Fragment affichant les tweets concernant l'école
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
-**/
+ **/
 
 public class TwitterNews extends Fragment {
 
 	private Bundle bundle = new Bundle();
 	private ArrayList<Tweet> result = new ArrayList<Tweet>();
-	private String query = "#ENSIIE OR @ENSIIE OR @A3IE -RT";
-	private int tweetsNumber = 100;
 
 	// newInstance constructor for creating fragment with arguments
 	public static TwitterNews newInstance(Bundle mainBundle) {
@@ -47,8 +44,7 @@ public class TwitterNews extends Fragment {
 		final ListView mListView = (ListView) view.findViewById(R.id.listview);
 
 		if (!bundle.containsKey("twitternews") && isOnline()){
-			Log.d("twitter_log" , "Récupération twitter internet***");
-			TwitterGetRequest getTweets = new TwitterGetRequest(query, tweetsNumber);
+			TwitterGetRequest getTweets = new TwitterGetRequest(getActivity(), bundle.getString("scriptURL"));
 			try {
 				result = getTweets.execute().get();
 			} catch (InterruptedException e) {
@@ -57,9 +53,8 @@ public class TwitterNews extends Fragment {
 				e.printStackTrace();
 			}
 			mListView.setAdapter(new TwitterItemsAdapter(getActivity().getApplicationContext(), R.layout.fragment_listview, result));
-			saveResult(result, bundle, "twitternews");
+			if (result.size() > 0) saveResult(result, bundle, "twitternews");
 		} else if (bundle.containsKey("twitternews")) {
-			Log.d("twitter_log" , "Récupération twitter bundle***");
 			Bundle tweetsBundle = bundle.getBundle("twitternews");
 			result = new ArrayList<Tweet>();
 			for (int i=0; i < tweetsBundle.size(); i++) {

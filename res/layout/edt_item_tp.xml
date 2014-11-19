@@ -10,10 +10,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:background="@color/tpback"
+        android:paddingBottom="8dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
         android:paddingTop="8dp"
-        android:paddingBottom="8dp"
         android:singleLine="false"
         android:textColor="@color/tptxt"
         android:textSize="16sp" />

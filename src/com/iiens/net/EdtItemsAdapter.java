@@ -3,6 +3,7 @@ package com.iiens.net;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
  **/
 
+@SuppressLint("DefaultLocale")
 public class EdtItemsAdapter extends BaseAdapter {
 
 	private List<EdtItem> edtItemsList = new ArrayList<EdtItem>();
@@ -71,12 +73,10 @@ public class EdtItemsAdapter extends BaseAdapter {
 			else if (type.equals("T.D.")) arg1 = inflater.inflate(R.layout.edt_item_td, arg2, false);
 			else if (type.equals("assoce")) arg1 = inflater.inflate(R.layout.edt_item_club, arg2, false);
 
-			// Set titre and take into account special cases
-			String titre = edtItem.getTitre();
-			if (titre.length() > 0) {
-				if (titre.equals("Conférences")) titre = "Cycle de conférences";
-				else if (!type.equals("assoce")) titre = " de " + titre;
-			}
+			// Set groupe
+			String groupe = edtItem.getGroupe();
+			if (edtItem.getGroupe().length() > 0) {groupe = " pour " + groupe;}
+			if (edtItem.getGroupe().startsWith("op")) {groupe = "";}
 
 			// Set salle and take into account special cases
 			String lieu = edtItem.getLieu();
@@ -96,10 +96,21 @@ public class EdtItemsAdapter extends BaseAdapter {
 				else auteur = " avec " + auteur;
 			}
 
-			// Set groupe
-			String groupe = edtItem.getGroupe();
-			if (edtItem.getGroupe().length() > 0) {groupe = " pour " + groupe;}
-			if (edtItem.getGroupe().startsWith("op")) {groupe = "";}
+			// Set titre and take into account special cases
+			String titre = edtItem.getTitre();
+			if (titre.length() > 0) {
+				if (titre.equals("Conférences")) {
+					titre = "Cycle de conférences";
+					auteur = "";
+					type = "";
+				}
+				else if (titre.contains("Langues Vivantes")) {
+					titre = edtItem.getGroupe().toUpperCase();
+					groupe = "";
+					type = "";
+				}
+				else if (!type.equals("assoce")) titre = " de " + titre;
+			}
 
 			TextView mEdtItem = (TextView) arg1.findViewById(R.id.edt_item_content);
 			if (type.equals("assoce")) { mEdtItem.setText(Html.fromHtml("<b>" + hDebut + "-" + hFin + "</b>" + " : " + titre + lieu + auteur)); 

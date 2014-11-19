@@ -41,10 +41,10 @@ public class Edt extends Fragment {
 	private RadioButton radio1A, radio2A, radio3A;
 	private ImageButton mEdtCalendar;
 	private Calendar myCalendar = Calendar.getInstance();
-	private LinearLayout mOpt2a, mOpt3a;
+	private LinearLayout mFormulaire, mProgressSpinner, mOpt2a, mOpt3a;
 	private Spinner mGroupSpinner, mOptSpinner1, mOptSpinner2, mOptSpinner3, mOptSpinner4, mOptSpinner5, mOptSpinner6;
-	private SimpleDateFormat calDateFormater = new SimpleDateFormat("dd-MM-yyyy");
-	private SimpleDateFormat rqDateFormater = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat calDateFormater = new SimpleDateFormat("dd-MM-yyyy", Locale.FRENCH);
+	private SimpleDateFormat rqDateFormater = new SimpleDateFormat("yyyy-MM-dd", Locale.FRENCH);
 	private String[] groupes = {"", "GR1", "GR1.1", "GR1.2", "GR2", "GR2.1", "GR2.2", "GR3", "GR3.1", "GR3.2", "GR4", "GR4.1", "GR4.2", "GR5", "FIPA"};
 	private String[][] options2a = { {},
 			{"", "op21.1", "op21.2", "op21.2g1", "op21.3", "op21.4"},
@@ -68,7 +68,6 @@ public class Edt extends Fragment {
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
-		Log.d("Edt", "onCreate called");
 		super.onCreate(savedInstanceState);
 		bundle = this.getArguments(); 
 		// retain this fragment
@@ -78,11 +77,12 @@ public class Edt extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		Log.d("Edt", "onCreateView called");
 
 		super.onCreate(savedInstanceState);
 
 		View view =  inflater.inflate(R.layout.edt_formulaire, container, false);
+		mFormulaire = (LinearLayout) view.findViewById(R.id.edt_formulaire);
+		mProgressSpinner = (LinearLayout) view.findViewById(R.id.spinner_layout);
 		mEdtPickedDate = (TextView) view.findViewById(R.id.edt_picked_date);
 		mEdtCalendar = (ImageButton) view.findViewById(R.id.edt_calendar);
 
@@ -160,7 +160,6 @@ public class Edt extends Fragment {
 		btnSearch.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.d("Edt", "btnSearch clicked");
 
 				// get selected radio button from radioGroup
 				int selectedId = radioPromoGroup.getCheckedRadioButtonId();
@@ -205,8 +204,6 @@ public class Edt extends Fragment {
 
 				String [] filtre = {selectedGroup, option1, option2, option3, option4, option5, option6};
 
-				for (int i=0; i< filtre.length; i++) Log.d("*** Filtre ***", filtre[i].toString());
-
 				// format the date picked to display it in the results and to match the database date format
 				String date = mEdtPickedDate.getText().toString();
 				try {
@@ -226,6 +223,9 @@ public class Edt extends Fragment {
 					bundle.putString("promo", promo);
 					bundle.putStringArray("filtre", filtre);
 					frag.setArguments(bundle);
+
+					mProgressSpinner.setVisibility(View.VISIBLE);
+					mFormulaire.setVisibility(View.GONE);				
 
 					fragmentManager.beginTransaction().replace(R.id.content, frag).commit();
 				} else {

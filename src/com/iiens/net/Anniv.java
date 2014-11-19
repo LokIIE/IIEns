@@ -8,7 +8,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +27,6 @@ public class Anniv extends Fragment {
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
-		Log.d("Anniv", "onCreate called");
 		super.onCreate(savedInstanceState);
 		bundle = this.getArguments(); 
 		// retain this fragment
@@ -38,16 +36,14 @@ public class Anniv extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
-		final View view =  inflater.inflate(R.layout.fragment_listview, container, false);
-		//		Bundle bundle = this.getArguments();
 		super.onCreate(savedInstanceState);
 
+		final View view =  inflater.inflate(R.layout.fragment_listview, container, false);
 		bundle = this.getArguments();
 		final ListView mListView = (ListView) view.findViewById(R.id.listview);
 
 		if (!bundle.containsKey("anniversaires") && isOnline()){
-			AnnivGetRequest getAnniv = new AnnivGetRequest(bundle.getString("scriptURL"));
+			AnnivGetRequest getAnniv = new AnnivGetRequest(getActivity(), bundle.getString("scriptURL"));
 
 			try {
 				result = getAnniv.execute().get();
@@ -61,7 +57,6 @@ public class Anniv extends Fragment {
 			}
 
 		} else if (bundle.containsKey("anniversaires")) {
-			Log.d("*** DEBUG " , "Récupération anniv bundle***");
 			Bundle annivBundle = bundle.getBundle("anniversaires");
 			result = new ArrayList<AnnivItem>();
 			for (int i=0; i < annivBundle.size(); i++) {

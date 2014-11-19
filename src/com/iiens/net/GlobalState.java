@@ -18,7 +18,7 @@ public class GlobalState extends Application {
 	public void addBundle(Bundle bundle){
 		appbundle.putAll(bundle);
 	}
-	
+
 	public void resetBundle() {
 		appbundle.clear();
 	}
