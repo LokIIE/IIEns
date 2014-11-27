@@ -9,7 +9,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -24,12 +23,24 @@ public class TwitterNews extends Fragment {
 
 	private Bundle bundle = new Bundle();
 	private ArrayList<Tweet> result = new ArrayList<Tweet>();
+	private String bundleKey = "twitternews";
 
-	// newInstance constructor for creating fragment with arguments
-	public static TwitterNews newInstance(Bundle mainBundle) {
-		TwitterNews fragment = new TwitterNews();
-		fragment.setArguments(mainBundle);
-		return fragment;
+	@Override // this method is only called once for this fragment
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		bundle = this.getArguments(); 
+
+		// retain this fragment
+		setRetainInstance(true);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (savedInstanceState != null) {
+			// Restauration des données du contexte utilisateur
+			bundle.putAll(savedInstanceState);
+		}
 	}
 
 	@Override
@@ -43,26 +54,32 @@ public class TwitterNews extends Fragment {
 		bundle = this.getArguments();
 		final ListView mListView = (ListView) view.findViewById(R.id.listview);
 
-		if (!bundle.containsKey("twitternews") && isOnline()){
-			TwitterGetRequest getTweets = new TwitterGetRequest(getActivity(), bundle.getString("scriptURL"));
+		if (bundle.containsKey(bundleKey)) {
+
+			Bundle tweetsBundle = bundle.getBundle(bundleKey);
+			result = new ArrayList<Tweet>();
+
+			for (int i=0; i < tweetsBundle.size(); i++) {
+				ArrayList<String> twIA = tweetsBundle.getStringArrayList(Integer.toString(i));
+				Tweet tweetItem = new Tweet(twIA.get(0), twIA.get(1), twIA.get(2), twIA.get(3), twIA.get(4), twIA.get(5), twIA.get(6), twIA.get(7), twIA.get(8));
+				result.add(tweetItem);
+			}
+
+			mListView.setAdapter(new TwitterItemsAdapter(getActivity().getApplicationContext(), R.layout.fragment_listview, result));
+
+		} else if (!bundle.containsKey(bundleKey) && isOnline()){
+
 			try {
-				result = getTweets.execute().get();
+				result = new TwitterGetRequest(getActivity(), bundle.getString("scriptURL")).execute().get();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (ExecutionException e) {
 				e.printStackTrace();
 			}
 			mListView.setAdapter(new TwitterItemsAdapter(getActivity().getApplicationContext(), R.layout.fragment_listview, result));
-			if (result.size() > 0) saveResult(result, bundle, "twitternews");
-		} else if (bundle.containsKey("twitternews")) {
-			Bundle tweetsBundle = bundle.getBundle("twitternews");
-			result = new ArrayList<Tweet>();
-			for (int i=0; i < tweetsBundle.size(); i++) {
-				ArrayList<String> twIA = tweetsBundle.getStringArrayList(Integer.toString(i));
-				Tweet tweetItem = new Tweet(twIA.get(0), twIA.get(1), twIA.get(2), twIA.get(3), twIA.get(4), twIA.get(5), twIA.get(6), twIA.get(7), twIA.get(8));
-				result.add(tweetItem);
-			}
-			mListView.setAdapter(new TwitterItemsAdapter(getActivity().getApplicationContext(), R.layout.fragment_listview, result));
+
+			if (result.size() > 0) saveResult(result, bundle, bundleKey); // save Tweets in Bundle to avoid using data all over again
+
 		} else {
 			Toast.makeText(getActivity().getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
 		}
@@ -70,7 +87,7 @@ public class TwitterNews extends Fragment {
 		return view;
 	}
 
-	// Verifies that the app has internet access
+	/* Verifies that the app has internet access */
 	public boolean isOnline() {
 		ConnectivityManager cm =
 				(ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -81,18 +98,6 @@ public class TwitterNews extends Fragment {
 		return false;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
 	private void saveResult(ArrayList<Tweet> result, Bundle bundle, String key) {
 		int i = 0;
 		Bundle tweetSave = new Bundle();
@@ -100,6 +105,14 @@ public class TwitterNews extends Fragment {
 			tweetSave.putStringArrayList(Integer.toString(i), result.get(i).toArrayListString());
 		}
 		bundle.putBundle(key, tweetSave);
+	}
+
+	/* Action when (for ex) the screen orientation changes */
+	@Override
+	public void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		outState.putAll(bundle);
 	}
 
 }

@@ -39,7 +39,7 @@ public class SplashScreen extends Activity {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				Intent i = new Intent(SplashScreen.this, Main.class);
+				Intent i = new Intent(SplashScreen.this, Login.class);
 				if (isOnline()) { /* Start main activity when timer is over and end splash screen */
 					if (!backPressed) {
 						startActivity(i);

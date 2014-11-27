@@ -1,9 +1,16 @@
 package com.iiens.net;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
-import android.app.Activity;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,6 +19,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,25 +35,22 @@ public class News extends Fragment {
 
 	private int newsNumber = 6; // number of news to show
 	private Bundle bundle = new Bundle();
-	private ArrayList<NewsItem> result = new ArrayList<NewsItem>();
+	private ArrayList<NewsItem> newsItemsList;
 	private ListView mListView;
+	private Context context;
 	SharedPreferences SP;
-
-	// News constructor for creating fragment with arguments
-	public static News newInstance(Bundle mainBundle) {
-		News fragment = new News();
-		fragment.setArguments(mainBundle);
-		return fragment;
-	}
-
-	public Bundle getBundle(){
-		return bundle;
-	}
+	NewsItemsAdapter newsAdapter;
+	private String bundleKey = "news";
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		bundle = this.getArguments();
+		context = getActivity();
+		if (savedInstanceState != null) {
+			bundle.putAll(savedInstanceState);
+		}
+
 		SP = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 		// retain this fragment
@@ -62,59 +67,108 @@ public class News extends Fragment {
 	}
 
 	@Override
-	public void onResume(){
-		super.onResume();
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View view = inflater.inflate(R.layout.fragment_listview, container, false);
+		View view = new View(getActivity());
+		view = inflater.inflate(R.layout.fragment_listview, container, false);
 		mListView = (ListView) view.findViewById(R.id.listview);
-		mListView.setDivider(null);
+		mListView.setDivider(null); // Do not show the separations between items on the screen
 
 		// Toast.makeText(getActivity().getApplicationContext(), SP.getString("last_title", ""), Toast.LENGTH_LONG).show();
 
-		super.onCreate(savedInstanceState);
+		// Récupération des news 
+		if (bundle.containsKey(bundleKey)){
+			Bundle newsBundle = bundle.getBundle(bundleKey);
+			newsItemsList = new ArrayList<NewsItem>();
 
-		// Récupération des news
-		if (!bundle.containsKey("news") && isOnline()){
-			result = new ArrayList<NewsItem>();
-			NewsGetRequest getNews = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL"));
+			for (int i=0; i < newsNumber; i++) {
+				ArrayList<String> newsItemSArray = newsBundle.getStringArrayList(Integer.toString(i)); 
+				NewsItem newsItem = new NewsItem().fromStringArrayList(newsItemSArray);
+				newsItemsList.add(newsItem);
+			}
+			mListView.setAdapter(new NewsItemsAdapter(getActivity().getApplicationContext(), newsItemsList));	
+		} else if (!bundle.containsKey(bundleKey) && isOnline()){
+			newsItemsList = new ArrayList<NewsItem>();
+
 			try {
-				result = getNews.execute().get();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
+				JSONArray jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
+				writeToInternalStorage(jResult.toString(), bundleKey+".txt");
+				readFromInternalStorage(bundleKey+".txt");
+				newsItemsList = jArrayToArrayList(jResult);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
-			NewsItemsAdapter newsAdapter = new NewsItemsAdapter(getActivity().getApplicationContext(), result, newsNumber);
-			mListView.setAdapter(newsAdapter);
-			if (result.size() > 0) {
-				saveResult(result, bundle, "news");
+			mListView.setAdapter(new NewsItemsAdapter(getActivity().getApplicationContext(), newsItemsList));
+
+			// If the request was successful, save the items to save data consumption
+			if (newsItemsList.size() > 0) {
+				saveResult(newsItemsList, bundle, bundleKey);
+				
 				Editor edit = SP.edit();
-				edit.putString("last_title", result.get(0).getTitle());
+				edit.putString("news_last_update", newsItemsList.get(0).getDate());
 				edit.apply();
 			}
-		} else if (bundle.containsKey("news")){
-			Bundle newsBundle = bundle.getBundle("news");
-			result = new ArrayList<NewsItem>();
-			for (int i=0; i < newsBundle.size(); i++) {
-				ArrayList<String> newsItemArray = newsBundle.getStringArrayList(Integer.toString(i)); 
-				NewsItem newsItem = new NewsItem(newsItemArray.get(0), newsItemArray.get(1), newsItemArray.get(2), newsItemArray.get(3));
-				result.add(newsItem);
-			}
-			NewsItemsAdapter newsAdapter = new NewsItemsAdapter(getActivity().getApplicationContext(), result, newsNumber);
-			mListView.setAdapter(newsAdapter);
 		} else Toast.makeText(getActivity().getApplicationContext(), "Recupérer les news : IMPOSSIBRU ! Try again", Toast.LENGTH_LONG).show();
 
 		return view;
 	}
 
+	@Override
+	public void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		outState.putAll(bundle);
+	}
+
+	private void writeToInternalStorage(String content, String fileName) {
+		String eol = System.getProperty("line.separator");
+		BufferedWriter writer = null; 
+		try {
+			writer = 
+					new BufferedWriter(new OutputStreamWriter(context.openFileOutput(fileName, 
+							Context.MODE_PRIVATE)));
+			writer.write(content + eol);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private void readFromInternalStorage(String fileName) {
+		String eol = System.getProperty("line.separator");
+		BufferedReader input = null;
+		try {
+			input = new BufferedReader(new InputStreamReader(context.openFileInput(fileName)));
+			String line;
+			StringBuffer buffer = new StringBuffer();
+			while ((line = input.readLine()) != null) {
+				buffer.append(line + eol);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+
 	// Verifies that the app has internet access
-	public boolean isOnline() {
+	private boolean isOnline() {
 		ConnectivityManager cm =
 				(ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -124,24 +178,31 @@ public class News extends Fragment {
 		return false;
 	}
 
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
+	private ArrayList<NewsItem> jArrayToArrayList(JSONArray jArray) {
+		ArrayList<NewsItem> newsItemsList = new ArrayList<NewsItem>();
+
+		try{
+			for(int i=0;i<jArray.length();i++){
+				JSONObject json_data = jArray.getJSONObject(i);
+				NewsItem newsItem = new NewsItem();
+				newsItem.fromJsonObject(json_data);
+				newsItemsList.add(newsItem);
+			}
+		} catch(JSONException e){
+			Log.e("news", "Error parsing data " + e.toString());
+		}
+
+		return newsItemsList;
 	}
 
+	/* Save each item of the ArrayList<NewsItem> in the bundle in StringArrayList form */
 	private void saveResult(ArrayList<NewsItem> result, Bundle bundle, String key) {
-		int i = 0;
 		Bundle newsSave = new Bundle();
-		for (i=0; i < result.size(); i++){
-			newsSave.putStringArrayList(Integer.toString(i), result.get(i).toArrayList());
+
+		for (int i=0; i < result.size(); i++){
+			newsSave.putStringArrayList(Integer.toString(i), result.get(i).toStringArrayList());
 		}
 		bundle.putBundle(key, newsSave);
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState)
-	{
-		outState.putAll(bundle);
 	}
 
 }

@@ -1,9 +1,6 @@
 package com.iiens.net;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Fragment;
@@ -18,7 +15,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /** EdtResult
@@ -26,26 +22,18 @@ import android.widget.Toast;
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
  **/
 
-public class EdtResult extends Fragment {
+public class TrombiResult extends Fragment {
 
-	private TextView mEdtDate;
 	private Button btnNewSearch;
-	private ListView mListView;
+	private ListView mGridView;
 	private Bundle bundle;
-	private SimpleDateFormat dateFrFormater = new SimpleDateFormat("EEEE dd MMMM yyyy", Locale.FRENCH);
-	private SimpleDateFormat rqDateFormater = new SimpleDateFormat("yyyy-MM-dd", Locale.FRENCH);
-	private String date;
-	private String promo;
-	private String[] filtre;
+	private ArrayList<TrombiItem> trombiItemsList;
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		bundle = this.getArguments(); 
-		this.date = bundle.getString("date");
-		this.promo = bundle.getString("promo");
-		this.filtre = bundle.getStringArray("filtre");
+		bundle = this.getArguments();
 		setRetainInstance(false);
 	}
 
@@ -56,29 +44,22 @@ public class EdtResult extends Fragment {
 			bundle.putAll(savedInstanceState);
 		}
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		View view =  inflater.inflate(R.layout.edt_result, container, false);
-		mEdtDate = (TextView) view.findViewById(R.id.edt_date);
-		mListView = (ListView) view.findViewById(R.id.listview);
+		View view =  inflater.inflate(R.layout.trombi_result, container, false);
+		mGridView = (ListView) view.findViewById(R.id.listview);
 		btnNewSearch = (Button) view.findViewById(R.id.edt_newsearch_button);
-
-		try {
-			mEdtDate.setText(dateFrFormater.format(rqDateFormater.parse(date.toString())).toString());
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
 
 		// action of the new search button
 		btnNewSearch.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				FragmentManager fragmentManager = getFragmentManager();
-				Fragment frag = new Edt();
+				Fragment frag = new Trombi();
 				frag.setArguments(bundle);
 				fragmentManager.beginTransaction().replace(R.id.content, frag).commit();
 			}
@@ -87,18 +68,19 @@ public class EdtResult extends Fragment {
 
 		// make the request
 		if (isOnline()){
+			Toast.makeText(getActivity().getApplicationContext(), "Requete en cours", Toast.LENGTH_LONG).show();
 
-			EdtGetRequest getEdt = new EdtGetRequest(getActivity(), date, promo, filtre, bundle.getString("scriptURL"));
-			ArrayList<EdtItem> result = new ArrayList<EdtItem>();
+			TrombiGetRequest getTrombi = new TrombiGetRequest(getActivity(), bundle);
+			trombiItemsList = new ArrayList<TrombiItem>();
 			try {						
-				result = getEdt.execute((Void) null).get();
+				trombiItemsList = getTrombi.execute().get();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (ExecutionException e) {
 				e.printStackTrace();
 			}
 
-			mListView.setAdapter(new EdtItemsAdapter(getActivity().getApplicationContext(), result));
+			mGridView.setAdapter(new TrombiItemsAdapter(getActivity().getApplicationContext(), trombiItemsList));
 		} else {
 			Toast.makeText(getActivity().getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
 		}

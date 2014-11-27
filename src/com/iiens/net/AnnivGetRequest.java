@@ -3,13 +3,7 @@ package com.iiens.net;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.security.KeyStore;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -18,10 +12,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -42,21 +33,22 @@ import android.util.Log;
 
 public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>> {
 
-	private static ArrayList<AnnivItem> AnnivItemsList = new ArrayList<AnnivItem>();
+	private static ArrayList<AnnivItem> annivItemsList;
 	private String scriptURL = null;
 	private static Context context;
 
 	@SuppressWarnings("static-access")
 	public AnnivGetRequest(Context context, String scriptURL){
+		annivItemsList = new ArrayList<AnnivItem>();
 		this.context = context;
 		this.scriptURL = scriptURL;
 	}
 
 	@Override
 	protected ArrayList<AnnivItem> doInBackground(Void... voids) {
-		AnnivItemsList = getAnnivRequest(scriptURL);
+		annivItemsList = getAnnivRequest(scriptURL);
 
-		return AnnivItemsList;
+		return annivItemsList;
 	}
 
 	// Récupère une liste d'items de l'emploi du temps.
@@ -70,36 +62,7 @@ public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>>
 
 		// Envoi de la commande http
 		try {
-			// Load CA from an InputStream (CA would be saved in Raw file,
-			// and loaded as a raw resource)
-			CertificateFactory cf = CertificateFactory.getInstance("X.509");
-			InputStream in = context.getResources().openRawResource(R.raw.cacert);
-			Certificate ca;
-			try {
-				ca = cf.generateCertificate(in);
-			} finally {
-				in.close();
-			}
-
-			// Create a KeyStore containing our trusted CAs
-			KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-			keyStore.load(null, null);
-			keyStore.setCertificateEntry("ca", ca); 
-
-			// Create a TrustManager that trusts the CAs in our KeyStore
-			String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-			TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-			tmf.init(keyStore);
-
-			// Create an SSLContext that uses our TrustManager
-			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(null, tmf.getTrustManagers(), null);
-
-			SchemeRegistry schemeRegistry = new SchemeRegistry();
-			schemeRegistry.register(new Scheme("http", PlainSocketFactory
-					.getSocketFactory(), 80));
-			SSLSocketFactory sslSocketFactory = new SSLSocketFactory(keyStore);
-			schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
+			SchemeRegistry schemeRegistry = new SSLArise().init(context);
 
 			HttpParams params = new BasicHttpParams();
 			ClientConnectionManager cm = 
@@ -125,7 +88,6 @@ public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>>
 			}
 			is.close();
 			result=sb.toString();
-			//Log.d("sdfdsf", "result " + result);
 		} catch (Exception e) {
 			Log.e("anniv_get", "Error converting result " + e.toString());
 		}
@@ -137,13 +99,13 @@ public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>>
 				JSONObject json_data = jArray.getJSONObject(i);
 				AnnivItem AnnivItem = new AnnivItem();
 				AnnivItem.mapJsonObject(json_data);
-				AnnivItemsList.add(AnnivItem);
+				annivItemsList.add(AnnivItem);
 			}
 		}catch(JSONException e){
 			Log.e("anniv_get", "Error parsing data " + e.toString());
 		}
 
-		return AnnivItemsList;
+		return annivItemsList;
 	}
 
 	//	@Override

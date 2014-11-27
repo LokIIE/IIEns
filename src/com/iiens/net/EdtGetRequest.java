@@ -4,13 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.security.KeyStore;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -19,10 +13,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -43,7 +34,7 @@ import android.util.Log;
 
 public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 
-	private ArrayList<EdtItem> edtItemsList = new ArrayList<EdtItem>();
+	private ArrayList<EdtItem> edtItemsList;
 	private String date;
 	private String promo;
 	static private String[] filtre;
@@ -52,6 +43,7 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 
 	@SuppressWarnings("static-access")
 	public EdtGetRequest(Context context, String date, String promo, String[] groupFiltre, String scriptURL){
+		this.edtItemsList = new ArrayList<EdtItem>();
 		this.date = date;
 		this.promo = promo;
 		this.context = context;
@@ -95,37 +87,7 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 		nameValuePairs.add(new BasicNameValuePair("promo", promo));
 
 		try {
-			// Load CA from an InputStream (CA would be saved in Raw file,
-			// and loaded as a raw resource)
-			CertificateFactory cf = CertificateFactory.getInstance("X.509");
-			InputStream in = context.getResources().openRawResource(R.raw.cacert);
-			Certificate ca;
-			try {
-				ca = cf.generateCertificate(in);
-			} finally {
-				in.close();
-			}
-
-			// Create a KeyStore containing our trusted CAs
-			KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-			keyStore.load(null, null);
-			keyStore.setCertificateEntry("ca", ca); 
-
-			// Create a TrustManager that trusts the CAs in our KeyStore
-			String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-			TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-			tmf.init(keyStore);
-
-			// Create an SSLContext that uses our TrustManager
-			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(null, tmf.getTrustManagers(), null);
-
-			SchemeRegistry schemeRegistry = new SchemeRegistry();
-			schemeRegistry.register(new Scheme("http", PlainSocketFactory
-					.getSocketFactory(), 80));
-			SSLSocketFactory sslSocketFactory = new SSLSocketFactory(keyStore);
-			schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
-
+			SchemeRegistry schemeRegistry = new SSLArise().init(context);
 			HttpParams params = new BasicHttpParams();
 			ClientConnectionManager cm = 
 					new ThreadSafeClientConnManager(params, schemeRegistry);

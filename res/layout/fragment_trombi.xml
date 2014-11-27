@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <ScrollView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="vertical" >
 
         <LinearLayout
+            android:id="@+id/trombi_formulaire"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
@@ -35,21 +36,21 @@
 
                 <Spinner
                     android:id="@+id/option_nom"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:entries="@array/option" >
                 </Spinner>
-
-                <EditText
-                    android:id="@+id/nom"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
             </LinearLayout>
+
+            <EditText
+                android:id="@+id/nom"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -66,21 +67,21 @@
 
                 <Spinner
                     android:id="@+id/option_prenom"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:entries="@array/option" >
                 </Spinner>
-
-                <EditText
-                    android:id="@+id/prenom"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
             </LinearLayout>
+
+            <EditText
+                android:id="@+id/prenom"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -96,20 +97,20 @@
 
                 <Spinner
                     android:id="@+id/option_pseudo"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:entries="@array/option" >
                 </Spinner>
-
-                <EditText
-                    android:id="@+id/pseudo"
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true" />
             </LinearLayout>
+
+            <EditText
+                android:id="@+id/pseudo"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -125,7 +126,7 @@
 
                 <Spinner
                     android:id="@+id/option_tel"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:entries="@array/option_tel" >
@@ -133,7 +134,7 @@
 
                 <EditText
                     android:id="@+id/tel"
-                    android:layout_width="120dp"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="phone"
@@ -185,7 +186,7 @@
 
                 <Spinner
                     android:id="@+id/promo"
-                    android:layout_width="fill_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:entries="@array/promo" >
@@ -257,7 +258,7 @@
 
                 <Spinner
                     android:id="@+id/option_logement"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:entries="@array/option_logement" >
@@ -279,30 +280,32 @@
 
                 <Spinner
                     android:id="@+id/option_club_ancienBdE"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:entries="@array/option_logement" >
                 </Spinner>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp" >
+
+                <Button
+                    android:id="@+id/Rechercher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|bottom"
+                    android:layout_marginTop="16dp"
+                    android:paddingLeft="32dp"
+                    android:paddingRight="32dp"
+                    android:text="@string/edt_search_button" />
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp" >
-
-        <Button
-            android:id="@+id/Rechercher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:layout_marginTop="16dp"
-            android:paddingLeft="32dp"
-            android:paddingRight="32dp"
-            android:text="@string/txt_button2" />
+        <include layout="@layout/progress_spinner" />
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

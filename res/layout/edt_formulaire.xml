@@ -115,6 +115,34 @@
                     android:paddingRight="16dp" >
                 </Spinner>
             </LinearLayout>
+            
+            <LinearLayout
+                android:id="@+id/edt_comm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:visibility="gone" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="@string/edt_comm_txt" />
+
+                <Spinner
+                    android:id="@+id/edt_comm_spin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:entries="@array/edt_comm_grp"
+                    android:padding="8dp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp" >
+                </Spinner>
+            </LinearLayout>
 
             <include layout="@layout/edt_options2a" />
 
@@ -123,15 +151,16 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:gravity="center" >
 
                 <Button
                     android:id="@+id/edt_search_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center|bottom"
                     android:background="@null"
-                    android:text="@string/txt_button2" />
+                    android:text="@string/edt_search_button" />
             </LinearLayout>
         </LinearLayout>
 

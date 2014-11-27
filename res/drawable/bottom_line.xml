@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<!-- This is the main color -->
+<item>
+  <shape>
+        <solid android:color="@color/orange" />
+  </shape>
+</item>
+<!-- This is the line -->
+<item android:bottom="1dp">
+ <shape>
+       <solid android:color="@color/white" />
+ </shape>
+</item>
+</layer-list>
+<!-- <shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" android:padding="10dp">
+     <solid android:color="#FFFFFF"/>
+     <stroke
+        android:width=".05dp"
+        android:color="#d2d2d2" />
+     <corners android:topLeftRadius="5dp"
+         android:topRightRadius="5dp"/>
+</shape> -->

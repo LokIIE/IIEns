@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="@string/anim_connexion"
+                android:text="@string/in_progress"
                 android:textColor="@color/black" />
         </LinearLayout>
     </LinearLayout>
@@ -56,42 +56,84 @@
             <EditText
                 android:id="@+id/username"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_top"
-                android:hint="@string/txt_username"
-                android:maxLines="1"
-                android:padding="10dp"
-                android:singleLine="true" />
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bottom_line"
+                android:hint="@string/hint_user"
+                android:paddingBottom="16dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="16dp"
+                android:singleLine="true"
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_bottom"
-                android:hint="@string/txt_password"
-                android:imeActionId="@+id/login"
+                android:layout_height="48dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bottom_line"
+                android:hint="@string/hint_password"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
-                android:maxLines="1"
-                android:padding="10dp"
-                android:singleLine="true" />
+                android:paddingBottom="16dp"
+                android:paddingLeft="8dp"
+                android:paddingTop="16dp"
+                android:singleLine="true"
+                android:textSize="16sp" />
 
             <CheckBox
-                android:id="@+id/remember_login"
+                android:id="@+id/auto_connect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/auto_connect"
                 android:textColor="@color/black" />
 
-            <Button
-                android:id="@+id/connexion_button"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                style="?android:attr/buttonBarStyle"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:paddingLeft="32dp"
-                android:paddingRight="32dp"
-                android:text="@string/txt_button" />
+                android:background="@null"
+                android:gravity="center"
+                android:orientation="horizontal" >
+
+                <Button
+                    android:id="@+id/connect_button"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@null"
+                    android:minWidth="64dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/connect_button"
+                    android:textColor="@color/orange"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/offline_button"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:background="@null"
+                    android:minWidth="64dp"
+                    android:paddingBottom="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/offline_button"
+                    android:textColor="@color/orange"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

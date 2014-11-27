@@ -13,9 +13,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -40,12 +38,13 @@ public class Edt extends Fragment {
 	private RadioGroup radioPromoGroup;
 	private RadioButton radio1A, radio2A, radio3A;
 	private ImageButton mEdtCalendar;
-	private Calendar myCalendar = Calendar.getInstance();
-	private LinearLayout mFormulaire, mProgressSpinner, mOpt2a, mOpt3a;
-	private Spinner mGroupSpinner, mOptSpinner1, mOptSpinner2, mOptSpinner3, mOptSpinner4, mOptSpinner5, mOptSpinner6;
+	private Calendar myCalendar;
+	private LinearLayout mFormulaire, mComm, mProgressSpinner, mOpt2a, mOpt3a;
+	private Spinner mGroupSpinner, mCommSpinner, mOptSpinner1, mOptSpinner2, mOptSpinner3, mOptSpinner4, mOptSpinner5, mOptSpinner6;
 	private SimpleDateFormat calDateFormater = new SimpleDateFormat("dd-MM-yyyy", Locale.FRENCH);
 	private SimpleDateFormat rqDateFormater = new SimpleDateFormat("yyyy-MM-dd", Locale.FRENCH);
 	private String[] groupes = {"", "GR1", "GR1.1", "GR1.2", "GR2", "GR2.1", "GR2.2", "GR3", "GR3.1", "GR3.2", "GR4", "GR4.1", "GR4.2", "GR5", "FIPA"};
+	private String[] commGroupes = {"", "GR A", "GR B", "GR C", "GR D", "GR E", "GR F"};
 	private String[][] options2a = { {},
 			{"", "op21.1", "op21.2", "op21.2g1", "op21.3", "op21.4"},
 			{"", "op22.1", "op22.2", "op22.3", "op22.4"},
@@ -64,14 +63,26 @@ public class Edt extends Fragment {
 	};
 	private String[][] optionsPromo = null;
 	private Button btnSearch;
-	private Bundle bundle = new Bundle();
+	private Bundle bundle;
+	private Fragment frag;
+	private FragmentManager fragmentManager;
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		bundle = this.getArguments(); 
+
 		// retain this fragment
 		setRetainInstance(true);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (savedInstanceState != null) {
+			// Restauration des données du contexte utilisateur
+			bundle.putAll(savedInstanceState);
+		}
 	}
 
 	@Override
@@ -81,6 +92,7 @@ public class Edt extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		View view =  inflater.inflate(R.layout.edt_formulaire, container, false);
+		myCalendar = Calendar.getInstance();
 		mFormulaire = (LinearLayout) view.findViewById(R.id.edt_formulaire);
 		mProgressSpinner = (LinearLayout) view.findViewById(R.id.spinner_layout);
 		mEdtPickedDate = (TextView) view.findViewById(R.id.edt_picked_date);
@@ -93,7 +105,10 @@ public class Edt extends Fragment {
 
 		mOpt2a = (LinearLayout) view.findViewById(R.id.edt_options2A);
 		mOpt3a = (LinearLayout) view.findViewById(R.id.edt_options3A);
+		mComm = (LinearLayout) view.findViewById(R.id.edt_comm);
 		mGroupSpinner = (Spinner) view.findViewById(R.id.edt_groupe);
+		mCommSpinner = (Spinner) view.findViewById(R.id.edt_comm_spin);
+
 
 		btnSearch = (Button) view.findViewById(R.id.edt_search_button);
 
@@ -103,6 +118,7 @@ public class Edt extends Fragment {
 			public void onClick(View v) {
 				mOpt2a.setVisibility(View.GONE);
 				mOpt3a.setVisibility(View.GONE);
+				mComm.setVisibility(View.VISIBLE);
 			}
 
 		});
@@ -112,6 +128,7 @@ public class Edt extends Fragment {
 			public void onClick(View v) {
 				mOpt2a.setVisibility(View.VISIBLE);
 				mOpt3a.setVisibility(View.GONE);
+				mComm.setVisibility(View.VISIBLE);
 			}
 
 		});
@@ -121,6 +138,7 @@ public class Edt extends Fragment {
 			public void onClick(View v) {
 				mOpt2a.setVisibility(View.GONE);
 				mOpt3a.setVisibility(View.VISIBLE);
+				mComm.setVisibility(View.GONE);
 			}
 
 		});
@@ -174,16 +192,21 @@ public class Edt extends Fragment {
 				String option4 = ""; String option5 = ""; String option6 = "";
 				LinearLayout promoOptsLayout = null;
 
-				if (selectedId == radio1A.getId()) {promo = "1";}
+				String commGroup = "";
+				if (selectedId == radio1A.getId()) {
+					promo = "1";
+					commGroup = commGroupes[mCommSpinner.getSelectedItemPosition()];
+				}
 				else if (selectedId == radio2A.getId()) {
 					promo = "2";
 					promoOptsLayout = mOpt2a;
 					optionsPromo = options2a;
+					commGroup = commGroupes[mCommSpinner.getSelectedItemPosition()];
 				} else if (selectedId == radio3A.getId()) {
 					promo = "3";
 					promoOptsLayout = mOpt3a;
 					optionsPromo = options3a;
-				} else {Log.d("Edt", "problème");}
+				}
 
 				String selectedGroup = groupes[mGroupSpinner.getSelectedItemPosition()];
 
@@ -202,7 +225,7 @@ public class Edt extends Fragment {
 					option6 = optionsPromo[6][mOptSpinner6.getSelectedItemPosition()];
 				}
 
-				String [] filtre = {selectedGroup, option1, option2, option3, option4, option5, option6};
+				String [] filtre = {selectedGroup, commGroup, option1, option2, option3, option4, option5, option6};
 
 				// format the date picked to display it in the results and to match the database date format
 				String date = mEdtPickedDate.getText().toString();
@@ -214,11 +237,9 @@ public class Edt extends Fragment {
 
 				// make the request
 				if (isOnline()){
-					FragmentManager fragmentManager = getFragmentManager();
-					Fragment frag = new EdtResult();
+					fragmentManager = getFragmentManager();
+					frag = new EdtResult();
 
-					Log.d("Edt", "date : " + date);
-					Log.d("Edt", "promo : " + promo.isEmpty());
 					bundle.putString("date", date);
 					bundle.putString("promo", promo);
 					bundle.putStringArray("filtre", filtre);
@@ -250,18 +271,12 @@ public class Edt extends Fragment {
 		return false;
 	}
 
+	/* Action when (for ex) the screen orientation changes */
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+	public void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		outState.putAll(bundle);
 	}
-
-
 
 }

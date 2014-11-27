@@ -28,28 +28,36 @@ public class NewsItem {
 	public void setAuthor(String author) {this.author = author;}
 	public void setDate(String date) {this.date = date;}
 
-	public NewsItem(String title, String description, String author, String date){
-		this.title = title;
-		this.description = description;
-		this.author = author;
-		this.date = date;
-	}
-
 	public NewsItem() {}
 
-	public void mapJsonObject(JSONObject json_data) {
+	public void fromJsonObject(JSONObject json_data) {
 		try {
 			setTitle(json_data.getString("titre"));
 			String contenu = json_data.getString("contenu");
-			setDescription(formatHtml(contenu));
+			setDescription(toHtml(contenu));
 			setAuthor(json_data.getString("par"));
 			setDate(json_data.getString("calDate"));
 		} catch(JSONException e){
-			Log.e("log_tag", "Error parsing data " + e.toString());
+			Log.e("newsitem_tag", "Error parsing data " + e.toString());
 		}
 	}
+	
+	public JSONObject toJsonObject() {
+		JSONObject jObject = new JSONObject();
+		
+		try {
+			jObject.put("titre", title);
+			jObject.put("contenu", description);
+			jObject.put("par", author);
+			jObject.put("calDate", date);
+		} catch(JSONException e){
+			Log.e("newsitem_tag", "Error parsing data " + e.toString());
+		}
+		
+		return jObject;
+	}
 
-	private String formatHtml(String contenu){
+	private String toHtml(String contenu){
 		String formatContenu = contenu;
 
 		String pRed = "(?i)(:red.*?:)(.+?)(:red:)";
@@ -73,7 +81,7 @@ public class NewsItem {
 		return formatContenu;
 	}
 
-	public ArrayList<String> toArrayList() {
+	public ArrayList<String> toStringArrayList() {
 		ArrayList<String> result = new ArrayList<String>();
 
 		result.add(title);
@@ -82,5 +90,14 @@ public class NewsItem {
 		result.add(date);
 
 		return result;
+	}
+	
+	public NewsItem fromStringArrayList(ArrayList<String> sArrayList) {
+		this.title = sArrayList.get(0);
+		this.description = sArrayList.get(1);
+		this.author = sArrayList.get(2);
+		this.date = sArrayList.get(3);
+		
+		return this;
 	}
 }

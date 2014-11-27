@@ -24,13 +24,24 @@ public class Anniv extends Fragment {
 
 	private Bundle bundle = new Bundle();
 	private ArrayList<AnnivItem> result = new ArrayList<AnnivItem>();
+	private String bundleKey = "anniv";
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		bundle = this.getArguments(); 
+
 		// retain this fragment
 		setRetainInstance(true);
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (savedInstanceState != null) {
+			// Restauration des données du contexte utilisateur
+			bundle.putAll(savedInstanceState);
+		}
 	}
 
 	@Override
@@ -42,22 +53,22 @@ public class Anniv extends Fragment {
 		bundle = this.getArguments();
 		final ListView mListView = (ListView) view.findViewById(R.id.listview);
 
-		if (!bundle.containsKey("anniversaires") && isOnline()){
+		if (!bundle.containsKey(bundleKey) && isOnline()){
 			AnnivGetRequest getAnniv = new AnnivGetRequest(getActivity(), bundle.getString("scriptURL"));
 
 			try {
 				result = getAnniv.execute().get();
 				AnnivItemsAdapter annivAdapter = new AnnivItemsAdapter(getActivity().getApplicationContext(), result);
 				mListView.setAdapter(annivAdapter);
-				saveResult(result, bundle, "anniversaires");
+				saveResult(result, bundle, bundleKey);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (ExecutionException e) {
 				e.printStackTrace();
 			}
 
-		} else if (bundle.containsKey("anniversaires")) {
-			Bundle annivBundle = bundle.getBundle("anniversaires");
+		} else if (bundle.containsKey(bundleKey)) {
+			Bundle annivBundle = bundle.getBundle( bundleKey);
 			result = new ArrayList<AnnivItem>();
 			for (int i=0; i < annivBundle.size(); i++) {
 				ArrayList<String> annivIA = annivBundle.getStringArrayList(Integer.toString(i));
@@ -103,7 +114,13 @@ public class Anniv extends Fragment {
 		}
 		bundle.putBundle(key, annivSave);
 	}
-
-
+	
+	/* Action when (for ex) the screen orientation changes */
+	@Override
+	public void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		outState.putAll(bundle);
+	}
 
 }
