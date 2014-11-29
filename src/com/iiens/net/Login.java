@@ -55,7 +55,7 @@ public class Login extends Activity {
 	private View mLoginFormView, mLoginStatusView;
 	private TextView mLoginStatus;
 	private CheckBox mCheckBoxView;
-	private Button mConnectButton;
+	private Button mConnectButton, mOfflineButton;
 	
 	// Other
 	private UserLoginTask mAuthTask = null;
@@ -81,7 +81,8 @@ public class Login extends Activity {
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatus = (TextView) findViewById(R.id.login_status_message);
 		mConnectButton = (Button) findViewById(R.id.connect_button);
-		preferences = this.getPreferences(Context.MODE_PRIVATE);
+		mOfflineButton = (Button) findViewById(R.id.offline_button);
+		preferences = getSharedPreferences("IIEns_prefs", Context.MODE_PRIVATE);
 	}
 
 	@Override
@@ -89,7 +90,7 @@ public class Login extends Activity {
 		super.onStart();
 		
 		// If automatic log in is enabled, try to authenticate
-		if (preferences.getBoolean("remember_login", false) == true) {
+		if (preferences.getBoolean("auto_login", false)) {
 			mUsernameView.setText(preferences.getString("login", ""));
 			mPasswordView.setText(preferences.getString("password", ""));
 			mCheckBoxView.setChecked(true);
@@ -103,7 +104,7 @@ public class Login extends Activity {
 					// If asked, saves the credentials in the preferences of the app
 					if (mCheckBoxView.isChecked()) {
 						editor = preferences.edit();
-						editor.putBoolean("remember_login", true);
+						editor.putBoolean("auto_login", true);
 						editor.putString("login", mUsernameView.getText().toString());
 						editor.putString("password", mPasswordView.getText().toString());
 						editor.commit();
@@ -112,6 +113,19 @@ public class Login extends Activity {
 					// Try to authenticate
 					attemptLogin();
 				}	
+			});
+			
+			mOfflineButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					mLoginStatus.setText(R.string.offline_mode);
+					showProgress(true);
+					Intent i = new Intent(Login.this, Main.class);
+					i.putExtra("isConnected", isConnected);
+					startActivity(i);
+					overridePendingTransition(R.anim.bottom_in, R.anim.top_out);
+					finish();					
+				}
 			});
 		}
 	}
@@ -179,7 +193,7 @@ public class Login extends Activity {
 
 	}
 
-	/* Verifies the inputs are correctly provided */
+	/* Verifies the credentials are provided before attempting log in */
 	public void attemptLogin() {
 		// If already logged in
 		if (mAuthTask != null) {
@@ -259,7 +273,7 @@ public class Login extends Activity {
 			Log.e("login", "Error in http connection " + e.toString());
 		}
 
-		// Conversion de la requête en string
+		// Conversion du résultat en string
 		try{
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is,"utf-8"),8);
 			StringBuilder sb = new StringBuilder();
@@ -275,7 +289,6 @@ public class Login extends Activity {
 		
 		Document doc = Jsoup.parse(result);
 		String element = doc.select("div.connect").first().text();
-		Log.d("element", element);
 		
 		httpclient.getConnectionManager().shutdown();
 		

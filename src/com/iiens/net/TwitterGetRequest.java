@@ -1,11 +1,8 @@
 package com.iiens.net;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 import org.apache.http.HttpEntity;
@@ -26,8 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -61,6 +56,7 @@ public class TwitterGetRequest extends AsyncTask<Void, Void, ArrayList<Tweet>> {
 	public static ArrayList<Tweet> getTweets(String scriptURL) {
 
 		ArrayList<Tweet> tweetList = new ArrayList<Tweet>();
+		JSONArray resJArray = new JSONArray();
 
 		InputStream is = null;
 		String result = "";
@@ -106,6 +102,18 @@ public class TwitterGetRequest extends AsyncTask<Void, Void, ArrayList<Tweet>> {
 			JSONArray jArray = (JSONArray) new JSONObject(result).get("statuses");
 			for(int i=0;i<jArray.length();i++){
 				JSONObject json_data = jArray.getJSONObject(i);
+				JSONObject res_tweet = new JSONObject();
+				JSONObject res_user = new JSONObject();
+				res_tweet.put("created_at", json_data.getString("created_at"));
+				res_tweet.put("id", json_data.getString("id"));
+				res_tweet.put("text", json_data.getString("text"));
+				res_tweet.put("in_reply_to_screen_name", json_data.getString("in_reply_to_screen_name"));
+				res_tweet.put("in_reply_to_status_id" , json_data.getString("in_reply_to_status_id"));
+				res_tweet.put("in_reply_to_user_id" , json_data.getString("in_reply_to_user_id"));
+				res_user.put("screen_name" , json_data.getJSONObject("user").getString("screen_name"));
+				res_user.put("name" , json_data.getJSONObject("user").getString("name"));
+				res_user.put("profile_image_url" ,json_data.getJSONObject("user").getString("profile_image_url"));
+				
 				Tweet tweet = new Tweet(
 						json_data.getString("created_at"),
 						json_data.getString("id"),
@@ -115,30 +123,16 @@ public class TwitterGetRequest extends AsyncTask<Void, Void, ArrayList<Tweet>> {
 						json_data.getString("in_reply_to_user_id"),
 						json_data.getJSONObject("user").getString("screen_name"),
 						json_data.getJSONObject("user").getString("name"),
-						json_data.getJSONObject("user").getString("profile_image_url_https")
+						json_data.getJSONObject("user").getString("profile_image_url")
 						);
 				tweetList.add(tweet);
+				resJArray.put(res_tweet).put(res_user);
 			}
 		}catch(JSONException e){
 			Log.e("twitter_get", "Error parsing data " + e.toString());
 		}
 
 		return tweetList;
-	}
-
-
-	public Bitmap getBitmap(String bitmapUrl) {
-		try {
-			URL url = new URL(bitmapUrl);
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			connection.setDoInput(true);
-			connection.connect();
-			InputStream input = connection.getInputStream();
-			Bitmap myBitmap = BitmapFactory.decodeStream(input);
-			return myBitmap;
-		} catch (IOException e) {
-			return null;
-		}
 	}
 
 }

@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /** TwitterItemsAdapter 
@@ -40,12 +41,16 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
 
 		Tweet tweet = tweets.get(position);
 		if (tweet != null) {
+			ImageView avatar = (ImageView) v.findViewById(R.id.avatar);
 			TextView username = (TextView) v.findViewById(R.id.username);
 			TextView message = (TextView) v.findViewById(R.id.message);
 			TextView account = (TextView) v.findViewById(R.id.useraccount);
 			TextView time = (TextView) v.findViewById(R.id.publishtime);
-			//			ImageView image = (ImageView) v.findViewById(R.id.avatar);
 
+			if (avatar != null){
+				avatar.setImageBitmap(tweet.getUser().getProfileImage());
+			}
+			
 			if (username != null) {
 				username.setText(tweet.getUser().getName());
 			}
@@ -115,16 +120,16 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
 		long elapsedSeconds = different / secondsInMilli;
 
 		if (elapsedDays > 0) {
-			result = String.valueOf(elapsedDays) + "d";
+			result = String.valueOf(elapsedDays) + " j";
 		} else if (elapsedHours > 0) {
-			result = String.valueOf(elapsedHours) + "h";
+			result = String.valueOf(elapsedHours) + " h";
 		} else if (elapsedMinutes > 0) {
-			result = String.valueOf(elapsedMinutes) + "m";
+			result = String.valueOf(elapsedMinutes) + " m";
 		} else {
-			result = String.valueOf(elapsedSeconds) + "s";
+			result = String.valueOf(elapsedSeconds) + " s";
 		}
 
-		return result + " ago";
+		return result;
 
 	}
 }

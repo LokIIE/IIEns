@@ -5,6 +5,9 @@ import java.util.Random;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -31,17 +34,26 @@ public class Main extends Activity {
 			"Emploi du temps",
 			"Anniversaires",
 			"Twitter",
+	};
+
+	// Items to add when connected
+	private String[] menuItemsConnected = new String[]{
 			"Trombinoscope"
 	};
+
 	// The Fragments corresponding to the items, based on the position in the list
 	private Fragment[] menuFragments = new Fragment[]{
 			new News(),
 			new Edt(),
 			new Anniv(),
 			new TwitterNews(),
+	};
+
+	// Fragments to add if connected
+	private Fragment[] menuFragmentsConnected = new Fragment[]{
 			new Trombi()
 	};
-	
+
 	// The different ways of welcoming the user if connected, by replacing "..." by its name
 	private String[] helloStrings = new String[]{
 			"Bienvenue ... :)",
@@ -51,7 +63,7 @@ public class Main extends Activity {
 			"Hello ... !",
 			"..., SALOPE ! tu bois !"
 	};
-	
+
 	private int defaultFragmentNumber = 0; // Number of the fragment to show first after the SplashScreen
 	private String scriptURL = "*****"; // Address of the script making database queries
 
@@ -64,6 +76,8 @@ public class Main extends Activity {
 	private Bundle mainBundle;
 	private boolean isConnected = false;
 	private int currentFragment;
+	private SharedPreferences preferences;
+	private SharedPreferences.Editor editor;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -78,6 +92,8 @@ public class Main extends Activity {
 			mainBundle.putString("nom", getIntent().getStringExtra("nom"));
 		}
 		currentFragment = defaultFragmentNumber;
+		preferences = getSharedPreferences("IIEns_prefs", Context.MODE_PRIVATE);
+		editor = preferences.edit();
 
 		// Get back all info if the activity is recreated
 		super.onCreate(savedInstanceState);
@@ -111,15 +127,39 @@ public class Main extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
+		if (isConnected) {
+			menu.getItem(0).setTitle(R.string.action_logout);
+		}
+
 		return true;
-	} 
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		if (drawerToggle.onOptionsItemSelected(item))
 			return true;
-		return super.onOptionsItemSelected(item);
+		else {
+			// Handle item selection
+			switch (item.getItemId()) {
+			case R.id.action_loginout:
+				Intent i;
+				if (isConnected) {
+					i = new Intent(Main.this, Main.class);
+					i.putExtra("isConnected", false);
+					editor.remove("login").remove("password").remove("auto_login").apply();
+				}
+				else i = new Intent(Main.this, Login.class);
+				startActivity(i);
+				overridePendingTransition(R.anim.left_in, R.anim.right_out);
+				finish();
+				return true;
+			case R.id.action_settings:
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		}
 	}
 
 	/* Action when (for ex) the screen orientation changes */
@@ -196,22 +236,28 @@ public class Main extends Activity {
 		}
 		drawerLayout.closeDrawer(menu); 
 	}
-	
-	/* Change the starting parameters to adapt to connected state */ 	
+
+	/* Change the initial parameters to adapt to connected state */ 	
 	private void setParametersConnected() {
-		// Add random welcome message in first place
-		String[] newMenuItems = new String[menuItems.length + 1];
+		// Add random welcome message in first place and the connected parameters at the end
+		String[] newMenuItems = new String[menuItems.length + menuItemsConnected.length + 1];
 		for (int i=0; i < menuItems.length; i++) {
 			newMenuItems[i+1] = menuItems[i];
+		}
+		for (int i=0; i < menuItemsConnected.length; i++){
+			newMenuItems[i+1+menuItems.length] = menuItemsConnected[i];
 		}
 		Random r = new Random();
 		newMenuItems[0] = helloStrings[r.nextInt(helloStrings.length)].replace("...", mainBundle.getString("nom"));
 		menuItems = newMenuItems;
 
-		// Add a null fragment in first place to do nothing when toggled
-		Fragment[] newMenuFragments = new Fragment[menuFragments.length + 1];
+		// Add a null fragment in first place to do nothing when toggled, and the connected parameters at the end
+		Fragment[] newMenuFragments = new Fragment[menuFragments.length + menuFragmentsConnected.length + 1];
 		for (int i=0; i < menuFragments.length; i++) {
 			newMenuFragments[i+1] = menuFragments[i];
+		}
+		for (int i=0; i < menuFragmentsConnected.length; i++){
+			newMenuFragments[i+1+menuFragments.length] = menuFragmentsConnected[i];
 		}
 		newMenuFragments[0] = null;
 		menuFragments = newMenuFragments;

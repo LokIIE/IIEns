@@ -4,6 +4,8 @@
     <!-- Général -->
     <string name="app_name">IIEns</string>
     <string name="action_settings">Paramètres</string>
+    <string name="action_connect">Se connecter</string>
+    <string name="action_logout">Se déconnecter</string>
 
     <!-- activity_login.xml -->
 
@@ -13,24 +15,16 @@
     <string name="offline_button">PASSER</string>
     <string name="in_progress">Connexion en cours&#8230;</string>
     <string name="authenticated">Connecté ! Récupération des infos&#8230;</string>
+    <string name="offline_mode">Récupération des infos&#8230;</string>
     <string name="error_incorrect">Erreur d\'identifiants</string>
     <string name="error_field_required">Champ obligatoire</string>
     <string name="auto_connect">Connexion automatique</string>
 
     <!-- activity_main.xml -->
-    <string name="txt_menu_profil">Profil</string>
     <string name="txt_menu_trombi">Trombinoscope</string>
     <string name="txt_menu_edt">Emploi du temps</string>
     <string name="open_menu">Ouverture du menu</string>
     <string name="close_menu">Fermeture du menu</string>
-
-    <!-- fragment_photos.xml -->
-    <string name="page_photo">La fonctionnalité d\'affichage des photos n\'est pas encore disponible &#8230;</string>
-    <string name="desc">Photo</string>
-    <string name="download">Télécharger</string>
-
-    <!-- fragment_profil.xml -->
-    <string name="page_profil">La fonctionnalité d\'affichage et modification du profil n\'est pas encore disponible &#8230;</string>
 
     <!-- fragment_trombi.xml -->
     <string name="page_trombi">La fonctionnalité d\'affichage du trombi n\'est pas encore disponible &#8230;</string>
@@ -48,5 +42,5 @@
 
     <string name="pref_edt_alloptions">Toutes les options</string>
     <string name="pref_edt_myoptions">Seulement mes options</string>
-	
+
 </resources>

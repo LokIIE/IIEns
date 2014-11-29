@@ -2,17 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.iiens.net.Main" >
 
-<!--     <item
+    <!--
+         <item
         android:id="@+id/action_refresh"
         android:orderInCategory="100"
         android:showAsAction="always"
         android:icon="@drawable/ic_refresh"
-        android:title="Refresh"/> -->
-    
-<!--     <item
-        android:id="@+id/action_download"
+        android:title="Refresh"/>
+    -->
+
+    <item
+        android:id="@+id/action_loginout"
         android:showAsAction="never"
-        android:title="@string/download"/> -->
+        android:title="@string/action_connect"/>
     
     <item
         android:id="@+id/action_settings"

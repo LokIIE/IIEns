@@ -48,7 +48,7 @@ public class TwitterNews extends Fragment {
 			Bundle savedInstanceState) {
 
 		final View view =  inflater.inflate(R.layout.fragment_listview, container, false);
-		//		Bundle bundle = this.getArguments();
+	
 		super.onCreate(savedInstanceState);
 
 		bundle = this.getArguments();

@@ -151,7 +151,7 @@ public class Trombi extends Fragment {
 		outState.putAll(bundle);
 	}
 
-	// Verifies that the app has internet access
+	/* Verifies that the app has internet access */
 	public boolean isOnline() {
 		ConnectivityManager cm =
 				(ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);

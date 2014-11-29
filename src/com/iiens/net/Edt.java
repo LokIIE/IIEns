@@ -260,7 +260,7 @@ public class Edt extends Fragment {
 		return view;
 	}
 
-	// Verifies that the app has internet access
+	/* Verifies that the app has internet access */
 	public boolean isOnline() {
 		ConnectivityManager cm =
 				(ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -18,7 +18,6 @@ import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +50,7 @@ public class News extends Fragment {
 			bundle.putAll(savedInstanceState);
 		}
 
-		SP = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		SP = getActivity().getSharedPreferences("IIEns_prefs", Context.MODE_PRIVATE);
 
 		// retain this fragment
 		setRetainInstance(true);
@@ -79,22 +78,22 @@ public class News extends Fragment {
 
 		// Récupération des news 
 		if (bundle.containsKey(bundleKey)){
-			Bundle newsBundle = bundle.getBundle(bundleKey);
 			newsItemsList = new ArrayList<NewsItem>();
-
-			for (int i=0; i < newsNumber; i++) {
-				ArrayList<String> newsItemSArray = newsBundle.getStringArrayList(Integer.toString(i)); 
-				NewsItem newsItem = new NewsItem().fromStringArrayList(newsItemSArray);
-				newsItemsList.add(newsItem);
+			try {
+				newsItemsList = jArrayToArrayList(new JSONArray(bundle.getString(bundleKey)));
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
+
 			mListView.setAdapter(new NewsItemsAdapter(getActivity().getApplicationContext(), newsItemsList));	
 		} else if (!bundle.containsKey(bundleKey) && isOnline()){
 			newsItemsList = new ArrayList<NewsItem>();
 
+			JSONArray jResult = null;			
 			try {
-				JSONArray jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
-				writeToInternalStorage(jResult.toString(), bundleKey+".txt");
-				readFromInternalStorage(bundleKey+".txt");
+				jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
+				// writeToInternalStorage(jResult.toString(), bundleKey+".txt");
+				// readFromInternalStorage(bundleKey+".txt");
 				newsItemsList = jArrayToArrayList(jResult);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -104,8 +103,7 @@ public class News extends Fragment {
 
 			// If the request was successful, save the items to save data consumption
 			if (newsItemsList.size() > 0) {
-				saveResult(newsItemsList, bundle, bundleKey);
-				
+				bundle.putString(bundleKey, jResult.toString());
 				Editor edit = SP.edit();
 				edit.putString("news_last_update", newsItemsList.get(0).getDate());
 				edit.apply();

@@ -2,21 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp" >
 
     <ImageView
         android:id="@+id/item_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="trombi_pic"
-        android:paddingBottom="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp" />
+        android:layout_width="48dp"
+        android:layout_height="fill_parent"
+        android:paddingRight="8dp"
+        android:contentDescription="trombi_pic" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
+        android:paddingLeft="8dp"
         android:orientation="vertical" >
 
         <TextView
@@ -32,7 +35,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp" />
-
     </LinearLayout>
 
 </LinearLayout>
