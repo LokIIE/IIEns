@@ -37,9 +37,9 @@ public class News extends Fragment {
 	private ArrayList<NewsItem> newsItemsList;
 	private ListView mListView;
 	private Context context;
-	SharedPreferences SP;
-	NewsItemsAdapter newsAdapter;
+	private SharedPreferences preferences;
 	private String bundleKey = "news";
+	private JSONArray jResult = null;
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class News extends Fragment {
 			bundle.putAll(savedInstanceState);
 		}
 
-		SP = getActivity().getSharedPreferences("IIEns_prefs", Context.MODE_PRIVATE);
+		preferences = getActivity().getSharedPreferences("IIEns_prefs", Context.MODE_PRIVATE);
 
 		// retain this fragment
 		setRetainInstance(true);
@@ -70,45 +70,77 @@ public class News extends Fragment {
 			Bundle savedInstanceState) {
 
 		View view = new View(getActivity());
-		view = inflater.inflate(R.layout.fragment_listview, container, false);
+		view = inflater.inflate(R.layout.listview, container, false);
 		mListView = (ListView) view.findViewById(R.id.listview);
 		mListView.setDivider(null); // Do not show the separations between items on the screen
-
-		// Toast.makeText(getActivity().getApplicationContext(), SP.getString("last_title", ""), Toast.LENGTH_LONG).show();
+		newsItemsList = new ArrayList<NewsItem>();
 
 		// Récupération des news 
-		if (bundle.containsKey(bundleKey)){
-			newsItemsList = new ArrayList<NewsItem>();
-			try {
-				newsItemsList = jArrayToArrayList(new JSONArray(bundle.getString(bundleKey)));
-			} catch (JSONException e) {
-				e.printStackTrace();
+		if (preferences.getBoolean("storage_option", false)) {
+			if (preferences.getBoolean("news_new_update", false) && isOnline()){ // Télécharger nouvelle news et sauvegarder dans fichier
+				try {
+					jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
+					writeToInternalStorage(jResult.toString(), bundleKey + ".txt");
+					newsItemsList = jArrayToArrayList(jResult);
+					preferences.edit().putBoolean("news_new_update", false).apply();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else { // Charger depuis fichier
+				Toast.makeText(getActivity().getApplicationContext(), "Impossible de mettre à jour les news (pas d'Internet)", Toast.LENGTH_LONG).show();
+				try {
+					newsItemsList = jArrayToArrayList(new JSONArray(readFromInternalStorage(bundleKey + ".txt")));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 			}
-
-			mListView.setAdapter(new NewsItemsAdapter(getActivity().getApplicationContext(), newsItemsList));	
-		} else if (!bundle.containsKey(bundleKey) && isOnline()){
-			newsItemsList = new ArrayList<NewsItem>();
-
-			JSONArray jResult = null;			
-			try {
-				jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
-				// writeToInternalStorage(jResult.toString(), bundleKey+".txt");
-				// readFromInternalStorage(bundleKey+".txt");
-				newsItemsList = jArrayToArrayList(jResult);
-			} catch (Exception e) {
-				e.printStackTrace();
+		} else {
+			if (bundle.containsKey(bundleKey)) { // déjà chargé dans bundle
+				try {
+					newsItemsList = jArrayToArrayList(new JSONArray(bundle.getString(bundleKey)));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} else if (isOnline()) { // télécharger et mettre dans bundle
+				try {
+					jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
+					newsItemsList = jArrayToArrayList(jResult);
+					
+					bundle.putString(bundleKey, jResult.toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else { // Pas dans un fichier et pas de connexion ...
+				Toast.makeText(getActivity().getApplicationContext(), "Impossible de récupérer les news...", Toast.LENGTH_LONG).show();
 			}
+		}
+//
+//		if (bundle.containsKey(bundleKey)){
+//			try {
+//				newsItemsList = jArrayToArrayList(new JSONArray(bundle.getString(bundleKey)));
+//			} catch (JSONException e) {
+//				e.printStackTrace();
+//			}
+//		} else if (preferences.getBoolean("storage_option", true) && preferences.getBoolean("news_new_update", true)) {
+//			try {
+//				newsItemsList = jArrayToArrayList(new JSONArray(readFromInternalStorage(bundleKey + ".txt")));
+//			} catch (JSONException e) {
+//				e.printStackTrace();
+//			}
+//		} else if (!bundle.containsKey(bundleKey) && isOnline()){
+//			try {
+//				jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
+//				if (preferences.getBoolean("storage_option", true)) writeToInternalStorage(jResult.toString(), bundleKey + ".txt");
+//				newsItemsList = jArrayToArrayList(jResult);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		} else Toast.makeText(getActivity().getApplicationContext(), "Impossible de récupérer les news...", Toast.LENGTH_LONG).show();
 
+		// If the request was successful, save the items to save data consumption and populate listview
+		if (newsItemsList.size() > 0) {
 			mListView.setAdapter(new NewsItemsAdapter(getActivity().getApplicationContext(), newsItemsList));
-
-			// If the request was successful, save the items to save data consumption
-			if (newsItemsList.size() > 0) {
-				bundle.putString(bundleKey, jResult.toString());
-				Editor edit = SP.edit();
-				edit.putString("news_last_update", newsItemsList.get(0).getDate());
-				edit.apply();
-			}
-		} else Toast.makeText(getActivity().getApplicationContext(), "Recupérer les news : IMPOSSIBRU ! Try again", Toast.LENGTH_LONG).show();
+		}
 
 		return view;
 	}
@@ -141,27 +173,24 @@ public class News extends Fragment {
 		}
 	}
 
-	private void readFromInternalStorage(String fileName) {
+	private String readFromInternalStorage(String fileName) {
 		String eol = System.getProperty("line.separator");
 		BufferedReader input = null;
+		String fileString="";
 		try {
 			input = new BufferedReader(new InputStreamReader(context.openFileInput(fileName)));
 			String line;
-			StringBuffer buffer = new StringBuffer();
+			StringBuilder buffer = new StringBuilder();
 			while ((line = input.readLine()) != null) {
 				buffer.append(line + eol);
 			}
+			input.close();
+			fileString = buffer.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		} 
+
+		return fileString;
 	}
 
 

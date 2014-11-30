@@ -47,7 +47,7 @@ public class TwitterNews extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		final View view =  inflater.inflate(R.layout.fragment_listview, container, false);
+		final View view =  inflater.inflate(R.layout.listview, container, false);
 	
 		super.onCreate(savedInstanceState);
 
@@ -65,7 +65,7 @@ public class TwitterNews extends Fragment {
 				result.add(tweetItem);
 			}
 
-			mListView.setAdapter(new TwitterItemsAdapter(getActivity().getApplicationContext(), R.layout.fragment_listview, result));
+			mListView.setAdapter(new TwitterItemsAdapter(getActivity().getApplicationContext(), R.layout.listview, result));
 
 		} else if (!bundle.containsKey(bundleKey) && isOnline()){
 
@@ -76,7 +76,7 @@ public class TwitterNews extends Fragment {
 			} catch (ExecutionException e) {
 				e.printStackTrace();
 			}
-			mListView.setAdapter(new TwitterItemsAdapter(getActivity().getApplicationContext(), R.layout.fragment_listview, result));
+			mListView.setAdapter(new TwitterItemsAdapter(getActivity().getApplicationContext(), R.layout.listview, result));
 
 			if (result.size() > 0) saveResult(result, bundle, bundleKey); // save Tweets in Bundle to avoid using data all over again
 

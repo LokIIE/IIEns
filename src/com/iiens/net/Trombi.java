@@ -60,7 +60,7 @@ public class Trombi extends Fragment {
 			Bundle savedInstanceState) {
 
 		View view = new View(getActivity());
-		view = inflater.inflate(R.layout.fragment_trombi, container, false);
+		view = inflater.inflate(R.layout.trombi_formulaire, container, false);
 		
 		requeteParams = new Bundle();
 		

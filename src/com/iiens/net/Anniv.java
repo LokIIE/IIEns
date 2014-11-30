@@ -49,7 +49,7 @@ public class Anniv extends Fragment {
 			Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		final View view =  inflater.inflate(R.layout.fragment_listview, container, false);
+		final View view =  inflater.inflate(R.layout.listview, container, false);
 		bundle = this.getArguments();
 		final ListView mListView = (ListView) view.findViewById(R.id.listview);
 

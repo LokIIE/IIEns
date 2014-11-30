@@ -75,6 +75,7 @@ public class Main extends Activity {
 	private Fragment frag;
 	private Bundle mainBundle;
 	private boolean isConnected = false;
+	private boolean inSettings = false;
 	private int currentFragment;
 	private SharedPreferences preferences;
 	private SharedPreferences.Editor editor;
@@ -94,6 +95,7 @@ public class Main extends Activity {
 		currentFragment = defaultFragmentNumber;
 		preferences = getSharedPreferences("IIEns_prefs", Context.MODE_PRIVATE);
 		editor = preferences.edit();
+		fragmentManager = getFragmentManager();
 
 		// Get back all info if the activity is recreated
 		super.onCreate(savedInstanceState);
@@ -155,6 +157,11 @@ public class Main extends Activity {
 				finish();
 				return true;
 			case R.id.action_settings:
+				if (!inSettings) {
+					fragmentManager.beginTransaction().replace(R.id.content, new Preferences()).addToBackStack(null).commit();
+					inSettings = true;
+					getActionBar().setTitle("Préférences");
+				}
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -166,6 +173,7 @@ public class Main extends Activity {
 	@Override
 	public void onSaveInstanceState(Bundle outState)
 	{
+		backFromSettingsFragment();
 		super.onSaveInstanceState(outState);
 		outState.putInt("currentFragment", currentFragment);
 		outState.putString("scriptURL", scriptURL);
@@ -214,15 +222,20 @@ public class Main extends Activity {
 				if (currentFragment != position) {
 					currentFragment = position;
 					openFragment(position);
+				} else if (inSettings && currentFragment == position) {
+					backFromSettingsFragment(); 
 				}
-				else drawerLayout.closeDrawer(menu);
+
+				drawerLayout.closeDrawer(menu);
 			}
 		});	
 	}
 
 	/* Specify the fragment to open based on the position of the menu item toggled */
 	private void openFragment(int position) {
-		fragmentManager = getFragmentManager();
+		if (inSettings) {
+			backFromSettingsFragment();
+		}
 
 		frag = menuFragments[position];
 		if (frag != null) {
@@ -263,5 +276,23 @@ public class Main extends Activity {
 		menuFragments = newMenuFragments;
 
 		currentFragment += 1;
+	}
+
+	@Override
+	public void onBackPressed()
+	{
+		if (inSettings)
+		{
+			backFromSettingsFragment();
+			return;
+		}
+		super.onBackPressed();
+	}
+
+	private void backFromSettingsFragment()
+	{
+		inSettings = false;
+		getFragmentManager().popBackStack();
+		getActionBar().setTitle(menuItems[currentFragment]);
 	}
 }
