@@ -20,7 +20,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -31,28 +30,28 @@ import android.util.Log;
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
  **/
 
-public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>> {
+public class AnnivGetRequest extends AsyncTask<Void, Void, JSONArray> {
 
-	private static ArrayList<AnnivItem> annivItemsList;
-	private String scriptURL = null;
+	private static JSONArray annivJArray;
+	private String scriptURL;
 	private static Context context;
 
 	@SuppressWarnings("static-access")
 	public AnnivGetRequest(Context context, String scriptURL){
-		annivItemsList = new ArrayList<AnnivItem>();
+		annivJArray = new JSONArray();
 		this.context = context;
 		this.scriptURL = scriptURL;
 	}
 
 	@Override
-	protected ArrayList<AnnivItem> doInBackground(Void... voids) {
-		annivItemsList = getAnnivRequest(scriptURL);
+	protected JSONArray doInBackground(Void... voids) {
+		annivJArray = getAnnivRequest(scriptURL);
 
-		return annivItemsList;
+		return annivJArray;
 	}
 
 	// Récupère une liste d'items de l'emploi du temps.
-	public static ArrayList<AnnivItem> getAnnivRequest(String scriptURL) {
+	public static JSONArray getAnnivRequest(String scriptURL) {
 
 		InputStream is = null;
 		String result = "";
@@ -63,7 +62,6 @@ public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>>
 		// Envoi de la commande http
 		try {
 			SchemeRegistry schemeRegistry = new SSLArise().init(context);
-
 			HttpParams params = new BasicHttpParams();
 			ClientConnectionManager cm = 
 					new ThreadSafeClientConnManager(params, schemeRegistry);
@@ -87,25 +85,19 @@ public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>>
 				sb.append(line + "\n");
 			}
 			is.close();
-			result=sb.toString();
+			result = sb.toString();
 		} catch (Exception e) {
 			Log.e("anniv_get", "Error converting result " + e.toString());
 		}
 
-		// Parse les données JSON
+		JSONArray resJArray = null;
 		try{
-			JSONArray jArray = new JSONArray(result);
-			for(int i=0;i<jArray.length();i++){
-				JSONObject json_data = jArray.getJSONObject(i);
-				AnnivItem AnnivItem = new AnnivItem();
-				AnnivItem.mapJsonObject(json_data);
-				annivItemsList.add(AnnivItem);
-			}
+			resJArray = new JSONArray(result);
 		}catch(JSONException e){
 			Log.e("anniv_get", "Error parsing data " + e.toString());
 		}
 
-		return annivItemsList;
+		return resJArray;
 	}
 
 	//	@Override

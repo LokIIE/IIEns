@@ -99,7 +99,7 @@ public class NewsGetRequest extends AsyncTask<Void, Void, JSONArray> {
 				sb.append(line + "\n");
 			}
 			is.close();
-			result=sb.toString();
+			result = sb.toString();
 		} catch (Exception e) {
 			Log.e("news_get", "Error converting result " + e.toString());
 		}

@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -33,13 +32,14 @@ import android.widget.Toast;
 public class News extends Fragment {
 
 	private int newsNumber = 6; // number of news to show
+	private String bundleKey = "news"; // file name where to save the results
+	
 	private Bundle bundle = new Bundle();
 	private ArrayList<NewsItem> newsItemsList;
+	private JSONArray jResult = null;
 	private ListView mListView;
 	private Context context;
 	private SharedPreferences preferences;
-	private String bundleKey = "news";
-	private JSONArray jResult = null;
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
@@ -87,7 +87,7 @@ public class News extends Fragment {
 					e.printStackTrace();
 				}
 			} else { // Charger depuis fichier
-				Toast.makeText(getActivity().getApplicationContext(), "Impossible de mettre à jour les news (pas d'Internet)", Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity().getApplicationContext(), "Mise à jour impossible (pas d'Internet)", Toast.LENGTH_LONG).show();
 				try {
 					newsItemsList = jArrayToArrayList(new JSONArray(readFromInternalStorage(bundleKey + ".txt")));
 				} catch (JSONException e) {
@@ -105,7 +105,8 @@ public class News extends Fragment {
 				try {
 					jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
 					newsItemsList = jArrayToArrayList(jResult);
-					
+					writeToInternalStorage(jResult.toString(), bundleKey + ".txt");
+
 					bundle.putString(bundleKey, jResult.toString());
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -114,28 +115,28 @@ public class News extends Fragment {
 				Toast.makeText(getActivity().getApplicationContext(), "Impossible de récupérer les news...", Toast.LENGTH_LONG).show();
 			}
 		}
-//
-//		if (bundle.containsKey(bundleKey)){
-//			try {
-//				newsItemsList = jArrayToArrayList(new JSONArray(bundle.getString(bundleKey)));
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//		} else if (preferences.getBoolean("storage_option", true) && preferences.getBoolean("news_new_update", true)) {
-//			try {
-//				newsItemsList = jArrayToArrayList(new JSONArray(readFromInternalStorage(bundleKey + ".txt")));
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//			}
-//		} else if (!bundle.containsKey(bundleKey) && isOnline()){
-//			try {
-//				jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
-//				if (preferences.getBoolean("storage_option", true)) writeToInternalStorage(jResult.toString(), bundleKey + ".txt");
-//				newsItemsList = jArrayToArrayList(jResult);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		} else Toast.makeText(getActivity().getApplicationContext(), "Impossible de récupérer les news...", Toast.LENGTH_LONG).show();
+		//
+		//		if (bundle.containsKey(bundleKey)){
+		//			try {
+		//				newsItemsList = jArrayToArrayList(new JSONArray(bundle.getString(bundleKey)));
+		//			} catch (JSONException e) {
+		//				e.printStackTrace();
+		//			}
+		//		} else if (preferences.getBoolean("storage_option", true) && preferences.getBoolean("news_new_update", true)) {
+		//			try {
+		//				newsItemsList = jArrayToArrayList(new JSONArray(readFromInternalStorage(bundleKey + ".txt")));
+		//			} catch (JSONException e) {
+		//				e.printStackTrace();
+		//			}
+		//		} else if (!bundle.containsKey(bundleKey) && isOnline()){
+		//			try {
+		//				jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
+		//				if (preferences.getBoolean("storage_option", true)) writeToInternalStorage(jResult.toString(), bundleKey + ".txt");
+		//				newsItemsList = jArrayToArrayList(jResult);
+		//			} catch (Exception e) {
+		//				e.printStackTrace();
+		//			}
+		//		} else Toast.makeText(getActivity().getApplicationContext(), "Impossible de récupérer les news...", Toast.LENGTH_LONG).show();
 
 		// If the request was successful, save the items to save data consumption and populate listview
 		if (newsItemsList.size() > 0) {
@@ -222,14 +223,14 @@ public class News extends Fragment {
 		return newsItemsList;
 	}
 
-	/* Save each item of the ArrayList<NewsItem> in the bundle in StringArrayList form */
-	private void saveResult(ArrayList<NewsItem> result, Bundle bundle, String key) {
-		Bundle newsSave = new Bundle();
-
-		for (int i=0; i < result.size(); i++){
-			newsSave.putStringArrayList(Integer.toString(i), result.get(i).toStringArrayList());
-		}
-		bundle.putBundle(key, newsSave);
-	}
+//	/* Save each item of the ArrayList<NewsItem> in the bundle in StringArrayList form */
+//	private void saveResult(ArrayList<NewsItem> result, Bundle bundle, String key) {
+//		Bundle newsSave = new Bundle();
+//
+//		for (int i=0; i < result.size(); i++){
+//			newsSave.putStringArrayList(Integer.toString(i), result.get(i).toStringArrayList());
+//		}
+//		bundle.putBundle(key, newsSave);
+//	}
 
 }
