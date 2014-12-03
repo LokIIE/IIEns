@@ -5,7 +5,7 @@
     <string name="chk_1A">1A</string>
     <string name="chk_2A">2A</string>
     <string name="chk_3A">3A</string>
-    <string name="edt_date_txt">Jour : </string>
+    <string name="edt_date_txt">Semaine : </string>
     <string name="edt_groupe_txt">Groupes :</string>
      <string name="edt_comm_txt">Groupe de comm\' :</string>
     <string name="edt_search_button">Rechercher</string>

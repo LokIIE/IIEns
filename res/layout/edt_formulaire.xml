@@ -69,25 +69,14 @@
                     android:text="@string/edt_date_txt"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/edt_picked_date"
+                <Spinner
+                    android:id="@+id/edt_week"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@null"
-                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:padding="8dp"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp" />
-
-                <ImageButton
-                    android:id="@+id/edt_calendar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:contentDescription="@null"
-                    android:cropToPadding="true"
-                    android:src="@drawable/ic_calendar" />
             </LinearLayout>
 
             <LinearLayout
@@ -115,7 +104,7 @@
                     android:paddingRight="16dp" >
                 </Spinner>
             </LinearLayout>
-            
+
             <LinearLayout
                 android:id="@+id/edt_comm"
                 android:layout_width="match_parent"

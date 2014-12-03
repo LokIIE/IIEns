@@ -59,8 +59,6 @@ public class SplashScreen extends Activity {
 
 			if (regid.isEmpty()) {
 				new GCMRegisterApp(getApplicationContext(), gcm, getAppVersion(getApplicationContext())).execute();
-			}else{
-				Toast.makeText(getApplicationContext(), "Device already Registered", Toast.LENGTH_SHORT).show();
 			}
 		} else {
 			Log.i(TAG, "No valid Google Play Services APK found.");

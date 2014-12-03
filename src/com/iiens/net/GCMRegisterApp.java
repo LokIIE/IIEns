@@ -23,6 +23,7 @@ public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
 	Context ctx;
 	GoogleCloudMessaging gcm;
 	String SENDER_ID = "*****";
+	private String regURL = "*****";
 	String regid = null; 
 	private int appVersion;
 	public GCMRegisterApp(Context ctx, GoogleCloudMessaging gcm, int appVersion){
@@ -82,7 +83,7 @@ public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
 	private void sendRegistrationIdToBackend() {
 		URI url = null;
 		try {
-			url = new URI("*****" + regid);
+			url = new URI(regURL + regid);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		} 

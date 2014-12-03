@@ -5,11 +5,11 @@ import java.util.Random;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -93,7 +93,7 @@ public class Main extends Activity {
 			mainBundle.putString("nom", getIntent().getStringExtra("nom"));
 		}
 		currentFragment = defaultFragmentNumber;
-		preferences = getSharedPreferences("IIEns_prefs", Context.MODE_PRIVATE);
+		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		editor = preferences.edit();
 		fragmentManager = getFragmentManager();
 

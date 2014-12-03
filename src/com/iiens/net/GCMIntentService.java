@@ -79,11 +79,16 @@ public class GCMIntentService extends IntentService {
 		NotificationCompat.Builder mBuilder =
 				new NotificationCompat.Builder(this)
 		// .setSmallIcon(R.drawable.ic_stat_gcm)
-		.setContentTitle("GCMDemo")
 		.setSmallIcon(R.drawable.ic_launcher)
 		.setStyle(new NotificationCompat.BigTextStyle()
 		.bigText(msg))
 		.setContentText(msg);
+		
+		if (msg.startsWith("Partiel")) {
+			mBuilder.setContentTitle("Partiel");
+		} else {
+			mBuilder.setContentTitle("Nouvelle news");
+		}
 
 		mBuilder.setContentIntent(contentIntent);
 		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

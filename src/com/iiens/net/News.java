@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +51,7 @@ public class News extends Fragment {
 			bundle.putAll(savedInstanceState);
 		}
 
-		preferences = getActivity().getSharedPreferences("IIEns_prefs", Context.MODE_PRIVATE);
+		preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 		// retain this fragment
 		setRetainInstance(true);
@@ -87,7 +88,6 @@ public class News extends Fragment {
 					e.printStackTrace();
 				}
 			} else { // Charger depuis fichier
-				Toast.makeText(getActivity().getApplicationContext(), "Mise à jour impossible (pas d'Internet)", Toast.LENGTH_LONG).show();
 				try {
 					newsItemsList = jArrayToArrayList(new JSONArray(readFromInternalStorage(bundleKey + ".txt")));
 				} catch (JSONException e) {

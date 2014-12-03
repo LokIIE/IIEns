@@ -35,16 +35,16 @@ import android.util.Log;
 public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 
 	private ArrayList<EdtItem> edtItemsList;
-	private String date;
+	private String week;
 	private String promo;
 	static private String[] filtre;
 	private String scriptURL;
 	private static Context context;
 
 	@SuppressWarnings("static-access")
-	public EdtGetRequest(Context context, String date, String promo, String[] groupFiltre, String scriptURL){
+	public EdtGetRequest(Context context, String week, String promo, String[] groupFiltre, String scriptURL){
 		this.edtItemsList = new ArrayList<EdtItem>();
-		this.date = date;
+		this.week = week;
 		this.promo = promo;
 		this.context = context;
 		filtre = groupFiltre;
@@ -53,12 +53,12 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 
 	@Override
 	protected ArrayList<EdtItem> doInBackground(Void... voids) {
-		edtItemsList = getEdtRequest(date, promo, scriptURL);
+		edtItemsList = getEdtRequest(week, promo, scriptURL);
 		return edtItemsList;
 	}
 
 	// Récupère une liste d'items de l'emploi du temps.
-	public static ArrayList<EdtItem> getEdtRequest(String date, String promo, String scriptURL) {
+	public static ArrayList<EdtItem> getEdtRequest(String week, String promo, String scriptURL) {
 
 		ArrayList<EdtItem> edtItemsList = new ArrayList<EdtItem>();
 
@@ -83,7 +83,7 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		// Ajout des paramètres de la requête
 		nameValuePairs.add(new BasicNameValuePair("type","edt"));
-		nameValuePairs.add(new BasicNameValuePair("date", date));
+		nameValuePairs.add(new BasicNameValuePair("week", week));
 		nameValuePairs.add(new BasicNameValuePair("promo", promo));
 
 		try {
