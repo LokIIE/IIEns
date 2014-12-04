@@ -13,10 +13,10 @@ import android.util.Log;
  **/
 
 public class NewsItem {
-	private String title;
-	private String description;
-	private String author;
-	private String date;
+	private String title = "";
+	private String description = "";
+	private String author = "";
+	private String date = "";
 
 	public String getTitle() {return title;}
 	public String getDescription() {return description;}

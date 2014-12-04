@@ -46,9 +46,9 @@ public class TrombiItemsAdapter extends BaseAdapter {
 		if(arg1==null)
 		{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			arg1 = inflater.inflate(R.layout.trombi_grid_item, arg2,false);
+			arg1 = inflater.inflate(R.layout.trombi_item, arg2,false);
 		}
-
+		
 		TextView mNom = (TextView) arg1.findViewById(R.id.item_nom);
 		TextView mPromo = (TextView) arg1.findViewById(R.id.item_promo);
 		ImageView mPhoto = (ImageView) arg1.findViewById(R.id.item_image);

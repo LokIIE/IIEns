@@ -45,7 +45,6 @@ public class TwitterUser {
 
 	public void setProfileImageUrl(String profileImageUrl) {
 		this.profileImageUrl = profileImageUrl;
-		setProfileImage(profileImageUrl);
 	}
 	
 	public void setProfileImage(String profileImageUrl) {

@@ -13,11 +13,11 @@ import android.util.Log;
  **/
 
 public class AnnivItem {
-	String nom;
-	String prenom;
-	String pseudo;
-	String anniv;
-	String age;
+	String nom = "";
+	String prenom = "";
+	String pseudo = "";
+	String anniv = "";
+	String age = "";
 
 	public String getNom() {return nom;}
 	public String getPrenom() {return prenom;}

@@ -115,28 +115,6 @@ public class News extends Fragment {
 				Toast.makeText(getActivity().getApplicationContext(), "Impossible de récupérer les news...", Toast.LENGTH_LONG).show();
 			}
 		}
-		//
-		//		if (bundle.containsKey(bundleKey)){
-		//			try {
-		//				newsItemsList = jArrayToArrayList(new JSONArray(bundle.getString(bundleKey)));
-		//			} catch (JSONException e) {
-		//				e.printStackTrace();
-		//			}
-		//		} else if (preferences.getBoolean("storage_option", true) && preferences.getBoolean("news_new_update", true)) {
-		//			try {
-		//				newsItemsList = jArrayToArrayList(new JSONArray(readFromInternalStorage(bundleKey + ".txt")));
-		//			} catch (JSONException e) {
-		//				e.printStackTrace();
-		//			}
-		//		} else if (!bundle.containsKey(bundleKey) && isOnline()){
-		//			try {
-		//				jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
-		//				if (preferences.getBoolean("storage_option", true)) writeToInternalStorage(jResult.toString(), bundleKey + ".txt");
-		//				newsItemsList = jArrayToArrayList(jResult);
-		//			} catch (Exception e) {
-		//				e.printStackTrace();
-		//			}
-		//		} else Toast.makeText(getActivity().getApplicationContext(), "Impossible de récupérer les news...", Toast.LENGTH_LONG).show();
 
 		// If the request was successful, save the items to save data consumption and populate listview
 		if (newsItemsList.size() > 0) {
@@ -222,15 +200,5 @@ public class News extends Fragment {
 
 		return newsItemsList;
 	}
-
-//	/* Save each item of the ArrayList<NewsItem> in the bundle in StringArrayList form */
-//	private void saveResult(ArrayList<NewsItem> result, Bundle bundle, String key) {
-//		Bundle newsSave = new Bundle();
-//
-//		for (int i=0; i < result.size(); i++){
-//			newsSave.putStringArrayList(Integer.toString(i), result.get(i).toStringArrayList());
-//		}
-//		bundle.putBundle(key, newsSave);
-//	}
 
 }

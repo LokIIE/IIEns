@@ -24,12 +24,14 @@ public class EdtResultPage extends Fragment {
     public EdtResultPage(ArrayList<EdtItem> dayItems) {
         edtItemsList = dayItems;
     }
+    
+    public EdtResultPage() {}
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setRetainInstance(false);
+		setRetainInstance(true);
 	}
 
 	@Override
@@ -45,7 +47,7 @@ public class EdtResultPage extends Fragment {
 			Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		View view =  inflater.inflate(R.layout.edt_result_page, container, false);
+		View view = inflater.inflate(R.layout.edt_result_page, container, false);
 		mListView = (ListView) view.findViewById(R.id.listview);
 
 		mListView.setAdapter(new EdtItemsAdapter(getActivity().getApplicationContext(), edtItemsList));

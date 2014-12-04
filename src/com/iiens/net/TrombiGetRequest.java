@@ -8,7 +8,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -144,7 +143,25 @@ public class TrombiGetRequest extends AsyncTask<Void, Void, ArrayList<TrombiItem
 			TrombiItem item = new TrombiItem();
 			item.setNom(element.select("td.nom").text());
 			item.setPromo(element.select("td.promo").text());
-			
+			for(Element row : element.select("td.infos tr")) {
+				if (row.select("td.key").text().equals("Établissement d'origine :")) item.setOrigine(row.select("td.val").text());
+				if (row.select("td.key").text().equals("Filière :")) item.setFiliere(row.select("td.val").text());
+				if (row.select("td.key").text().equals("Date de naissance :")) item.setNaissance(row.select("td.val").text());
+				if (row.select("td.key").text().equals("Téléphone (fixe) :")) item.setTelFixe(row.select("td.val").text());
+				if (row.select("td.key").text().equals("Téléphone (port) :")) item.setTelPortable(row.select("td.val").text());
+				if (row.select("td.key").text().equals("Mail ensiie:")) item.setMailEnsiie(row.select("td.val").text());
+				if (row.select("td.key").text().equals("Mail perso :")) item.setMailPerso(row.select("td.val").text());
+				if (row.select("td.key").text().equals("Etudie à :")) item.setAntenne(row.select("td.val").text());
+				if (row.select("td.key").text().equals("Groupe :")) item.setGroupe(row.select("td.val").text());
+				if (row.select("td.key").text().equals("Associations :")) item.setAssoces(
+						row.select("td.val").html()
+						.replace("<ul>", "<br/>")
+						.replace("<li>", "&emsp; &#8226; &emsp;")
+						.replace("</li>", "<br/>")
+						.replace("</ul>", "")
+						);
+			}
+
 			// Each time an image is retrieved, the cookie is deleted, so we force the httpclient to keep it in memory
 			cStore = new BasicCookieStore();
 			cStore.addCookie(cookie);
@@ -152,10 +169,6 @@ public class TrombiGetRequest extends AsyncTask<Void, Void, ArrayList<TrombiItem
 			try {
 				URI imageURI = new URI("https://www.iiens.net" + element.select("td.photo").select("img").attr("src").toString());
 				response = httpclient.execute(new HttpGet(imageURI));
-				Header[] test = response.getAllHeaders();
-				for (int i=0; i<test.length; i++){
-					Log.d("element", test[i].toString());
-				}
 				Bitmap imageBitmap = BitmapFactory.decodeStream(response.getEntity().getContent());
 				item.setPhoto(imageBitmap);
 			} catch (URISyntaxException e) {
@@ -173,26 +186,4 @@ public class TrombiGetRequest extends AsyncTask<Void, Void, ArrayList<TrombiItem
 
 		return trombiItemsList;
 	}
-
-	//	private static void writeToInternalStorage(String content, String fileName) {
-	//		String eol = System.getProperty("line.separator");
-	//		BufferedWriter writer = null; 
-	//		try {
-	//			writer = 
-	//					new BufferedWriter(new OutputStreamWriter(context.openFileOutput(fileName, 
-	//							Context.MODE_PRIVATE)));
-	//			writer.write(content + eol);
-	//		} catch (Exception e) {
-	//			e.printStackTrace();
-	//		} finally {
-	//			if (writer != null) {
-	//				try {
-	//					writer.close();
-	//				} catch (IOException e) {
-	//					e.printStackTrace();
-	//				}
-	//			}
-	//		}
-	//	}
-
 }

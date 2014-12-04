@@ -5,8 +5,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,17 +51,23 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
 			TextView account = (TextView) v.findViewById(R.id.useraccount);
 			TextView time = (TextView) v.findViewById(R.id.publishtime);
 
-			if (avatar != null){
-				avatar.setImageBitmap(tweet.getUser().getProfileImage());
+			if (avatar != null && isOnline()){
+				try {
+					Bitmap profileImg = new TweetImgAsyncTask(tweet.getUser().getProfileImageUrl()).execute().get();
+					if (profileImg != null) avatar.setImageBitmap(profileImg);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+				}
 			}
-			
+
 			if (username != null) {
 				username.setText(tweet.getUser().getName());
 			}
 
 			if (message != null) {
 				String tweetTxt = tweet.getText();
-				// tweetTxt = tweetTxt.replaceAll("(.*)(http://[^<>[:space:]]+[[:alnum:]/])(.*)", "$1<a href=\"$2\">$2</a>$3"); // Txt sous URL mais non-cliquable (entraine crash app)
 				message.setText(Html.fromHtml(tweetTxt));
 			}
 
@@ -84,11 +94,6 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
 				}
 
 			}
-
-			// Affichage des images annulé pour le moment car temps de chargement trop long
-			//			if(image != null) {
-			//				image.setImageBitmap(tweet.getUser().getProfileImageUrl());
-			//			}
 		}
 
 		return v;
@@ -131,5 +136,16 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
 
 		return result;
 
+	}
+	
+	/* Verifies that the app has internet access */
+	public boolean isOnline() {
+		ConnectivityManager cm =
+				(ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+			return true;
+		}
+		return false;
 	}
 }

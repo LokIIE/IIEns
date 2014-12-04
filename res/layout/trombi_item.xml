@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/trombi_item"
+    android:layout_width="fill_parent"
+    android:layout_height="96dp"
     android:orientation="horizontal"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp" >
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp" >
 
     <ImageView
         android:id="@+id/item_image"
-        android:layout_width="48dp"
-        android:layout_height="fill_parent"
-        android:paddingRight="8dp"
-        android:contentDescription="trombi_pic" />
+        android:layout_width="96dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="trombi_pic"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp" />
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:paddingLeft="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/item_image"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/item_nom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -37,4 +37,4 @@
             android:textSize="12sp" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

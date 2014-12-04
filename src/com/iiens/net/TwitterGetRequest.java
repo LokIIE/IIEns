@@ -32,7 +32,7 @@ import android.util.Log;
  **/
 
 // Uses an AsyncTask to download a Twitter user's timeline
-public class TwitterGetRequest extends AsyncTask<Void, Void, ArrayList<Tweet>> {
+public class TwitterGetRequest extends AsyncTask<Void, Void, JSONArray> {
 
 	private String scriptURL;
 	private static Context context;
@@ -44,8 +44,8 @@ public class TwitterGetRequest extends AsyncTask<Void, Void, ArrayList<Tweet>> {
 	}
 
 	@Override
-	protected ArrayList<Tweet> doInBackground(Void ... voids) {
-		ArrayList<Tweet> result = new ArrayList<Tweet>();
+	protected JSONArray doInBackground(Void ... voids) {
+		JSONArray result = new JSONArray();
 
 		result = getTweets(scriptURL);
 
@@ -53,9 +53,8 @@ public class TwitterGetRequest extends AsyncTask<Void, Void, ArrayList<Tweet>> {
 	}
 
 	// Récupère une liste d'items de l'emploi du temps.
-	public static ArrayList<Tweet> getTweets(String scriptURL) {
+	public static JSONArray getTweets(String scriptURL) {
 
-		ArrayList<Tweet> tweetList = new ArrayList<Tweet>();
 		JSONArray resJArray = new JSONArray();
 
 		InputStream is = null;
@@ -92,7 +91,6 @@ public class TwitterGetRequest extends AsyncTask<Void, Void, ArrayList<Tweet>> {
 			}
 			is.close();
 			result=sb.toString();
-			//Log.d("sdfdsf", "result " + result);
 		} catch (Exception e) {
 			Log.e("twitter_get", "Error converting result " + e.toString());
 		}
@@ -102,6 +100,7 @@ public class TwitterGetRequest extends AsyncTask<Void, Void, ArrayList<Tweet>> {
 			JSONArray jArray = (JSONArray) new JSONObject(result).get("statuses");
 			for(int i=0;i<jArray.length();i++){
 				JSONObject json_data = jArray.getJSONObject(i);
+				JSONArray res_array = new JSONArray();
 				JSONObject res_tweet = new JSONObject();
 				JSONObject res_user = new JSONObject();
 				res_tweet.put("created_at", json_data.getString("created_at"));
@@ -112,27 +111,16 @@ public class TwitterGetRequest extends AsyncTask<Void, Void, ArrayList<Tweet>> {
 				res_tweet.put("in_reply_to_user_id" , json_data.getString("in_reply_to_user_id"));
 				res_user.put("screen_name" , json_data.getJSONObject("user").getString("screen_name"));
 				res_user.put("name" , json_data.getJSONObject("user").getString("name"));
-				res_user.put("profile_image_url" ,json_data.getJSONObject("user").getString("profile_image_url"));
-				
-				Tweet tweet = new Tweet(
-						json_data.getString("created_at"),
-						json_data.getString("id"),
-						json_data.getString("text"),
-						json_data.getString("in_reply_to_screen_name"),
-						json_data.getString("in_reply_to_status_id"),
-						json_data.getString("in_reply_to_user_id"),
-						json_data.getJSONObject("user").getString("screen_name"),
-						json_data.getJSONObject("user").getString("name"),
-						json_data.getJSONObject("user").getString("profile_image_url")
-						);
-				tweetList.add(tweet);
-				resJArray.put(res_tweet).put(res_user);
+				res_user.put("profile_image_url" , json_data.getJSONObject("user").getString("profile_image_url"));
+
+				res_array.put(res_tweet).put(res_user);
+				resJArray.put(i, res_array);
 			}
 		}catch(JSONException e){
 			Log.e("twitter_get", "Error parsing data " + e.toString());
 		}
 
-		return tweetList;
+		return resJArray;
 	}
 
 }

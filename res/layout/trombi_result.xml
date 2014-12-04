@@ -5,27 +5,13 @@
     android:orientation="vertical" >
 
     <include
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        layout="@layout/listview" />
-    <!--
-         <GridView
-        android:id="@+id/gridview"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-		android:numColumns="auto_fit"
-		android:verticalSpacing="8dp"
-		android:horizontalSpacing="8dp"
-		android:columnWidth="100dp"
-		android:stretchMode="columnWidth"
-		android:gravity="center">
-    </GridView>
-    -->
+        layout="@layout/listview" />
 
     <Button
-        android:id="@+id/edt_newsearch_button"
+        android:id="@+id/trombi_newsearch_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

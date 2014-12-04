@@ -21,7 +21,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -32,52 +31,31 @@ import android.util.Log;
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
  **/
 
-public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
+public class EdtGetRequest extends AsyncTask<Void, Void, JSONArray> {
 
-	private ArrayList<EdtItem> edtItemsList;
+	private JSONArray edtJArray;
 	private String week;
 	private String promo;
-	static private String[] filtre;
 	private String scriptURL;
 	private static Context context;
 
 	@SuppressWarnings("static-access")
-	public EdtGetRequest(Context context, String week, String promo, String[] groupFiltre, String scriptURL){
-		this.edtItemsList = new ArrayList<EdtItem>();
+	public EdtGetRequest(Context context, String week, String promo, String scriptURL){
+		this.edtJArray = new JSONArray();
 		this.week = week;
 		this.promo = promo;
 		this.context = context;
-		filtre = groupFiltre;
 		this.scriptURL = scriptURL;
 	}
 
 	@Override
-	protected ArrayList<EdtItem> doInBackground(Void... voids) {
-		edtItemsList = getEdtRequest(week, promo, scriptURL);
-		return edtItemsList;
+	protected JSONArray doInBackground(Void... voids) {
+		edtJArray = getEdtRequest(week, promo, scriptURL);
+		return edtJArray;
 	}
 
 	// Récupère une liste d'items de l'emploi du temps.
-	public static ArrayList<EdtItem> getEdtRequest(String week, String promo, String scriptURL) {
-
-		ArrayList<EdtItem> edtItemsList = new ArrayList<EdtItem>();
-
-		//		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-		//		System.out.println("startdate: " + sdf.format(myCalendar.getTime()));
-		//	    Date[] minMaxD = calcDateRangeWeek(myCalendar, Calendar.DAY_OF_WEEK);
-		//	    Log.d("Min date", minMaxD[0].toString());
-		//	    Log.d("Min date", minMaxD[1].toString());
-		//	    
-		//		public Date[] calcDateRangeWeek(Calendar c, int day) {
-		//		    Date[] dr = new Date[2];
-		//		    // setMin
-		//		    c.set(day, Calendar.MONDAY);
-		//		    dr[0] = c.getTime();
-		//		    // setMax
-		//		    c.set(day, Calendar.SUNDAY);
-		//		    dr[1] = c.getTime();
-		//		    return dr;
-		//		}
+	public static JSONArray getEdtRequest(String week, String promo, String scriptURL) {
 
 		String result = "";
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
@@ -103,52 +81,16 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 			Log.e("edt_get", "Error in http connection " + e.toString());
 		}
 
-		// Parse les données JSON
+		JSONArray resJArray = null;		
 		try{
-			JSONArray jArray = new JSONArray(result);
-			for(int i=0;i<jArray.length();i++){
-				JSONObject json_data = jArray.getJSONObject(i);
-				filterItems(json_data, edtItemsList, filtre);
-			}
+			resJArray = new JSONArray(result);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		} catch(JSONException e){
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 
-		return edtItemsList;
-	}
-
-	static private void filterItems(JSONObject json_data, ArrayList<EdtItem> edtItemsList, String[] filtre) {
-
-		EdtItem edtItem = new EdtItem();
-		edtItem.mapJsonObject(json_data);
-		String groupe = edtItem.getGroupe();
-
-		boolean filtreEmpty = true;
-		for (int i = 0; i< filtre.length; i++) {if (filtre[i] != "") filtreEmpty = false;} 
-
-		// Filtre les cours/td en groupe et n'affiche que le groupe ou le sous-groupe demandé par l'utilisateur
-		if (groupe == "" || filtreEmpty) {
-			edtItemsList.add(edtItem);
-		}
-		else {
-			if (isInList(groupe, filtre)) {
-				edtItemsList.add(edtItem);
-			}
-		}
-
-	}
-
-	static private boolean isInList (String groupe, String[] list) {
-
-		for (int i=0; i < list.length; i++) {
-			String authorizedGroup = list[i];
-			if (authorizedGroup != "" && (groupe.startsWith(authorizedGroup) || authorizedGroup.startsWith(groupe))) {
-				return true;
-			}
-		}
-		return false;
+		return resJArray;
 	}
 
 	private static String httpRequest(HttpClient httpclient, HttpPost httppost) {

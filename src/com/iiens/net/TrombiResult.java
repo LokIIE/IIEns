@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -25,15 +27,17 @@ import android.widget.Toast;
 public class TrombiResult extends Fragment {
 
 	private Button btnNewSearch;
-	private ListView mGridView;
+	private ListView mListView;
 	private Bundle bundle;
 	private ArrayList<TrombiItem> trombiItemsList;
+	private FragmentManager fragmentManager;
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		bundle = this.getArguments();
+		fragmentManager = getFragmentManager();
 		setRetainInstance(false);
 	}
 
@@ -51,8 +55,8 @@ public class TrombiResult extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		View view =  inflater.inflate(R.layout.trombi_result, container, false);
-		mGridView = (ListView) view.findViewById(R.id.listview);
-		btnNewSearch = (Button) view.findViewById(R.id.edt_newsearch_button);
+		mListView = (ListView) view.findViewById(R.id.listview);
+		btnNewSearch = (Button) view.findViewById(R.id.trombi_newsearch_button);
 
 		// action of the new search button
 		btnNewSearch.setOnClickListener(new OnClickListener() {
@@ -80,10 +84,19 @@ public class TrombiResult extends Fragment {
 				e.printStackTrace();
 			}
 
-			mGridView.setAdapter(new TrombiItemsAdapter(getActivity().getApplicationContext(), trombiItemsList));
+			mListView.setAdapter(new TrombiItemsAdapter(getActivity().getApplicationContext(), trombiItemsList));
 		} else {
 			Toast.makeText(getActivity().getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
 		}
+
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				fragmentManager.beginTransaction().replace(R.id.content, new TrombiResultDetail(trombiItemsList.get(position))).addToBackStack(null).commit();
+
+			}
+		}); 
 
 		return view;
 	}

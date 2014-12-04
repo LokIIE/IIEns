@@ -458,7 +458,7 @@ containing a value of this type.
         public static final int backtitle=0x7f020005;
         public static final int bar=0x7f020006;
         public static final int bdsf=0x7f020007;
-        public static final int blue=0x7f02005c;
+        public static final int blue=0x7f02005d;
         public static final int bottom_line=0x7f020008;
         public static final int card=0x7f020009;
         public static final int card_background=0x7f02000a;
@@ -496,7 +496,7 @@ containing a value of this type.
         public static final int ecliipse=0x7f02002a;
         public static final int forum=0x7f02002b;
         public static final int gala=0x7f02002c;
-        public static final int green=0x7f02005d;
+        public static final int green=0x7f02005e;
         public static final int guiilde=0x7f02002d;
         public static final int header_news=0x7f02002e;
         public static final int ic_backward=0x7f02002f;
@@ -533,29 +533,30 @@ containing a value of this type.
         public static final int manga=0x7f02004e;
         public static final int misteriie=0x7f02004f;
         public static final int muzzik=0x7f020050;
-        public static final int origamie=0x7f020051;
-        public static final int origine=0x7f020052;
-        public static final int powered_by_google_dark=0x7f020053;
-        public static final int powered_by_google_light=0x7f020054;
-        public static final int progress=0x7f020055;
-        public static final int realitiie=0x7f020056;
-        public static final int red=0x7f02005b;
-        public static final int resiie=0x7f020057;
-        public static final int skiie=0x7f020058;
-        public static final int splash_logo=0x7f020059;
-        public static final int white=0x7f02005e;
-        public static final int wiise=0x7f02005a;
+        public static final int notfound=0x7f020051;
+        public static final int origamie=0x7f020052;
+        public static final int origine=0x7f020053;
+        public static final int powered_by_google_dark=0x7f020054;
+        public static final int powered_by_google_light=0x7f020055;
+        public static final int progress=0x7f020056;
+        public static final int realitiie=0x7f020057;
+        public static final int red=0x7f02005c;
+        public static final int resiie=0x7f020058;
+        public static final int skiie=0x7f020059;
+        public static final int splash_logo=0x7f02005a;
+        public static final int white=0x7f02005f;
+        public static final int wiise=0x7f02005b;
     }
     public static final class id {
         public static final int Rechercher=0x7f0d004c;
-        public static final int action_loginout=0x7f0d0056;
-        public static final int action_settings=0x7f0d0057;
+        public static final int action_loginout=0x7f0d0063;
+        public static final int action_settings=0x7f0d0064;
         public static final int anniv_date=0x7f0d0020;
         public static final int anniv_person=0x7f0d0021;
         public static final int antenne_evry=0x7f0d0047;
         public static final int antenne_stras=0x7f0d0048;
         public static final int auto_connect=0x7f0d0019;
-        public static final int avatar=0x7f0d0050;
+        public static final int avatar=0x7f0d005d;
         public static final int book_now=0x7f0d000e;
         public static final int buyButton=0x7f0d000a;
         public static final int buy_now=0x7f0d000f;
@@ -583,8 +584,8 @@ containing a value of this type.
         public static final int edt_option6=0x7f0d0033;
         public static final int edt_options2A=0x7f0d002d;
         public static final int edt_options3A=0x7f0d0034;
-        public static final int edt_pager=0x7f0d0054;
-        public static final int edt_pager_header=0x7f0d0055;
+        public static final int edt_pager=0x7f0d0061;
+        public static final int edt_pager_header=0x7f0d0062;
         public static final int edt_search_button=0x7f0d002b;
         public static final int edt_week=0x7f0d0027;
         public static final int grayscale=0x7f0d0012;
@@ -592,16 +593,26 @@ containing a value of this type.
         public static final int holo_light=0x7f0d0006;
         public static final int hybrid=0x7f0d0000;
         public static final int imgLogo=0x7f0d001f;
-        public static final int item_image=0x7f0d004d;
-        public static final int item_nom=0x7f0d004e;
-        public static final int item_promo=0x7f0d004f;
+        public static final int item_antenne=0x7f0d0058;
+        public static final int item_assoces=0x7f0d005a;
+        public static final int item_filiere=0x7f0d0052;
+        public static final int item_groupe=0x7f0d0059;
+        public static final int item_image=0x7f0d004e;
+        public static final int item_mailiie=0x7f0d0056;
+        public static final int item_mailperso=0x7f0d0057;
+        public static final int item_naissance=0x7f0d0053;
+        public static final int item_nom=0x7f0d004f;
+        public static final int item_origine=0x7f0d0051;
+        public static final int item_promo=0x7f0d0050;
+        public static final int item_tel_fixe=0x7f0d0054;
+        public static final int item_tel_portable=0x7f0d0055;
         public static final int listview=0x7f0d0037;
         public static final int login_form=0x7f0d0016;
         public static final int login_status=0x7f0d0014;
         public static final int login_status_message=0x7f0d0015;
         public static final int match_parent=0x7f0d000c;
         public static final int menu=0x7f0d001e;
-        public static final int message=0x7f0d0053;
+        public static final int message=0x7f0d0060;
         public static final int monochrome=0x7f0d0013;
         public static final int news_description=0x7f0d003a;
         public static final int news_title=0x7f0d0039;
@@ -621,7 +632,7 @@ containing a value of this type.
         public static final int production=0x7f0d0007;
         public static final int promo=0x7f0d0046;
         public static final int pseudo=0x7f0d0041;
-        public static final int publishtime=0x7f0d0052;
+        public static final int publishtime=0x7f0d005f;
         public static final int sandbox=0x7f0d0008;
         public static final int satellite=0x7f0d0003;
         public static final int selectionDetails=0x7f0d000b;
@@ -631,8 +642,11 @@ containing a value of this type.
         public static final int strict_sandbox=0x7f0d0009;
         public static final int tel=0x7f0d0043;
         public static final int terrain=0x7f0d0004;
+        public static final int trombi_detail_return=0x7f0d005b;
         public static final int trombi_formulaire=0x7f0d003b;
-        public static final int useraccount=0x7f0d0051;
+        public static final int trombi_item=0x7f0d004d;
+        public static final int trombi_newsearch_button=0x7f0d005c;
+        public static final int useraccount=0x7f0d005e;
         public static final int username=0x7f0d0017;
         public static final int wrap_content=0x7f0d000d;
     }
@@ -661,8 +675,8 @@ containing a value of this type.
         public static final int preferences=0x7f030012;
         public static final int progress_spinner=0x7f030013;
         public static final int trombi_formulaire=0x7f030014;
-        public static final int trombi_grid_item=0x7f030015;
-        public static final int trombi_item=0x7f030016;
+        public static final int trombi_item=0x7f030015;
+        public static final int trombi_item_detail=0x7f030016;
         public static final int trombi_result=0x7f030017;
         public static final int twitter_item=0x7f030018;
         public static final int viewpager=0x7f030019;
@@ -679,9 +693,9 @@ containing a value of this type.
         public static final int action_connect=0x7f070025;
         public static final int action_logout=0x7f070026;
         public static final int action_settings=0x7f070024;
-        public static final int antenne=0x7f070058;
-        public static final int antenne_evry=0x7f070059;
-        public static final int antenne_stras=0x7f07005a;
+        public static final int antenne=0x7f070059;
+        public static final int antenne_evry=0x7f07005a;
+        public static final int antenne_stras=0x7f07005b;
         /**  Général 
          */
         public static final int app_name=0x7f070023;
@@ -691,7 +705,7 @@ containing a value of this type.
         public static final int chk_2A=0x7f07003d;
         public static final int chk_3A=0x7f07003e;
         public static final int close_menu=0x7f070034;
-        public static final int clubs=0x7f07005d;
+        public static final int clubs=0x7f07005e;
         /**   Text for notification shown when the Android Wear apps needs to be updated. Only shown on the wearable. [CHAR LIMIT=NONE] 
          */
         public static final int common_android_wear_notification_needs_update_text=0x7f070009;
@@ -810,15 +824,15 @@ containing a value of this type.
         public static final int edt_search_txt=0x7f07003b;
         public static final int error_field_required=0x7f07002f;
         public static final int error_incorrect=0x7f07002e;
-        public static final int feminin=0x7f070056;
-        public static final int groupe=0x7f07005b;
+        public static final int feminin=0x7f070057;
+        public static final int groupe=0x7f07005c;
         public static final int hint_password=0x7f070028;
         /**  activity_login.xml 
          */
         public static final int hint_user=0x7f070027;
         public static final int in_progress=0x7f07002b;
-        public static final int logement=0x7f07005c;
-        public static final int masculin=0x7f070055;
+        public static final int logement=0x7f07005d;
+        public static final int masculin=0x7f070056;
         public static final int news_description=0x7f07004c;
         public static final int news_title=0x7f07004b;
         public static final int offline_button=0x7f07002a;
@@ -834,17 +848,18 @@ containing a value of this type.
         public static final int pref_edt_myoptions=0x7f07003a;
         public static final int pref_news=0x7f070037;
         public static final int pref_ok_button=0x7f070038;
-        public static final int promo=0x7f070057;
-        public static final int sexe=0x7f070054;
+        public static final int promo=0x7f070058;
+        public static final int sexe=0x7f070055;
         public static final int store_picture_message=0x7f070001;
         public static final int store_picture_title=0x7f070000;
-        public static final int trombi_nom=0x7f07004d;
-        public static final int trombi_prenom=0x7f07004e;
-        public static final int trombi_pseudo=0x7f07004f;
-        public static final int trombi_tel=0x7f070050;
-        public static final int trombi_tel_portable=0x7f070051;
-        public static final int txt_back_button=0x7f070052;
-        public static final int txt_dwld_button=0x7f070053;
+        public static final int trombi_nom=0x7f07004e;
+        public static final int trombi_prenom=0x7f07004f;
+        public static final int trombi_pseudo=0x7f070050;
+        public static final int trombi_return_button=0x7f07004d;
+        public static final int trombi_tel=0x7f070051;
+        public static final int trombi_tel_portable=0x7f070052;
+        public static final int txt_back_button=0x7f070053;
+        public static final int txt_dwld_button=0x7f070054;
         public static final int txt_menu_edt=0x7f070032;
         /**  activity_main.xml 
          */

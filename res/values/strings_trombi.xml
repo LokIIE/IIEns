@@ -5,6 +5,8 @@
         <item>commencant par</item>
         <item>contenant</item>
     </string-array>
+    
+    <string name="trombi_return_button">Retour</string>
 
     <string name="trombi_nom">Nom de famille</string>
     <string name="trombi_prenom">Prénom</string>

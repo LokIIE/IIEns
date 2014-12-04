@@ -1,7 +1,16 @@
 package com.iiens.net;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -22,14 +31,17 @@ import android.widget.Toast;
 public class TwitterNews extends Fragment {
 
 	private Bundle bundle = new Bundle();
-	private ArrayList<Tweet> result = new ArrayList<Tweet>();
+	private JSONArray resJArray = new JSONArray();
+	private ArrayList<Tweet> tweetsList = new ArrayList<Tweet>();
 	private String bundleKey = "twitternews";
+	private Context context;
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		bundle = this.getArguments(); 
-
+		context = getActivity();
+		
 		// retain this fragment
 		setRetainInstance(true);
 	}
@@ -48,40 +60,65 @@ public class TwitterNews extends Fragment {
 			Bundle savedInstanceState) {
 
 		final View view =  inflater.inflate(R.layout.listview, container, false);
-	
 		super.onCreate(savedInstanceState);
 
 		bundle = this.getArguments();
 		final ListView mListView = (ListView) view.findViewById(R.id.listview);
 
 		if (bundle.containsKey(bundleKey)) {
-
-			Bundle tweetsBundle = bundle.getBundle(bundleKey);
-			result = new ArrayList<Tweet>();
-
-			for (int i=0; i < tweetsBundle.size(); i++) {
-				ArrayList<String> twIA = tweetsBundle.getStringArrayList(Integer.toString(i));
-				Tweet tweetItem = new Tweet(twIA.get(0), twIA.get(1), twIA.get(2), twIA.get(3), twIA.get(4), twIA.get(5), twIA.get(6), twIA.get(7), twIA.get(8));
-				result.add(tweetItem);
-			}
-
-			mListView.setAdapter(new TwitterItemsAdapter(getActivity().getApplicationContext(), R.layout.listview, result));
-
-		} else if (!bundle.containsKey(bundleKey) && isOnline()){
-
 			try {
-				result = new TwitterGetRequest(getActivity(), bundle.getString("scriptURL")).execute().get();
+				resJArray = new JSONArray(bundle.getString(bundleKey));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else if (!isOnline()) {
+			try {
+				resJArray = new JSONArray(readFromInternalStorage(bundleKey + ".txt"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		} else if (isOnline()){
+			try {
+				resJArray = new TwitterGetRequest(getActivity(), bundle.getString("scriptURL")).execute().get();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			} catch (ExecutionException e) {
 				e.printStackTrace();
 			}
-			mListView.setAdapter(new TwitterItemsAdapter(getActivity().getApplicationContext(), R.layout.listview, result));
-
-			if (result.size() > 0) saveResult(result, bundle, bundleKey); // save Tweets in Bundle to avoid using data all over again
-
+			
+			if (resJArray.length() > 0) {
+				writeToInternalStorage(resJArray.toString(), bundleKey + ".txt");
+			}
 		} else {
 			Toast.makeText(getActivity().getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
+		}
+
+		for (int i=0; i < resJArray.length(); i++) {
+			try {
+				JSONArray tweetArray = resJArray.getJSONArray(i);
+				JSONObject res_tweet = tweetArray.getJSONObject(0);
+				JSONObject res_user = tweetArray.getJSONObject(1);
+
+				Tweet tweetItem = new Tweet(
+						res_tweet.getString("created_at"),
+						res_tweet.getString("id"),
+						res_tweet.getString("text"),
+						res_tweet.getString("in_reply_to_screen_name"),
+						res_tweet.getString("in_reply_to_status_id"),
+						res_tweet.getString("in_reply_to_user_id"),
+						res_user.getString("screen_name"),
+						res_user.getString("name"),
+						res_user.getString("profile_image_url")
+						);
+				tweetsList.add(tweetItem);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		if (tweetsList.size() > 0) {
+			mListView.setAdapter(new TwitterItemsAdapter(getActivity().getApplicationContext(), R.layout.listview, tweetsList));
 		}
 
 		return view;
@@ -98,15 +135,6 @@ public class TwitterNews extends Fragment {
 		return false;
 	}
 
-	private void saveResult(ArrayList<Tweet> result, Bundle bundle, String key) {
-		int i = 0;
-		Bundle tweetSave = new Bundle();
-		for (i=0; i < result.size(); i++){
-			tweetSave.putStringArrayList(Integer.toString(i), result.get(i).toArrayListString());
-		}
-		bundle.putBundle(key, tweetSave);
-	}
-
 	/* Action when (for ex) the screen orientation changes */
 	@Override
 	public void onSaveInstanceState(Bundle outState)
@@ -115,4 +143,44 @@ public class TwitterNews extends Fragment {
 		outState.putAll(bundle);
 	}
 
+	private void writeToInternalStorage(String content, String fileName) {
+		String eol = System.getProperty("line.separator");
+		BufferedWriter writer = null; 
+		try {
+			writer = 
+					new BufferedWriter(new OutputStreamWriter(context.openFileOutput(fileName, 
+							Context.MODE_PRIVATE)));
+			writer.write(content + eol);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private String readFromInternalStorage(String fileName) {
+		String eol = System.getProperty("line.separator");
+		BufferedReader input = null;
+		String fileString="";
+		try {
+			input = new BufferedReader(new InputStreamReader(context.openFileInput(fileName)));
+			String line;
+			StringBuilder buffer = new StringBuilder();
+			while ((line = input.readLine()) != null) {
+				buffer.append(line + eol);
+			}
+			input.close();
+			fileString = buffer.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+
+		return fileString;
+	}
 }

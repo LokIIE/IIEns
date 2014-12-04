@@ -36,7 +36,7 @@ public class Edt extends Fragment {
 	private Calendar myCalendar;
 	private LinearLayout mFormulaire, mComm, mProgressSpinner, mOpt2a, mOpt3a;
 	private Spinner mEdtWeekSpinner, mGroupSpinner, mCommSpinner, mOptSpinner1, mOptSpinner2, mOptSpinner3, mOptSpinner4, mOptSpinner5, mOptSpinner6;
-	private int weekNumber = 1;
+	private int currentWeekNumber = 1;
 	private String[] groupes = {"", "GR1", "GR1.1", "GR1.2", "GR2", "GR2.1", "GR2.2", "GR3", "GR3.1", "GR3.2", "GR4", "GR4.1", "GR4.2", "GR5", "FIPA"};
 	private String[] commGroupes = {"", "GR A", "GR B", "GR C", "GR D", "GR E", "GR F"};
 	private String[][] options2a = { {},
@@ -138,7 +138,7 @@ public class Edt extends Fragment {
 
 		// display weeks in spinner
 		List<String> spinnerItems = new ArrayList<String>();
-		weekNumber = myCalendar.get(Calendar.WEEK_OF_YEAR);
+		currentWeekNumber = myCalendar.get(Calendar.WEEK_OF_YEAR);
 		myCalendar.add(Calendar.WEEK_OF_YEAR, -2);
 		SimpleDateFormat monthName = new SimpleDateFormat("MMM", Locale.FRENCH);
 		for(int i = 0; i < 11; i++){
@@ -209,10 +209,10 @@ public class Edt extends Fragment {
 
 				String [] filtre = {selectedGroup, commGroup, option1, option2, option3, option4, option5, option6};
 
-				String week = String.valueOf(weekNumber - 2 + mEdtWeekSpinner.getSelectedItemPosition());
+				String week = String.valueOf(currentWeekNumber - 2 + mEdtWeekSpinner.getSelectedItemPosition());
 
 				// make the request
-				if (isOnline()){
+				if (isOnline() || week.equals(String.valueOf(currentWeekNumber))){
 					mProgressSpinner.setVisibility(View.VISIBLE);
 					mFormulaire.setVisibility(View.GONE);	
 

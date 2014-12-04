@@ -14,7 +14,8 @@
         android:layout_height="fill_parent"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:contentDescription="userAvatar" />
+        android:contentDescription="userAvatar"
+        android:src="@drawable/notfound" />
 
     <LinearLayout
         android:layout_width="0dp"

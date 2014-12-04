@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,7 +47,7 @@ public class Anniv extends Fragment {
 		bundle = this.getArguments();
 		context = getActivity();
 		
-		preferences = getActivity().getSharedPreferences("IIEns_prefs", Context.MODE_PRIVATE);
+		preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 		// retain this fragment
 		setRetainInstance(true);

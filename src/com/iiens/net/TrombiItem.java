@@ -9,22 +9,23 @@ import android.graphics.Bitmap;
  **/
 
 public class TrombiItem {
-	private String nom;
-	private String promo;
-	private Bitmap photo;
-	private String origine;
-	private String filiere;
-	private String naissance;
-	private String telFixe;
-	private String telPortable;
-	private String mailEnsiie;
-	private String mailPerso;
-	private String antenne;
-	private String groupe;
-	private String[] clubPres;
-	private String[] clubAdmin;
-	private String[] clubMembre;
-	private String citation;
+	private String nom = "";
+	private String promo = "";
+	private Bitmap photo = null;
+	private String origine = "";
+	private String filiere = "";
+	private String naissance = "";
+	private String telFixe = "";
+	private String telPortable = "";
+	private String mailEnsiie = "";
+	private String mailPerso = "";
+	private String antenne = "";
+	private String groupe = "";
+	private String assoces = "";
+	private String[] clubPres = {};
+	private String[] clubAdmin = {};
+	private String[] clubMembre = {};
+	private String citation = "";
 
 	public String getNom() {return nom;}
 	public String getPromo() {return promo;}
@@ -38,6 +39,7 @@ public class TrombiItem {
 	public String getMailPerso() {return mailPerso;}
 	public String getAntenne() {return antenne;}
 	public String getGroupe() {return groupe;}
+	public String getAssoces() {return assoces;}
 	public String[] getClubPres() {return clubPres;}
 	public String[] getClubAdmin() {return clubAdmin;}
 	public String[] getClubMembre() {return clubMembre;}
@@ -55,6 +57,7 @@ public class TrombiItem {
 	public void setMailPerso(String mailPerso) {this.mailPerso= mailPerso;}
 	public void setAntenne(String antenne) {this.antenne = antenne;}
 	public void setGroupe(String groupe) {this.groupe = groupe;}
+	public void setAssoces(String assoces) {this.assoces = assoces;}
 	public void setClubPres(String[] clubPres) {this.clubPres = clubPres;}
 	public void setClubAdmin(String[] clubAdmin) {this.clubAdmin = clubAdmin;}
 	public void setClubMembre(String[] clubMembre) {this.clubMembre = clubMembre;}
