@@ -76,6 +76,19 @@ public class TrombiGetRequest extends AsyncTask<Void, Void, ArrayList<TrombiItem
 		InputStream is = null;
 		String result = "";
 		CookieStore cStore = new BasicCookieStore();
+		
+		Log.d("test", login);
+		Log.d("test", pass);
+		Log.d("test nom", requete.getString("nom"));
+		Log.d("test prenom", requete.getString("prenom"));
+		Log.d("test pseudo", requete.getString("pseudo"));
+		Log.d("test type_tel", requete.getString("type_req_tel"));
+		Log.d("test tel", requete.getString("tel"));
+		Log.d("test sexe fem", String.valueOf(requete.getBoolean("sexe_fem")));
+		Log.d("test sexe masc", String.valueOf(requete.getBoolean("sexe_masc")));
+		Log.d("test evry", String.valueOf(requete.getBoolean("antenne_evry")));
+		Log.d("test stras", String.valueOf(requete.getBoolean("antenne_stras")));
+		Log.d("test", requete.getString("groupe"));
 
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		nameValuePairs.add(new BasicNameValuePair("login", login));
@@ -86,17 +99,20 @@ public class TrombiGetRequest extends AsyncTask<Void, Void, ArrayList<TrombiItem
 		nameValuePairs.add(new BasicNameValuePair("type_req[prenom]", "2"));
 		nameValuePairs.add(new BasicNameValuePair("prenom", requete.getString("prenom")));
 		nameValuePairs.add(new BasicNameValuePair("type_req[surnom]", "2"));
-		nameValuePairs.add(new BasicNameValuePair("surnom", requete.getString("surnom")));
-		nameValuePairs.add(new BasicNameValuePair("type_tel", "2"));
+		nameValuePairs.add(new BasicNameValuePair("surnom", requete.getString("pseudo")));
+		nameValuePairs.add(new BasicNameValuePair("type_tel", requete.getString("type_req_tel")));
 		nameValuePairs.add(new BasicNameValuePair("telephone", requete.getString("tel")));
-		nameValuePairs.add(new BasicNameValuePair("sexe[fem]", requete.getString("sexe_fem")));
-		nameValuePairs.add(new BasicNameValuePair("sexe[masc]", requete.getString("sexe_masc")));
-		nameValuePairs.add(new BasicNameValuePair("promoAnnee[]", "2015"));
+		if (requete.getBoolean("sexe_fem")) nameValuePairs.add(new BasicNameValuePair("sexe[fem]", "1"));
+		if (requete.getBoolean("sexe_masc")) nameValuePairs.add(new BasicNameValuePair("sexe[masc]", "1"));
+		nameValuePairs.add(new BasicNameValuePair("promoAnnee[]", "2017"));
 		nameValuePairs.add(new BasicNameValuePair("promoAnnee[]", "2016"));
-		nameValuePairs.add(new BasicNameValuePair("promoAnnee[]", "2013"));
+		nameValuePairs.add(new BasicNameValuePair("promoAnnee[]", "2015"));
 		nameValuePairs.add(new BasicNameValuePair("promoAnnee[]", "2014"));
-		nameValuePairs.add(new BasicNameValuePair("localisation[evry]", requete.getString("antenne_evry")));
-		nameValuePairs.add(new BasicNameValuePair("localisation[strasbourg]", requete.getString("antenne_stras")));
+		if (requete.getBoolean("antenne_evry")) nameValuePairs.add(new BasicNameValuePair("localisation[evry]", "1"));
+		if (requete.getBoolean("antenne_stras")) nameValuePairs.add(new BasicNameValuePair("localisation[strasbourg]", "1"));
+		if (requete.getString("groupe") != "") {
+			nameValuePairs.add(new BasicNameValuePair("groupe[]", requete.getString("groupe")));
+		}
 		nameValuePairs.add(new BasicNameValuePair("assocesEtOu", "et"));
 		nameValuePairs.add(new BasicNameValuePair("tsub", "Rechercher"));
 
@@ -130,19 +146,25 @@ public class TrombiGetRequest extends AsyncTask<Void, Void, ArrayList<TrombiItem
 			}
 			is.close();
 			result=sb.toString();
-			//writeToInternalStorage(result, "trombi.html");
 		} catch (Exception e) {
 			Log.e("trombi_get", "Error converting result " + e.toString());
 		}
 		// Parsing the response to extract data
-
 		Document doc = Jsoup.parse(result);
+		Log.d("count", doc.select("td.contenu h4").text());
+		//int resultNumber = Integer.valueOf(doc.select("td.contenu h4").text().substring(31).toString());
+//		if (resultNumber > 50) {
+//			trombiItemsList = null;
+//			return trombiItemsList;
+//		}
+
 		Elements elements = doc.select("div.page");
 		Cookie cookie = cStore.getCookies().get(0);
 		for (Element element : elements) {
 			TrombiItem item = new TrombiItem();
 			item.setNom(element.select("td.nom").text());
 			item.setPromo(element.select("td.promo").text());
+			item.setPhotoURL(element.select("td.photo").select("img").attr("src").toString());
 			for(Element row : element.select("td.infos tr")) {
 				if (row.select("td.key").text().equals("Établissement d'origine :")) item.setOrigine(row.select("td.val").text());
 				if (row.select("td.key").text().equals("Filière :")) item.setFiliere(row.select("td.val").text());
@@ -167,7 +189,7 @@ public class TrombiGetRequest extends AsyncTask<Void, Void, ArrayList<TrombiItem
 			cStore.addCookie(cookie);
 			httpclient.setCookieStore(cStore);
 			try {
-				URI imageURI = new URI("https://www.iiens.net" + element.select("td.photo").select("img").attr("src").toString());
+				URI imageURI = new URI("https://www.iiens.net" + item.getPhotoURL());
 				response = httpclient.execute(new HttpGet(imageURI));
 				Bitmap imageBitmap = BitmapFactory.decodeStream(response.getEntity().getContent());
 				item.setPhoto(imageBitmap);

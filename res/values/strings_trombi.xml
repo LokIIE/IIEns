@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string-array name="option">
-        <item>commencant par</item>
-        <item>contenant</item>
-    </string-array>
     
     <string name="trombi_return_button">Retour</string>
 
-    <string name="trombi_nom">Nom de famille</string>
-    <string name="trombi_prenom">Prénom</string>
-    <string name="trombi_pseudo">Pseudo</string>
-    <string name="trombi_tel">Téléphone</string>
+    <string name="trombi_nom">Nom commencant par : </string>
+    <string name="trombi_prenom">Prénom commencant par : </string>
+    <string name="trombi_pseudo">Pseudo commencant par : </string>
+    <string name="trombi_tel">Téléphone : </string>
     <string name="trombi_tel_portable">Portable</string>
 
     <string-array name="option_tel">
@@ -20,7 +15,6 @@
     </string-array>
 
     <string name="txt_back_button">Retour</string>
-    <string name="txt_dwld_button">Télécharger</string>
     <string name="sexe">Sexe</string>
     <string name="masculin">Masculin</string>
     <string name="feminin">Féminin</string>

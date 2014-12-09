@@ -1,8 +1,8 @@
 package com.iiens.net;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -27,12 +27,12 @@ public class Trombi extends Fragment {
 	private Bundle bundle = new Bundle();
 	private LinearLayout mProgressSpinner, mFormulaire;
 	private Button mSearch;
-	private Spinner mSpinNom, mSpinPrenom, mSpinPseudo, mSpinTel, mSpinPromo, mSpinGroupe, mSpinLogement, mSpinClub;
+	private Spinner mSpinTel, mSpinPromo, mSpinGroupe, mSpinLogement, mSpinClub;
 	private EditText mNom, mPrenom, mPseudo, mTel;
 	private CheckBox mMasc, mFem, mEvry, mStras;
 	private Bundle requeteParams;
-	private Fragment frag;
-	private FragmentManager fragmentManager;
+
+	private String[] groupes = {"", "1", "1.1", "1.2", "2", "2.1", "2.2", "3", "3.1", "3.2", "4", "4.1", "4.2", "5", "6", "FIPA"};
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,19 +61,16 @@ public class Trombi extends Fragment {
 
 		View view = new View(getActivity());
 		view = inflater.inflate(R.layout.trombi_formulaire, container, false);
-		
+
 		requeteParams = new Bundle();
-		
+
 		mFormulaire = (LinearLayout) view.findViewById(R.id.trombi_formulaire);
 		mProgressSpinner = (LinearLayout) view.findViewById(R.id.spinner_layout);
 
 		mProgressSpinner = (LinearLayout) view.findViewById(R.id.spinner_layout);
 		mSearch = (Button) view.findViewById(R.id.Rechercher);
-		mSpinNom = (Spinner) view.findViewById(R.id.option_nom);
 		mNom = (EditText) view.findViewById(R.id.nom);
-		mSpinPrenom = (Spinner) view.findViewById(R.id.option_prenom);
 		mPrenom = (EditText) view.findViewById(R.id.prenom);
-		mSpinPseudo = (Spinner) view.findViewById(R.id.option_pseudo);
 		mPseudo = (EditText) view.findViewById(R.id.pseudo);
 		mSpinTel = (Spinner) view.findViewById(R.id.option_tel);
 		mTel = (EditText) view.findViewById(R.id.tel);
@@ -96,46 +93,37 @@ public class Trombi extends Fragment {
 		mSearch.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				int type_req_nom = mSpinNom.getSelectedItemPosition() + 1;
 				String nom = mNom.getText().toString();
-				int type_req_prenom = mSpinPrenom.getSelectedItemPosition() + 1;
 				String prenom = mPrenom.getText().toString();
-				int type_req_pseudo = mSpinPseudo.getSelectedItemPosition() + 1;
 				String pseudo = mPseudo.getText().toString() ;
-				int type_req_tel = mSpinTel.getSelectedItemPosition() + 1;
 				String tel =  mTel.getText().toString();
-				int sexe_fem = (mFem.isChecked() ? 1 : 0);
-				int sexe_masc = (mMasc.isChecked() ? 1 : 0);
-				
-				requeteParams.putString("type_req_nom", String.valueOf(type_req_nom));
+
 				requeteParams.putString("nom", (nom != null) ? nom : "");
-				requeteParams.putString("type_req_prenom", String.valueOf(type_req_prenom));
 				requeteParams.putString("prenom", (prenom != null) ? prenom : "");
-				requeteParams.putString("type_req_pseudo", String.valueOf(type_req_pseudo));
 				requeteParams.putString("pseudo", (pseudo != null) ? pseudo : "");
-				requeteParams.putString("type_req_tel", String.valueOf(type_req_tel));
+				requeteParams.putString("type_req_tel", String.valueOf(mSpinTel.getSelectedItemPosition() + 1));
 				requeteParams.putString("tel", (tel != null) ? tel : "");
-				requeteParams.putString("sexe_fem", String.valueOf(sexe_fem));
-				requeteParams.putString("sexe_masc", String.valueOf(sexe_masc));
-				requeteParams.putString("antenne_evry", String.valueOf((mEvry.isChecked() ? 1 : 0)));
-				requeteParams.putString("antenne_stras", String.valueOf((mStras.isChecked() ? 1 : 0)));
-				requeteParams.putString("promo", (String) mSpinPromo.getSelectedItem());
-				requeteParams.putString("groupe", (String) mSpinGroupe.getSelectedItem());
-				requeteParams.putString("logement", (String) mSpinLogement.getSelectedItem());
+				requeteParams.putBoolean("sexe_fem", mFem.isChecked());
+				requeteParams.putBoolean("sexe_masc", mMasc.isChecked());
+				requeteParams.putBoolean("antenne_evry", mEvry.isChecked());
+				requeteParams.putBoolean("antenne_stras", mStras.isChecked());
+				requeteParams.putString("promo", mSpinPromo.getSelectedItem().toString());
+				requeteParams.putString("groupe", groupes[mSpinGroupe.getSelectedItemPosition()]);
+				requeteParams.putString("logement", mSpinLogement.getSelectedItem().toString());
 				requeteParams.putString("club", (String) mSpinClub.getSelectedItem());
 
 				bundle.putBundle("requete", requeteParams);
 				// make the request
 				if (isOnline()){
-					fragmentManager = getFragmentManager();
-					frag = new TrombiResult();
-
-					frag.setArguments(bundle);
-
 					mProgressSpinner.setVisibility(View.VISIBLE);
-					mFormulaire.setVisibility(View.GONE);				
-
-					fragmentManager.beginTransaction().replace(R.id.content, frag).commit();
+					mFormulaire.setVisibility(View.GONE);	
+					
+					Intent i = new Intent(getActivity(), TrombiResult.class);
+					i.putExtra("bundle", bundle);
+					startActivity(i);
+					
+					mProgressSpinner.setVisibility(View.GONE);
+					mFormulaire.setVisibility(View.VISIBLE);	
 				} else {
 					Toast.makeText(getActivity().getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
 				}

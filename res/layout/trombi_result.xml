@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical" >
 
-    <include
-        android:layout_width="fill_parent"
+    <FrameLayout
+        android:id="@+id/trombi_res_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        layout="@layout/listview" />
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/trombi_newsearch_button"

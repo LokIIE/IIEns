@@ -5,8 +5,10 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -88,6 +90,8 @@ public class GCMIntentService extends IntentService {
 			mBuilder.setContentTitle("Partiel");
 		} else {
 			mBuilder.setContentTitle("Nouvelle news");
+			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+			preferences.edit().putBoolean("news_new_update", true).commit();
 		}
 
 		mBuilder.setContentIntent(contentIntent);

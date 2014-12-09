@@ -1,5 +1,7 @@
 package com.iiens.net;
 
+import java.util.ArrayList;
+
 import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,12 +23,14 @@ import android.widget.TextView;
 public class TrombiResultDetail extends Fragment {
 
 	private Button btnReturn;
+	private ArrayList<TrombiItem> trombiItemsList;
 	private TrombiItem trombiItem;
 	private TextView mNom, mPromo, mOrigine, mFiliere, mNaissance, mTelFixe, mTelPort, mMailIIE, mMailPerso, mAntenne, mGroupe, mAssoces;
 	private ImageView mPhoto;
 
-	public TrombiResultDetail(TrombiItem trombiItem) {
-		this.trombiItem = trombiItem;
+	public TrombiResultDetail(ArrayList<TrombiItem> trombiItemsList, int position) {
+		this.trombiItemsList = trombiItemsList;
+		this.trombiItem = trombiItemsList.get(position);
 	}
 
 	@Override // this method is only called once for this fragment
@@ -121,7 +125,9 @@ public class TrombiResultDetail extends Fragment {
 		btnReturn.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				getFragmentManager().popBackStack();
+				Fragment frag = new TrombiResultList(trombiItemsList);
+				frag.setArguments(getArguments());
+				getFragmentManager().beginTransaction().replace(R.id.trombi_res_content, frag).commit();
 			}
 		});
 
