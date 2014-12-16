@@ -60,21 +60,25 @@ public class EdtResult extends FragmentActivity {
 		if (savedInstanceState != null) {
 			bundle.putAll(savedInstanceState.getBundle("edtResultBundle"));
 		}
-		
+
 		String requestWeek = bundle.getString("week");
 		String[] requestFilter = bundle.getStringArray("filtre");
 		String requestPromo = bundle.getString("promo");
 		
+		String filename = bundleKey + requestPromo + ".txt";
+
 		if (bundle.containsKey("edtJArrayResult")) {
 			try {
 				jResult = new JSONArray(bundle.getString("edtJArrayResult"));
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			bundle.putString("edtJArrayResult", jResult.toString());
-		} else if (preferences.getBoolean("storage_option", false) && requestWeek.equals(preferences.getString("edtWeekSaved", "0"))) {
+		} else if (preferences.getBoolean("storage_option", false) 
+				&& requestWeek.equals(preferences.getString("edtWeekSaved", "0"))
+				&& getFileStreamPath(filename).exists()) {
 			try {
-				jResult = new JSONArray(readFromInternalStorage(bundleKey + ".txt"));
+				jResult = new JSONArray(readFromInternalStorage(filename));
+				bundle.putString("edtJArrayResult", jResult.toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -93,7 +97,7 @@ public class EdtResult extends FragmentActivity {
 			// Save the results if storage is activated
 			String currentWeek = String.valueOf(Calendar.getInstance(Locale.FRENCH).get(Calendar.WEEK_OF_YEAR));
 			if (preferences.getBoolean("storage_option", false) && requestWeek.equals(currentWeek)) {
-				writeToInternalStorage(jResult.toString(), bundleKey + ".txt");
+				writeToInternalStorage(jResult.toString(), filename);
 				preferences.edit().putString("edtWeekSaved", currentWeek).commit();
 			}
 		} else {
@@ -102,7 +106,7 @@ public class EdtResult extends FragmentActivity {
 
 		// Transform jArray in ArrayList
 		ArrayList<EdtItem> edtItemsList = jArrayToArrayList(jResult, requestFilter);
-		
+
 		SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
 		SimpleDateFormat formatter = new SimpleDateFormat("EEEE dd MMMM", Locale.FRANCE);
 		resultLundi = new ArrayList<EdtItem>();
@@ -141,7 +145,7 @@ public class EdtResult extends FragmentActivity {
 				days[4] = jour;
 			}
 		}
-		
+
 		getActionBar().setTitle("Résultats de la recherche");
 		vpPager = (ViewPager) findViewById(R.id.edt_pager);
 		btnNewSearch = (Button) findViewById(R.id.edt_newsearch_button);
@@ -154,10 +158,10 @@ public class EdtResult extends FragmentActivity {
 			}
 		});
 	}
-	
+
 	public void onStart() {
 		super.onStart();
-		
+
 		adapterViewPager = new EdtResultPagerAdapter(getSupportFragmentManager());
 		vpPager.setAdapter(adapterViewPager);
 	}
@@ -188,11 +192,10 @@ public class EdtResult extends FragmentActivity {
 		return false;
 	}
 
-	static private boolean isInList (String groupe, String[] list) {
-
+	static private boolean isInList(String groupe, String[] list) {
 		for (int i=0; i < list.length; i++) {
 			String authorizedGroup = list[i];
-			if (authorizedGroup != "" && (groupe.startsWith(authorizedGroup) || authorizedGroup.startsWith(groupe))) {
+			if (!authorizedGroup.equals("") && (groupe.startsWith(authorizedGroup) || authorizedGroup.startsWith(groupe))) {
 				return true;
 			}
 		}
@@ -295,21 +298,19 @@ public class EdtResult extends FragmentActivity {
 		return edtItemsList;
 	}
 
-	static private void filterItems(JSONObject json_data, ArrayList<EdtItem> edtItemsList, String[] filtre) {
-
+	static private void filterItems(JSONObject json_data, ArrayList<EdtItem> edtItemsList, String[] toKeepFilter) {
 		EdtItem edtItem = new EdtItem();
 		edtItem.mapJsonObject(json_data);
 		String groupe = edtItem.getGroupe();
-
-		boolean filtreEmpty = true;
-		for (int i = 0; i< filtre.length; i++) {if (filtre[i] != "") filtreEmpty = false;} 
-
+		
+		boolean filterEmpty = true;
+		for (int i = 0; i< toKeepFilter.length; i++) {if (toKeepFilter[i].length() > 0) filterEmpty = false;} 
+		
 		// Filtre les cours/td en groupe et n'affiche que le groupe ou le sous-groupe demandé par l'utilisateur
-		if (groupe == "" || filtreEmpty) {
+		if (groupe.equals("") || filterEmpty) {
 			edtItemsList.add(edtItem);
-		}
-		else {
-			if (isInList(groupe, filtre)) {
+		} else {
+			if (isInList(groupe, toKeepFilter)) {
 				edtItemsList.add(edtItem);
 			}
 		}

@@ -34,11 +34,12 @@ public class Edt extends Fragment {
 	private RadioGroup radioPromoGroup;
 	private RadioButton radio1A, radio2A, radio3A;
 	private Calendar myCalendar;
-	private LinearLayout mFormulaire, mComm, mProgressSpinner, mOpt2a, mOpt3a;
-	private Spinner mEdtWeekSpinner, mGroupSpinner, mCommSpinner, mOptSpinner1, mOptSpinner2, mOptSpinner3, mOptSpinner4, mOptSpinner5, mOptSpinner6;
+	private LinearLayout mFormulaire, mComm, mLangue, mProgressSpinner, mOpt2a, mOpt3a;
+	private Spinner mEdtWeekSpinner, mGroupSpinner, mCommSpinner, mLangSpinner, mOptSpinner1, mOptSpinner2, mOptSpinner3, mOptSpinner4, mOptSpinner5, mOptSpinner6;
 	private int currentWeekNumber = 1;
 	private String[] groupes = {"", "GR1", "GR1.1", "GR1.2", "GR2", "GR2.1", "GR2.2", "GR3", "GR3.1", "GR3.2", "GR4", "GR4.1", "GR4.2", "GR5", "FIPA"};
 	private String[] commGroupes = {"", "GR A", "GR B", "GR C", "GR D", "GR E", "GR F"};
+	private String[] langGroupes = {"", "allemand", "allemand fort", "allemand inter", "chinois", "espagnol", "français (FLE)", "français renforcé", "japonais", "portugais", "russe", "sout. anglais"};
 	private String[][] options2a = { {},
 			{"", "op21.1", "op21.2", "op21.2g1", "op21.3", "op21.4"},
 			{"", "op22.1", "op22.2", "op22.3", "op22.4"},
@@ -99,9 +100,10 @@ public class Edt extends Fragment {
 		mOpt2a = (LinearLayout) view.findViewById(R.id.edt_options2A);
 		mOpt3a = (LinearLayout) view.findViewById(R.id.edt_options3A);
 		mComm = (LinearLayout) view.findViewById(R.id.edt_comm);
+		mLangue = (LinearLayout) view.findViewById(R.id.edt_langue);
 		mGroupSpinner = (Spinner) view.findViewById(R.id.edt_groupe);
 		mCommSpinner = (Spinner) view.findViewById(R.id.edt_comm_spin);
-
+		mLangSpinner = (Spinner) view.findViewById(R.id.edt_lang_spin);
 
 		btnSearch = (Button) view.findViewById(R.id.edt_search_button);
 
@@ -112,6 +114,7 @@ public class Edt extends Fragment {
 				mOpt2a.setVisibility(View.GONE);
 				mOpt3a.setVisibility(View.GONE);
 				mComm.setVisibility(View.VISIBLE);
+				mLangue.setVisibility(View.VISIBLE);
 			}
 
 		});
@@ -122,6 +125,7 @@ public class Edt extends Fragment {
 				mOpt2a.setVisibility(View.VISIBLE);
 				mOpt3a.setVisibility(View.GONE);
 				mComm.setVisibility(View.VISIBLE);
+				mLangue.setVisibility(View.VISIBLE);
 			}
 
 		});
@@ -132,6 +136,7 @@ public class Edt extends Fragment {
 				mOpt2a.setVisibility(View.GONE);
 				mOpt3a.setVisibility(View.VISIBLE);
 				mComm.setVisibility(View.GONE);
+				mLangue.setVisibility(View.GONE);
 			}
 
 		});
@@ -143,13 +148,13 @@ public class Edt extends Fragment {
 		SimpleDateFormat monthName = new SimpleDateFormat("MMM", Locale.FRENCH);
 		for(int i = 0; i < 11; i++){
 			myCalendar.setFirstDayOfWeek(Calendar.MONDAY);
-			
+
 			myCalendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 			String lundi = String.valueOf(myCalendar.get(Calendar.DAY_OF_MONTH)) + " " + monthName.format(myCalendar.getTime());
-			
+
 			myCalendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
 			String vendredi = String.valueOf(myCalendar.get(Calendar.DAY_OF_MONTH)) + " " + monthName.format(myCalendar.getTime());
-			
+
 			spinnerItems.add("Du " + lundi + " au " + vendredi);
 			myCalendar.add(Calendar.DAY_OF_MONTH, 7);
 		}
@@ -174,16 +179,18 @@ public class Edt extends Fragment {
 				String option4 = ""; String option5 = ""; String option6 = "";
 				LinearLayout promoOptsLayout = null;
 
-				String commGroup = "";
+				String commGroup = ""; String langGroup = "";
 				if (selectedId == radio1A.getId()) {
 					promo = "1";
 					commGroup = commGroupes[mCommSpinner.getSelectedItemPosition()];
+					langGroup = langGroupes[mLangSpinner.getSelectedItemPosition()];
 				}
 				else if (selectedId == radio2A.getId()) {
 					promo = "2";
 					promoOptsLayout = mOpt2a;
 					optionsPromo = options2a;
 					commGroup = commGroupes[mCommSpinner.getSelectedItemPosition()];
+					langGroup = langGroupes[mLangSpinner.getSelectedItemPosition()];
 				} else if (selectedId == radio3A.getId()) {
 					promo = "3";
 					promoOptsLayout = mOpt3a;
@@ -207,7 +214,7 @@ public class Edt extends Fragment {
 					option6 = optionsPromo[6][mOptSpinner6.getSelectedItemPosition()];
 				}
 
-				String [] filtre = {selectedGroup, commGroup, option1, option2, option3, option4, option5, option6};
+				String [] filtre = {selectedGroup, commGroup, langGroup, option1, option2, option3, option4, option5, option6};
 
 				String week = String.valueOf(currentWeekNumber - 2 + mEdtWeekSpinner.getSelectedItemPosition());
 

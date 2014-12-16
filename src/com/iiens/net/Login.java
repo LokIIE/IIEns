@@ -3,7 +3,10 @@ package com.iiens.net;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+
+import javax.crypto.KeyGenerator;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -65,6 +68,7 @@ public class Login extends Activity {
 	private Boolean isConnected = false;
 	private SharedPreferences preferences;
 	private SharedPreferences.Editor editor;
+	private KeyGenerator keyGen;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,11 @@ public class Login extends Activity {
 		mConnectButton = (Button) findViewById(R.id.connect_button);
 		mOfflineButton = (Button) findViewById(R.id.offline_button);
 		preferences = getSharedPreferences("IIEns_prefs", Context.MODE_PRIVATE);
+		try {
+			keyGen = KeyGenerator.getInstance("DES");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

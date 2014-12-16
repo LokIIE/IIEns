@@ -107,7 +107,7 @@ public class EdtItemsAdapter extends BaseAdapter {
 				}
 				else if (titre.contains("Langues Vivantes")) {
 					titre = edtItem.getGroupe().toUpperCase();
-					groupe = "";
+					// groupe = "";
 					type = "";
 				}
 				else if (!type.equals("assoce")) titre = " de " + titre;

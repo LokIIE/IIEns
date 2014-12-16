@@ -27,7 +27,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 /** EdtGetRequest 
-	Classe permettant de récupérer l'emploi du temps en bdd et de filtrer les résultats suivant les choix de l'utilisateur
+	Classe permettant de récupérer l'emploi du temps en bdd
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
  **/
 

@@ -1,7 +1,5 @@
 package com.iiens.net;
 
-import java.util.Random;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -52,16 +50,6 @@ public class Main extends Activity {
 	// Fragments to add if connected
 	private Fragment[] menuFragmentsConnected = new Fragment[]{
 			new Trombi()
-	};
-
-	// The different ways of welcoming the user if connected, by replacing "..." by its name
-	private String[] helloStrings = new String[]{
-			"Bienvenue ... :)",
-			"Coucou ... coucou",
-			"Sup sup ... o/",
-			"...",
-			"Hello ... !",
-			"..., SALOPE ! tu bois !"
 	};
 
 	private int defaultFragmentNumber = 0; // Number of the fragment to show first after the SplashScreen
@@ -139,19 +127,19 @@ public class Main extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		if (drawerToggle.onOptionsItemSelected(item))
+		if (drawerToggle.onOptionsItemSelected(item)) // if it is the side menu
 			return true;
-		else {
+		else { // if it is the action menu
 			// Handle item selection
 			switch (item.getItemId()) {
 			case R.id.action_loginout:
 				Intent i;
-				if (isConnected) {
+				if (isConnected) { // revert everything to offline state
 					i = new Intent(Main.this, Main.class);
 					i.putExtra("isConnected", false);
 					editor.remove("login").remove("password").remove("auto_login").apply();
-				}
-				else i = new Intent(Main.this, Login.class);
+				} else i = new Intent(Main.this, Login.class); // open the login activity
+				
 				startActivity(i);
 				overridePendingTransition(R.anim.left_in, R.anim.right_out);
 				finish();
@@ -173,7 +161,7 @@ public class Main extends Activity {
 	@Override
 	public void onSaveInstanceState(Bundle outState)
 	{
-		backFromSettingsFragment();
+		backFromSettings(); // if orientation changes while being in settings
 		super.onSaveInstanceState(outState);
 		outState.putInt("currentFragment", currentFragment);
 		outState.putString("scriptURL", scriptURL);
@@ -183,21 +171,18 @@ public class Main extends Activity {
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
-		// Sync the toggle state after onRestoreInstanceState has occurred.
-		drawerToggle.syncState();
+		drawerToggle.syncState(); // Sync the toggle state after onRestoreInstanceState has occurred.
 	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		// Pass any configuration change to the drawer toggle
-		drawerToggle.onConfigurationChanged(newConfig);
+		drawerToggle.onConfigurationChanged(newConfig); // Pass any configuration change to the drawer toggle
 	}
 
 	/* Create the menu and add the items to it */
 	private void createMenu() {
-		// If connected, change initial parameters
-		if (isConnected) setParametersConnected();
+		if (isConnected) setParametersConnected(); // If connected, change initial parameters
 
 		ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menuItems);
 		menu.setAdapter(menuAdapter);
@@ -212,29 +197,28 @@ public class Main extends Activity {
 				R.string.open_menu, 
 				R.string.close_menu);
 
-		// Link the drawerToggle and the drawerLayout
-		drawerLayout.setDrawerListener(drawerToggle);
+		drawerLayout.setDrawerListener(drawerToggle); // Link the drawerToggle and the drawerLayout
 
 		// Set the list's click listener
 		menu.setOnItemClickListener(new ListView.OnItemClickListener() {
 			@Override @SuppressWarnings("rawtypes")
 			public void onItemClick(AdapterView parent, View view, int position, long id) {
-				if (currentFragment != position) {
+				drawerLayout.closeDrawer(menu); // Close the menu in all cases
+
+				if (currentFragment != position) { // if an other item is selected in the menu, open it
 					currentFragment = position;
 					openFragment(position);
-				} else if (inSettings && currentFragment == position) {
-					backFromSettingsFragment(); 
+				} else if (inSettings && currentFragment == position) { // If we get want to get back from settings to the current fragment
+					backFromSettings(); 
 				}
-
-				drawerLayout.closeDrawer(menu);
 			}
 		});	
 	}
 
-	/* Specify the fragment to open based on the position of the menu item toggled */
+	/* Specify the fragment to open based on the position of the menu item clicked */
 	private void openFragment(int position) {
-		if (inSettings) {
-			backFromSettingsFragment();
+		if (inSettings) { // if we select an item from the menu while being in app settings
+			backFromSettings();
 		}
 
 		frag = menuFragments[position];
@@ -243,56 +227,51 @@ public class Main extends Activity {
 			if (!frag.isAdded()) frag.setArguments(mainBundle); // Can't setArguments if the fragment is active, isAdded verfies that
 			fragmentManager.beginTransaction().replace(R.id.content, frag).commit();
 
-			// Highlight the selected item, update the title, and close the drawer
-			menu.setItemChecked(position, true);
 			getActionBar().setTitle(menuItems[position]);
 		}
 		drawerLayout.closeDrawer(menu); 
 	}
 
-	/* Change the initial parameters to adapt to connected state */ 	
+	/* Replace the menu with the a new menu containing the items only accessible when connected */ 	
 	private void setParametersConnected() {
-		// Add random welcome message in first place and the connected parameters at the end
+		// Add user name in first place and the items accessible only while connected at the end
 		String[] newMenuItems = new String[menuItems.length + menuItemsConnected.length + 1];
-		for (int i=0; i < menuItems.length; i++) {
+		newMenuItems[0] = mainBundle.getString("nom");
+		for (int i = 0; i < menuItems.length; i++) {
 			newMenuItems[i+1] = menuItems[i];
 		}
-		for (int i=0; i < menuItemsConnected.length; i++){
+		for (int i = 0; i < menuItemsConnected.length; i++){
 			newMenuItems[i+1+menuItems.length] = menuItemsConnected[i];
 		}
-		Random r = new Random();
-		newMenuItems[0] = helloStrings[r.nextInt(helloStrings.length)].replace("...", mainBundle.getString("nom"));
 		menuItems = newMenuItems;
 
-		// Add a null fragment in first place to do nothing when toggled, and the connected parameters at the end
+		// Add a null fragment in first place to do nothing when toggled, and the fragments accessible only while connected at the end
 		Fragment[] newMenuFragments = new Fragment[menuFragments.length + menuFragmentsConnected.length + 1];
-		for (int i=0; i < menuFragments.length; i++) {
+		newMenuFragments[0] = null;
+		for (int i = 0; i < menuFragments.length; i++) {
 			newMenuFragments[i+1] = menuFragments[i];
 		}
-		for (int i=0; i < menuFragmentsConnected.length; i++){
+		for (int i = 0; i < menuFragmentsConnected.length; i++){
 			newMenuFragments[i+1+menuFragments.length] = menuFragmentsConnected[i];
 		}
-		newMenuFragments[0] = null;
 		menuFragments = newMenuFragments;
-
-		currentFragment += 1;
+		
+		currentFragment += 1; // Because the name in first place shifted everything of 1 place
 	}
 
 	@Override
-	public void onBackPressed()
-	{
-		if (inSettings)
-		{
-			backFromSettingsFragment();
+	public void onBackPressed() {
+		if (inSettings)	{
+			backFromSettings();
 			return;
 		}
 		super.onBackPressed();
 	}
 
-	private void backFromSettingsFragment()
-	{
+	private void backFromSettings() {
 		inSettings = false;
 		getFragmentManager().popBackStack();
 		getActionBar().setTitle(menuItems[currentFragment]);
 	}
+
 }

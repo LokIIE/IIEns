@@ -24,17 +24,18 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 /** SplashScreen 
-	Animation lors du lancement de l'appli
+	Animation lors du lancement de l'appli et création compte sur GCM
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
  **/
 
 public class SplashScreen extends Activity {
 
-	private static int SPLASH_TIME_OUT = 2000; // Splash screen timer
-	private boolean backPressed = false; // Was back button pressed ?
+	/* Animation parameters */
+	private static int SPLASH_TIME_OUT = 2000; // Splash screen animation duration
+	private boolean backPressed = false; // Was back button pressed during the animation
 	private SharedPreferences preferences;
 
-	/////////////////////////////////////
+	/* Google Cloud Messaging parameters */
 	private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 	public static final String EXTRA_MESSAGE = "message";
 	public static final String PROPERTY_REG_ID = "registration_id";
@@ -42,8 +43,6 @@ public class SplashScreen extends Activity {
 	private static final String TAG = "GCMRelated";
 	GoogleCloudMessaging gcm;
 	AtomicInteger msgId = new AtomicInteger();
-	String regid;
-	//////////////////////////////////////
 
 	/* Determines the view to load for this activity */
 	@Override
@@ -51,48 +50,30 @@ public class SplashScreen extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-		////////////////////////////
-		if (checkPlayServices()) {
-			gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
-			regid = getRegistrationId(getApplicationContext());
-
-			if (regid.isEmpty()) {
-				new GCMRegisterApp(getApplicationContext(), gcm, getAppVersion(getApplicationContext())).execute();
-			}
-		} else {
-			Log.i(TAG, "No valid Google Play Services APK found.");
-		}
-		///////////////////////////////
 	}
 
 	/* Actions when the view is displayed on the screen */
 	@Override
 	protected void onStart() {
 		super.onStart();
-		StartAnimation();
+		startLogoAnimation(R.id.imgLogo, R.anim.top_in);
+
+		// GCM needs Google Play Services to function correctly
+		if (checkPlayServices()) {
+			gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+
+			if (getRegistrationId(getApplicationContext()).isEmpty()) {
+				new GCMRegisterApp(getApplicationContext(), gcm, getAppVersion(getApplicationContext())).execute();
+			}
+		} else {
+			Log.i(TAG, "No valid Google Play Services APK found.");
+		}
 
 		// Execute the actions after a certain delay
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				Intent i = null;
-				if (preferences.getBoolean("login_option", false)) {
-					i = new Intent(SplashScreen.this, Login.class);
-				} else {
-					i = new Intent(SplashScreen.this, Main.class);
-				}
-
-				// Start main activity when timer is over or when off-line mode enabled and end splash screen
-				if (isOnline() || preferences.getBoolean("storage_option", false)) {  
-					if (!backPressed) {
-						startActivity(i);
-						overridePendingTransition(R.anim.right_in, R.anim.left_out);
-					}
-				} else {
-					Toast.makeText(getApplicationContext(), "Connexion Internet requise", Toast.LENGTH_LONG).show();
-				}
-				finish();
+				goToNextActivity();
 			}
 		}, SPLASH_TIME_OUT);
 
@@ -108,9 +89,9 @@ public class SplashScreen extends Activity {
 	}
 
 	/* Animation for the splash screen logo */
-	private void StartAnimation() { 
-		Animation anim = AnimationUtils.loadAnimation(this, R.anim.top_in);
-		ImageView iv = (ImageView) findViewById(R.id.imgLogo);
+	private void startLogoAnimation(int logo, int animation) { 
+		Animation anim = AnimationUtils.loadAnimation(this, animation);
+		ImageView iv = (ImageView) findViewById(logo);
 		iv.startAnimation(anim);
 	}
 
@@ -125,7 +106,31 @@ public class SplashScreen extends Activity {
 		return false;
 	}
 
-	////////////////////////////////
+	private void goToNextActivity() {
+		Intent i = null;
+		overridePendingTransition(R.anim.right_in, R.anim.left_out);
+
+		// If login option enabled, show login activity else main activity
+		if (preferences.getBoolean("login_option", false)) {
+			i = new Intent(SplashScreen.this, Login.class);
+			if (!backPressed) {
+				startActivity(i);
+			}
+		}
+		else {
+			i = new Intent(SplashScreen.this, Main.class);
+			// Main activity requires either data stored on the device or an internet connection
+			if (!backPressed && (preferences.getBoolean("storage_option", false) || isOnline())) {
+				startActivity(i);
+			}
+			else {
+				Toast.makeText(getApplicationContext(), "Connexion Internet requise", Toast.LENGTH_LONG).show();
+			}
+		}
+
+		// Destroy this activity
+		finish();
+	}
 
 	/**
 	 * Check the device to make sure it has the Google Play Services APK. If
@@ -179,7 +184,7 @@ public class SplashScreen extends Activity {
 	 * @return Application's {@code SharedPreferences}.
 	 */
 	private SharedPreferences getGCMPreferences(Context context) {
-		// This sample app persists the registration ID in shared preferences, but
+		// Persists the registration ID in shared preferences, but
 		// how you store the regID in your app is up to you.
 		return getSharedPreferences(SplashScreen.class.getSimpleName(),
 				Context.MODE_PRIVATE);
