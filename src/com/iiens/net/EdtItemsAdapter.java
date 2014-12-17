@@ -81,7 +81,7 @@ public class EdtItemsAdapter extends BaseAdapter {
 			// Set salle and take into account special cases
 			String lieu = edtItem.getLieu();
 			if (lieu.length() > 0) {
-				if (type.equals("assoce") && !lieu.equals("2")) lieu = " au " + lieu;
+				if (type.equals("assoce") && !lieu.matches("[0-9]*")) lieu = " au " + lieu;
 				else if (lieu.equals("2")) lieu = " en amphi 2";
 				else lieu = " en " + lieu;
 			}
@@ -91,6 +91,7 @@ public class EdtItemsAdapter extends BaseAdapter {
 			if (auteur.length() > 0) {
 				if (type.equals("assoce")) {
 					if (auteur.equals("aeiie")) auteur = "BdE";
+					else if (auteur.equals("manga")) auteur = "Bakaclub";
 					auteur = " par " + auteur;
 				}
 				else auteur = " avec " + auteur;
@@ -103,13 +104,7 @@ public class EdtItemsAdapter extends BaseAdapter {
 					titre = "Cycle de conférences";
 					auteur = "";
 					type = "";
-				}
-				else if (titre.contains("Langues Vivantes")) {
-					titre = edtItem.getGroupe().toUpperCase();
-					groupe = "";
-					type = "";
-				}
-				else if (!type.equals("assoce")) titre = " de " + titre;
+				} else if (!type.equals("assoce")) titre = " de " + titre;
 			}
 
 			TextView mEdtItem = (TextView) arg1.findViewById(R.id.edt_item_content);

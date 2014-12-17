@@ -4,13 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.security.KeyStore;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -19,10 +13,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -30,102 +21,51 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 /** EdtGetRequest 
-	Classe permettant de récupérer l'emploi du temps en bdd et de filtrer les résultats suivant les choix de l'utilisateur
+	Classe permettant de récupérer l'emploi du temps en bdd
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
  **/
 
-public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
+public class EdtGetRequest extends AsyncTask<Void, Void, JSONArray> {
 
-	private ArrayList<EdtItem> edtItemsList = new ArrayList<EdtItem>();
-	private String date;
+	private JSONArray edtJArray;
+	private String week;
 	private String promo;
-	static private String[] filtre;
 	private String scriptURL;
 	private static Context context;
 
 	@SuppressWarnings("static-access")
-	public EdtGetRequest(Context context, String date, String promo, String[] groupFiltre, String scriptURL){
-		this.date = date;
+	public EdtGetRequest(Context context, String week, String promo, String scriptURL){
+		this.edtJArray = new JSONArray();
+		this.week = week;
 		this.promo = promo;
 		this.context = context;
-		filtre = groupFiltre;
 		this.scriptURL = scriptURL;
 	}
 
 	@Override
-	protected ArrayList<EdtItem> doInBackground(Void... voids) {
-		edtItemsList = getEdtRequest(date, promo, scriptURL);
-		return edtItemsList;
+	protected JSONArray doInBackground(Void... voids) {
+		edtJArray = getEdtRequest(week, promo, scriptURL);
+		return edtJArray;
 	}
 
 	// Récupère une liste d'items de l'emploi du temps.
-	public static ArrayList<EdtItem> getEdtRequest(String date, String promo, String scriptURL) {
-
-		ArrayList<EdtItem> edtItemsList = new ArrayList<EdtItem>();
-
-		//		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-		//		System.out.println("startdate: " + sdf.format(myCalendar.getTime()));
-		//	    Date[] minMaxD = calcDateRangeWeek(myCalendar, Calendar.DAY_OF_WEEK);
-		//	    Log.d("Min date", minMaxD[0].toString());
-		//	    Log.d("Min date", minMaxD[1].toString());
-		//	    
-		//		public Date[] calcDateRangeWeek(Calendar c, int day) {
-		//		    Date[] dr = new Date[2];
-		//		    // setMin
-		//		    c.set(day, Calendar.MONDAY);
-		//		    dr[0] = c.getTime();
-		//		    // setMax
-		//		    c.set(day, Calendar.SUNDAY);
-		//		    dr[1] = c.getTime();
-		//		    return dr;
-		//		}
+	public static JSONArray getEdtRequest(String week, String promo, String scriptURL) {
 
 		String result = "";
 		ArrayList<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		// Ajout des paramètres de la requête
 		nameValuePairs.add(new BasicNameValuePair("type","edt"));
-		nameValuePairs.add(new BasicNameValuePair("date", date));
+		nameValuePairs.add(new BasicNameValuePair("week", week));
 		nameValuePairs.add(new BasicNameValuePair("promo", promo));
 
 		try {
-			// Load CA from an InputStream (CA would be saved in Raw file,
-			// and loaded as a raw resource)
-			CertificateFactory cf = CertificateFactory.getInstance("X.509");
-			InputStream in = context.getResources().openRawResource(R.raw.cacert);
-			Certificate ca;
-			try {
-				ca = cf.generateCertificate(in);
-			} finally {
-				in.close();
-			}
-
-			// Create a KeyStore containing our trusted CAs
-			KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-			keyStore.load(null, null);
-			keyStore.setCertificateEntry("ca", ca); 
-
-			// Create a TrustManager that trusts the CAs in our KeyStore
-			String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-			TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-			tmf.init(keyStore);
-
-			// Create an SSLContext that uses our TrustManager
-			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(null, tmf.getTrustManagers(), null);
-
-			SchemeRegistry schemeRegistry = new SchemeRegistry();
-			schemeRegistry.register(new Scheme("http", PlainSocketFactory
-					.getSocketFactory(), 80));
-			SSLSocketFactory sslSocketFactory = new SSLSocketFactory(keyStore);
-			schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
-
+			SchemeRegistry schemeRegistry = new SSLArise().init(context);
 			HttpParams params = new BasicHttpParams();
 			ClientConnectionManager cm = 
 					new ThreadSafeClientConnManager(params, schemeRegistry);
@@ -141,52 +81,18 @@ public class EdtGetRequest extends AsyncTask<Void, Void, ArrayList<EdtItem>> {
 			Log.e("edt_get", "Error in http connection " + e.toString());
 		}
 
-		// Parse les données JSON
+		if (result.length() == 0) {return null;} // if there is no data
+
+		JSONArray resJArray = null;		
 		try{
-			JSONArray jArray = new JSONArray(result);
-			for(int i=0;i<jArray.length();i++){
-				JSONObject json_data = jArray.getJSONObject(i);
-				filterItems(json_data, edtItemsList, filtre);
-			}
+			resJArray = new JSONArray(result);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		} catch(JSONException e){
 			Log.e("log_tag", "Error parsing data " + e.toString());
 		}
 
-		return edtItemsList;
-	}
-
-	static private void filterItems(JSONObject json_data, ArrayList<EdtItem> edtItemsList, String[] filtre) {
-
-		EdtItem edtItem = new EdtItem();
-		edtItem.mapJsonObject(json_data);
-		String groupe = edtItem.getGroupe();
-
-		boolean filtreEmpty = true;
-		for (int i = 0; i< filtre.length; i++) {if (filtre[i] != "") filtreEmpty = false;} 
-
-		// Filtre les cours/td en groupe et n'affiche que le groupe ou le sous-groupe demandé par l'utilisateur
-		if (groupe == "" || filtreEmpty) {
-			edtItemsList.add(edtItem);
-		}
-		else {
-			if (isInList(groupe, filtre)) {
-				edtItemsList.add(edtItem);
-			}
-		}
-
-	}
-
-	static private boolean isInList (String groupe, String[] list) {
-
-		for (int i=0; i < list.length; i++) {
-			String authorizedGroup = list[i];
-			if (authorizedGroup != "" && (groupe.startsWith(authorizedGroup) || authorizedGroup.startsWith(groupe))) {
-				return true;
-			}
-		}
-		return false;
+		return resJArray;
 	}
 
 	private static String httpRequest(HttpClient httpclient, HttpPost httppost) {

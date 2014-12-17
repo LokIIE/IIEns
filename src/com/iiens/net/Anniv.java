@@ -1,13 +1,24 @@
 package com.iiens.net;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,15 +33,34 @@ import android.widget.Toast;
 
 public class Anniv extends Fragment {
 
+	private String bundleKey = "anniv";
+
 	private Bundle bundle = new Bundle();
-	private ArrayList<AnnivItem> result = new ArrayList<AnnivItem>();
+	private ArrayList<AnnivItem> annivItemsList;
+	private JSONArray jResult = null;
+	private ListView mListView;
+	private Context context;
+	private SharedPreferences preferences;
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		bundle = this.getArguments(); 
+		bundle = this.getArguments();
+		context = getActivity();
+
+		preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
 		// retain this fragment
 		setRetainInstance(true);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (savedInstanceState != null) {
+			// Restauration des données du contexte utilisateur
+			bundle.putAll(savedInstanceState);
+		}
 	}
 
 	@Override
@@ -38,36 +68,65 @@ public class Anniv extends Fragment {
 			Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		final View view =  inflater.inflate(R.layout.fragment_listview, container, false);
+		final View view =  inflater.inflate(R.layout.listview, container, false);
 		bundle = this.getArguments();
-		final ListView mListView = (ListView) view.findViewById(R.id.listview);
+		mListView = (ListView) view.findViewById(R.id.listview);
+		annivItemsList = new ArrayList<AnnivItem>();
 
-		if (!bundle.containsKey("anniversaires") && isOnline()){
-			AnnivGetRequest getAnniv = new AnnivGetRequest(getActivity(), bundle.getString("scriptURL"));
+		// Récupération des anniv 
+		if (preferences.getBoolean("storage_option", false)) { // If the user accepts to store data
+			if (preferences.getBoolean("anniv_new_update", false) && isOnline()){ // If there is a new birthday coming up, update the file
+				try {
+					jResult = new AnnivGetRequest(getActivity(), bundle.getString("scriptURL")).execute().get();
+					writeToInternalStorage(jResult.toString(), bundleKey + ".txt");
+					annivItemsList = jArrayToArrayList(jResult);
+					preferences.edit().putBoolean("anniv_new_update", false).apply();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else if (fileExists(bundleKey + ".txt")){ // Retrieve the data from the file (happens more often)
+				try {
+					annivItemsList = jArrayToArrayList(new JSONArray(readFromInternalStorage(bundleKey + ".txt")));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} else if (isOnline()) { // if the file doesn't exist yet (first launch for example), get the data and create file
+				try {
+					jResult = new AnnivGetRequest(getActivity(), bundle.getString("scriptURL")).execute().get();
+					annivItemsList = jArrayToArrayList(jResult);
+					writeToInternalStorage(jResult.toString(), bundleKey + ".txt");
 
-			try {
-				result = getAnniv.execute().get();
-				AnnivItemsAdapter annivAdapter = new AnnivItemsAdapter(getActivity().getApplicationContext(), result);
-				mListView.setAdapter(annivAdapter);
-				saveResult(result, bundle, "anniversaires");
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
+					bundle.putString(bundleKey, jResult.toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}				
+			} else {
+				Toast.makeText(getActivity().getApplicationContext(), "Connexion à Internet requise", Toast.LENGTH_LONG).show();
+			} 
+		} else { // If the user does not accept to store data
+			if (fileExists(bundleKey + ".txt")) {context.getFileStreamPath(bundleKey + ".txt").delete();} // if he changed minds for ex.
+			
+			if (bundle.containsKey(bundleKey)) { // If data already loaded, retrieve it
+				try {
+					annivItemsList = jArrayToArrayList(new JSONArray(bundle.getString(bundleKey)));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} else if (isOnline()) { // If we have an internet connection, get the data
+				try {
+					jResult = new AnnivGetRequest(getActivity(), bundle.getString("scriptURL")).execute().get();
+					annivItemsList = jArrayToArrayList(jResult);
+
+					bundle.putString(bundleKey, jResult.toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else { // If no connection, can't do anything
+				Toast.makeText(getActivity().getApplicationContext(), "Connexion à Internet requise", Toast.LENGTH_LONG).show();
 			}
-
-		} else if (bundle.containsKey("anniversaires")) {
-			Bundle annivBundle = bundle.getBundle("anniversaires");
-			result = new ArrayList<AnnivItem>();
-			for (int i=0; i < annivBundle.size(); i++) {
-				ArrayList<String> annivIA = annivBundle.getStringArrayList(Integer.toString(i));
-				AnnivItem annivItem = new AnnivItem(annivIA.get(0), annivIA.get(1), annivIA.get(2), annivIA.get(3), annivIA.get(4));
-				result.add(annivItem);
-			}
-			mListView.setAdapter(new AnnivItemsAdapter(getActivity().getApplicationContext(), result));
-		} else {
-			Toast.makeText(getActivity().getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
 		}
+
+		mListView.setAdapter(new AnnivItemsAdapter(getActivity().getApplicationContext(), annivItemsList));
 
 		return view;
 	}
@@ -95,15 +154,78 @@ public class Anniv extends Fragment {
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void saveResult(ArrayList<AnnivItem> result, Bundle bundle, String key) {
-		int i = 0;
-		Bundle annivSave = new Bundle();
-		for (i=0; i < result.size(); i++){
-			annivSave.putStringArrayList(Integer.toString(i), result.get(i).toArrayList());
-		}
-		bundle.putBundle(key, annivSave);
+	/* Action when (for ex) the screen orientation changes */
+	@Override
+	public void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		outState.putAll(bundle);
 	}
 
+	private ArrayList<AnnivItem> jArrayToArrayList(JSONArray jArray) {
+		ArrayList<AnnivItem> annivItemsList = new ArrayList<AnnivItem>();
 
+		try {
+			for(int i=0; i<jArray.length(); i++){
+				JSONObject json_data = jArray.getJSONObject(i);
+				AnnivItem AnnivItem = new AnnivItem();
+				AnnivItem.mapJsonObject(json_data);
+				annivItemsList.add(AnnivItem);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return annivItemsList;
+	}
+
+	private void writeToInternalStorage(String content, String fileName) {
+		String eol = System.getProperty("line.separator");
+		BufferedWriter writer = null; 
+		try {
+			writer = 
+					new BufferedWriter(new OutputStreamWriter(context.openFileOutput(fileName, 
+							Context.MODE_PRIVATE)));
+			writer.write(content + eol);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	private String readFromInternalStorage(String fileName) {
+		String eol = System.getProperty("line.separator");
+		BufferedReader input = null;
+		String fileString="";
+
+		if (fileExists(fileName)){
+			try {
+				input = new BufferedReader(new InputStreamReader(context.openFileInput(fileName)));
+				String line;
+				StringBuilder buffer = new StringBuilder();
+				while ((line = input.readLine()) != null) {
+					buffer.append(line + eol);
+				}
+				input.close();
+				fileString = buffer.toString();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+		}
+
+		return fileString;
+	}
+
+	public boolean fileExists(String fname){
+		File file = context.getFileStreamPath(fname);
+		return file.exists();
+	}
 
 }

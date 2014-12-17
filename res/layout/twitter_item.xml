@@ -1,17 +1,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/white"
-    android:gravity="left|center"
-    android:paddingBottom="5dp"
-    android:paddingLeft="5dp"
-    android:paddingTop="5dp" >
+    android:gravity="left"
+    android:paddingBottom="8dp"
+    android:paddingLeft="8dp"
+    android:paddingTop="8dp"
+    android:paddingRight="8dp" >
 
     <ImageView
         android:id="@+id/avatar"
-        android:layout_width="wrap_content"
+        android:layout_width="72dp"
         android:layout_height="fill_parent"
-        android:layout_marginRight="6dip" />
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:contentDescription="userAvatar"
+        android:src="@drawable/notfound" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -39,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:gravity="center"
-                android:textColor="@color/blue"
+                android:textColor="@color/gray"
                 android:textSize="14sp" />
 
             <TextView
@@ -57,8 +61,6 @@
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:paddingRight="16dp"
             android:textColor="@color/black"
             android:textSize="16sp" />
     </LinearLayout>

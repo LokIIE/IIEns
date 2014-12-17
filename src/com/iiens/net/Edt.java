@@ -1,32 +1,28 @@
 package com.iiens.net;
 
-import java.text.ParseException;
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /** Edt
@@ -36,16 +32,15 @@ import android.widget.Toast;
 
 public class Edt extends Fragment {
 
-	private TextView mEdtPickedDate;
 	private RadioGroup radioPromoGroup;
 	private RadioButton radio1A, radio2A, radio3A;
-	private ImageButton mEdtCalendar;
-	private Calendar myCalendar = Calendar.getInstance();
-	private LinearLayout mFormulaire, mProgressSpinner, mOpt2a, mOpt3a;
-	private Spinner mGroupSpinner, mOptSpinner1, mOptSpinner2, mOptSpinner3, mOptSpinner4, mOptSpinner5, mOptSpinner6;
-	private SimpleDateFormat calDateFormater = new SimpleDateFormat("dd-MM-yyyy", Locale.FRENCH);
-	private SimpleDateFormat rqDateFormater = new SimpleDateFormat("yyyy-MM-dd", Locale.FRENCH);
+	private Calendar myCalendar;
+	private LinearLayout mFormulaire, mComm, mLangue, mProgressSpinner, mOpt2a, mOpt3a;
+	private Spinner mEdtWeekSpinner, mGroupSpinner, mCommSpinner, mLangSpinner, mOptSpinner1, mOptSpinner2, mOptSpinner3, mOptSpinner4, mOptSpinner5, mOptSpinner6;
+	private int currentWeekNumber = 1;
 	private String[] groupes = {"", "GR1", "GR1.1", "GR1.2", "GR2", "GR2.1", "GR2.2", "GR3", "GR3.1", "GR3.2", "GR4", "GR4.1", "GR4.2", "GR5", "FIPA"};
+	private String[] commGroupes = {"", "GR A", "GR B", "GR C", "GR D", "GR E", "GR F"};
+	private String[] langGroupes = {"", "allemand", "allemand fort", "allemand inter", "chinois", "espagnol", "français (FLE)", "français renforcé", "japonais", "portugais", "russe", "sout. anglais"};
 	private String[][] options2a = { {},
 			{"", "op21.1", "op21.2", "op21.2g1", "op21.3", "op21.4"},
 			{"", "op22.1", "op22.2", "op22.3", "op22.4"},
@@ -64,27 +59,41 @@ public class Edt extends Fragment {
 	};
 	private String[][] optionsPromo = null;
 	private Button btnSearch;
-	private Bundle bundle = new Bundle();
+	private Bundle bundle;
+	private Context context;
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		bundle = this.getArguments(); 
+		context = getActivity();
+
 		// retain this fragment
 		setRetainInstance(true);
 	}
 
 	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		if (savedInstanceState != null) {
+			// Restauration des données du contexte utilisateur
+			bundle.putAll(savedInstanceState);
+		}
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
 		super.onCreate(savedInstanceState);
 
 		View view =  inflater.inflate(R.layout.edt_formulaire, container, false);
+
+		myCalendar = Calendar.getInstance(Locale.FRENCH);
+		myCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+
 		mFormulaire = (LinearLayout) view.findViewById(R.id.edt_formulaire);
 		mProgressSpinner = (LinearLayout) view.findViewById(R.id.spinner_layout);
-		mEdtPickedDate = (TextView) view.findViewById(R.id.edt_picked_date);
-		mEdtCalendar = (ImageButton) view.findViewById(R.id.edt_calendar);
+		mEdtWeekSpinner = (Spinner) view.findViewById(R.id.edt_week);
 
 		radioPromoGroup = (RadioGroup) view.findViewById(R.id.chk_promo);
 		radio1A = (RadioButton) view.findViewById(R.id.chk_1A);
@@ -93,7 +102,11 @@ public class Edt extends Fragment {
 
 		mOpt2a = (LinearLayout) view.findViewById(R.id.edt_options2A);
 		mOpt3a = (LinearLayout) view.findViewById(R.id.edt_options3A);
+		mComm = (LinearLayout) view.findViewById(R.id.edt_comm);
+		mLangue = (LinearLayout) view.findViewById(R.id.edt_langue);
 		mGroupSpinner = (Spinner) view.findViewById(R.id.edt_groupe);
+		mCommSpinner = (Spinner) view.findViewById(R.id.edt_comm_spin);
+		mLangSpinner = (Spinner) view.findViewById(R.id.edt_lang_spin);
 
 		btnSearch = (Button) view.findViewById(R.id.edt_search_button);
 
@@ -103,6 +116,8 @@ public class Edt extends Fragment {
 			public void onClick(View v) {
 				mOpt2a.setVisibility(View.GONE);
 				mOpt3a.setVisibility(View.GONE);
+				mComm.setVisibility(View.VISIBLE);
+				mLangue.setVisibility(View.VISIBLE);
 			}
 
 		});
@@ -112,6 +127,8 @@ public class Edt extends Fragment {
 			public void onClick(View v) {
 				mOpt2a.setVisibility(View.VISIBLE);
 				mOpt3a.setVisibility(View.GONE);
+				mComm.setVisibility(View.VISIBLE);
+				mLangue.setVisibility(View.VISIBLE);
 			}
 
 		});
@@ -121,40 +138,31 @@ public class Edt extends Fragment {
 			public void onClick(View v) {
 				mOpt2a.setVisibility(View.GONE);
 				mOpt3a.setVisibility(View.VISIBLE);
+				mComm.setVisibility(View.GONE);
+				mLangue.setVisibility(View.GONE);
 			}
 
 		});
 
-		// display the current date by default
-		mEdtPickedDate.setText(calDateFormater.format(new Date()).toString());
+		// display weeks in spinner
+		List<String> spinnerItems = new ArrayList<String>();
+		currentWeekNumber = myCalendar.get(Calendar.WEEK_OF_YEAR);
+		myCalendar.add(Calendar.WEEK_OF_YEAR, -2);
+		SimpleDateFormat monthName = new SimpleDateFormat("MMM", Locale.FRENCH);
+		for(int i = 0; i < 11; i++){
+			myCalendar.setFirstDayOfWeek(Calendar.MONDAY);
 
-		// set up the calendar to pick the date
-		final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-			@Override
-			public void onDateSet(DatePicker view, int year, int monthOfYear,
-					int dayOfMonth) {
-				myCalendar.set(Calendar.YEAR, year);
-				myCalendar.set(Calendar.MONTH, monthOfYear);
-				myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-				myCalendar.setFirstDayOfWeek(Calendar.MONDAY);
+			myCalendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+			String lundi = String.valueOf(myCalendar.get(Calendar.DAY_OF_MONTH)) + " " + monthName.format(myCalendar.getTime());
 
-				String myFormat = "dd-MM-yyyy";
-				SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.FRANCE);
+			myCalendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+			String vendredi = String.valueOf(myCalendar.get(Calendar.DAY_OF_MONTH)) + " " + monthName.format(myCalendar.getTime());
 
-				mEdtPickedDate.setText(sdf.format(myCalendar.getTime()));
-			}
-
-		};
-
-		// display the calendar when the icon is clicked
-		mEdtCalendar.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				new DatePickerDialog(getActivity(), date, myCalendar
-						.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-						myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-			}
-		});
+			spinnerItems.add("Du " + lundi + " au " + vendredi);
+			myCalendar.add(Calendar.DAY_OF_MONTH, 7);
+		}
+		mEdtWeekSpinner.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, spinnerItems));
+		mEdtWeekSpinner.setSelection(2);
 
 		// action of the search button
 		btnSearch.setOnClickListener(new OnClickListener() {
@@ -174,16 +182,23 @@ public class Edt extends Fragment {
 				String option4 = ""; String option5 = ""; String option6 = "";
 				LinearLayout promoOptsLayout = null;
 
-				if (selectedId == radio1A.getId()) {promo = "1";}
+				String commGroup = ""; String langGroup = "";
+				if (selectedId == radio1A.getId()) {
+					promo = "1";
+					commGroup = commGroupes[mCommSpinner.getSelectedItemPosition()];
+					langGroup = langGroupes[mLangSpinner.getSelectedItemPosition()];
+				}
 				else if (selectedId == radio2A.getId()) {
 					promo = "2";
 					promoOptsLayout = mOpt2a;
 					optionsPromo = options2a;
+					commGroup = commGroupes[mCommSpinner.getSelectedItemPosition()];
+					langGroup = langGroupes[mLangSpinner.getSelectedItemPosition()];
 				} else if (selectedId == radio3A.getId()) {
 					promo = "3";
 					promoOptsLayout = mOpt3a;
 					optionsPromo = options3a;
-				} else {Log.d("Edt", "problème");}
+				}
 
 				String selectedGroup = groupes[mGroupSpinner.getSelectedItemPosition()];
 
@@ -202,32 +217,24 @@ public class Edt extends Fragment {
 					option6 = optionsPromo[6][mOptSpinner6.getSelectedItemPosition()];
 				}
 
-				String [] filtre = {selectedGroup, option1, option2, option3, option4, option5, option6};
+				String [] filtre = {selectedGroup, commGroup, langGroup, option1, option2, option3, option4, option5, option6};
 
-				// format the date picked to display it in the results and to match the database date format
-				String date = mEdtPickedDate.getText().toString();
-				try {
-					date = rqDateFormater.format(calDateFormater.parse(date));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
+				String week = String.valueOf(currentWeekNumber - 2 + mEdtWeekSpinner.getSelectedItemPosition());
 
 				// make the request
-				if (isOnline()){
-					FragmentManager fragmentManager = getFragmentManager();
-					Fragment frag = new EdtResult();
+				if (isOnline() || (week.equals(String.valueOf(currentWeekNumber)) && fileExists("edt" + promo))){
+					mProgressSpinner.setVisibility(View.VISIBLE);
+					mFormulaire.setVisibility(View.GONE);	
 
-					Log.d("Edt", "date : " + date);
-					Log.d("Edt", "promo : " + promo.isEmpty());
-					bundle.putString("date", date);
+					Intent i = new Intent(getActivity(), EdtResult.class);
+					bundle.putString("week", week);
 					bundle.putString("promo", promo);
 					bundle.putStringArray("filtre", filtre);
-					frag.setArguments(bundle);
+					i.putExtra("bundle", bundle);
+					startActivity(i);
 
-					mProgressSpinner.setVisibility(View.VISIBLE);
-					mFormulaire.setVisibility(View.GONE);				
-
-					fragmentManager.beginTransaction().replace(R.id.content, frag).commit();
+					mProgressSpinner.setVisibility(View.GONE);
+					mFormulaire.setVisibility(View.VISIBLE);
 				} else {
 					Toast.makeText(getActivity().getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
 				}
@@ -239,7 +246,7 @@ public class Edt extends Fragment {
 		return view;
 	}
 
-	// Verifies that the app has internet access
+	/* Verifies that the app has internet access */
 	public boolean isOnline() {
 		ConnectivityManager cm =
 				(ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -250,18 +257,18 @@ public class Edt extends Fragment {
 		return false;
 	}
 
+	/* Action when (for ex) the screen orientation changes */
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+	public void onSaveInstanceState(Bundle outState)
+	{
+		super.onSaveInstanceState(outState);
+		outState.putAll(bundle);
 	}
 
+	public boolean fileExists(String fname){
+		File file = context.getFileStreamPath(fname);
+		return file.exists();
+	}
 
 
 }

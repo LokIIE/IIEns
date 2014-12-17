@@ -3,13 +3,7 @@ package com.iiens.net;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.security.KeyStore;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -18,10 +12,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.conn.scheme.PlainSocketFactory;
-import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
-import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -29,7 +20,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -40,27 +30,28 @@ import android.util.Log;
 	Auteur : Srivatsan 'Loki' Magadevane, promo 2014
  **/
 
-public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>> {
+public class AnnivGetRequest extends AsyncTask<Void, Void, JSONArray> {
 
-	private static ArrayList<AnnivItem> AnnivItemsList = new ArrayList<AnnivItem>();
-	private String scriptURL = null;
+	private static JSONArray annivJArray;
+	private String scriptURL;
 	private static Context context;
 
 	@SuppressWarnings("static-access")
 	public AnnivGetRequest(Context context, String scriptURL){
+		annivJArray = new JSONArray();
 		this.context = context;
 		this.scriptURL = scriptURL;
 	}
 
 	@Override
-	protected ArrayList<AnnivItem> doInBackground(Void... voids) {
-		AnnivItemsList = getAnnivRequest(scriptURL);
+	protected JSONArray doInBackground(Void... voids) {
+		annivJArray = getAnnivRequest(scriptURL);
 
-		return AnnivItemsList;
+		return annivJArray;
 	}
 
 	// Récupère une liste d'items de l'emploi du temps.
-	public static ArrayList<AnnivItem> getAnnivRequest(String scriptURL) {
+	public static JSONArray getAnnivRequest(String scriptURL) {
 
 		InputStream is = null;
 		String result = "";
@@ -70,37 +61,7 @@ public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>>
 
 		// Envoi de la commande http
 		try {
-			// Load CA from an InputStream (CA would be saved in Raw file,
-			// and loaded as a raw resource)
-			CertificateFactory cf = CertificateFactory.getInstance("X.509");
-			InputStream in = context.getResources().openRawResource(R.raw.cacert);
-			Certificate ca;
-			try {
-				ca = cf.generateCertificate(in);
-			} finally {
-				in.close();
-			}
-
-			// Create a KeyStore containing our trusted CAs
-			KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-			keyStore.load(null, null);
-			keyStore.setCertificateEntry("ca", ca); 
-
-			// Create a TrustManager that trusts the CAs in our KeyStore
-			String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-			TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-			tmf.init(keyStore);
-
-			// Create an SSLContext that uses our TrustManager
-			SSLContext sslContext = SSLContext.getInstance("TLS");
-			sslContext.init(null, tmf.getTrustManagers(), null);
-
-			SchemeRegistry schemeRegistry = new SchemeRegistry();
-			schemeRegistry.register(new Scheme("http", PlainSocketFactory
-					.getSocketFactory(), 80));
-			SSLSocketFactory sslSocketFactory = new SSLSocketFactory(keyStore);
-			schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
-
+			SchemeRegistry schemeRegistry = new SSLArise().init(context);
 			HttpParams params = new BasicHttpParams();
 			ClientConnectionManager cm = 
 					new ThreadSafeClientConnManager(params, schemeRegistry);
@@ -124,26 +85,19 @@ public class AnnivGetRequest extends AsyncTask<Void, Void, ArrayList<AnnivItem>>
 				sb.append(line + "\n");
 			}
 			is.close();
-			result=sb.toString();
-			//Log.d("sdfdsf", "result " + result);
+			result = sb.toString();
 		} catch (Exception e) {
 			Log.e("anniv_get", "Error converting result " + e.toString());
 		}
 
-		// Parse les données JSON
+		JSONArray resJArray = null;
 		try{
-			JSONArray jArray = new JSONArray(result);
-			for(int i=0;i<jArray.length();i++){
-				JSONObject json_data = jArray.getJSONObject(i);
-				AnnivItem AnnivItem = new AnnivItem();
-				AnnivItem.mapJsonObject(json_data);
-				AnnivItemsList.add(AnnivItem);
-			}
+			resJArray = new JSONArray(result);
 		}catch(JSONException e){
 			Log.e("anniv_get", "Error parsing data " + e.toString());
 		}
 
-		return AnnivItemsList;
+		return resJArray;
 	}
 
 	//	@Override

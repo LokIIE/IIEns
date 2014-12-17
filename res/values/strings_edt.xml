@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="newsearch_button">Nouvelle recherche</string>
+
+    <string name="edt_formulaire">Choix des options de l\'emploi du temps</string>
+    <string name="edt_search_txt">Emploi du temps &#8230; </string>
+    <string name="chk_1A">1A</string>
+    <string name="chk_2A">2A</string>
+    <string name="chk_3A">3A</string>
+    <string name="edt_date_txt">Semaine :</string>
+    <string name="edt_groupe_txt">Groupes :</string>
+    <string name="edt_comm_txt">Groupe de comm\' :</string>
+    <string name="edt_langue_txt">Langue :</string>
+    <string name="edt_search_button">Rechercher</string>
+    <string name="edt_search_progress">Recherche en cours &#8230;</string>
+    <string name="edt_newsearch_button">Nouvelle recherche</string>
     <string name="edt_option1">Option 1</string>
     <string name="edt_option2">Option 2</string>
     <string name="edt_option3">Option 3</string>
@@ -25,6 +37,15 @@
         <item value="5">Groupe 5</item>
         <item value="6">Groupe 6</item>
         <item value="FIPA">Groupe FIPA</item>
+    </string-array>
+    <string-array name="edt_comm_grp">
+        <item>---</item>
+        <item value="GR A">Groupe A</item>
+        <item value="GR B">Groupe B</item>
+        <item value="GR C">Groupe C</item>
+        <item value="GR D">Groupe D</item>
+        <item value="GR E">Groupe E</item>
+        <item value="GR F">Groupe F</item>
     </string-array>
     <string-array name="edt_options2A_1">
         <item value="">---</item>
@@ -137,6 +158,20 @@
         <item value="op36.3g1">OPTI2 - groupe 1</item>
         <item value="op36.3g2">OPTI2 - groupe 2</item>
         <item value="op36.4">MGNT2 - Management</item>
+    </string-array>
+    <string-array name="edt_langue">
+        <item value="">---</item>
+        <item value="allemand">Allemand</item>
+        <item value="allemand fort">Allemand fort</item>
+        <item value="allemand inter">Allemand inter</item>
+        <item value="chinois">Chinois</item>
+        <item value="espagnol">Espagnol</item>
+        <item value="français (FLE)">Français (FLE)</item>
+        <item value="comF">Français renforcé</item>
+        <item value="japonais">Japonais</item>
+        <item value="portugais">Portugais</item>
+        <item value="russe">Russe</item>
+        <item value="sout. anglais">Soutien anglais</item>
     </string-array>
 
 </resources>

@@ -45,3 +45,6 @@ Temporary Items
 bin/
 Idées\ abandonnées/
 proguard/
+gen/
+src/com/iiens/net/Main.java
+src/com/iiens/net/GCM*.java

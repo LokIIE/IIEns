@@ -21,7 +21,7 @@ public class NewsItemsAdapter extends BaseAdapter {
 	private List<NewsItem> newsItemsList;
 	private Context context;
 
-	public NewsItemsAdapter(Context context, ArrayList<NewsItem> getNews, int number) {
+	public NewsItemsAdapter(Context context, ArrayList<NewsItem> getNews) {
 		this.newsItemsList = getNews;
 		this.context = context;
 	}
@@ -42,26 +42,24 @@ public class NewsItemsAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int arg0, View arg1, ViewGroup arg2) {
+	public View getView(int position, View convertView, ViewGroup parent) {
 
-		if(arg1==null)
+		if( convertView == null)
 		{
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			arg1 = inflater.inflate(R.layout.news_item, arg2, false);
+			convertView = inflater.inflate(R.layout.news_item, parent, false);
 		}
 
-		TextView newsTitle = (TextView) arg1.findViewById(R.id.rss_header);
-		TextView newsDescription = (TextView) arg1.findViewById(R.id.rss_description);
+		TextView newsTitle = (TextView) convertView.findViewById(R.id.news_title);
+		TextView newsDescription = (TextView) convertView.findViewById(R.id.news_description);
 
-		NewsItem newsItem = newsItemsList.get(arg0);
+		NewsItem newsItem = newsItemsList.get(position);
 
-		newsTitle.setText(newsItem.getTitle());
-		newsDescription.setText(Html.fromHtml(newsItem.getDescription()));
-		newsTitle.setCompoundDrawablesWithIntrinsicBounds(
-				context.getResources().getIdentifier(
-						newsItem.getAuthor(), "drawable", "com.iiens.net"
-						) , 0, 0, 0);
+		if (newsItem.getTitle().length() > 0) newsTitle.setText(newsItem.getTitle());
+		if (newsItem.getDescription().length() > 0) newsDescription.setText(Html.fromHtml(newsItem.getDescription()));
+		int logoId = context.getResources().getIdentifier(newsItem.getAuthor(), "drawable", "com.iiens.net");
+		if (logoId != 0) newsTitle.setCompoundDrawablesWithIntrinsicBounds(logoId, 0, 0, 0);
 
-		return arg1;
+		return convertView;
 	}
 }
