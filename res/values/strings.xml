@@ -30,14 +30,22 @@
     <string name="page_trombi">La fonctionnalité d\'affichage du trombi n\'est pas encore disponible &#8230;</string>
 
     <!-- activity_preferences.xml -->
-    <string name="pref_edt">Emploi du temps</string>
+    <string name="pref_notifs_txt">Affichage des notifications</string>
+    <string name="pref_partiel_notif_summary">Choix des notifications de partiels à recevoir</string>
     <string name="pref_news">News</string>
     <string name="pref_ok_button"></string>
 
-    <string-array name="pref_edt_promo">
-        <item value="1">1A</item>
-        <item value="2">2A</item>
-        <item value="3">3A</item>
+    <string-array name="pref_partiel_notif_entries">
+        <item value="0">Désactivé</item>
+        <item value="1">Partiels de 1A</item>
+        <item value="2">Partiels de 2A</item>
+        <item value="3">Partiels de 3A</item>
+    </string-array>
+    <string-array name="pref_partiel_notif_values">
+        <item value="0">none</item>
+        <item value="1">partiel1A</item>
+        <item value="2">partiel2A</item>
+        <item value="3">partiel3A</item>
     </string-array>
 
     <string name="pref_edt_alloptions">Toutes les options</string>

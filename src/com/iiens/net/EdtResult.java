@@ -46,15 +46,16 @@ public class EdtResult extends FragmentActivity {
 	private JSONArray jResult;
 	private ViewPager vpPager;
 	private Button btnNewSearch;
-	private static String[] days = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"};
 	private SharedPreferences preferences;
-	private FragmentPagerAdapter adapterViewPager;
+	private Calendar myCalendar;
+	private static String[] days = {"lundi", "mardi", "mercredi", "jeudi", "vendredi"};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.viewpager);
 
+		myCalendar = Calendar.getInstance(Locale.FRENCH);
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		bundle = getIntent().getBundleExtra("bundle");
 		if (savedInstanceState != null) {
@@ -64,7 +65,7 @@ public class EdtResult extends FragmentActivity {
 		String requestWeek = bundle.getString("week");
 		String[] requestFilter = bundle.getStringArray("filtre");
 		String requestPromo = bundle.getString("promo");
-		
+
 		String filename = bundleKey + requestPromo + ".txt";
 
 		if (bundle.containsKey("edtJArrayResult")) {
@@ -78,7 +79,6 @@ public class EdtResult extends FragmentActivity {
 				&& getFileStreamPath(filename).exists()) {
 			try {
 				jResult = new JSONArray(readFromInternalStorage(filename));
-				bundle.putString("edtJArrayResult", jResult.toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -91,8 +91,9 @@ public class EdtResult extends FragmentActivity {
 				e.printStackTrace();
 			} catch (ExecutionException e) {
 				e.printStackTrace();
+			} catch (NullPointerException e) {
+				Toast.makeText(getApplicationContext(), "C'est les vacances !", Toast.LENGTH_LONG).show();
 			}
-			bundle.putString("edtJArrayResult", jResult.toString());
 
 			// Save the results if storage is activated
 			String currentWeek = String.valueOf(Calendar.getInstance(Locale.FRENCH).get(Calendar.WEEK_OF_YEAR));
@@ -104,65 +105,74 @@ public class EdtResult extends FragmentActivity {
 			Toast.makeText(getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
 		}
 
-		// Transform jArray in ArrayList
-		ArrayList<EdtItem> edtItemsList = jArrayToArrayList(jResult, requestFilter);
+		if (jResult == null) { // If it is the holidays for example
+			Toast.makeText(getApplicationContext(), "Rien cette semaine là !", Toast.LENGTH_LONG).show();
+			finish();
+		} else {
+			bundle.putString("edtJArrayResult", jResult.toString());
+			// Transform jArray in ArrayList
+			ArrayList<EdtItem> edtItemsList = jArrayToArrayList(jResult, requestFilter);
 
-		SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
-		SimpleDateFormat formatter = new SimpleDateFormat("EEEE dd MMMM", Locale.FRANCE);
-		resultLundi = new ArrayList<EdtItem>();
-		resultMardi = new ArrayList<EdtItem>();
-		resultMercredi = new ArrayList<EdtItem>();
-		resultJeudi = new ArrayList<EdtItem>();
-		resultVendredi = new ArrayList<EdtItem>();
+			SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
+			SimpleDateFormat formatter = new SimpleDateFormat("EEEE dd MMMM", Locale.FRANCE);
+			resultLundi = new ArrayList<EdtItem>();
+			resultMardi = new ArrayList<EdtItem>();
+			resultMercredi = new ArrayList<EdtItem>();
+			resultJeudi = new ArrayList<EdtItem>();
+			resultVendredi = new ArrayList<EdtItem>();
 
-		// Class items depending on day
-		for (EdtItem item : edtItemsList){
-			String jour = "";
-			try {
-				jour = formatter.format(parser.parse(item.getJour()));
-			} catch (ParseException e) {
-				e.printStackTrace();
+			// Class items depending on day
+			for (EdtItem item : edtItemsList){
+				String jour = "";
+				try {
+					jour = formatter.format(parser.parse(item.getJour()));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+
+				if (jour.contains("lundi")) {
+					resultLundi.add(item);
+				}
+				else if (jour.contains("mardi")) {
+					resultMardi.add(item);
+				}
+				else if (jour.contains("mercredi")) {
+					resultMercredi.add(item);
+				}
+				else if (jour.contains("jeudi")) {
+					resultJeudi.add(item);
+				}
+				else if (jour.contains("vendredi")) {
+					resultVendredi.add(item);
+				}
+			}
+			
+			myCalendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+			myCalendar.set(Calendar.WEEK_OF_YEAR, Integer.valueOf(requestWeek));
+
+			for (int i = 0; i < days.length; i++) {
+				days[i] = formatter.format(myCalendar.getTime());
+				myCalendar.add(Calendar.DATE, 1);
 			}
 
-			if (jour.contains("lundi")) {
-				resultLundi.add(item);
-				days[0] = jour;
-			}
-			else if (jour.contains("mardi")) {
-				resultMardi.add(item);
-				days[1] = jour;
-			}
-			else if (jour.contains("mercredi")) {
-				resultMercredi.add(item);
-				days[2] = jour;
-			}
-			else if (jour.contains("jeudi")) {
-				resultJeudi.add(item);
-				days[3] = jour;
-			}
-			else if (jour.contains("vendredi")) {
-				resultVendredi.add(item);
-				days[4] = jour;
-			}
+			getActionBar().setTitle("Résultats de la recherche");
+			vpPager = (ViewPager) findViewById(R.id.edt_pager);
+			btnNewSearch = (Button) findViewById(R.id.edt_newsearch_button);
+
+			// action of the new search button
+			btnNewSearch.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					finish();
+				}
+			});
 		}
-
-		getActionBar().setTitle("Résultats de la recherche");
-		vpPager = (ViewPager) findViewById(R.id.edt_pager);
-		btnNewSearch = (Button) findViewById(R.id.edt_newsearch_button);
-
-		// action of the new search button
-		btnNewSearch.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
 	}
 
 	public void onStart() {
 		super.onStart();
 
-		adapterViewPager = new EdtResultPagerAdapter(getSupportFragmentManager());
+		FragmentPagerAdapter adapterViewPager = new EdtResultPagerAdapter(getSupportFragmentManager(), bundle.getString("week"));
 		vpPager.setAdapter(adapterViewPager);
 	}
 
@@ -246,7 +256,7 @@ public class EdtResult extends FragmentActivity {
 	public static class EdtResultPagerAdapter extends FragmentPagerAdapter {
 		private static int NUM_ITEMS = 5;
 
-		public EdtResultPagerAdapter(FragmentManager fragmentManager) {
+		public EdtResultPagerAdapter(FragmentManager fragmentManager, String week) {
 			super(fragmentManager);
 		}
 
@@ -302,10 +312,10 @@ public class EdtResult extends FragmentActivity {
 		EdtItem edtItem = new EdtItem();
 		edtItem.mapJsonObject(json_data);
 		String groupe = edtItem.getGroupe();
-		
+
 		boolean filterEmpty = true;
 		for (int i = 0; i< toKeepFilter.length; i++) {if (toKeepFilter[i].length() > 0) filterEmpty = false;} 
-		
+
 		// Filtre les cours/td en groupe et n'affiche que le groupe ou le sous-groupe demandé par l'utilisateur
 		if (groupe.equals("") || filterEmpty) {
 			edtItemsList.add(edtItem);

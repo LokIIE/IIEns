@@ -1,5 +1,6 @@
 package com.iiens.net;
 
+import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import android.app.Activity;
@@ -50,6 +51,11 @@ public class SplashScreen extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 		preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		if (!preferences.getBoolean("storage_option", false)) {
+			for (File file : getFilesDir().listFiles()) {
+				file.delete();
+			}
+		}
 	}
 
 	/* Actions when the view is displayed on the screen */
@@ -73,6 +79,7 @@ public class SplashScreen extends Activity {
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run() {
+				PreferenceManager.setDefaultValues(getApplicationContext(), R.layout.preferences, false);
 				goToNextActivity();
 			}
 		}, SPLASH_TIME_OUT);
@@ -110,23 +117,23 @@ public class SplashScreen extends Activity {
 		Intent i = null;
 		overridePendingTransition(R.anim.right_in, R.anim.left_out);
 
-		// If login option enabled, show login activity else main activity
-		if (preferences.getBoolean("login_option", false)) {
-			i = new Intent(SplashScreen.this, Login.class);
-			if (!backPressed) {
-				startActivity(i);
-			}
+		//		// If login option enabled, show login activity else main activity
+		//		if (preferences.getBoolean("login_option", false)) {
+		//			i = new Intent(SplashScreen.this, Login.class);
+		//			if (!backPressed) {
+		//				startActivity(i);
+		//			}
+		//		}
+		//		else {
+		i = new Intent(SplashScreen.this, Main.class);
+		// Main activity requires either data stored on the device or an internet connection
+		if (!backPressed && (preferences.getBoolean("storage_option", false) || isOnline())) {
+			startActivity(i);
 		}
 		else {
-			i = new Intent(SplashScreen.this, Main.class);
-			// Main activity requires either data stored on the device or an internet connection
-			if (!backPressed && (preferences.getBoolean("storage_option", false) || isOnline())) {
-				startActivity(i);
-			}
-			else {
-				Toast.makeText(getApplicationContext(), "Connexion Internet requise", Toast.LENGTH_LONG).show();
-			}
+			Toast.makeText(getApplicationContext(), "Connexion Internet requise", Toast.LENGTH_LONG).show();
 		}
+		//		}
 
 		// Destroy this activity
 		finish();

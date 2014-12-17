@@ -19,34 +19,35 @@ public final class R {
         public static final int top_out=0x7f040007;
     }
     public static final class array {
-        public static final int edt_comm_grp=0x7f0b0002;
-        public static final int edt_langue=0x7f0b000f;
-        public static final int edt_option_groupe=0x7f0b0001;
-        public static final int edt_options2A_1=0x7f0b0003;
-        public static final int edt_options2A_2=0x7f0b0004;
-        public static final int edt_options2A_3=0x7f0b0005;
-        public static final int edt_options2A_4=0x7f0b0006;
-        public static final int edt_options2A_5=0x7f0b0007;
-        public static final int edt_options2A_6=0x7f0b0008;
-        public static final int edt_options3A_1=0x7f0b0009;
-        public static final int edt_options3A_2=0x7f0b000a;
-        public static final int edt_options3A_3=0x7f0b000b;
-        public static final int edt_options3A_4=0x7f0b000c;
-        public static final int edt_options3A_5=0x7f0b000d;
-        public static final int edt_options3A_6=0x7f0b000e;
-        public static final int option_club_BdA=0x7f0b001b;
-        public static final int option_club_culture=0x7f0b0017;
-        public static final int option_club_event=0x7f0b0015;
-        public static final int option_club_human=0x7f0b001a;
-        public static final int option_club_listesBdE=0x7f0b0018;
-        public static final int option_club_loisir=0x7f0b0016;
-        public static final int option_club_services=0x7f0b0014;
-        public static final int option_club_sport=0x7f0b0019;
-        public static final int option_groupe=0x7f0b0012;
-        public static final int option_logement=0x7f0b0013;
-        public static final int option_tel=0x7f0b0010;
-        public static final int pref_edt_promo=0x7f0b0000;
-        public static final int promo=0x7f0b0011;
+        public static final int edt_comm_grp=0x7f0b0003;
+        public static final int edt_langue=0x7f0b0010;
+        public static final int edt_option_groupe=0x7f0b0002;
+        public static final int edt_options2A_1=0x7f0b0004;
+        public static final int edt_options2A_2=0x7f0b0005;
+        public static final int edt_options2A_3=0x7f0b0006;
+        public static final int edt_options2A_4=0x7f0b0007;
+        public static final int edt_options2A_5=0x7f0b0008;
+        public static final int edt_options2A_6=0x7f0b0009;
+        public static final int edt_options3A_1=0x7f0b000a;
+        public static final int edt_options3A_2=0x7f0b000b;
+        public static final int edt_options3A_3=0x7f0b000c;
+        public static final int edt_options3A_4=0x7f0b000d;
+        public static final int edt_options3A_5=0x7f0b000e;
+        public static final int edt_options3A_6=0x7f0b000f;
+        public static final int option_club_BdA=0x7f0b001c;
+        public static final int option_club_culture=0x7f0b0018;
+        public static final int option_club_event=0x7f0b0016;
+        public static final int option_club_human=0x7f0b001b;
+        public static final int option_club_listesBdE=0x7f0b0019;
+        public static final int option_club_loisir=0x7f0b0017;
+        public static final int option_club_services=0x7f0b0015;
+        public static final int option_club_sport=0x7f0b001a;
+        public static final int option_groupe=0x7f0b0013;
+        public static final int option_logement=0x7f0b0014;
+        public static final int option_tel=0x7f0b0011;
+        public static final int pref_partiel_notif_entries=0x7f0b0000;
+        public static final int pref_partiel_notif_values=0x7f0b0001;
+        public static final int promo=0x7f0b0012;
     }
     public static final class attr {
         /** 
@@ -548,8 +549,7 @@ containing a value of this type.
     }
     public static final class id {
         public static final int Rechercher=0x7f0d004b;
-        public static final int action_loginout=0x7f0d0063;
-        public static final int action_settings=0x7f0d0064;
+        public static final int action_settings=0x7f0d0063;
         public static final int anniv_date=0x7f0d0020;
         public static final int anniv_person=0x7f0d0021;
         public static final int antenne_evry=0x7f0d0046;
@@ -692,19 +692,19 @@ containing a value of this type.
         public static final int action_connect=0x7f070025;
         public static final int action_logout=0x7f070026;
         public static final int action_settings=0x7f070024;
-        public static final int antenne=0x7f07005a;
-        public static final int antenne_evry=0x7f07005b;
-        public static final int antenne_stras=0x7f07005c;
+        public static final int antenne=0x7f07005b;
+        public static final int antenne_evry=0x7f07005c;
+        public static final int antenne_stras=0x7f07005d;
         /**  Général 
          */
         public static final int app_name=0x7f070023;
         public static final int authenticated=0x7f07002c;
         public static final int auto_connect=0x7f070030;
-        public static final int chk_1A=0x7f07003d;
-        public static final int chk_2A=0x7f07003e;
-        public static final int chk_3A=0x7f07003f;
+        public static final int chk_1A=0x7f07003e;
+        public static final int chk_2A=0x7f07003f;
+        public static final int chk_3A=0x7f070040;
         public static final int close_menu=0x7f070034;
-        public static final int clubs=0x7f07005f;
+        public static final int clubs=0x7f070060;
         /**   Text for notification shown when the Android Wear apps needs to be updated. Only shown on the wearable. [CHAR LIMIT=NONE] 
          */
         public static final int common_android_wear_notification_needs_update_text=0x7f070009;
@@ -808,58 +808,59 @@ containing a value of this type.
         public static final int create_calendar_message=0x7f070005;
         public static final int create_calendar_title=0x7f070004;
         public static final int decline=0x7f070003;
-        public static final int edt_comm_txt=0x7f070042;
-        public static final int edt_date_txt=0x7f070040;
-        public static final int edt_formulaire=0x7f07003b;
-        public static final int edt_groupe_txt=0x7f070041;
-        public static final int edt_langue_txt=0x7f070043;
-        public static final int edt_newsearch_button=0x7f070046;
-        public static final int edt_option1=0x7f070047;
-        public static final int edt_option2=0x7f070048;
-        public static final int edt_option3=0x7f070049;
-        public static final int edt_option4=0x7f07004a;
-        public static final int edt_option5=0x7f07004b;
-        public static final int edt_option6=0x7f07004c;
-        public static final int edt_search_button=0x7f070044;
-        public static final int edt_search_progress=0x7f070045;
-        public static final int edt_search_txt=0x7f07003c;
+        public static final int edt_comm_txt=0x7f070043;
+        public static final int edt_date_txt=0x7f070041;
+        public static final int edt_formulaire=0x7f07003c;
+        public static final int edt_groupe_txt=0x7f070042;
+        public static final int edt_langue_txt=0x7f070044;
+        public static final int edt_newsearch_button=0x7f070047;
+        public static final int edt_option1=0x7f070048;
+        public static final int edt_option2=0x7f070049;
+        public static final int edt_option3=0x7f07004a;
+        public static final int edt_option4=0x7f07004b;
+        public static final int edt_option5=0x7f07004c;
+        public static final int edt_option6=0x7f07004d;
+        public static final int edt_search_button=0x7f070045;
+        public static final int edt_search_progress=0x7f070046;
+        public static final int edt_search_txt=0x7f07003d;
         public static final int error_field_required=0x7f07002f;
         public static final int error_incorrect=0x7f07002e;
-        public static final int feminin=0x7f070058;
-        public static final int groupe=0x7f07005d;
+        public static final int feminin=0x7f070059;
+        public static final int groupe=0x7f07005e;
         public static final int hint_password=0x7f070028;
         /**  activity_login.xml 
          */
         public static final int hint_user=0x7f070027;
         public static final int in_progress=0x7f07002b;
-        public static final int logement=0x7f07005e;
-        public static final int masculin=0x7f070057;
-        public static final int news_description=0x7f07004e;
-        public static final int news_title=0x7f07004d;
+        public static final int logement=0x7f07005f;
+        public static final int masculin=0x7f070058;
+        public static final int news_description=0x7f07004f;
+        public static final int news_title=0x7f07004e;
         public static final int offline_button=0x7f07002a;
         public static final int offline_mode=0x7f07002d;
         public static final int open_menu=0x7f070033;
         /**  fragment_trombi.xml 
          */
         public static final int page_trombi=0x7f070035;
+        public static final int pref_edt_alloptions=0x7f07003a;
+        public static final int pref_edt_myoptions=0x7f07003b;
+        public static final int pref_news=0x7f070038;
         /**  activity_preferences.xml 
          */
-        public static final int pref_edt=0x7f070036;
-        public static final int pref_edt_alloptions=0x7f070039;
-        public static final int pref_edt_myoptions=0x7f07003a;
-        public static final int pref_news=0x7f070037;
-        public static final int pref_ok_button=0x7f070038;
-        public static final int promo=0x7f070059;
-        public static final int sexe=0x7f070056;
+        public static final int pref_notifs_txt=0x7f070036;
+        public static final int pref_ok_button=0x7f070039;
+        public static final int pref_partiel_notif_summary=0x7f070037;
+        public static final int promo=0x7f07005a;
+        public static final int sexe=0x7f070057;
         public static final int store_picture_message=0x7f070001;
         public static final int store_picture_title=0x7f070000;
-        public static final int trombi_nom=0x7f070050;
-        public static final int trombi_prenom=0x7f070051;
-        public static final int trombi_pseudo=0x7f070052;
-        public static final int trombi_return_button=0x7f07004f;
-        public static final int trombi_tel=0x7f070053;
-        public static final int trombi_tel_portable=0x7f070054;
-        public static final int txt_back_button=0x7f070055;
+        public static final int trombi_nom=0x7f070051;
+        public static final int trombi_prenom=0x7f070052;
+        public static final int trombi_pseudo=0x7f070053;
+        public static final int trombi_return_button=0x7f070050;
+        public static final int trombi_tel=0x7f070054;
+        public static final int trombi_tel_portable=0x7f070055;
+        public static final int txt_back_button=0x7f070056;
         public static final int txt_menu_edt=0x7f070032;
         /**  activity_main.xml 
          */

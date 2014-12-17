@@ -12,8 +12,40 @@
     <CheckBoxPreference
         android:defaultValue="true"
         android:key="storage_option"
-        android:summaryOff="Les données publiques sont chargées à partir d'Internet"
-        android:summaryOn="Les données publiques sont stockées sur l'appareil"
+        android:summaryOff="Les données publiques sont chargées à partir d&apos;Internet"
+        android:summaryOn="Les données publiques sont stockées sur l&apos;appareil"
         android:title="Stockage local" />
+
+    <PreferenceCategory android:title="@string/pref_notifs_txt" >
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="news_notif"
+            android:summaryOff="Désactivé"
+            android:summaryOn="Activé"
+            android:title="Pour les news publiées" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="anniv_notif"
+            android:summaryOff="Désactivé"
+            android:summaryOn="Activé"
+            android:title="Pour les anniversaires du jour" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="club_notif"
+            android:summaryOff="Désactivé"
+            android:summaryOn="Activé"
+            android:title="Pour les events associatifs" />
+
+        <ListPreference
+            android:entries="@array/pref_partiel_notif_entries"
+            android:entryValues="@array/pref_partiel_notif_values"
+            android:key="partiel_notif"
+            android:summary="@string/pref_partiel_notif_summary"
+            android:title="Pour les partiels" />
+        
+    </PreferenceCategory>
 
 </PreferenceScreen>

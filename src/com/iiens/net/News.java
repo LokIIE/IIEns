@@ -2,6 +2,7 @@ package com.iiens.net;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -34,7 +35,7 @@ public class News extends Fragment {
 
 	private int newsNumber = 6; // number of news to show
 	private String bundleKey = "news"; // file name where to save the results
-	
+
 	private Bundle bundle = new Bundle();
 	private ArrayList<NewsItem> newsItemsList;
 	private JSONArray jResult = null;
@@ -77,8 +78,8 @@ public class News extends Fragment {
 		newsItemsList = new ArrayList<NewsItem>();
 
 		// Récupération des news 
-		if (preferences.getBoolean("storage_option", false)) {
-			if (preferences.getBoolean("news_new_update", false) && isOnline()){ // Télécharger nouvelle news et sauvegarder dans fichier
+		if (preferences.getBoolean("storage_option", false)) { // If the user accepts to store data
+			if (preferences.getBoolean("news_new_update", false) && isOnline()){ // If there is an update available and we are connected to the internet
 				try {
 					jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
 					writeToInternalStorage(jResult.toString(), bundleKey + ".txt");
@@ -87,21 +88,13 @@ public class News extends Fragment {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			} else { // Charger depuis fichier
+			} else if (fileExists(bundleKey + ".txt")) { // If a file with the data exists, load from it
 				try {
 					newsItemsList = jArrayToArrayList(new JSONArray(readFromInternalStorage(bundleKey + ".txt")));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-			}
-		} else {
-			if (bundle.containsKey(bundleKey)) { // déjà chargé dans bundle
-				try {
-					newsItemsList = jArrayToArrayList(new JSONArray(bundle.getString(bundleKey)));
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			} else if (isOnline()) { // télécharger et mettre dans bundle
+			} else if (isOnline()) {
 				try {
 					jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
 					newsItemsList = jArrayToArrayList(jResult);
@@ -110,9 +103,28 @@ public class News extends Fragment {
 					bundle.putString(bundleKey, jResult.toString());
 				} catch (Exception e) {
 					e.printStackTrace();
+				}				
+			}
+		} else { // The user does not want to store data
+			if (fileExists(bundleKey + ".txt")) {context.getFileStreamPath(bundleKey + ".txt").delete();} // if he changed minds for ex.
+			
+			if (bundle.containsKey(bundleKey)) { // If already loaded in memory
+				try {
+					newsItemsList = jArrayToArrayList(new JSONArray(bundle.getString(bundleKey)));
+				} catch (JSONException e) {
+					e.printStackTrace();
 				}
-			} else { // Pas dans un fichier et pas de connexion ...
-				Toast.makeText(getActivity().getApplicationContext(), "Impossible de récupérer les news...", Toast.LENGTH_LONG).show();
+			} else if (isOnline()) { // If we have an internet connection
+				try {
+					jResult = new NewsGetRequest(getActivity(), newsNumber, bundle.getString("scriptURL")).execute().get();
+					newsItemsList = jArrayToArrayList(jResult);
+
+					bundle.putString(bundleKey, jResult.toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else { // No way to get the data
+				Toast.makeText(getActivity().getApplicationContext(), "Besoin d'une connexion internet", Toast.LENGTH_LONG).show();
 			}
 		}
 
@@ -199,6 +211,11 @@ public class News extends Fragment {
 		}
 
 		return newsItemsList;
+	}
+
+	public boolean fileExists(String fname){
+		File file = context.getFileStreamPath(fname);
+		return file.exists();
 	}
 
 }

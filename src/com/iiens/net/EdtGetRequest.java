@@ -81,6 +81,8 @@ public class EdtGetRequest extends AsyncTask<Void, Void, JSONArray> {
 			Log.e("edt_get", "Error in http connection " + e.toString());
 		}
 
+		if (result.length() == 0) {return null;} // if there is no data
+
 		JSONArray resJArray = null;		
 		try{
 			resJArray = new JSONArray(result);

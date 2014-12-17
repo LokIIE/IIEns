@@ -1,5 +1,9 @@
 package com.iiens.net;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,7 +12,9 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.Html;
@@ -51,16 +57,24 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
 			TextView account = (TextView) v.findViewById(R.id.useraccount);
 			TextView time = (TextView) v.findViewById(R.id.publishtime);
 
-			if (avatar != null && isOnline()){
+			String imgURL = tweet.getUser().getProfileImageUrl();
+			String imgName = imgURL.replace("http://pbs.twimg.com/profile_images/", "").split("/")[0];
+
+			Bitmap profileImg = loadImgFromStorage(imgName);
+
+			if (profileImg != null) {
+				avatar.setImageBitmap(profileImg);
+			} else if (isOnline()){
 				try {
-					Bitmap profileImg = new TweetImgAsyncTask(tweet.getUser().getProfileImageUrl()).execute().get();
+					profileImg = new TweetImgAsyncTask(imgURL).execute().get();
+					saveToInternalStorage(profileImg, imgName);
 					if (profileImg != null) avatar.setImageBitmap(profileImg);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				} catch (ExecutionException e) {
 					e.printStackTrace();
 				}
-			}
+			} else avatar.setImageDrawable(context.getResources().getDrawable(R.drawable.notfound));
 
 			if (username != null) {
 				username.setText(tweet.getUser().getName());
@@ -137,7 +151,7 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
 		return result;
 
 	}
-	
+
 	/* Verifies that the app has internet access */
 	public boolean isOnline() {
 		ConnectivityManager cm =
@@ -147,5 +161,43 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
 			return true;
 		}
 		return false;
+	}
+
+	/* Save the profile images in local storage */
+	private String saveToInternalStorage(Bitmap bitmapImage, String bitmapURL){
+		ContextWrapper cw = new ContextWrapper(context);
+		// path to /data/data/yourapp/app_data/imageDir
+		File directory = cw.getDir("tweetsProfileImg", Context.MODE_PRIVATE);
+		// Create imageDir
+		File imgFile=new File(directory, bitmapURL+".jpeg");
+
+		FileOutputStream fos = null;
+		try {           
+			fos = new FileOutputStream(imgFile);
+
+			// Use the compress method on the BitMap object to write image to the OutputStream
+			bitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+			fos.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return directory.getAbsolutePath();
+	}
+
+	private Bitmap loadImgFromStorage(String bitmapURL){
+		Bitmap result = null;
+		ContextWrapper cw = new ContextWrapper(context);
+		// path to /data/data/yourapp/app_data/imageDir
+		File directory = cw.getDir("tweetsProfileImg", Context.MODE_PRIVATE);
+		// Create imageDir
+		File imgFile=new File(directory, bitmapURL+".jpeg");
+
+		if (imgFile.exists()){
+			try {
+				result = BitmapFactory.decodeStream(new FileInputStream(imgFile));
+			} catch (FileNotFoundException e) {
+			}
+		}
+		return result;
 	}
 }

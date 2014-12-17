@@ -2,6 +2,7 @@ package com.iiens.net;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -14,9 +15,11 @@ import org.json.JSONObject;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,13 +38,16 @@ public class TwitterNews extends Fragment {
 	private ArrayList<Tweet> tweetsList = new ArrayList<Tweet>();
 	private String bundleKey = "twitternews";
 	private Context context;
+	private SharedPreferences preferences;
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		bundle = this.getArguments(); 
 		context = getActivity();
-		
+
+		preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
 		// retain this fragment
 		setRetainInstance(true);
 	}
@@ -65,32 +71,59 @@ public class TwitterNews extends Fragment {
 		bundle = this.getArguments();
 		final ListView mListView = (ListView) view.findViewById(R.id.listview);
 
-		if (bundle.containsKey(bundleKey)) {
-			try {
-				resJArray = new JSONArray(bundle.getString(bundleKey));
-			} catch (JSONException e) {
-				e.printStackTrace();
+		if (preferences.getBoolean("storage_option", false)) { // If the user allows the app to store data
+			if (bundle.containsKey(bundleKey)) {
+				try {
+					resJArray = new JSONArray(bundle.getString(bundleKey));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} else if (fileExists(bundleKey + ".txt")) {
+				try {
+					resJArray = new JSONArray(readFromInternalStorage(bundleKey + ".txt"));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+
+				if (resJArray.length() > 0) {
+					bundle.putString(bundleKey, resJArray.toString());
+				}
+			} else if (isOnline()){
+				try {
+					resJArray = new TwitterGetRequest(getActivity(), bundle.getString("scriptURL")).execute().get();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+				}
+
+				if (resJArray.length() > 0) {
+					writeToInternalStorage(resJArray.toString(), bundleKey + ".txt");
+					bundle.putString(bundleKey, resJArray.toString());
+				}
+			} 
+		} else { // If the user doesn't want to store data
+			if (bundle.containsKey(bundleKey)) {
+				try {
+					resJArray = new JSONArray(bundle.getString(bundleKey));
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} else if (isOnline()){
+				try {
+					resJArray = new TwitterGetRequest(getActivity(), bundle.getString("scriptURL")).execute().get();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					e.printStackTrace();
+				}
+
+				if (resJArray.length() > 0) {
+					bundle.putString(bundleKey, resJArray.toString());
+				}
+			} else {
+				Toast.makeText(getActivity().getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
 			}
-		} else if (!isOnline()) {
-			try {
-				resJArray = new JSONArray(readFromInternalStorage(bundleKey + ".txt"));
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		} else if (isOnline()){
-			try {
-				resJArray = new TwitterGetRequest(getActivity(), bundle.getString("scriptURL")).execute().get();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
-			}
-			
-			if (resJArray.length() > 0) {
-				writeToInternalStorage(resJArray.toString(), bundleKey + ".txt");
-			}
-		} else {
-			Toast.makeText(getActivity().getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
 		}
 
 		for (int i=0; i < resJArray.length(); i++) {
@@ -182,5 +215,10 @@ public class TwitterNews extends Fragment {
 		} 
 
 		return fileString;
+	}
+
+	public boolean fileExists(String fname){
+		File file = context.getFileStreamPath(fname);
+		return file.exists();
 	}
 }

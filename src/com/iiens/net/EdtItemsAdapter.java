@@ -104,13 +104,7 @@ public class EdtItemsAdapter extends BaseAdapter {
 					titre = "Cycle de conférences";
 					auteur = "";
 					type = "";
-				}
-				else if (titre.contains("Langues Vivantes")) {
-					titre = edtItem.getGroupe().toUpperCase();
-					// groupe = "";
-					type = "";
-				}
-				else if (!type.equals("assoce")) titre = " de " + titre;
+				} else if (!type.equals("assoce")) titre = " de " + titre;
 			}
 
 			TextView mEdtItem = (TextView) arg1.findViewById(R.id.edt_item_content);

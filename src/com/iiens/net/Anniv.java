@@ -2,6 +2,7 @@ package com.iiens.net;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -46,7 +47,7 @@ public class Anniv extends Fragment {
 		super.onCreate(savedInstanceState);
 		bundle = this.getArguments();
 		context = getActivity();
-		
+
 		preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
 		// retain this fragment
@@ -73,8 +74,8 @@ public class Anniv extends Fragment {
 		annivItemsList = new ArrayList<AnnivItem>();
 
 		// Récupération des anniv 
-		if (preferences.getBoolean("storage_option", false)) {
-			if (preferences.getBoolean("anniv_new_update", false) && isOnline()){ // Télécharger nouvelle news et sauvegarder dans fichier
+		if (preferences.getBoolean("storage_option", false)) { // If the user accepts to store data
+			if (preferences.getBoolean("anniv_new_update", false) && isOnline()){ // If there is a new birthday coming up, update the file
 				try {
 					jResult = new AnnivGetRequest(getActivity(), bundle.getString("scriptURL")).execute().get();
 					writeToInternalStorage(jResult.toString(), bundleKey + ".txt");
@@ -83,22 +84,13 @@ public class Anniv extends Fragment {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			} else { // Charger depuis fichier
-				Toast.makeText(getActivity().getApplicationContext(), "Mise à jour impossible (pas d'Internet)", Toast.LENGTH_LONG).show();
+			} else if (fileExists(bundleKey + ".txt")){ // Retrieve the data from the file (happens more often)
 				try {
 					annivItemsList = jArrayToArrayList(new JSONArray(readFromInternalStorage(bundleKey + ".txt")));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-			}
-		} else {
-			if (bundle.containsKey(bundleKey)) { // déjà chargé dans bundle
-				try {
-					annivItemsList = jArrayToArrayList(new JSONArray(bundle.getString(bundleKey)));
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			} else if (isOnline()) { // télécharger et mettre dans bundle
+			} else if (isOnline()) { // if the file doesn't exist yet (first launch for example), get the data and create file
 				try {
 					jResult = new AnnivGetRequest(getActivity(), bundle.getString("scriptURL")).execute().get();
 					annivItemsList = jArrayToArrayList(jResult);
@@ -107,40 +99,34 @@ public class Anniv extends Fragment {
 					bundle.putString(bundleKey, jResult.toString());
 				} catch (Exception e) {
 					e.printStackTrace();
+				}				
+			} else {
+				Toast.makeText(getActivity().getApplicationContext(), "Connexion à Internet requise", Toast.LENGTH_LONG).show();
+			} 
+		} else { // If the user does not accept to store data
+			if (fileExists(bundleKey + ".txt")) {context.getFileStreamPath(bundleKey + ".txt").delete();} // if he changed minds for ex.
+			
+			if (bundle.containsKey(bundleKey)) { // If data already loaded, retrieve it
+				try {
+					annivItemsList = jArrayToArrayList(new JSONArray(bundle.getString(bundleKey)));
+				} catch (JSONException e) {
+					e.printStackTrace();
 				}
-			} else { // Pas dans un fichier et pas de connexion ...
-				Toast.makeText(getActivity().getApplicationContext(), "Impossible de récupérer les annivs...", Toast.LENGTH_LONG).show();
+			} else if (isOnline()) { // If we have an internet connection, get the data
+				try {
+					jResult = new AnnivGetRequest(getActivity(), bundle.getString("scriptURL")).execute().get();
+					annivItemsList = jArrayToArrayList(jResult);
+
+					bundle.putString(bundleKey, jResult.toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else { // If no connection, can't do anything
+				Toast.makeText(getActivity().getApplicationContext(), "Connexion à Internet requise", Toast.LENGTH_LONG).show();
 			}
 		}
-		
-		mListView.setAdapter(new AnnivItemsAdapter(getActivity().getApplicationContext(), annivItemsList));
 
-		//		if (!bundle.containsKey(bundleKey) && isOnline()){
-		//			AnnivGetRequest getAnniv = new AnnivGetRequest(getActivity(), bundle.getString("scriptURL"));
-		//
-		//			try {
-		//				jResult = getAnniv.execute().get();
-		//				AnnivItemsAdapter annivAdapter = new AnnivItemsAdapter(getActivity().getApplicationContext(), jResult);
-		//				mListView.setAdapter(annivAdapter);
-		//				saveResult(jResult, bundle, bundleKey);
-		//			} catch (InterruptedException e) {
-		//				e.printStackTrace();
-		//			} catch (ExecutionException e) {
-		//				e.printStackTrace();
-		//			}
-		//
-		//		} else if (bundle.containsKey(bundleKey)) {
-		//			Bundle annivBundle = bundle.getBundle( bundleKey);
-		//			jResult = new ArrayList<AnnivItem>();
-		//			for (int i=0; i < annivBundle.size(); i++) {
-		//				ArrayList<String> annivIA = annivBundle.getStringArrayList(Integer.toString(i));
-		//				AnnivItem annivItem = new AnnivItem(annivIA.get(0), annivIA.get(1), annivIA.get(2), annivIA.get(3), annivIA.get(4));
-		//				jResult.add(annivItem);
-		//			}
-		//			mListView.setAdapter(new AnnivItemsAdapter(getActivity().getApplicationContext(), jResult));
-		//		} else {
-		//			Toast.makeText(getActivity().getApplicationContext(), "T'as pas internet, banane", Toast.LENGTH_LONG).show();
-		//		}
+		mListView.setAdapter(new AnnivItemsAdapter(getActivity().getApplicationContext(), annivItemsList));
 
 		return view;
 	}
@@ -167,15 +153,6 @@ public class Anniv extends Fragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-//	private void saveResult(ArrayList<AnnivItem> result, Bundle bundle, String key) {
-//		int i = 0;
-//		Bundle annivSave = new Bundle();
-//		for (i=0; i < result.size(); i++){
-//			annivSave.putStringArrayList(Integer.toString(i), result.get(i).toArrayList());
-//		}
-//		bundle.putBundle(key, annivSave);
-//	}
 
 	/* Action when (for ex) the screen orientation changes */
 	@Override
@@ -227,21 +204,28 @@ public class Anniv extends Fragment {
 		String eol = System.getProperty("line.separator");
 		BufferedReader input = null;
 		String fileString="";
-		try {
-			input = new BufferedReader(new InputStreamReader(context.openFileInput(fileName)));
-			String line;
-			StringBuilder buffer = new StringBuilder();
-			while ((line = input.readLine()) != null) {
-				buffer.append(line + eol);
-			}
-			input.close();
-			fileString = buffer.toString();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
+
+		if (fileExists(fileName)){
+			try {
+				input = new BufferedReader(new InputStreamReader(context.openFileInput(fileName)));
+				String line;
+				StringBuilder buffer = new StringBuilder();
+				while ((line = input.readLine()) != null) {
+					buffer.append(line + eol);
+				}
+				input.close();
+				fileString = buffer.toString();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+		}
 
 		return fileString;
 	}
 
+	public boolean fileExists(String fname){
+		File file = context.getFileStreamPath(fname);
+		return file.exists();
+	}
 
 }

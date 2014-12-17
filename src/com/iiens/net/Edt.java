@@ -1,5 +1,6 @@
 package com.iiens.net;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,11 +60,13 @@ public class Edt extends Fragment {
 	private String[][] optionsPromo = null;
 	private Button btnSearch;
 	private Bundle bundle;
+	private Context context;
 
 	@Override // this method is only called once for this fragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		bundle = this.getArguments(); 
+		context = getActivity();
 
 		// retain this fragment
 		setRetainInstance(true);
@@ -219,7 +222,7 @@ public class Edt extends Fragment {
 				String week = String.valueOf(currentWeekNumber - 2 + mEdtWeekSpinner.getSelectedItemPosition());
 
 				// make the request
-				if (isOnline() || week.equals(String.valueOf(currentWeekNumber))){
+				if (isOnline() || (week.equals(String.valueOf(currentWeekNumber)) && fileExists("edt" + promo))){
 					mProgressSpinner.setVisibility(View.VISIBLE);
 					mFormulaire.setVisibility(View.GONE);	
 
@@ -261,5 +264,11 @@ public class Edt extends Fragment {
 		super.onSaveInstanceState(outState);
 		outState.putAll(bundle);
 	}
+
+	public boolean fileExists(String fname){
+		File file = context.getFileStreamPath(fname);
+		return file.exists();
+	}
+
 
 }

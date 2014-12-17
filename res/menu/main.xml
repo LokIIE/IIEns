@@ -8,14 +8,12 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:icon="@drawable/ic_refresh"
-        android:title="Refresh"/>
-    -->
+        android:title="Refresh"/>    -->
 
-    <item
+<!--     <item
         android:id="@+id/action_loginout"
         android:showAsAction="never"
-        android:title="@string/action_connect"/>
-    
+        android:title="@string/action_connect"/> -->
     <item
         android:id="@+id/action_settings"
         android:showAsAction="never"

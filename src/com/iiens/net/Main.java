@@ -3,11 +3,8 @@ package com.iiens.net;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
@@ -34,10 +31,10 @@ public class Main extends Activity {
 			"Twitter",
 	};
 
-	// Items to add when connected
-	private String[] menuItemsConnected = new String[]{
-			"Trombinoscope"
-	};
+	//	// Items to add when connected
+	//	private String[] menuItemsConnected = new String[]{
+	//			"Trombinoscope"
+	//	};
 
 	// The Fragments corresponding to the items, based on the position in the list
 	private Fragment[] menuFragments = new Fragment[]{
@@ -47,10 +44,10 @@ public class Main extends Activity {
 			new TwitterNews(),
 	};
 
-	// Fragments to add if connected
-	private Fragment[] menuFragmentsConnected = new Fragment[]{
-			new Trombi()
-	};
+	//	// Fragments to add if connected
+	//	private Fragment[] menuFragmentsConnected = new Fragment[]{
+	//			new Trombi()
+	//	};
 
 	private int defaultFragmentNumber = 0; // Number of the fragment to show first after the SplashScreen
 	private String scriptURL = "*****"; // Address of the script making database queries
@@ -65,12 +62,10 @@ public class Main extends Activity {
 	private boolean isConnected = false;
 	private boolean inSettings = false;
 	private int currentFragment;
-	private SharedPreferences preferences;
-	private SharedPreferences.Editor editor;
+	//private SharedPreferences.Editor editor;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
+	public void onCreate(Bundle savedInstanceState) {
 		mainBundle = new Bundle();
 		mainBundle.putString("scriptURL", scriptURL);
 		// If connected, get additional informations
@@ -81,8 +76,8 @@ public class Main extends Activity {
 			mainBundle.putString("nom", getIntent().getStringExtra("nom"));
 		}
 		currentFragment = defaultFragmentNumber;
-		preferences = PreferenceManager.getDefaultSharedPreferences(this);
-		editor = preferences.edit();
+
+		//editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
 		fragmentManager = getFragmentManager();
 
 		// Get back all info if the activity is recreated
@@ -132,18 +127,22 @@ public class Main extends Activity {
 		else { // if it is the action menu
 			// Handle item selection
 			switch (item.getItemId()) {
-			case R.id.action_loginout:
-				Intent i;
-				if (isConnected) { // revert everything to offline state
-					i = new Intent(Main.this, Main.class);
-					i.putExtra("isConnected", false);
-					editor.remove("login").remove("password").remove("auto_login").apply();
-				} else i = new Intent(Main.this, Login.class); // open the login activity
-				
-				startActivity(i);
-				overridePendingTransition(R.anim.left_in, R.anim.right_out);
-				finish();
-				return true;
+			//			case R.id.action_loginout:
+			//				if (!preferences.getBoolean("login_option", false)) {
+			//					Toast.makeText(this, "Nécessite l'option OpenID dans les paramètres", Toast.LENGTH_LONG).show();
+			//					return true;
+			//				}
+			//				Intent i;
+			//				if (isConnected) { // revert everything to offline state
+			//					i = new Intent(Main.this, Main.class);
+			//					i.putExtra("isConnected", false);
+			//					editor.remove("login").remove("password").remove("auto_login").apply();
+			//				} else i = new Intent(Main.this, Login.class); // open the login activity
+			//				
+			//				startActivity(i);
+			//				overridePendingTransition(R.anim.left_in, R.anim.right_out);
+			//				finish();
+			//				return true;
 			case R.id.action_settings:
 				if (!inSettings) {
 					fragmentManager.beginTransaction().replace(R.id.content, new Preferences()).addToBackStack(null).commit();
@@ -182,7 +181,7 @@ public class Main extends Activity {
 
 	/* Create the menu and add the items to it */
 	private void createMenu() {
-		if (isConnected) setParametersConnected(); // If connected, change initial parameters
+		// if (isConnected) setParametersConnected(); // If connected, change initial parameters
 
 		ArrayAdapter<String> menuAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, menuItems);
 		menu.setAdapter(menuAdapter);
@@ -232,32 +231,32 @@ public class Main extends Activity {
 		drawerLayout.closeDrawer(menu); 
 	}
 
-	/* Replace the menu with the a new menu containing the items only accessible when connected */ 	
-	private void setParametersConnected() {
-		// Add user name in first place and the items accessible only while connected at the end
-		String[] newMenuItems = new String[menuItems.length + menuItemsConnected.length + 1];
-		newMenuItems[0] = mainBundle.getString("nom");
-		for (int i = 0; i < menuItems.length; i++) {
-			newMenuItems[i+1] = menuItems[i];
-		}
-		for (int i = 0; i < menuItemsConnected.length; i++){
-			newMenuItems[i+1+menuItems.length] = menuItemsConnected[i];
-		}
-		menuItems = newMenuItems;
-
-		// Add a null fragment in first place to do nothing when toggled, and the fragments accessible only while connected at the end
-		Fragment[] newMenuFragments = new Fragment[menuFragments.length + menuFragmentsConnected.length + 1];
-		newMenuFragments[0] = null;
-		for (int i = 0; i < menuFragments.length; i++) {
-			newMenuFragments[i+1] = menuFragments[i];
-		}
-		for (int i = 0; i < menuFragmentsConnected.length; i++){
-			newMenuFragments[i+1+menuFragments.length] = menuFragmentsConnected[i];
-		}
-		menuFragments = newMenuFragments;
-		
-		currentFragment += 1; // Because the name in first place shifted everything of 1 place
-	}
+	//	/* Replace the menu with the a new menu containing the items only accessible when connected */ 	
+	//	private void setParametersConnected() {
+	//		// Add user name in first place and the items accessible only while connected at the end
+	//		String[] newMenuItems = new String[menuItems.length + menuItemsConnected.length + 1];
+	//		newMenuItems[0] = mainBundle.getString("nom");
+	//		for (int i = 0; i < menuItems.length; i++) {
+	//			newMenuItems[i+1] = menuItems[i];
+	//		}
+	//		for (int i = 0; i < menuItemsConnected.length; i++){
+	//			newMenuItems[i+1+menuItems.length] = menuItemsConnected[i];
+	//		}
+	//		menuItems = newMenuItems;
+	//
+	//		// Add a null fragment in first place to do nothing when toggled, and the fragments accessible only while connected at the end
+	//		Fragment[] newMenuFragments = new Fragment[menuFragments.length + menuFragmentsConnected.length + 1];
+	//		newMenuFragments[0] = null;
+	//		for (int i = 0; i < menuFragments.length; i++) {
+	//			newMenuFragments[i+1] = menuFragments[i];
+	//		}
+	//		for (int i = 0; i < menuFragmentsConnected.length; i++){
+	//			newMenuFragments[i+1+menuFragments.length] = menuFragmentsConnected[i];
+	//		}
+	//		menuFragments = newMenuFragments;
+	//
+	//		currentFragment += 1; // Because the name in first place shifted everything of 1 place
+	//	}
 
 	@Override
 	public void onBackPressed() {

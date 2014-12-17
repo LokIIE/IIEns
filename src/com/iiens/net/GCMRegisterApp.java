@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -53,10 +52,6 @@ public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
 			// The request to your server should be authenticated if your app
 			// is using accounts.
 			sendRegistrationIdToBackend();
-
-			// For this demo: we don't need to send it because the device
-			// will send upstream messages to a server that echo back the
-			// message using the 'from' address in the message.
 
 			// Persist the regID - no need to register again.
 			storeRegistrationId(ctx, regid);
@@ -103,7 +98,7 @@ public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		super.onPostExecute(result);
-		Toast.makeText(ctx, "Registration Completed. Now you can see the notifications", Toast.LENGTH_SHORT).show();
+		// Toast.makeText(ctx, "Registration Completed. Now you can see the notifications", Toast.LENGTH_SHORT).show();
 		Log.v(TAG, result);
 	}
 }
