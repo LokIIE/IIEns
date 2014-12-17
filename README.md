@@ -4,6 +4,8 @@ IIEns
 IIEns est l'application Android pour les élèves de l'ENSIIE. Elle permet d'avoir accès aux différents services disponibles sur le site des élèves de l'ENSIIE : http://www.iiens.net, en version mobile.
 Elle est supportée par plusieurs scripts PHP côté serveur (qui ne sont pas encore présents sur ce repo).
 
+[![Google Play](http://developer.android.com/images/brand/en_generic_rgb_wo_45.png)](https://play.google.com/store/apps/details?id=com.iiens.net)
+
 #### Fonctionnalités
 
 ###### News
