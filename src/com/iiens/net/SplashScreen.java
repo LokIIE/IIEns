@@ -117,14 +117,6 @@ public class SplashScreen extends Activity {
 		Intent i = null;
 		overridePendingTransition(R.anim.right_in, R.anim.left_out);
 
-		//		// If login option enabled, show login activity else main activity
-		//		if (preferences.getBoolean("login_option", false)) {
-		//			i = new Intent(SplashScreen.this, Login.class);
-		//			if (!backPressed) {
-		//				startActivity(i);
-		//			}
-		//		}
-		//		else {
 		i = new Intent(SplashScreen.this, Main.class);
 		// Main activity requires either data stored on the device or an internet connection
 		if (!backPressed && (preferences.getBoolean("storage_option", false) || isOnline())) {

@@ -175,7 +175,9 @@ public class GCMIntentService extends IntentService {
 		NotificationCompat.Builder mBuilder =
 				new NotificationCompat.Builder(this)
 		.setSmallIcon(R.drawable.ic_launcher)
-		.setStyle(new NotificationCompat.BigTextStyle());
+		.setStyle(new NotificationCompat.BigTextStyle()
+		.bigText(msg))
+		.setContentText(msg);
 
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 

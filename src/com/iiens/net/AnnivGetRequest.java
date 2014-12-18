@@ -100,10 +100,4 @@ public class AnnivGetRequest extends AsyncTask<Void, Void, JSONArray> {
 		return resJArray;
 	}
 
-	//	@Override
-	//	protected void onPostExecute() {
-	//		// Rien à faire
-	//		super.onPostExecute(null);
-	//	}
-
 }
