@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/bool_storage_option_name"
+        android:summaryOff="@string/pref_deactivated"
+        android:summaryOn="@string/pref_activated"
+        android:title="@string/pref_storage_title" />
+
+    <PreferenceCategory android:title="@string/pref_notifs_txt" >
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/pref_news_key"
+            android:summaryOff="@string/pref_deactivated"
+            android:summaryOn="@string/pref_activated"
+            android:title="@string/pref_news_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/pref_anniv_key"
+            android:summaryOff="@string/pref_deactivated"
+            android:summaryOn="@string/pref_activated"
+            android:title="@string/pref_anniv_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/pref_events_key"
+            android:summaryOff="@string/pref_deactivated"
+            android:summaryOn="@string/pref_activated"
+            android:title="@string/pref_events_title" />
+
+        <ListPreference
+            android:defaultValue="none"
+            android:entries="@array/pref_partiel_entries"
+            android:entryValues="@array/pref_partiel_values"
+            android:key="@string/pref_partiel_key"
+            android:summary="@string/pref_partiel_summary"
+            android:title="@string/pref_partiel_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

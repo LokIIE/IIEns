@@ -1,9 +1,0 @@
-<resources>
-    <!-- inherit from the material theme -->
-	<style name="AppTheme" parent="android:Theme.Material.Light">
-
-        <item name="android:colorPrimary">@color/aqua</item>
-        <item name="android:colorPrimaryDark">@color/aqua</item>
-
-    </style>
-</resources> 
