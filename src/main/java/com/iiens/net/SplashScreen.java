@@ -39,8 +39,6 @@ public class SplashScreen extends Activity {
     private boolean backPressed = false; // Was back button pressed during the animation
     private SharedPreferences preferences;
     private GlobalState global;
-    private GoogleCloudMessaging gcm;
-    private boolean ariseOnline = false;
 
     /**
      * @return Application's version code from the {@code PackageManager}.
@@ -78,14 +76,15 @@ public class SplashScreen extends Activity {
         startLogoAnimation(R.anim.top_in);
 
         // End if there is no Internet connection
-        if (!global.isOnline()) {
+        if (!global.isOnline() && !global.fileExists("news")) {
             Toast.makeText(global, getResources().getText(R.string.internet_unavailable), Toast.LENGTH_SHORT).show();
             finish();
+            return;
         }
 
         // GCM needs Google Play Services to function correctly
         if (checkPlayServices()) {
-            gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+            GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
             if (getRegistrationId().isEmpty()) {
                 new GCMRegisterApp(getApplicationContext(), gcm, getAppVersion(getApplicationContext())).execute();
             }
@@ -99,10 +98,9 @@ public class SplashScreen extends Activity {
             @Override
             public void run() {
                 PreferenceManager.setDefaultValues(getApplicationContext(), R.layout.preferences, false);
-                goToNextActivity();
+                goToMainActivity();
             }
         }, SPLASH_TIME_OUT);
-
     }
 
     /* Back button toggled during animation <=> the user didn't want to launch the application */
@@ -120,7 +118,7 @@ public class SplashScreen extends Activity {
     }
 
     /* Start the main activity if the user didn't cancel by pressing the back key */
-    private void goToNextActivity() {
+    private void goToMainActivity() {
         Intent i = new Intent(SplashScreen.this, Main.class);
         overridePendingTransition(R.anim.right_in, R.anim.left_out);
 
