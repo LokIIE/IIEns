@@ -23,7 +23,7 @@ Permet de consulter l'emploi du temps des élèves :
 * selon les langues vivantes choisies ;
 * selon les options choisies en 2è et 3è année.
 
-Permet également d'ajouter les résultats de la recherche avec l'agenda installé sur l'appareil
+Permet également d'ajouter les résultats de la recherche à l'agenda installé sur l'appareil
 
 ###### Anniversaires
 
