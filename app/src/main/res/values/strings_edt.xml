@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="edt_formulaire">Choix des options de l\'emploi du temps</string>
+    <string name="edt_search_txt">Emploi du temps &#8230; </string>
+    <string name="edt_result_title">Résultats de la recherche</string>
+    <string name="chk_1A">1A</string>
+    <string name="chk_2A">2A</string>
+    <string name="chk_3A">3A</string>
+    <string name="edt_date_txt">Semaine :</string>
+    <string name="edt_groupe_txt">Groupes :</string>
+    <string name="edt_comm_txt">Groupe de comm\' :</string>
+    <string name="edt_langue_txt">Langue :</string>
+    <string name="edt_search_button">Rechercher</string>
+    <string name="edt_search_progress">Recherche en cours &#8230;</string>
+    <string name="edt_newsearch_button">Nouvelle recherche</string>
+    <string name="edt_optiontc">Tronc commun</string>
+    <string name="edt_option1">Option 1</string>
+    <string name="edt_option2">Option 2</string>
+    <string name="edt_option3">Option 3</string>
+    <string name="edt_option4">Option 4</string>
+    <string name="edt_option5">Option 5</string>
+    <string name="edt_option6">Option 6</string>
+    <string name="edt_group_missing">Choisis une promo patate</string>
+    <string name="edt_no_result">Rien cette semaine là</string>
+    <string name="export_to_calendar_title">Exporter vers l\'agenda</string>
+    <string name="export_item_to_calendar_msg">Voulez-vous exporter cet évènement vers votre agenda personnel ?</string>
+    <string name="export_week_to_calendar_msg">Voulez-vous exporter cette semaine vers votre agenda personnel ? (Attention : export basé sur les résultats de la recherche)</string>
+    <string name="export_week_to_calendar_done">Semaine ajoutée à votre agenda</string>
+    <string name="export_week_to_calendar_chose_group">Choisissez votre groupe</string>
+    
+    <string-array name="edt_groups">
+        <item>1.1</item>
+        <item>1.2</item>
+        <item>2.1</item>
+        <item>2.2</item>
+        <item>3.1</item>
+        <item>3.2</item>
+        <item>4.1</item>
+        <item>4.2</item>
+    </string-array>
+
+    <string-array name="edt_groupes_raw">
+        <item>GR1.1</item>
+        <item>GR1.2</item>
+        <item>GR2.1</item>
+        <item>GR2.2</item>
+        <item>GR3.1</item>
+        <item>GR3.2</item>
+        <item>GR4.1</item>
+        <item>GR4.2"</item>
+    </string-array>
+
+    <string-array name="edt_search_option_groupe">
+        <item>Tous les groupes</item>
+        <item>Groupe 1</item>
+        <item>Sous-groupe 1.1</item>
+        <item>Sous-groupe 1.2</item>
+        <item>Groupe 2</item>
+        <item>Sous-groupe 2.1</item>
+        <item>Sous-groupe 2.2</item>
+        <item>Groupe 3</item>
+        <item>Sous-groupe 3.1</item>
+        <item>Sous-groupe 3.2</item>
+        <item>Groupe 4</item>
+        <item>Sous-groupe 4.1</item>
+        <item>Sous-groupe 4.2</item>
+    </string-array>
+
+    <string-array name="edt_search_option_groupe_raw">
+        <item/>
+        <item>"GR1"</item>
+        <item>"GR1.1"</item>
+        <item>"GR1.2"</item>
+        <item>"GR2"</item>
+        <item>"GR2.1"</item>
+        <item>"GR2.2"</item>
+        <item>"GR3"</item>
+        <item>"GR3.1"</item>
+        <item>"GR3.2"</item>
+        <item>"GR4"</item>
+        <item>"GR4.1"</item>
+        <item>"GR4.2"</item>
+    </string-array>
+
+    <string-array name="edt_comm_grp">
+        <item>---</item>
+        <item value="GR A">Groupe A</item>
+        <item value="GR B">Groupe B</item>
+        <item value="GR C">Groupe C</item>
+        <item value="GR D">Groupe D</item>
+        <item value="GR E">Groupe E</item>
+        <item value="GR F">Groupe F</item>
+    </string-array>
+    
+    <string-array name="edt_comm_grp_raw">
+        <item/>
+        <item>GR A</item>
+        <item>GR B</item>
+        <item>GR C</item>
+        <item>GR D</item>
+        <item>GR E</item>
+        <item>GR F</item>
+    </string-array>
+    
+    <string-array name="edt_options2A_tc">
+        <item value="">---</item>
+        <item value="Option tc 1">ESE - Structure des grandes entreprises</item>
+        <item value="Option tc 1g1">ESE - ESE, groupe 1</item>
+        <item value="Option tc 2">EIE - Intelligence économique</item>
+        <item value="Option tc 3">ESF - Stratégie financière</item>
+    </string-array>
+    
+    <string-array name="edt_options2A_tc_raw">
+        <item/>
+        <item>Option tc 1</item>
+        <item>Option tc 1g1</item>
+        <item>Option tc 2</item>
+        <item>Option tc 3</item>
+    </string-array>
+
+    <string-array name="edt_options2A_1">
+        <item value="">---</item>
+        <item value="op21.1">PST - Processus stochastiques</item>
+        <item value="op21.2">IA1 - Intelligence Artificielle</item>
+        <item value="op21.2g2">IA1 - IA1, groupe 2</item>
+        <item value="op21.3">RIAL - Réseaux IP et administration LAN</item>
+        <item value="op21.4">LOA - Langage objet avancé</item>
+    </string-array>
+    
+    <string-array name="edt_options2A_1_raw">
+        <item/>
+        <item>op21.1</item>
+        <item>op21.2</item>
+        <item>op21.2g2</item>
+        <item>op21.3</item>
+        <item>op21.4</item>
+    </string-array>
+
+    <string-array name="edt_options2A_2">
+        <item value="">---</item>
+        <item value="op22.1">MNS - Méthodes numériques de simulation</item>
+        <item value="op22.2">ASN - Algorithmes semi-numériques</item>
+        <item value="op22.3">CORO - Compléments et outils de recherche opérationnelle</item>
+        <item value="op22.4">PCV - Programmation concurrente et vérification</item>
+    </string-array>
+    
+    <string-array name="edt_options2A_2_raw">
+        <item/>
+        <item>op22.1</item>
+        <item>op22.2</item>
+        <item>op22.3</item>
+        <item>op22.4</item>
+    </string-array>
+
+    <string-array name="edt_options2A_3">
+        <item value="">---</item>
+        <item value="op23.1">MOST - Modélisation statistique</item>
+        <item value="op23.1g1">MOST - MOST, groupe 1</item>
+        <item value="op23.1g2">MOST - MOST, groupe 2</item>
+        <item value="op23.2">SE1 - Système d\'exploitation 1</item>
+        <item value="op23.3">MFDLS - Méthodes formelles pour le développement de logiciels sûrs</item>
+        <item value="op23.4">RVIG - Réalité virtuelle et info graphique</item>
+        <item value="op23.4g1">RVIG - RVIG, groupe 1</item>
+        <item value="op23.4g2">RVIG - RVIG, groupe 2</item>
+    </string-array>
+
+    <string-array name="edt_options2A_3_raw">
+        <item/>
+        <item>op23.1</item>
+        <item>op23.1g1</item>
+        <item>op23.1g2</item>
+        <item>op23.2</item>
+        <item>op23.3</item>
+        <item>op23.4</item>
+        <item>op23.4g1</item>
+        <item>op23.4g2</item>
+    </string-array>
+
+    <string-array name="edt_options2A_4">
+        <item value="">---</item>
+        <item value="op24.1">MCS - Introduction au calcul stochastique</item>
+        <item value="op24.2">SE2 - Système d\'exploitation 2</item>
+        <item value="op24.3">CAL - Modèles de calculs</item>
+        <item value="op24.4g1">SIPD - Système d\'Information Privacy by Design, groupe 1</item>
+    </string-array>
+
+    <string-array name="edt_options2A_4_raw">
+        <item/>
+        <item>op24.1</item>
+        <item>op24.2</item>
+        <item>op24.3</item>
+        <item>op24.4g1</item>
+        <item>op24.4g2</item>
+    </string-array>
+
+    <string-array name="edt_options2A_5">
+        <item value="">---</item>
+        <item value="op25.1">IMF - Instruments et modèles financiers</item>
+        <item value="op25.2">SIPD1 - Système d\'Information Privacy by Design 1</item>
+        <item value="op25.3">AUTO - Automatique</item>
+        <item value="op25.4">BIOINFO - Bioinformatique</item>
+    </string-array>
+
+    <string-array name="edt_options2A_5_raw">
+        <item/>
+        <item>op25.1</item>
+        <item>op25.2</item>
+        <item>op25.3</item>
+        <item>op25.4"</item>
+    </string-array>
+
+    <string-array name="edt_options2A_6">
+        <item value="">---</item>
+        <item value="op26.1g1">PRR - Projet recherche, groupe 1</item>
+        <item value="op26.1g2">PRR - Projet recherche, groupe 2</item>
+        <item value="op26.1g3">PRR - Projet recherche, groupe 3</item>
+        <item value="op26.1g4">PRR - Projet recherche, groupe 4</item>
+        <item value="op26.2">PRB - Pattern recognition and biometrics</item>
+        <item value="op26.2g2">PRB - PRB, groupe 2</item>
+        <item value="op26.3">SSI - Sécurité des systèmes d\'information</item>
+        <item value="op26.4">IRA - Image et réalité augmentée</item>
+    </string-array>
+
+    <string-array name="edt_options2A_6_raw">
+        <item/>
+        <item>op26.1</item>
+        <item>op26.2</item>
+        <item>op26.2g1</item>
+        <item>op26.2g2</item>
+        <item>op26.3</item>
+        <item>op26.4</item>
+        <item>op26.4g1</item>
+        <item>op26.4g2"</item>
+    </string-array>
+
+    <string-array name="edt_options3A_1">
+        <item value="">---</item>
+        <item value="op31.1">MAF1 - Marchés Financiers</item>
+        <item value="op31.2">AEBI1 - Architecture d\'Entreprise et Business Intelligence</item>
+        <item value="op31.3">WIA1 - Web sémantique, Intelligence Artificielle</item>
+        <item value="op31.3g1">WIA1 - WIA1, groupe 1</item>
+        <item value="op31.3g2">WIA1 - WIA1, groupe 2</item>
+        <item value="op31.4">MEC1 - Modèles et rendus</item>
+        <item value="op31.4g1">MEC1 - MEC1, groupe 1</item>
+    </string-array>
+
+    <string-array name="edt_options3A_1_raw">
+        <item/>
+        <item>op31.1</item>
+        <item>op31.2</item>
+        <item>op31.3</item>
+        <item>op31.3g1</item>
+        <item>op31.3g2</item>
+        <item>op31.4</item>
+        <item>op31.4g1</item>
+    </string-array>
+
+    <string-array name="edt_options3A_2">
+        <item value="">---</item>
+        <item value="op32.1">MAF2 - Marchés Financiers</item>
+        <item value="op32.2">SEC2 - Sécurité avancée</item>
+        <item value="op32.3">WIA2 - Web sémantique, Intelligence Artificielle</item>
+        <item value="op32.3g1">WIA2 - WIA2, groupe 1</item>
+        <item value="op32.3g2">WIA2 - WIA2, groupe 2</item>
+        <item value="op32.4">GPA2 - Gestion de projet avancée</item>
+    </string-array>
+
+    <string-array name="edt_options3A_2_raw">
+        <item/>
+        <item>op32.1</item>
+        <item>op32.2</item>
+        <item>op32.3</item>
+        <item>op32.3g1</item>
+        <item>op32.3g2</item>
+        <item>op32.4</item>
+    </string-array>
+
+    <string-array name="edt_options3A_3">
+        <item value="">---</item>
+        <item value="op33.1">MOD1 - Modélisation statistique</item>
+        <item value="op33.2">GDA1 - Gestion et droit des affaires</item>
+        <item value="op33.3">RESO1 - Réseaux avancés</item>
+        <item value="op33.3g1">RESO1 - RESO1, groupe 1</item>
+        <item value="op33.3g2">RESO1 - RESO1, groupe 2</item>
+        <item value="op33.4">IEC1 - Interaction et capteurs</item>
+        <item value="op33.4g1">IEC1 - IEC1, groupe 1</item>
+    </string-array>
+
+    <string-array name="edt_options3A_3_raw">
+        <item/>
+        <item>op33.1</item>
+        <item>op33.2</item>
+        <item>op33.3</item>
+        <item>op33.3g1</item>
+        <item>op33.3g2</item>
+        <item>op33.4</item>
+        <item>op33.4g1</item>
+    </string-array>
+
+    <string-array name="edt_options3A_4">
+        <item value="">---</item>
+        <item value="op34.1">MOD2 - Modélisation statistique</item>
+        <item value="op34.1g1">MOD2 - MOD2, groupe 1</item>
+        <item value="op34.1g2">MOD2 - MOD2, groupe 2</item>
+        <item value="op34.1g3">MOD2 - MOD2, groupe 3</item>
+        <item value="op34.2">ESFI2 - Entreprise et stratégie financière</item>
+        <item value="op34.3">RESO2 - Réseaux avancés</item>
+        <item value="op34.3g1">RESO2 - RESO2, groupe 1</item>
+        <item value="op34.3g2">RESO2 - RESO2, groupe 2</item>
+        <item value="op34.4">SIR2 - Systèmes interagissants en réseaux</item>
+        <item value="op34.4g1">SIR2 - SIR2, groupe 1</item>
+        <item value="op34.4g2">SIR2 - SIR2, groupe 2</item>
+    </string-array>
+
+    <string-array name="edt_options3A_4_raw">
+        <item/>
+        <item>op34.1</item>
+        <item>op34.1g1</item>
+        <item>op34.1g2</item>
+        <item>op34.1g3</item>
+        <item>op34.2</item>
+        <item>op34.3</item>
+        <item>op34.3g1</item>
+        <item>op34.3g2</item>
+        <item>op34.4</item>
+        <item>op34.4g1</item>
+        <item>op34.4g2</item>
+    </string-array>
+
+    <string-array name="edt_options3A_5">
+        <item value="">---</item>
+        <item value="op35.1">MQF1 - Méthodes Quantitatives pour la Finance</item>
+        <item value="op35.2">PROG1 - Programmation raisonnée</item>
+        <item value="op35.3">OPT1 - Optimisation</item>
+        <item value="op35.3g1">OPT1 - OPT1, groupe 1</item>
+        <item value="op35.4">NTOE1 - Nouvelles Technologies et Organisation des Entreprises</item>
+    </string-array>
+
+    <string-array name="edt_options3A_5_raw">
+        <item/>
+        <item>op35.1</item>
+        <item>op35.2</item>
+        <item>op35.3</item>
+        <item>op35.3g1</item>
+        <item>op35.4</item>
+    </string-array>
+
+    <string-array name="edt_options3A_6">
+        <item value="">---</item>
+        <item value="op36.1">MQF2 - Méthodes Quantitatives pour la Finance</item>
+        <item value="op36.2">PROG2 - Programmation raisonnée</item>
+        <item value="op36.3">OPTI2 - Optimisation</item>
+        <item value="op36.3g1">OPTI2 - OPTI2, groupe 1</item>
+        <item value="op36.3g2">OPTI2 - OPTI2, groupe 2</item>
+        <item value="op36.4">MGNT2 - Management</item>
+    </string-array>
+
+    <string-array name="edt_options3A_6_raw">
+        <item/>
+        <item>op36.1</item>
+        <item>op36.2</item>
+        <item>op36.3</item>
+        <item>op36.3g1</item>
+        <item>op36.3g2</item>
+        <item>op36.4</item>
+    </string-array>
+
+    <string-array name="edt_langue">
+        <item value="">---</item>
+        <item value="allemand">Allemand</item>
+        <item value="allemand fort">Allemand fort</item>
+        <item value="allemand inter">Allemand inter</item>
+        <item value="chinois">Chinois</item>
+        <item value="espagnol">Espagnol</item>
+        <item value="français (FLE)">Français (FLE)</item>
+        <item value="comF">Français renforcé</item>
+        <item value="japonais">Japonais</item>
+        <item value="portugais">Portugais</item>
+        <item value="russe">Russe</item>
+        <item value="sout. anglais">Soutien anglais</item>
+    </string-array>
+
+    <string-array name="edt_langue_raw">
+        <item/>
+        <item>allemand</item>
+        <item>allemand fort</item>
+        <item>allemand inter</item>
+        <item>chinois</item>
+        <item>espagnol</item>
+        <item>français (FLE)</item>
+        <item>français renforcé</item>
+        <item>japonais</item>
+        <item>portugais</item>
+        <item>russe</item>
+        <item>sout. anglais</item>
+    </string-array>
+
+</resources>

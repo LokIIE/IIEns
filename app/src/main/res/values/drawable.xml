@@ -1,0 +1,6 @@
+<resources>
+	<drawable name="red">#ff0000</drawable>
+	<drawable name="blue">#0000ff</drawable>
+	<drawable name="green">#00ff00</drawable>
+	<drawable name="white">#000000</drawable>
+</resources>

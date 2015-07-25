@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Global app values -->
+    <string name="app_name">IIEns</string>
+    <string name="action_refresh">Actualiser</string>
+    <string name="settings">Paramètres</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+
+    <!-- Settings boolean values names -->
+    <string name="bool_storage_option_name">storage_option</string>
+    <string name="bool_news_update_name">news_new_update</string>
+    <string name="bool_anniv_update_name">anniv_new_update</string>
+
+    <!-- Toast messages -->
+    <string name="arise_unavailable">Arise, on a un problème :(</string>
+    <string name="internet_unavailable">Connexion à internet requise</string>
+    <string name="google_play_services_unavailable">Google Play Services requis pour recevoir des notifications</string>
+    <string name="cal_all_sync_done">Synchronisation avec votre agenda terminée</string>
+    <string name="cal_week_sync_done">La semaine a été ajoutée à votre agenda</string>
+    <string name="cal_event_sync_done">L\'évènement a été ajouté à votre agenda</string>
+
+    <string-array name="main_menu_entries">
+        <item>News</item>
+        <item>Emploi du temps</item>
+        <item>Anniversaires</item>
+        <item>Twitter</item>
+    </string-array>
+
+    <!-- Values for activity_main.xml -->
+    <string name="open_menu">Ouverture du menu</string>
+    <string name="close_menu">Fermeture du menu</string>
+
+    <!-- Notifications title -->
+    <string name="notif_news_title">News</string>
+    <string name="notif_partiels_title">Attention partiels !</string>
+    <string name="notif_anniv_title">Anniversaires du jour</string>
+    <string name="notif_events_title">Events aujourd\'hui</string>
+
+    <!-- Values for activity_preferences.xml -->
+    <string name="pref_storage_title">Stockage local</string>
+    <string name="pref_notifs_txt">Affichage des notifications</string>
+    <string name="pref_anniv_title">Pour les anniversaires du jour</string>
+    <string name="pref_anniv_key">anniv_notif</string>
+    <string name="pref_news_title">Pour les news publiées</string>
+    <string name="pref_news_key">news_notif</string>
+    <string name="pref_events_title">Pour les events associatifs</string>
+    <string name="pref_events_key">club_notif</string>
+    <string name="pref_partiel_title">Pour les partiels</string>
+    <string name="pref_partiel_key">partiel_notif</string>
+    <string name="pref_partiel_summary">Notifications pour les partiels</string>
+    <string name="pref_activated">Activé</string>
+    <string name="pref_deactivated">Désactivé</string>
+
+    <string-array name="pref_partiel_entries">
+        <item value="0">Désactivé</item>
+        <item value="1">Partiels de 1A</item>
+        <item value="2">Partiels de 2A</item>
+        <item value="3">Partiels de 3A</item>
+    </string-array>
+    <string-array name="pref_partiel_values">
+        <item value="0">none</item>
+        <item value="1">partiel1A</item>
+        <item value="2">partiel2A</item>
+        <item value="3">partiel3A</item>
+    </string-array>
+
+    <!-- News fragment values -->
+    <string name="news_title">No title</string>
+    <string name="news_description">No content</string>
+
+</resources>
