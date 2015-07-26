@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 public class NewsItem {
     private String title = "";
-    private String description = "";
-    private String author = "";
-    private String publicationDate = "";
+    private String contenu = "";
+    private String auteur = "";
+    private String datePublication = "";
 
     public NewsItem() {
     }
@@ -29,37 +29,37 @@ public class NewsItem {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getContenu() {
+        return contenu;
     }
 
-    void setDescription(String description) {
-        this.description = description;
+    void setContenu(String contenu) {
+        this.contenu = contenu;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getAuteur() {
+        return auteur;
     }
 
-    void setAuthor(String author) {
-        this.author = author;
+    void setAuteur(String auteur) {
+        this.auteur = auteur;
     }
 
-    public String getPublicationDate() {
-        return publicationDate;
+    public String getDatePublication() {
+        return datePublication;
     }
 
-    void setPublicationDate(String publicationDate) {
-        this.publicationDate = publicationDate;
+    void setDatePublication(String datePublication) {
+        this.datePublication = datePublication;
     }
 
     public void fromJsonObject(JSONObject json_data) {
         try {
             setTitle(json_data.getString("titre"));
             String contenu = json_data.getString("contenu");
-            setDescription(toHtml(contenu));
-            setAuthor(json_data.getString("par"));
-            setPublicationDate(json_data.getString("calDate"));
+            setContenu(toHtml(contenu));
+            setAuteur(json_data.getString("par"));
+            setDatePublication(json_data.getString("calDate"));
         } catch (JSONException e) {
             Log.e("newsitem_tag", "Error parsing data " + e.toString());
         }
@@ -70,9 +70,9 @@ public class NewsItem {
 
         try {
             jObject.put("titre", title);
-            jObject.put("contenu", description);
-            jObject.put("par", author);
-            jObject.put("calDate", publicationDate);
+            jObject.put("contenu", contenu);
+            jObject.put("par", auteur);
+            jObject.put("calDate", datePublication);
         } catch (JSONException e) {
             Log.e("newsitem_tag", "Error parsing data " + e.toString());
         }
@@ -113,18 +113,18 @@ public class NewsItem {
         ArrayList<String> result = new ArrayList<>();
 
         result.add(title);
-        result.add(description);
-        result.add(author);
-        result.add(publicationDate);
+        result.add(contenu);
+        result.add(auteur);
+        result.add(datePublication);
 
         return result;
     }
 
     public NewsItem fromStringArrayList(ArrayList<String> sArrayList) {
         this.title = sArrayList.get(0);
-        this.description = sArrayList.get(1);
-        this.author = sArrayList.get(2);
-        this.publicationDate = sArrayList.get(3);
+        this.contenu = sArrayList.get(1);
+        this.auteur = sArrayList.get(2);
+        this.datePublication = sArrayList.get(3);
 
         return this;
     }

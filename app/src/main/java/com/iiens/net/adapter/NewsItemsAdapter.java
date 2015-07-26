@@ -58,9 +58,9 @@ public class NewsItemsAdapter extends BaseAdapter {
         NewsItem newsItem = newsItemsList.get(position);
 
         if (newsItem.getTitle().length() > 0) newsTitle.setText(newsItem.getTitle());
-        if (newsItem.getDescription().length() > 0)
-            newsDescription.setText(Html.fromHtml(newsItem.getDescription()));
-        int logoId = context.getResources().getIdentifier(newsItem.getAuthor(), "drawable", "com.iiens.net");
+        if (newsItem.getContenu().length() > 0)
+            newsDescription.setText(Html.fromHtml(newsItem.getContenu()));
+        int logoId = context.getResources().getIdentifier(newsItem.getAuteur(), "drawable", "com.iiens.net");
         if (logoId != 0) newsTitle.setCompoundDrawablesWithIntrinsicBounds(logoId, 0, 0, 0);
 
         return convertView;

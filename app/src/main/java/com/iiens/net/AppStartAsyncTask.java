@@ -8,8 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * AppStartAsyncTask
- * Vérification à l'ouverture de l'application
+ * Vérifications à faire lors du lancement de l'application
  */
 
 public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
@@ -21,11 +20,10 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     /**
-     * isAriseOnline
      * Ping des serveurs d'Arise
      * @return True si les serveurs sont joignables, False sinon
      */
-    boolean isAriseOnline() {
+    private boolean isAriseOnline() {
         int timeout = 5000;
         String url = context.getResources().getString(R.string.url_iiens);
 
@@ -39,6 +37,12 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
         } catch (IOException exception) {
             return false;
         }
+    }
+
+    /**
+     * Récupère les logos des clubs et les stocke localement
+     */
+    private void getAllClubLogo() {
     }
 
     @Override
