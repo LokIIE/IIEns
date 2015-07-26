@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  * AnnivItem
- * Classe permettant de stocker les infos concernant un anniversaire
+ * Modèle d'un anniversaire
  */
 
 public class AnnivItem {
@@ -18,6 +18,46 @@ public class AnnivItem {
     private String pseudo = "";
     private String anniv = "";
     private String age = "";
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getPrenom() {
+        return prenom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+    public String getPseudo() {
+        return pseudo;
+    }
+
+    public void setPseudo(String pseudo) {
+        this.pseudo = pseudo;
+    }
+
+    public String getAnniv() {
+        return anniv;
+    }
+
+    public void setAnniv(String anniv) {
+        this.anniv = anniv;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
 
     public AnnivItem() {
     }
@@ -28,46 +68,6 @@ public class AnnivItem {
         setPseudo(pseudo);
         setAnniv(anniv);
         setAge(age);
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    private void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    private void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-    public String getPseudo() {
-        return pseudo;
-    }
-
-    private void setPseudo(String pseudo) {
-        this.pseudo = pseudo;
-    }
-
-    public String getAnniv() {
-        return anniv;
-    }
-
-    private void setAnniv(String anniv) {
-        this.anniv = anniv;
-    }
-
-    public String getAge() {
-        return age;
-    }
-
-    private void setAge(String age) {
-        this.age = age;
     }
 
     public void mapJsonObject(JSONObject json_data) {

@@ -5,8 +5,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,12 +15,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
- * Main
- * Activité pricipale
- * Permet de gérer le menu latéral, certains paramètres généraux ainsi que les transitions entre les différentes fonctions de l'appli
+ * ActionBar
+ * Gère le fonctionnement de la barre d'action
  */
 
-public class Main extends Activity {
+public class ActionBar extends Activity {
 
     private static int currentFragment = 0;
     private static boolean inSettings = false;
@@ -54,6 +53,9 @@ public class Main extends Activity {
 
         // Creation of the side menu
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, null,
+                R.string.open_menu,
+                R.string.close_menu);
         menu = (ListView) findViewById(R.id.drawerMenu);
         createMenu();
     }
@@ -121,10 +123,7 @@ public class Main extends Activity {
         getActionBar().setHomeButtonEnabled(true);
 
         // Menu icon on the action bar
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                R.drawable.ic_menu,
-                R.string.open_menu,
-                R.string.close_menu);
+
 
         drawerLayout.setDrawerListener(drawerToggle); // Link the drawerToggle and the drawerLayout
 

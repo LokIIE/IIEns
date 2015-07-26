@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Tweet
- * Classe stockant les infos d'un tweet
+ * Modèle d'un tweet
  */
 
 public class Tweet {

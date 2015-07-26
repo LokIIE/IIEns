@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 /**
  * EdtItem
- * Classe permettant stocker les infos concernant un élément de l'edt
+ * Modèle d'un évènement de l'emploi du temps
  */
 
 public class EdtItem {

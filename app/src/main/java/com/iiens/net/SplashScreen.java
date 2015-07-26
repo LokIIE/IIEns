@@ -121,7 +121,7 @@ public class SplashScreen extends Activity {
 
     /* Start the main activity if the user didn't cancel by pressing the back key */
     private void goToNextActivity() {
-        Intent i = new Intent(SplashScreen.this, Main.class);
+        Intent i = new Intent(SplashScreen.this, ActionBar.class);
         overridePendingTransition(R.anim.right_in, R.anim.left_out);
 
         // backPressed value has to be checked here because of the handler delay

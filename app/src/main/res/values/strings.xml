@@ -69,5 +69,6 @@
     <!-- News fragment values -->
     <string name="news_title">No title</string>
     <string name="news_description">No content</string>
+    <string name="title_activity_google_play_services">GooglePlayServicesActivity</string>
 
 </resources>

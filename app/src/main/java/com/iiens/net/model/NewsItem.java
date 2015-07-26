@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 /**
  * NewsItem
- * Classe stockant les infos pour une news
+ * Modèle d'une news
  */
 
 public class NewsItem {

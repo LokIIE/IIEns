@@ -14,7 +14,7 @@ import java.net.URISyntaxException;
 
 /**
  * TwitterUser
- * Classe permettant stocker les infos concernant l'auteur d'un tweet
+ * Modèle d'un utilisateur de Twitter
  */
 
 public class TwitterUser {
