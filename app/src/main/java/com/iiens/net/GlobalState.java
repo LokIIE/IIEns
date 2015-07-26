@@ -2,6 +2,7 @@ package com.iiens.net;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -13,12 +14,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.util.concurrent.ExecutionException;
 
 public class GlobalState extends Application {
 
     private static Bundle appBundle = new Bundle();
+    private static Resources resources;
 
     Bundle getBundle() {
         return appBundle;
@@ -29,7 +30,24 @@ public class GlobalState extends Application {
     }
 
     public String getScriptURL() {
-        return getResources().getString(R.string.url_script);
+        return resources.getString(R.string.url_script);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        resources = getResources();
+
+        AppStartAsyncTask at = new AppStartAsyncTask(getApplicationContext());
+        try {
+            boolean ariseOnline = at.execute().get();
+            if (!ariseOnline) {
+                Toast.makeText(getApplicationContext(), resources.getString(R.string.arise_unavailable), Toast.LENGTH_LONG).show();
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isOnline() {
@@ -37,22 +55,6 @@ public class GlobalState extends Application {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return (netInfo != null && netInfo.isConnectedOrConnecting());
-    }
-
-    boolean isAriseOnline() {
-        InetAddress addr;
-        boolean ariseOnline = false;
-        try {
-            addr = InetAddress.getByName(getResources().getString(R.string.url_iiens));
-            if (addr.isReachable(5000)) {
-                ariseOnline = true;
-            }
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            Toast.makeText(this.getApplicationContext(), getResources().getString(R.string.arise_unavailable), Toast.LENGTH_LONG).show();
-        }
-        return ariseOnline;
     }
 
     void writeToInternalStorage(String content, String fileName) {

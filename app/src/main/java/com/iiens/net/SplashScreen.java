@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.iiens.net.gcm.GCMRegisterApp;
 
 import java.io.File;
 
@@ -83,16 +82,16 @@ public class SplashScreen extends Activity {
             finish();
         }
 
-        // GCM needs Google Play Services to function correctly
-        if (checkPlayServices()) {
-            gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
-            if (getRegistrationId().isEmpty()) {
-                new GCMRegisterApp(getApplicationContext(), gcm, getAppVersion(getApplicationContext())).execute();
-            }
-        } else {
-            Log.i(TAG, "No valid Google Play Services APK found.");
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.google_play_services_unavailable), Toast.LENGTH_SHORT).show();
-        }
+//        // GCM needs Google Play Services to function correctly
+//        if (checkPlayServices()) {
+//            gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+//            if (getRegistrationId().isEmpty()) {
+//                new GCMRegisterApp(getApplicationContext(), gcm, getAppVersion(getApplicationContext())).execute();
+//            }
+//        } else {
+//            Log.i(TAG, "No valid Google Play Services APK found.");
+//            Toast.makeText(getApplicationContext(), getResources().getString(R.string.google_play_services_unavailable), Toast.LENGTH_SHORT).show();
+//        }
 
         // Go to main activity after the duration of the logo animation
         new Handler().postDelayed(new Runnable() {
