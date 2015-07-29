@@ -16,7 +16,7 @@ public class EdtItem {
     private String auteur; // Cours : prof assurant le cours / Club : club faisant l'evenement
     private Integer heure; // Heure de debut en quarts d'heure a partir de minuit (ex : 0h30 <=> 2)
     private Integer duree; // Nombre de quarts d'heure
-    private String nom_type; // Cours : T.D., T.P., Cours_td, controle, Cours / Club : assoce
+    private String type; // Cours : T.D., T.P., Cours_td, controle, Cours / Club : assoce
     private String groupe; // Cours : groupe du cours si defini / Club : vide
     private String lieu; // Lieu du cours ou de l'evenement
 
@@ -61,11 +61,11 @@ public class EdtItem {
     }
 
     public String getType() {
-        return nom_type;
+        return type;
     }
 
     private void setType(String nom_type) {
-        this.nom_type = nom_type;
+        this.type = nom_type;
     }
 
     public String getGroupe() {

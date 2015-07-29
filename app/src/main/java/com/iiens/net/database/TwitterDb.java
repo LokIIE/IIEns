@@ -8,30 +8,50 @@ import android.database.sqlite.SQLiteDatabase;
 import com.iiens.net.model.Tweet;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Gestion de la table Twitter dans la bdd
  */
-public class TwitterDb extends BaseDb<Tweet> {
+public class TwitterDb {//extends BaseDb<Tweet> {
     // Champs de la base de données
     private SQLiteDatabase database;
     private DatabaseHelper dbHelper;
-    private String[] allColumns = {DatabaseHelper.EDT_ID,
-            DatabaseHelper.EDT_TITRE,
-            DatabaseHelper.EDT_TYPE,
-            DatabaseHelper.EDT_PROF,
-            DatabaseHelper.EDT_CLUB,
-            DatabaseHelper.EDT_SALLE,
-            DatabaseHelper.EDT_HEURE_DEBUT,
-            DatabaseHelper.EDT_HEURE_FIN,
-            DatabaseHelper.EDT_DUREE};
+    private String[] allColumns = {};
 
     public TwitterDb(Context context) {
-        super(context);
+        //super(context);
     }
 
-    public Tweet createComment(String comment) {
+    public Tweet cursorToItem(Cursor cursor) {
+        Tweet item = new Tweet();
+        return item;
+    }
+
+    public ArrayList<Tweet> getAllItems() {
+        ArrayList<Tweet> itemArrayList = new ArrayList<>();
+
+        // Exécution de la requête
+        Cursor cursor = database.query(
+                DatabaseHelper.TABLE_EDT,
+                allColumns,
+                null,
+                null,
+                null,
+                null,
+                null);
+
+        // Lecture des résultats
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Tweet item = cursorToItem(cursor);
+            itemArrayList.add(item);
+            cursor.moveToNext();
+        }
+        cursor.close();
+
+        return itemArrayList;
+    }
+    public Tweet createItem(String comment) {
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.ANNIV_NOM, comment);
         long insertId = database.insert(DatabaseHelper.TABLE_EDT, null,
@@ -50,27 +70,5 @@ public class TwitterDb extends BaseDb<Tweet> {
         System.out.println("Comment deleted with id: " + id);
         database.delete(DatabaseHelper.TABLE_EDT, DatabaseHelper.ANNIV_ID
                 + " = " + id, null);
-    }
-
-    public List<Tweet> getAllComments() {
-        List<Tweet> comments = new ArrayList<Tweet>();
-
-        Cursor cursor = database.query(DatabaseHelper.TABLE_EDT,
-                allColumns, null, null, null, null, null);
-
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Tweet item = cursorToItem(cursor);
-            comments.add(item);
-            cursor.moveToNext();
-        }
-        // assurez-vous de la fermeture du curseur
-        cursor.close();
-        return comments;
-    }
-
-    public Tweet cursorToItem(Cursor cursor) {
-        Tweet item = new Tweet();
-        return item;
     }
 }

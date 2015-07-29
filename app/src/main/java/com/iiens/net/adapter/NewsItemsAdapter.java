@@ -57,7 +57,7 @@ public class NewsItemsAdapter extends BaseAdapter {
 
         NewsItem newsItem = newsItemsList.get(position);
 
-        if (newsItem.getTitle().length() > 0) newsTitle.setText(newsItem.getTitle());
+        if (newsItem.getTitre().length() > 0) newsTitle.setText(newsItem.getTitre());
         if (newsItem.getContenu().length() > 0)
             newsDescription.setText(Html.fromHtml(newsItem.getContenu()));
         int logoId = context.getResources().getIdentifier(newsItem.getAuteur(), "drawable", "com.iiens.net");

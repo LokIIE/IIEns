@@ -21,7 +21,7 @@ public class NewsItem {
     public NewsItem() {
     }
 
-    public String getTitle() {
+    public String getTitre() {
         return title;
     }
 

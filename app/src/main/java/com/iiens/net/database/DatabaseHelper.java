@@ -22,11 +22,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /* Table emploi du temps */
     public static final String TABLE_EDT = "anniversaires";
     public static final String EDT_ID = "_id";
-    public static final String EDT_TITRE = "nom";
-    public static final String EDT_TYPE = "prenom";
-    public static final String EDT_PROF = "prof";
-    public static final String EDT_CLUB = "club";
-    public static final String EDT_SALLE = "salle";
+    public static final String EDT_TITRE = "titre";
+    public static final String EDT_TYPE = "type";
+    public static final String EDT_HOTE = "hôte";
+    public static final String EDT_LIEU = "lieu";
+    public static final String EDT_GROUPE = "groupe";
     public static final String EDT_HEURE_DEBUT = "heure_debut";
     public static final String EDT_HEURE_FIN = "heure_fin";
     public static final String EDT_DUREE = "duree";
@@ -42,13 +42,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String NEWS_DATE_PUBLICATION = "date_publication";
 
     /* Table twitter */
-    public static final String TABLE_TWITTER = "twitter";
-    public static final String TWITTER_ID = "_id";
-    public static final String TWITTER_USERNAME = "username";
-    public static final String TWITTER_NOM = "nom";
-    public static final String TWITTER_DATE_PUBLICATION = "date_publication";
-    public static final String TWITTER_CONTENU = "contenu";
-    public static final String TWITTER_PROFILE_PICTURE_URL = "profile_picture_url";
+//    public static final String TABLE_TWITTER = "twitter";
+//    public static final String TWITTER_ID = "_id";
+//    public static final String TWITTER_USERNAME = "username";
+//    public static final String TWITTER_NOM = "nom";
+//    public static final String TWITTER_DATE_PUBLICATION = "date_publication";
+//    public static final String TWITTER_CONTENU = "contenu";
+//    public static final String TWITTER_PROFILE_PICTURE_URL = "profile_picture_url";
 
     private static final String DATABASE_NAME = "IIEns.db";
     private static final int DATABASE_VERSION = 1;
@@ -70,9 +70,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + "(" + EDT_ID + " integer primary key autoincrement, "
                     + EDT_TITRE + " text not null, "
                     + EDT_TYPE + " text not null, "
-                    + EDT_PROF + " text null, "
-                    + EDT_CLUB + " integer not null, "
-                    + EDT_SALLE + " integer not null, "
+                    + EDT_HOTE + " text not null, "
+                    + EDT_GROUPE + " text null, "
+                    + EDT_LIEU + " integer not null, "
                     + EDT_DATE + " datetime not null, "
                     + EDT_HEURE_DEBUT + " hour not null, "
                     + EDT_HEURE_FIN + " hour not null, "
@@ -91,15 +91,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + ");";
 
     // Commande sql pour la création de la table twitter
-    private static final String CREATE_TWITTER =
-            "create table " + TABLE_TWITTER
-                    + "(" + TWITTER_ID + " integer primary key autoincrement, "
-                    + TWITTER_USERNAME + " text not null, "
-                    + TWITTER_NOM + " text not null, "
-                    + TWITTER_DATE_PUBLICATION + " datetime not null, "
-                    + TWITTER_CONTENU + " text not null, "
-                    + TWITTER_PROFILE_PICTURE_URL + " text not null"
-                    + ");";
+//    private static final String CREATE_TWITTER =
+//            "create table " + TABLE_TWITTER
+//                    + "(" + TWITTER_ID + " integer primary key autoincrement, "
+//                    + TWITTER_USERNAME + " text not null, "
+//                    + TWITTER_NOM + " text not null, "
+//                    + TWITTER_DATE_PUBLICATION + " datetime not null, "
+//                    + TWITTER_CONTENU + " text not null, "
+//                    + TWITTER_PROFILE_PICTURE_URL + " text not null"
+//                    + ");";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -110,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL(CREATE_ANNIV);
         database.execSQL(CREATE_EDT);
         database.execSQL(CREATE_NEWS);
-        database.execSQL(CREATE_TWITTER);
+//        database.execSQL(CREATE_TWITTER);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ANNIVERSAIRES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TWITTER);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TWITTER);
         onCreate(db);
     }
 }

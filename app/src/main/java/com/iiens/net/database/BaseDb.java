@@ -5,33 +5,33 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Classe abstraite de gestion des tables
  */
 public abstract class BaseDb<T> {
     // Champs de la base de données
-    private SQLiteDatabase database;
-    private DatabaseHelper dbHelper;
+    protected SQLiteDatabase database;
+    protected DatabaseHelper dbHelper;
 
-    public BaseDb(Context context) {
+    protected BaseDb(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
 
-    public void open() throws SQLException {
+    protected void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
 
-    public void close() {
+    protected void close() {
         dbHelper.close();
     }
 
-    public abstract T createComment(String comment);
+    public abstract boolean createItem(T item);
 
-    public abstract void deleteItem(T item);
+    public abstract void deleteItem(long id);
 
-    public abstract List<T> getAllComments();
+    public abstract ArrayList<T> getAllItems();
 
     public abstract T cursorToItem(Cursor cursor);
 }
