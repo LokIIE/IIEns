@@ -67,10 +67,12 @@ public class AnnivDb extends BaseDb<AnnivItem>{
         values.put(DatabaseHelper.ANNIV_DATE, item.getAnniv());
 
         // Insertion en base
+        open();
         insertId = database.insert(
                 DatabaseHelper.TABLE_ANNIVERSAIRES,
                 null,
                 values);
+        close();
 
         return insertId > 0;
     }

@@ -25,10 +25,10 @@ public class ActionBar extends Activity {
     private static boolean inSettings = false;
     // The Fragments corresponding to the items, based on the position in the list
     private final Fragment[] menuFragments = new Fragment[]{
-            new News(),
-            new Edt(),
-            new Anniv(),
-            new TwitterNews(),
+//            new News(),
+//            new Edt(),
+            new Anniv()//,
+//            new TwitterNews(),
     };
     // Items shown on the menu, each corresponds to a Fragment
     private String[] menuItems;

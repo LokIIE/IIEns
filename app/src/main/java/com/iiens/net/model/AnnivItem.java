@@ -5,8 +5,6 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 /**
  * AnnivItem
  * Modèle d'un anniversaire
@@ -70,27 +68,18 @@ public class AnnivItem {
         setAge(age);
     }
 
-    public void mapJsonObject(JSONObject json_data) {
+    public static AnnivItem load(JSONObject json_data) {
+        AnnivItem item = new AnnivItem();
         try {
-            setNom(json_data.getString("nom"));
-            setPrenom(json_data.getString("prenom"));
-            setPseudo(json_data.getString("surnom"));
-            setAnniv(json_data.getString("anniv"));
-            setAge(json_data.getString("age"));
+            item.nom = json_data.getString("nom");
+            item.prenom = json_data.getString("prenom");
+            item.pseudo = json_data.getString("surnom");
+            item.anniv = json_data.getString("anniv");
+            item.age = json_data.getString("age");
         } catch (JSONException e) {
             Log.e("log_tag", "Error parsing data " + e.toString());
         }
-    }
 
-    public ArrayList<String> toArrayList() {
-        ArrayList<String> result = new ArrayList<>();
-
-        result.add(nom);
-        result.add(prenom);
-        result.add(pseudo);
-        result.add(anniv);
-        result.add(age);
-
-        return result;
+        return item;
     }
 }

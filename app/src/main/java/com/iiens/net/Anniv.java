@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.iiens.net.adapter.AnnivItemsAdapter;
+import com.iiens.net.database.AnnivDb;
 import com.iiens.net.model.AnnivItem;
 
 import org.json.JSONArray;
@@ -34,6 +35,7 @@ public class Anniv extends Fragment implements DisplayFragment {
     private GlobalState global;
     private String apiKey;
     private ListView mListView;
+    private AnnivDb dal;
 
     @Override // this method is only called once for this fragment
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class Anniv extends Fragment implements DisplayFragment {
         context = getActivity();
         global = (GlobalState) context.getApplicationContext();
         apiKey = getResources().getString(R.string.apiie_anniv);
+        dal = new AnnivDb(context);
 
         // retain this fragment
         setRetainInstance(true);
@@ -66,15 +69,13 @@ public class Anniv extends Fragment implements DisplayFragment {
         return id == R.id.action_settings || super.onOptionsItemSelected(item);
     }
 
-    private ArrayList<AnnivItem> jArrayToArrayList(JSONArray jArray) {
+    private ArrayList<AnnivItem> getItemList(JSONArray jArray) {
         ArrayList<AnnivItem> annivItemsList = new ArrayList<>();
 
         try {
             for (int i = 0; i < jArray.length(); i++) {
-                JSONObject json_data = jArray.getJSONObject(i);
-                AnnivItem annivItem = new AnnivItem();
-                annivItem.mapJsonObject(json_data);
-                annivItemsList.add(annivItem);
+                JSONObject data = jArray.getJSONObject(i);
+                annivItemsList.add(AnnivItem.load(data));
             }
         } catch (JSONException e) {
             Log.e(TAG, "Error parsing data " + e.toString());
@@ -93,9 +94,6 @@ public class Anniv extends Fragment implements DisplayFragment {
                 new ApiRequest(context, this, apiKey).execute();
                 preferences.edit().putBoolean(getResources().getString(R.string.bool_anniv_update_name), false).apply();
                 Log.e(TAG, "from web with save");
-            } else if (bundle.containsKey(apiKey)) { // If data already loaded, retrieve it
-                displayResult(view, new JSONArray(bundle.getString(apiKey)));
-                Log.e(TAG, "from bundle");
             } else if (global.fileExists(apiKey)) { // If a file with the data exists, load from it
                 displayResult(view, new JSONArray(global.readFromInternalStorage(apiKey)));
                 Log.e(TAG, "from file");
@@ -106,15 +104,17 @@ public class Anniv extends Fragment implements DisplayFragment {
                 Toast.makeText(global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
-            Log.e(TAG, e.toString());
+            e.printStackTrace();
         }
     }
 
     public void displayResult(View view, JSONArray jResult) {
+        ArrayList<AnnivItem> annivItemArrayList = getItemList(jResult);
+
         // If the request was successful, save the items to save data consumption and populate listview
         if (jResult != null && jResult.length() > 0) {
-            global.getBundle().putString(apiKey, jResult.toString());
-            mListView.setAdapter(new AnnivItemsAdapter(context, jArrayToArrayList(jResult)));
+//            global.getBundle().putString(apiKey, jResult.toString());
+            mListView.setAdapter(new AnnivItemsAdapter(context, getItemList(jResult) ));
         }
 
         if (view != null) view.findViewById(R.id.progress_spinner).setVisibility(View.GONE);
@@ -123,6 +123,10 @@ public class Anniv extends Fragment implements DisplayFragment {
         if (getView() != null) {
             getView().findViewById(R.id.progress_spinner).setVisibility(View.GONE);
             getView().setAlpha((float) 1);
+        }
+
+        for(AnnivItem item : annivItemArrayList) {
+            dal.createItem(item);
         }
     }
 

@@ -106,9 +106,9 @@ class ApiRequest extends AsyncTask<Void, Void, JSONArray> {
             }
         }
 
-        if (preferences.getBoolean(context.getString(R.string.bool_storage_option_name), false) && resJArray != null) { // If the user accepts to store data
-            global.writeToInternalStorage(resJArray.toString(), type);
-        }
+//        if (preferences.getBoolean(context.getString(R.string.bool_storage_option_name), false) && resJArray != null) { // If the user accepts to store data
+//            global.writeToInternalStorage(resJArray.toString(), type);
+//        }
 
         return resJArray;
     }

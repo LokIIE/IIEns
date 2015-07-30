@@ -55,18 +55,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Commande sql pour la création de la table anniv
     private static final String CREATE_ANNIV =
-            "create table " + TABLE_ANNIVERSAIRES
+            "CREATE TABLE IF NOT EXISTS " + TABLE_ANNIVERSAIRES
                     + "(" + ANNIV_ID + " integer primary key autoincrement, "
-                    + ANNIV_NOM + " text not null "
-                    + ANNIV_PRENOM + " text not null "
-                    + ANNIV_SURNOM + " text null "
-                    + ANNIV_AGE + " integer not null "
+                    + ANNIV_NOM + " text not null, "
+                    + ANNIV_PRENOM + " text not null, "
+                    + ANNIV_SURNOM + " text null, "
+                    + ANNIV_AGE + " integer not null, "
                     + ANNIV_DATE + " datetime not null"
                     + ");";
 
     // Commande sql pour la création de la table edt
     private static final String CREATE_EDT =
-            "create table " + TABLE_EDT
+            "CREATE TABLE IF NOT EXISTS " + TABLE_EDT
                     + "(" + EDT_ID + " integer primary key autoincrement, "
                     + EDT_TITRE + " text not null, "
                     + EDT_TYPE + " text not null, "
@@ -81,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Commande sql pour la création de la table news
     private static final String CREATE_NEWS =
-            "create table " + TABLE_NEWS
+            "CREATE TABLE IF NOT EXISTS " + TABLE_NEWS
                     + "(" + NEWS_ID + " integer primary key autoincrement, "
                     + NEWS_TITRE + " text not null, "
                     + NEWS_CONTENU + " text not null, "
@@ -92,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Commande sql pour la création de la table twitter
 //    private static final String CREATE_TWITTER =
-//            "create table " + TABLE_TWITTER
+//            "CREATE TABLE IF NOT EXISTS " + TABLE_TWITTER
 //                    + "(" + TWITTER_ID + " integer primary key autoincrement, "
 //                    + TWITTER_USERNAME + " text not null, "
 //                    + TWITTER_NOM + " text not null, "
