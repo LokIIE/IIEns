@@ -106,11 +106,6 @@ public class EdtResult extends FragmentActivity {
         try {
             if (bundle.containsKey("edtJArrayResult")) {
                 jResult = new JSONArray(bundle.getString("edtJArrayResult"));
-            } else if (preferences.getBoolean("storage_option", false)
-                    && requestWeek.equals(preferences.getString("edtWeekSaved", "0"))
-                    && getFileStreamPath(filename).exists()) {
-
-                jResult = new JSONArray(global.readFromInternalStorage(filename));
             } else if (global.isOnline()) {
                 EdtGetRequest getEdt = new EdtGetRequest(this, requestWeek, requestPromo);
                 try {
@@ -123,10 +118,6 @@ public class EdtResult extends FragmentActivity {
 
                 // Save the results if storage is activated
                 String currentWeek = String.valueOf(Calendar.getInstance(Locale.FRENCH).get(Calendar.WEEK_OF_YEAR));
-                if (preferences.getBoolean("storage_option", false) && requestWeek.equals(currentWeek)) {
-                    global.writeToInternalStorage(jResult.toString(), filename);
-                    preferences.edit().putString("edtWeekSaved", currentWeek).apply();
-                }
             } else {
                 Toast.makeText(global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG).show();
             }

@@ -68,9 +68,6 @@ public class TwitterNews extends Fragment implements DisplayFragment {
             } else if (global.isOnline()) {
                 new ApiRequest(getActivity(), this, apiKey).execute();
                 Log.e(TAG, "from web");
-            } else if (preferences.getBoolean(getResources().getString(R.string.bool_storage_option_name), false) && global.fileExists(apiKey)) {
-                displayResult(view, new JSONArray(global.readFromInternalStorage(apiKey)));
-                Log.e(TAG, "from file");
             } else {
                 Toast.makeText(global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG).show();
             }

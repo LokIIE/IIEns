@@ -185,8 +185,7 @@ public class Edt extends Fragment implements DisplayFragment {
                 String week = String.valueOf(currentWeekNumber - 2 + mEdtWeekSpinner.getSelectedItemPosition());
 
                 // make the request
-                if (global.isOnline()
-                        || (week.equals(String.valueOf(currentWeekNumber)) && global.fileExists(getResources().getString(R.string.apiie_edt) + promo))) {
+                if (global.isOnline()) {
                     Intent i = new Intent(getActivity(), EdtResult.class);
                     bundle.putString("week", week);
                     bundle.putString("promo", promo);

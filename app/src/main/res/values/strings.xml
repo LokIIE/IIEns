@@ -9,7 +9,6 @@
     <string name="no">Non</string>
 
     <!-- Settings boolean values names -->
-    <string name="bool_storage_option_name">storage_option</string>
     <string name="bool_news_update_name">news_new_update</string>
     <string name="bool_anniv_update_name">anniv_new_update</string>
 

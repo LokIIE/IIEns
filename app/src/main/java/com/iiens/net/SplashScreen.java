@@ -19,8 +19,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import java.io.File;
-
 /**
  * SplashScreen
  * Animation lors du lancement de l'appli et création d'un compte sur GCM pour les notifications
@@ -61,11 +59,6 @@ public class SplashScreen extends Activity {
         super.onCreate(savedInstanceState);
         global = (GlobalState) getApplicationContext();
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if (!preferences.getBoolean(getResources().getString(R.string.bool_storage_option_name), false)) {
-            for (File file : getFilesDir().listFiles()) {
-                file.delete();
-            }
-        }
 
         setContentView(R.layout.activity_splash);
     }

@@ -86,9 +86,6 @@ public class News extends Fragment implements DisplayFragment {
             } else if (bundle.containsKey(apiKey)) { // If data already loaded, retrieve it
                 displayResult(view, new JSONArray(bundle.getString(apiKey)));
                 Log.e(TAG, "from bundle");
-            } else if (global.fileExists(apiKey)) { // If a file with the data exists, load from it
-                displayResult(view, new JSONArray(global.readFromInternalStorage(apiKey)));
-                Log.e(TAG, "from file");
             } else if (global.isOnline()) { // If the file doesn't exist yet (first launch for example), get the data and create file
                 new ApiRequest(context, this, apiKey).execute();
                 Log.e(TAG, "from web");
