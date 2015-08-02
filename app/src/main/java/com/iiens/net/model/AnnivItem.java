@@ -11,11 +11,20 @@ import org.json.JSONObject;
  */
 
 public class AnnivItem {
+    private long id = 0;
     private String nom = "";
     private String prenom = "";
     private String pseudo = "";
     private String anniv = "";
     private String age = "";
+
+    public void setId (long id) {
+        this.id = id;
+    }
+
+    public long getId() {
+        return id;
+    }
 
     public String getNom() {
         return nom;

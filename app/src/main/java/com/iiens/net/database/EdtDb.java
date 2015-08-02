@@ -6,8 +6,6 @@ import android.database.Cursor;
 
 import com.iiens.net.model.EdtItem;
 
-import java.util.ArrayList;
-
 /**
  * Gestion de la table Edt dans la bdd
  */
@@ -26,37 +24,44 @@ public class EdtDb extends BaseDb<EdtItem>{
             DatabaseHelper.EDT_DUREE};
 
     public EdtDb(Context context) {
-        super(context);
+        super(context, DatabaseHelper.TABLE_EDT);
+        super.tableColumns = allColumns;
     }
 
-    public EdtItem cursorToItem(Cursor cursor) {
+    public EdtItem readCursor(Cursor cursor) {
         EdtItem item = new EdtItem();
         return item;
     }
 
-    public ArrayList<EdtItem> getAllItems() {
-        ArrayList<EdtItem> itemArrayList = new ArrayList<>();
+    @Override
+    public long findItemId(EdtItem item) {
+        return 0;
+    }
 
-        // Exécution de la requête
+    @Override
+    public EdtItem getItem(long id) {
+        return null;
+    }
+
+    @Override
+    public EdtItem getFirstItem() {
+        EdtItem result = null;
+
         Cursor cursor = database.query(
-                DatabaseHelper.TABLE_EDT,
-                allColumns,
+                DatabaseHelper.TABLE_ANNIVERSAIRES,
+                tableColumns,
                 null,
                 null,
                 null,
                 null,
-                null);
+                DatabaseHelper.ANNIV_ID + " ASC");
 
-        // Lecture des résultats
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            EdtItem item = cursorToItem(cursor);
-            itemArrayList.add(item);
-            cursor.moveToNext();
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            result = readCursor(cursor);
         }
-        cursor.close();
 
-        return itemArrayList;
+        return result;
     }
 
     public boolean createItem(EdtItem item) {
@@ -83,11 +88,21 @@ public class EdtDb extends BaseDb<EdtItem>{
         return insertId > 0;
     }
 
+    @Override
+    public boolean updateItem(EdtItem item) {
+        return false;
+    }
+
     public void deleteItem(long id) {
         database.delete(
                 DatabaseHelper.TABLE_EDT,
                 DatabaseHelper.EDT_ID + " = " + id,
                 null);
         System.out.println("Item avec l'id: " + id + " supprimé de la table " + DatabaseHelper.TABLE_EDT);
+    }
+
+    @Override
+    public void cleanTable() {
+
     }
 }

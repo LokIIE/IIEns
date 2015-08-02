@@ -61,8 +61,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + ANNIV_PRENOM + " text not null, "
                     + ANNIV_SURNOM + " text null, "
                     + ANNIV_AGE + " integer not null, "
-                    + ANNIV_DATE + " datetime not null"
+                    + ANNIV_DATE + " text not null"
                     + ");";
+
+    // Commande sql pour la création d'un trigger sur la table anniv
+    private static final String CREATE_TRIGGER_ANNIV =
+            "CREATE TRIGGER IF NOT EXISTS remove_anniversaires_passes "
+                    + "BEFORE INSERT ON " + TABLE_ANNIVERSAIRES
+                    + " BEGIN"
+                        + " DELETE FROM " + TABLE_ANNIVERSAIRES
+                        + " WHERE " + ANNIV_ID + " IN ("
+                        + " SELECT " + ANNIV_ID + " FROM " + TABLE_ANNIVERSAIRES
+                        + " WHERE " + ANNIV_DATE + " < GETDATE());"
+                    + " END";
 
     // Commande sql pour la création de la table edt
     private static final String CREATE_EDT =
@@ -73,7 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + EDT_HOTE + " text not null, "
                     + EDT_GROUPE + " text null, "
                     + EDT_LIEU + " integer not null, "
-                    + EDT_DATE + " datetime not null, "
+                    + EDT_DATE + " text not null, "
                     + EDT_HEURE_DEBUT + " hour not null, "
                     + EDT_HEURE_FIN + " hour not null, "
                     + EDT_DUREE + " integer not null"
@@ -86,8 +97,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + NEWS_TITRE + " text not null, "
                     + NEWS_CONTENU + " text not null, "
                     + NEWS_AUTEUR + " text null, "
-                    + NEWS_DATE_EVENT + " datetime not null, "
-                    + NEWS_DATE_PUBLICATION + " datetime not null"
+                    + NEWS_DATE_EVENT + " text not null, "
+                    + NEWS_DATE_PUBLICATION + " text not null"
                     + ");";
 
     // Commande sql pour la création de la table twitter
@@ -96,7 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //                    + "(" + TWITTER_ID + " integer primary key autoincrement, "
 //                    + TWITTER_USERNAME + " text not null, "
 //                    + TWITTER_NOM + " text not null, "
-//                    + TWITTER_DATE_PUBLICATION + " datetime not null, "
+//                    + TWITTER_DATE_PUBLICATION + " text not null, "
 //                    + TWITTER_CONTENU + " text not null, "
 //                    + TWITTER_PROFILE_PICTURE_URL + " text not null"
 //                    + ");";
@@ -108,6 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(CREATE_ANNIV);
+        // database.execSQL(CREATE_TRIGGER_ANNIV);
         database.execSQL(CREATE_EDT);
         database.execSQL(CREATE_NEWS);
 //        database.execSQL(CREATE_TWITTER);

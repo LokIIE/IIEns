@@ -2,9 +2,7 @@ package com.iiens.net;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -21,7 +19,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Anniv
@@ -55,7 +57,7 @@ public class Anniv extends Fragment implements DisplayFragment {
         View view = inflater.inflate(R.layout.listview, container, false);
         mListView = (ListView) view.findViewById(R.id.listview);
 
-        generateView(view);
+        this.generateView(view);
 
         return view;
     }
@@ -85,19 +87,23 @@ public class Anniv extends Fragment implements DisplayFragment {
     }
 
     void generateView(View view) {
-        Bundle bundle = global.getBundle();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-
+        AnnivItem firstItem = dal.getFirstItem();
         // Get the JSON data for this fragment
         try {
-            if (preferences.getBoolean(getResources().getString(R.string.bool_anniv_update_name), false) && global.isOnline()) { // If there is an update available and we are connected to the internet
-                new ApiRequest(context, this, apiKey).execute();
-                preferences.edit().putBoolean(getResources().getString(R.string.bool_anniv_update_name), false).apply();
-                Log.e(TAG, "from web with save");
-            } else if (global.fileExists(apiKey)) { // If a file with the data exists, load from it
-                displayResult(view, new JSONArray(global.readFromInternalStorage(apiKey)));
-                Log.e(TAG, "from file");
-            } else if (global.isOnline()) { // If the file doesn't exist yet (first launch for example), get the data and create file
+            if (firstItem != null) {
+                DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM", Locale.FRENCH);
+                Date firstDate = dateFormat.parse(firstItem.getAnniv());
+                Date today = new Date();
+                if (firstDate.compareTo(today) < 0) {
+                    mListView.setAdapter(new AnnivItemsAdapter(context, dal.getAllItems()));
+                } else {
+                    dal.deleteAll();
+                    if (global.isOnline()) {
+                        new ApiRequest(context, this, apiKey).execute();
+                    }
+                }
+            } else if (global.isOnline()) {
+                // Création de la table anniversaires et insertion des résultats avant affichage
                 new ApiRequest(context, this, apiKey).execute();
                 Log.e(TAG, "from web");
             } else { // If no connection or data stored, can't do anything
@@ -131,6 +137,7 @@ public class Anniv extends Fragment implements DisplayFragment {
     }
 
     public void refreshDisplay() {
+        dal.deleteAll();
         new ApiRequest(getActivity(), this, apiKey).execute();
 
         // In case the refresh button was triggered, starts an "animation"

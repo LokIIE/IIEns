@@ -40,9 +40,6 @@ class ApiRequest extends AsyncTask<Void, Void, JSONArray> {
     private DisplayFragment caller;
     private String type = "";
 
-    public ApiRequest() {
-    }
-
     @SuppressWarnings("static-access")
     public ApiRequest(Context context, DisplayFragment frag, String type) {
         this.context = context;
@@ -106,10 +103,6 @@ class ApiRequest extends AsyncTask<Void, Void, JSONArray> {
             }
         }
 
-//        if (preferences.getBoolean(context.getString(R.string.bool_storage_option_name), false) && resJArray != null) { // If the user accepts to store data
-//            global.writeToInternalStorage(resJArray.toString(), type);
-//        }
-
         return resJArray;
     }
 
@@ -144,7 +137,6 @@ class ApiRequest extends AsyncTask<Void, Void, JSONArray> {
         return twitterJArray;
     }
 
-    @Override
     protected JSONArray doInBackground(Void... voids) {
         return getJSONResult(type);
     }

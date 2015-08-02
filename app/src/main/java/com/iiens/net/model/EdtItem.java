@@ -11,6 +11,7 @@ import org.json.JSONObject;
  */
 
 public class EdtItem {
+    private long id;
     private String jour; // "2014-12-31"
     private String titre; // Intitulé de l'événement
     private String auteur; // Cours : prof assurant le cours / Club : club faisant l'evenement
@@ -19,6 +20,12 @@ public class EdtItem {
     private String type; // Cours : T.D., T.P., Cours_td, controle, Cours / Club : assoce
     private String groupe; // Cours : groupe du cours si defini / Club : vide
     private String lieu; // Lieu du cours ou de l'evenement
+
+    public long getId() { return id; }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getJour() {
         return jour;

@@ -5,20 +5,25 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 /**
  * NewsItem
  * Modèle d'une news
  */
 
 public class NewsItem {
+    public long id;
     private String title = "";
     private String contenu = "";
     private String auteur = "";
     private String datePublication = "";
 
     public NewsItem() {
+    }
+
+    public long getId() { return id; }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitre() {
@@ -56,8 +61,7 @@ public class NewsItem {
     public void fromJsonObject(JSONObject json_data) {
         try {
             setTitle(json_data.getString("titre"));
-            String contenu = json_data.getString("contenu");
-            setContenu(toHtml(contenu));
+            setContenu(toHtml(json_data.getString("contenu")));
             setAuteur(json_data.getString("par"));
             setDatePublication(json_data.getString("calDate"));
         } catch (JSONException e) {
@@ -107,25 +111,5 @@ public class NewsItem {
         formatContenu = formatContenu.replaceAll(pUrl, "<a href =\"" + "$2" + "\">Ici</a>");
 
         return formatContenu;
-    }
-
-    public ArrayList<String> toStringArrayList() {
-        ArrayList<String> result = new ArrayList<>();
-
-        result.add(title);
-        result.add(contenu);
-        result.add(auteur);
-        result.add(datePublication);
-
-        return result;
-    }
-
-    public NewsItem fromStringArrayList(ArrayList<String> sArrayList) {
-        this.title = sArrayList.get(0);
-        this.contenu = sArrayList.get(1);
-        this.auteur = sArrayList.get(2);
-        this.datePublication = sArrayList.get(3);
-
-        return this;
     }
 }

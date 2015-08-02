@@ -22,12 +22,17 @@ public class NewsDb extends BaseDb<NewsItem> {
             DatabaseHelper.NEWS_DATE_PUBLICATION};
 
     public NewsDb(Context context) {
-        super(context);
+        super(context, DatabaseHelper.TABLE_NEWS);
     }
 
-    public NewsItem cursorToItem(Cursor cursor) {
+    public NewsItem readCursor(Cursor cursor) {
         NewsItem item = new NewsItem();
         return item;
+    }
+
+    @Override
+    public long findItemId(NewsItem item) {
+        return 0;
     }
 
     public ArrayList<NewsItem> getAllItems() {
@@ -45,7 +50,7 @@ public class NewsDb extends BaseDb<NewsItem> {
         // Lecture des résultats
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            NewsItem item = cursorToItem(cursor);
+            NewsItem item = readCursor(cursor);
             itemArrayList.add(item);
             cursor.moveToNext();
         }
@@ -54,6 +59,33 @@ public class NewsDb extends BaseDb<NewsItem> {
         return itemArrayList;
     }
 
+    @Override
+    public NewsItem getItem(long id) {
+        return null;
+    }
+
+    @Override
+    public NewsItem getFirstItem() {
+        NewsItem result = null;
+
+        Cursor cursor = database.query(
+                DatabaseHelper.TABLE_ANNIVERSAIRES,
+                allColumns,
+                null,
+                null,
+                null,
+                null,
+                DatabaseHelper.ANNIV_ID + " ASC");
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            result = readCursor(cursor);
+        }
+
+        return result;
+    }
+
+    @Override
     public boolean createItem(NewsItem item) {
         ContentValues values = new ContentValues();
         long insertId;
@@ -72,11 +104,13 @@ public class NewsDb extends BaseDb<NewsItem> {
         return insertId > 0;
     }
 
-    public void deleteItem(long id) {
-        database.delete(
-                DatabaseHelper.TABLE_NEWS,
-                DatabaseHelper.NEWS_ID + " = " + id,
-                null);
-        System.out.println("Item avec l'id: " + id + " supprimé de la table " + DatabaseHelper.TABLE_NEWS);
+    @Override
+    public boolean updateItem(NewsItem item) {
+        return false;
+    }
+
+    @Override
+    public void cleanTable() {
+
     }
 }

@@ -19,7 +19,7 @@ import android.widget.ListView;
  * Gère le fonctionnement de la barre d'action
  */
 
-public class ActionBar extends Activity {
+public class Main extends Activity {
 
     private static int currentFragment = 0;
     private static boolean inSettings = false;
@@ -137,7 +137,7 @@ public class ActionBar extends Activity {
                 if (currentFragment != position) { // if an other item is selected in the menu, open it
                     currentFragment = position;
                     openFragment(position);
-                } else if (inSettings && currentFragment == position) { // If we get want to get back from settings to the current fragment
+                } else if (inSettings) { // If we get want to get back from settings to the current fragment
                     backFromSettings();
                 }
             }

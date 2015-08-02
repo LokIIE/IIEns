@@ -6,14 +6,12 @@ import android.database.Cursor;
 
 import com.iiens.net.model.AnnivItem;
 
-import java.util.ArrayList;
-
 /**
- * Gestion de la table Anniv dans la bdd
+ * Gestion de la table des anniversaires dans la bdd
  */
 public class AnnivDb extends BaseDb<AnnivItem>{
     // Champs de la base de données
-    private String[] allColumns = {
+    protected String[] allColumns = {
             DatabaseHelper.ANNIV_ID,
             DatabaseHelper.ANNIV_NOM,
             DatabaseHelper.ANNIV_PRENOM,
@@ -22,39 +20,53 @@ public class AnnivDb extends BaseDb<AnnivItem>{
             DatabaseHelper.ANNIV_DATE};
 
     public AnnivDb(Context context) {
-        super(context);
+        super(context, DatabaseHelper.TABLE_ANNIVERSAIRES);
+        super.tableColumns = allColumns;
     }
 
-    public AnnivItem cursorToItem(Cursor cursor) {
+    @Override
+    public AnnivItem readCursor(Cursor cursor) {
         AnnivItem item = new AnnivItem();
+        item.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.ANNIV_ID)));
+        item.setNom(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ANNIV_NOM)));
+        item.setPrenom(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ANNIV_PRENOM)));
+        item.setPseudo(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ANNIV_SURNOM)));
+        item.setAge(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ANNIV_AGE)));
+        item.setAnniv(cursor.getString(cursor.getColumnIndex(DatabaseHelper.ANNIV_DATE)));
         return item;
     }
 
-    public ArrayList<AnnivItem> getAllItems() {
-        ArrayList<AnnivItem> itemArrayList = new ArrayList<>();
+    @Override
+    public long findItemId(AnnivItem item) {
+        long result = 0;
 
-        // Exécution de la requête
+        // Connexion à la base de données et exécution de la requête
+        this.open();
         Cursor cursor = database.query(
-                DatabaseHelper.TABLE_ANNIVERSAIRES,
-                allColumns,
-                null,
+                tableName,
+                tableColumns,
+                DatabaseHelper.ANNIV_NOM + " = " + item.getNom()
+                + " AND " + DatabaseHelper.ANNIV_PRENOM + " = " + item.getPrenom()
+                + " AND " + DatabaseHelper.ANNIV_SURNOM + " = " + item.getPseudo(),
                 null,
                 null,
                 null,
                 null);
 
         // Lecture des résultats
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            AnnivItem item = cursorToItem(cursor);
-            itemArrayList.add(item);
-            cursor.moveToNext();
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            result = readCursor(cursor).getId();
         }
-        cursor.close();
 
-        return itemArrayList;
+        // Fermeture de la connexion
+        cursor.close();
+        this.close();
+
+        return result;
     }
 
+    @Override
     public boolean createItem(AnnivItem item) {
         ContentValues values = new ContentValues();
         long insertId;
@@ -66,22 +78,32 @@ public class AnnivDb extends BaseDb<AnnivItem>{
         values.put(DatabaseHelper.ANNIV_AGE, item.getAge());
         values.put(DatabaseHelper.ANNIV_DATE, item.getAnniv());
 
-        // Insertion en base
-        open();
+        // Connexion à la base de données et exécution de la requête
+        this.open();
         insertId = database.insert(
-                DatabaseHelper.TABLE_ANNIVERSAIRES,
+                tableName,
                 null,
                 values);
-        close();
+
+        // Fermeture de la connexion
+        this.close();
 
         return insertId > 0;
     }
 
-    public void deleteItem(long id) {
+    @Override
+    public boolean updateItem(AnnivItem item) {
+        return false;
+    }
+
+    @Override
+    public void cleanTable() {
+        open();
         database.delete(
-                DatabaseHelper.TABLE_ANNIVERSAIRES,
-                DatabaseHelper.ANNIV_ID + " = " + id,
+                tableName,
+                DatabaseHelper.ANNIV_DATE + " < DATE(CURRENT_DATE)",
                 null);
-        System.out.println("Item avec l'id: " + id + " supprimé de la table " + DatabaseHelper.TABLE_ANNIVERSAIRES);
+        close();
+        System.out.println("Table: " + tableName + " nettoyée");
     }
 }
