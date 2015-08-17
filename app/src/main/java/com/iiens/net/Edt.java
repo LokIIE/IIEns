@@ -1,6 +1,5 @@
 package com.iiens.net;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +26,7 @@ import java.util.Locale;
  * Fragment faisant office de formulaire pour la recherche dans l'edt
  */
 
-public class Edt extends Fragment implements DisplayFragment {
+public class Edt extends BaseFragment {
 
     public String TAG = getClass().getName();
     private GlobalState global;
@@ -232,9 +231,11 @@ public class Edt extends Fragment implements DisplayFragment {
         outState.putAll(bundle);
     }
 
-    public void displayResult(View view, JSONArray result) {
-    }
+    protected void generateView(View view) {}
 
-    public void refreshDisplay() {
-    }
+    @Override
+    protected void displayResult(View view, JSONArray result) {}
+
+    @Override
+    protected void refreshDisplay() {}
 }

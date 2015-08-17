@@ -1,15 +1,10 @@
 package com.iiens.net;
 
-import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.iiens.net.adapter.NewsItemsAdapter;
@@ -26,34 +21,14 @@ import java.util.ArrayList;
  * Fragment permettant l'affichage des news publiées
  */
 
-public class News extends Fragment implements DisplayFragment {
+public class News extends BaseFragment {
 
     private final String TAG = getClass().getName();
-    private Context context;
-    private GlobalState global;
-    private String apiKey;
-    private ListView mListView;
 
     @Override // this method is only called once for this fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getActivity();
-        global = (GlobalState) context.getApplicationContext();
-        apiKey = getResources().getString(R.string.apiie_news);
-
-        // retain this fragment
-        setRetainInstance(true);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.listview, container, false);
-        mListView = (ListView) view.findViewById(R.id.listview);
-
-        generateView(view);
-
-        return view;
+        this.apiKey = getResources().getString(R.string.apiie_news);
     }
 
     private ArrayList<NewsItem> jArrayToArrayList(JSONArray jArray) {
@@ -73,8 +48,7 @@ public class News extends Fragment implements DisplayFragment {
         return newsItemsList;
     }
 
-    void generateView(View view) {
-        Bundle bundle = global.getBundle();
+    protected void generateView(View view) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         // Get the JSON data for this fragment
@@ -83,11 +57,8 @@ public class News extends Fragment implements DisplayFragment {
                 //new ApiRequest(getActivity(), this, apiKey).execute();
                 preferences.edit().putBoolean(getResources().getString(R.string.bool_news_update_name), false).apply();
                 Log.e(TAG, "from web with save");
-            } else if (bundle.containsKey(apiKey)) { // If data already loaded, retrieve it
-                displayResult(view, new JSONArray(bundle.getString(apiKey)));
-                Log.e(TAG, "from bundle");
             } else if (global.isOnline()) { // If the file doesn't exist yet (first launch for example), get the data and create file
-                //new ApiRequest(context, this, apiKey).execute();
+                this.apiRequest(view);
                 Log.e(TAG, "from web");
             } else { // If no connection or data stored, can't do anything
                 Toast.makeText(global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG).show();
@@ -110,15 +81,6 @@ public class News extends Fragment implements DisplayFragment {
         if (getView() != null) {
             getView().findViewById(R.id.progress_spinner).setVisibility(View.GONE);
             getView().setAlpha((float) 1);
-        }
-    }
-
-    public void refreshDisplay() {
-        //new ApiRequest(getActivity(), this, apiKey).execute();
-
-        // In case the refresh button was triggered, starts an "animation"
-        if (getView() != null) {
-            getView().setAlpha((float) 0.3);
         }
     }
 }

@@ -1,15 +1,10 @@
 package com.iiens.net;
 
-import android.app.Fragment;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.iiens.net.adapter.TwitterItemsAdapter;
@@ -26,47 +21,23 @@ import java.util.ArrayList;
  * Fragment affichant les tweets concernant l'école
  */
 
-public class TwitterNews extends Fragment implements DisplayFragment {
+public class TwitterNews extends BaseFragment {
 
     private final String TAG = getClass().getName();
-    private Context context;
-    private GlobalState global;
-    private String apiKey;
-    private ListView mListView;
 
     @Override // this method is only called once for this fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getActivity();
-        global = (GlobalState) context.getApplicationContext();
-        apiKey = getResources().getString(R.string.apiie_twitter);
-
-        // retain this fragment
-        setRetainInstance(true);
+        this.apiKey = getResources().getString(R.string.apiie_twitter);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.listview, container, false);
-        mListView = (ListView) view.findViewById(R.id.listview);
-
-        generateView(view);
-
-        return view;
-    }
-
-    void generateView(View view) {
-        Bundle bundle = global.getBundle();
+    protected void generateView(View view) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         // Get the JSON data for this fragment
         try {
-            if (bundle.containsKey(apiKey)) {
-                displayResult(view, new JSONArray(bundle.getString(apiKey)));
-                Log.e(TAG, "from bundle");
-            } else if (global.isOnline()) {
-                //new ApiRequest(getActivity(), this, apiKey).execute();
+            if (global.isOnline()) {
+                this.apiRequest(view);
                 Log.e(TAG, "from web");
             } else {
                 Toast.makeText(global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG).show();

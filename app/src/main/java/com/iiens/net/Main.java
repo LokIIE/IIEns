@@ -25,10 +25,10 @@ public class Main extends Activity {
     private static boolean inSettings = false;
     // The Fragments corresponding to the items, based on the position in the list
     private final Fragment[] menuFragments = new Fragment[]{
-//            new News(),
+            new News(),
 //            new Edt(),
-            new Anniv()//,
-//            new TwitterNews(),
+            new Anniv(),
+            new TwitterNews(),
     };
     // Items shown on the menu, each corresponds to a Fragment
     private String[] menuItems;
@@ -91,7 +91,7 @@ public class Main extends Activity {
                     if (inSettings) return true;
                 {
                     // Start refreshing the display
-                    ((DisplayFragment) menuFragments[currentFragment]).refreshDisplay();
+                    ((BaseFragment) menuFragments[currentFragment]).refreshDisplay();
                 }
                 return true;
                 default:
