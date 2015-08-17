@@ -80,14 +80,14 @@ public class News extends Fragment implements DisplayFragment {
         // Get the JSON data for this fragment
         try {
             if (preferences.getBoolean(getResources().getString(R.string.bool_news_update_name), false) && global.isOnline()) { // If there is an update available and we are connected to the internet
-                new ApiRequest(getActivity(), this, apiKey).execute();
+                //new ApiRequest(getActivity(), this, apiKey).execute();
                 preferences.edit().putBoolean(getResources().getString(R.string.bool_news_update_name), false).apply();
                 Log.e(TAG, "from web with save");
             } else if (bundle.containsKey(apiKey)) { // If data already loaded, retrieve it
                 displayResult(view, new JSONArray(bundle.getString(apiKey)));
                 Log.e(TAG, "from bundle");
             } else if (global.isOnline()) { // If the file doesn't exist yet (first launch for example), get the data and create file
-                new ApiRequest(context, this, apiKey).execute();
+                //new ApiRequest(context, this, apiKey).execute();
                 Log.e(TAG, "from web");
             } else { // If no connection or data stored, can't do anything
                 Toast.makeText(global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG).show();
@@ -114,7 +114,7 @@ public class News extends Fragment implements DisplayFragment {
     }
 
     public void refreshDisplay() {
-        new ApiRequest(getActivity(), this, apiKey).execute();
+        //new ApiRequest(getActivity(), this, apiKey).execute();
 
         // In case the refresh button was triggered, starts an "animation"
         if (getView() != null) {

@@ -66,7 +66,7 @@ public class TwitterNews extends Fragment implements DisplayFragment {
                 displayResult(view, new JSONArray(bundle.getString(apiKey)));
                 Log.e(TAG, "from bundle");
             } else if (global.isOnline()) {
-                new ApiRequest(getActivity(), this, apiKey).execute();
+                //new ApiRequest(getActivity(), this, apiKey).execute();
                 Log.e(TAG, "from web");
             } else {
                 Toast.makeText(global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG).show();
@@ -74,6 +74,37 @@ public class TwitterNews extends Fragment implements DisplayFragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static JSONArray twitterJSONArray(String result) {
+        JSONArray twitterJArray = null;
+        try {
+            twitterJArray = (JSONArray) new JSONObject(result).get("statuses");
+            for (int i = 0; i < twitterJArray.length(); i++) {
+                JSONObject json_data = twitterJArray.getJSONObject(i);
+                JSONArray res_array = new JSONArray();
+                JSONObject res_tweet = new JSONObject();
+                JSONObject res_user = new JSONObject();
+                res_tweet.put("created_at", json_data.getString("created_at"));
+                res_tweet.put("id", json_data.getString("id"));
+                res_tweet.put("text", json_data.getString("text"));
+                res_tweet.put("in_reply_to_screen_name", json_data.getString("in_reply_to_screen_name"));
+                res_tweet.put("in_reply_to_status_id", json_data.getString("in_reply_to_status_id"));
+                res_tweet.put("in_reply_to_user_id", json_data.getString("in_reply_to_user_id"));
+                res_user.put("screen_name", json_data.getJSONObject("user").getString("screen_name"));
+                res_user.put("name", json_data.getJSONObject("user").getString("name"));
+                res_user.put("profile_image_url", json_data.getJSONObject("user").getString("profile_image_url"));
+
+                res_array.put(res_tweet).put(res_user);
+
+                twitterJArray.put(i, res_array);
+
+            }
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        }
+
+        return twitterJArray;
     }
 
     // Called after the data was retrieved
@@ -122,7 +153,7 @@ public class TwitterNews extends Fragment implements DisplayFragment {
     }
 
     public void refreshDisplay() {
-        new ApiRequest(getActivity(), this, apiKey).execute();
+        //new ApiRequest(getActivity(), this, apiKey).execute();
 
         // In case the refresh button was triggered, starts an "animation"
         if (getView() != null) {

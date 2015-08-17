@@ -13,8 +13,9 @@
     <string name="bool_anniv_update_name">anniv_new_update</string>
 
     <!-- Toast messages -->
-    <string name="arise_unavailable">Arise, on a un problème :(</string>
+    <string name="arise_unavailable">Arise = 404 not found</string>
     <string name="internet_unavailable">Connexion à internet requise</string>
+    <string name="api_error">Données introuvables</string>
     <string name="google_play_services_unavailable">Google Play Services requis pour recevoir des notifications</string>
     <string name="cal_all_sync_done">Synchronisation avec votre agenda terminée</string>
     <string name="cal_week_sync_done">La semaine a été ajoutée à votre agenda</string>
@@ -38,7 +39,6 @@
     <string name="notif_events_title">Events aujourd\'hui</string>
 
     <!-- Values for activity_preferences.xml -->
-    <string name="pref_storage_title">Stockage local</string>
     <string name="pref_notifs_txt">Affichage des notifications</string>
     <string name="pref_anniv_title">Pour les anniversaires du jour</string>
     <string name="pref_anniv_key">anniv_notif</string>

@@ -93,7 +93,7 @@ public abstract class BaseDb<T> {
         this.close();
 
         return result;
-    }
+    };
 
     /**
      * Récupération du premier objet de la table
@@ -155,7 +155,7 @@ public abstract class BaseDb<T> {
         this.close();
 
         return result;
-    }
+    };
 
     /**
      * Récupération des tous les items d'une table
@@ -165,7 +165,7 @@ public abstract class BaseDb<T> {
         ArrayList<T> itemArrayList = new ArrayList<>();
 
         // Connexion à la base de données et exécution de la requête
-        open();
+        this.open();
         Cursor cursor = database.query(
                 tableName,
                 tableColumns,
@@ -185,7 +185,7 @@ public abstract class BaseDb<T> {
 
         // Fermeture de la connexion
         cursor.close();
-        close();
+        this.close();
 
         return itemArrayList;
     }

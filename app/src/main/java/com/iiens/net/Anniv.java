@@ -11,6 +11,12 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
 import com.iiens.net.adapter.AnnivItemsAdapter;
 import com.iiens.net.database.AnnivDb;
 import com.iiens.net.model.AnnivItem;
@@ -35,7 +41,6 @@ public class Anniv extends Fragment implements DisplayFragment {
     private final String TAG = getClass().getName();
     private Context context;
     private GlobalState global;
-    private String apiKey;
     private ListView mListView;
     private AnnivDb dal;
 
@@ -44,7 +49,6 @@ public class Anniv extends Fragment implements DisplayFragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
         global = (GlobalState) context.getApplicationContext();
-        apiKey = getResources().getString(R.string.apiie_anniv);
         dal = new AnnivDb(context);
 
         // retain this fragment
@@ -86,7 +90,7 @@ public class Anniv extends Fragment implements DisplayFragment {
         return annivItemsList;
     }
 
-    void generateView(View view) {
+    void generateView(final View view) {
         AnnivItem firstItem = dal.getFirstItem();
         // Get the JSON data for this fragment
         try {
@@ -99,12 +103,11 @@ public class Anniv extends Fragment implements DisplayFragment {
                 } else {
                     dal.deleteAll();
                     if (global.isOnline()) {
-                        new ApiRequest(context, this, apiKey).execute();
+                        this.apiRequest(view);
                     }
                 }
             } else if (global.isOnline()) {
-                // Création de la table anniversaires et insertion des résultats avant affichage
-                new ApiRequest(context, this, apiKey).execute();
+                this.apiRequest(view);
                 Log.e(TAG, "from web");
             } else { // If no connection or data stored, can't do anything
                 Toast.makeText(global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG).show();
@@ -114,16 +117,29 @@ public class Anniv extends Fragment implements DisplayFragment {
         }
     }
 
+    private void apiRequest(final View view) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, global.getScriptURL() + "/anniv", null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                displayResult(view, response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(global, R.string.api_error, Toast.LENGTH_LONG).show();
+            }
+        });
+        queue.add(request);
+    }
+
     public void displayResult(View view, JSONArray jResult) {
         ArrayList<AnnivItem> annivItemArrayList = getItemList(jResult);
 
         // If the request was successful, save the items to save data consumption and populate listview
         if (jResult != null && jResult.length() > 0) {
-//            global.getBundle().putString(apiKey, jResult.toString());
             mListView.setAdapter(new AnnivItemsAdapter(context, getItemList(jResult) ));
         }
-
-        if (view != null) view.findViewById(R.id.progress_spinner).setVisibility(View.GONE);
 
         // In case the refresh button was triggered, stop the "animation"
         if (getView() != null) {
@@ -138,7 +154,7 @@ public class Anniv extends Fragment implements DisplayFragment {
 
     public void refreshDisplay() {
         dal.deleteAll();
-        new ApiRequest(getActivity(), this, apiKey).execute();
+        //new ApiRequest(getActivity(), this, apiKey).execute();
 
         // In case the refresh button was triggered, starts an "animation"
         if (getView() != null) {
