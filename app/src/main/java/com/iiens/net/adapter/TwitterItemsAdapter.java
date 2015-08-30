@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.iiens.net.GlobalState;
 import com.iiens.net.R;
-import com.iiens.net.TweetImgAsyncTask;
 import com.iiens.net.model.Tweet;
 
 import java.io.File;
@@ -26,7 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 /**
  * TwitterItemsAdapter
@@ -68,14 +66,14 @@ public class TwitterItemsAdapter extends ArrayAdapter<Tweet> {
             if (profileImg != null) {
                 avatar.setImageBitmap(profileImg);
             } else if (((GlobalState) context.getApplicationContext()).isOnline()) {
-                try {
-                    profileImg = new TweetImgAsyncTask(imgURL).execute().get();
-                    saveToInternalStorage(profileImg, imgName);
-                    if (profileImg != null) avatar.setImageBitmap(profileImg);
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            } else avatar.setImageDrawable(context.getResources().getDrawable(R.drawable.notfound));
+//                try {
+//                    //profileImg = new TweetImgAsyncTask(imgURL).execute().get();
+//                    saveToInternalStorage(profileImg, imgName);
+//                    if (profileImg != null) avatar.setImageBitmap(profileImg);
+//                } catch (InterruptedException | ExecutionException e) {
+//                    e.printStackTrace();
+//                }
+            } else avatar.setImageDrawable(context.getResources().getDrawable(R.drawable.notfound, null));
 
             if (username != null) {
                 username.setText(tweet.getUser().getName());

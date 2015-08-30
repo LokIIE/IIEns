@@ -9,13 +9,9 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.iiens.net.R;
 import com.iiens.net.SplashScreen;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
 
@@ -68,17 +64,10 @@ public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
 
 
     private void sendRegistrationIdToBackend() {
-        URI url = null;
+        URL url;
         try {
-            url = new URI(ctx.getResources().getString(R.string.url_gcm_register) + regid);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpGet request = new HttpGet();
-        request.setURI(url);
-        try {
-            httpclient.execute(request);
+            url = new URL(ctx.getResources().getString(R.string.url_gcm_register) + regid);
+            HttpURLConnection httpclient = (HttpURLConnection) url.openConnection();
         } catch (IOException e) {
             e.printStackTrace();
         }

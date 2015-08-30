@@ -1,20 +1,10 @@
 package com.iiens.net.model;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 /**
  * TwitterUser
- * Modèle d'un utilisateur de Twitter
+ * Modï¿½le d'un utilisateur de Twitter
  */
 
 public class TwitterUser {
@@ -43,15 +33,15 @@ public class TwitterUser {
     }
 
     public void setProfileImage(String profileImageUrl) {
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpResponse response;
-        try {
-            URI imageURI = new URI(profileImageUrl);
-            response = httpclient.execute(new HttpGet(imageURI));
-            this.profileImage = BitmapFactory.decodeStream(response.getEntity().getContent());
-        } catch (URISyntaxException | IOException e) {
-            e.printStackTrace();
-        }
+//        HttpClient httpclient = new DefaultHttpClient();
+//        HttpResponse response;
+//        try {
+//            URI imageURI = new URI(profileImageUrl);
+//            response = httpclient.execute(new HttpGet(imageURI));
+//            this.profileImage = BitmapFactory.decodeStream(response.getEntity().getContent());
+//        } catch (URISyntaxException | IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public String getScreenName() {
