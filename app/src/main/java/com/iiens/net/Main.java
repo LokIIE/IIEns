@@ -154,7 +154,7 @@ public class Main extends Activity {
 
         //if (fragmentManager.beginTransaction().replace(R.id.content, fragmentManager.findFragmentByTag(menuItems[position])).commit() >= 0) {}
         if ((frag = menuFragments[position]) != null) {
-            fragmentManager.beginTransaction().replace(R.id.content, frag, menuItems[position]).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_container, frag, menuItems[position]).commit();
             getActionBar().setTitle(menuItems[position]);
         }
         drawerLayout.closeDrawer(menu);
@@ -177,7 +177,7 @@ public class Main extends Activity {
 
     private void goToSettings() {
         inSettings = true;
-        fragmentManager.beginTransaction().replace(R.id.content, new Settings()).addToBackStack(null).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_container, new Settings()).addToBackStack(null).commit();
     }
 
 }

@@ -1,7 +1,6 @@
 package com.iiens.net.adapter;
 
 import android.content.Context;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,13 +52,10 @@ public class NewsItemsAdapter extends BaseAdapter {
         }
 
         TextView newsTitle = (TextView) convertView.findViewById(R.id.news_title);
-        TextView newsDescription = (TextView) convertView.findViewById(R.id.news_description);
 
         NewsItem newsItem = newsItemsList.get(position);
 
         if (newsItem.getTitre().length() > 0) newsTitle.setText(newsItem.getTitre());
-        if (newsItem.getContenu().length() > 0)
-            newsDescription.setText(Html.fromHtml(newsItem.getContenu()));
         int logoId = context.getResources().getIdentifier(newsItem.getAuteur(), "drawable", "com.iiens.net");
         if (logoId != 0) newsTitle.setCompoundDrawablesWithIntrinsicBounds(logoId, 0, 0, 0);
 
