@@ -10,7 +10,7 @@ import com.iiens.net.model.AnnivItem;
  * Gestion de la table des anniversaires dans la bdd
  */
 public class AnnivDb extends BaseDb<AnnivItem>{
-    // Champs de la base de données
+    // Champs de la base de donnees
     protected String[] allColumns = {
             DatabaseHelper.ANNIV_ID,
             DatabaseHelper.ANNIV_NOM,
@@ -40,20 +40,20 @@ public class AnnivDb extends BaseDb<AnnivItem>{
     public long findItemId(AnnivItem item) {
         long result = 0;
 
-        // Connexion à la base de données et exécution de la requête
+        // Connexion a la base de donnees et execution de la requete
         this.open();
         Cursor cursor = database.query(
                 tableName,
                 tableColumns,
-                DatabaseHelper.ANNIV_NOM + " = " + item.getNom()
-                + " AND " + DatabaseHelper.ANNIV_PRENOM + " = " + item.getPrenom()
-                + " AND " + DatabaseHelper.ANNIV_SURNOM + " = " + item.getPseudo(),
+                DatabaseHelper.ANNIV_NOM + " = '" + item.getNom() + "'"
+                + " AND " + DatabaseHelper.ANNIV_PRENOM + " = '" + item.getPrenom() + "'"
+                + " AND " + DatabaseHelper.ANNIV_SURNOM + " = '" + item.getPseudo() + "'",
                 null,
                 null,
                 null,
                 null);
 
-        // Lecture des résultats
+        // Lecture des resultats
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             result = readCursor(cursor).getId();
@@ -71,14 +71,14 @@ public class AnnivDb extends BaseDb<AnnivItem>{
         ContentValues values = new ContentValues();
         long insertId;
 
-        // Paramètres requête
+        // ParamÃ¨tres requÃªte
         values.put(DatabaseHelper.ANNIV_NOM, item.getNom());
         values.put(DatabaseHelper.ANNIV_PRENOM, item.getPrenom());
         values.put(DatabaseHelper.ANNIV_SURNOM, item.getPseudo());
         values.put(DatabaseHelper.ANNIV_AGE, item.getAge());
         values.put(DatabaseHelper.ANNIV_DATE, item.getAnniv());
 
-        // Connexion à la base de données et exécution de la requête
+        // Connexion Ã  la base de donnÃ©es et exÃ©cution de la requÃªte
         this.open();
         insertId = database.insert(
                 tableName,
@@ -104,6 +104,6 @@ public class AnnivDb extends BaseDb<AnnivItem>{
                 DatabaseHelper.ANNIV_DATE + " < DATE(CURRENT_DATE)",
                 null);
         close();
-        System.out.println("Table: " + tableName + " nettoyée");
+        System.out.println("Table: " + tableName + " nettoyÃ©e");
     }
 }

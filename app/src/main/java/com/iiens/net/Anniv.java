@@ -52,22 +52,21 @@ public class Anniv extends BaseFragment {
     }
 
     protected void generateView(final View view) {
+        view.findViewById(R.id.progress_spinner).setVisibility(View.VISIBLE);
+
         AnnivItem firstItem = dal.getFirstItem();
         // Get the JSON data for this fragment
         try {
-            if (firstItem != null) {
-                DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM", Locale.FRENCH);
-                Date firstDate = dateFormat.parse(firstItem.getAnniv());
-                Date today = new Date();
-                if (firstDate.compareTo(today) < 0) {
-                    mListView.setAdapter(new AnnivItemsAdapter(context, dal.getAllItems()));
-                } else {
-                    dal.deleteAll();
-                    if (global.isOnline()) {
-                        this.apiRequest(view);
-                    }
-                }
-            } else if (global.isOnline()) {
+            DateFormat dateFormat = new SimpleDateFormat("EEEE dd MMMM", Locale.FRENCH);
+            Date firstDate = (firstItem != null) ?
+                    dateFormat.parse(firstItem.getAnniv()) : null;
+            Date today = new Date();
+            // Aucun anniversaire n'est passé
+            if (firstItem != null && firstDate != null && firstDate.compareTo(today) < 0) {
+                mListView.setAdapter(new AnnivItemsAdapter(context, dal.getAllItems()));
+                view.findViewById(R.id.progress_spinner).setVisibility(View.GONE);
+            } else if (global.isOnline()) { // Mise à jour des données
+                dal.deleteAll();
                 this.apiRequest(view);
                 Log.e(TAG, "from web");
             } else { // If no connection or data stored, can't do anything
@@ -86,14 +85,13 @@ public class Anniv extends BaseFragment {
             mListView.setAdapter(new AnnivItemsAdapter(context, getItemList(jResult) ));
         }
 
-        // In case the refresh button was triggered, stop the "animation"
-        if (getView() != null) {
-            getView().findViewById(R.id.progress_spinner).setVisibility(View.GONE);
-            getView().setAlpha((float) 1);
-        }
+        view.findViewById(R.id.progress_spinner).setVisibility(View.GONE);
+        view.setAlpha((float) 1);
 
         for(AnnivItem item : annivItemArrayList) {
-            dal.createItem(item);
+            if (dal.findItemId(item) == 0) {
+                dal.createItem(item);
+            }
         }
     }
 }
