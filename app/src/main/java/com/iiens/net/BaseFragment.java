@@ -35,7 +35,6 @@ abstract class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
         this.context = getActivity();
         this.global = (GlobalState) context.getApplicationContext();
-
         // retain this fragment
         setRetainInstance(true);
     }

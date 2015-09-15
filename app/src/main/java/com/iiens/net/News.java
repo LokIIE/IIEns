@@ -66,12 +66,14 @@ public class News extends BaseFragment {
     }
 
     protected void generateView(View view) {
+        view.findViewById(R.id.progress_spinner).setVisibility(View.VISIBLE);
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         // Get the JSON data for this fragment
         try {
             if (preferences.getBoolean(getResources().getString(R.string.bool_news_update_name), false) && global.isOnline()) { // If there is an update available and we are connected to the internet
-                //new ApiRequest(getActivity(), this, apiKey).execute();
+                //this.apiRequest(view);
                 preferences.edit().putBoolean(getResources().getString(R.string.bool_news_update_name), false).apply();
                 Log.e(TAG, "from web with save");
             } else if (global.isOnline()) { // If the file doesn't exist yet (first launch for example), get the data and create file
@@ -94,7 +96,7 @@ public class News extends BaseFragment {
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                    FragmentManager fm =  getActivity().getFragmentManager();
+                    FragmentManager fm = getActivity().getFragmentManager();
 
                     // Création fragment détail
                     NewsDetail newsDetail = new NewsDetail();
