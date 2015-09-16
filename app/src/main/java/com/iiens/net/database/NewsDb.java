@@ -27,17 +27,51 @@ public class NewsDb extends BaseDb<NewsItem> {
 
     public NewsItem readCursor(Cursor cursor) {
         NewsItem item = new NewsItem();
+        item.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.NEWS_ID)));
+        item.setTitre(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NEWS_TITRE)));
+        item.setAuteur(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NEWS_AUTEUR)));
+        item.setContenu(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NEWS_CONTENU)));
+        item.setDatePublication(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NEWS_DATE_PUBLICATION)));
+        item.setDateEvent(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NEWS_DATE_EVENT)));
         return item;
     }
 
     @Override
     public long findItemId(NewsItem item) {
-        return 0;
+        long result = 0;
+
+        // Connexion a la base de donnees et execution de la requete
+        this.open();
+        // TODO : erreur dans l'echappement des caractères
+        Cursor cursor = database.query(
+                tableName,
+                tableColumns,
+                DatabaseHelper.NEWS_TITRE + " = '" + item.getTitre() + "'"
+                        + " AND " + DatabaseHelper.NEWS_AUTEUR + " = '" + item.getAuteur() + "'"
+                        + " AND " + DatabaseHelper.NEWS_DATE_PUBLICATION + " = '" + item.getDatePublication() + "'",
+                null,
+                null,
+                null,
+                null);
+
+        // Lecture des resultats
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            result = readCursor(cursor).getId();
+        }
+
+        // Fermeture de la connexion
+        cursor.close();
+        this.close();
+
+        return result;
     }
 
     public ArrayList<NewsItem> getAllItems() {
         ArrayList<NewsItem> itemArrayList = new ArrayList<>();
 
+        // Connexion a la base de donnees et execution de la requete
+        this.open();
         // Exécution de la requête
         Cursor cursor = database.query(DatabaseHelper.TABLE_NEWS,
                 allColumns,
@@ -54,7 +88,9 @@ public class NewsDb extends BaseDb<NewsItem> {
             itemArrayList.add(item);
             cursor.moveToNext();
         }
+        // Fermeture de la connexion
         cursor.close();
+        this.close();
 
         return itemArrayList;
     }
@@ -68,19 +104,25 @@ public class NewsDb extends BaseDb<NewsItem> {
     public NewsItem getFirstItem() {
         NewsItem result = null;
 
+        // Connexion a la base de donnees et execution de la requete
+        this.open();
+        // Exécution de la requête
         Cursor cursor = database.query(
-                DatabaseHelper.TABLE_ANNIVERSAIRES,
+                DatabaseHelper.TABLE_NEWS,
                 allColumns,
                 null,
                 null,
                 null,
                 null,
-                DatabaseHelper.ANNIV_ID + " ASC");
+                DatabaseHelper.NEWS_ID + " ASC");
 
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             result = readCursor(cursor);
         }
+        // Fermeture de la connexion
+        cursor.close();
+        this.close();
 
         return result;
     }
@@ -97,9 +139,13 @@ public class NewsDb extends BaseDb<NewsItem> {
         values.put(DatabaseHelper.NEWS_DATE_PUBLICATION, item.getDatePublication());
         values.put(DatabaseHelper.NEWS_DATE_EVENT, "");
 
+        // Connexion à la base de données et exécution de la requête
+        this.open();
         // Insertion en base
         insertId = database.insert(DatabaseHelper.TABLE_NEWS, null,
                 values);
+        // Fermeture de la connexion
+        this.close();
 
         return insertId > 0;
     }

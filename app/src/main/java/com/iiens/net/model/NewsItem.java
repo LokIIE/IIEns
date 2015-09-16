@@ -12,55 +12,40 @@ import org.json.JSONObject;
 
 public class NewsItem {
     public long id;
-    private String title = "";
+    private String titre = "";
     private String contenu = "";
     private String auteur = "";
     private String datePublication = "";
 
-    public NewsItem() {
-    }
+    public long getId() { return this.id; }
 
-    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    private String dateEvent = "";
 
-    public String getTitre() {
-        return title;
-    }
+    public String getTitre() { return this.titre; }
 
-    void setTitle(String title) {
-        this.title = title;
-    }
+    public void setTitre(String titre) { this.titre = titre; }
 
-    public String getContenu() {
-        return contenu;
-    }
+    public String getContenu() { return this.contenu; }
 
-    void setContenu(String contenu) {
-        this.contenu = contenu;
-    }
+    public void setContenu(String contenu) { this.contenu = contenu; }
 
-    public String getAuteur() {
-        return auteur;
-    }
+    public String getAuteur() { return this.auteur; }
 
-    void setAuteur(String auteur) {
-        this.auteur = auteur;
-    }
+    public void setAuteur(String auteur) { this.auteur = auteur; }
 
-    public String getDatePublication() {
-        return datePublication;
-    }
+    public String getDatePublication() { return this.datePublication; }
 
-    void setDatePublication(String datePublication) {
-        this.datePublication = datePublication;
-    }
+    public void setDatePublication(String datePublication) { this.datePublication = datePublication; }
+
+    public String getDateEvent() { return this.dateEvent; }
+
+    public void setDateEvent(String dateEvent) { this.dateEvent = dateEvent; }
 
     public void fromJsonObject(JSONObject json_data) {
         try {
-            setTitle(json_data.getString("titre"));
+            setTitre(json_data.getString("titre"));
             setContenu(toHtml(json_data.getString("contenu")));
             setAuteur(json_data.getString("par"));
             setDatePublication(json_data.getString("calDate"));
@@ -73,7 +58,7 @@ public class NewsItem {
         JSONObject jObject = new JSONObject();
 
         try {
-            jObject.put("titre", title);
+            jObject.put("titre", titre);
             jObject.put("contenu", contenu);
             jObject.put("par", auteur);
             jObject.put("calDate", datePublication);

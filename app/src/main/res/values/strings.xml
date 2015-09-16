@@ -32,7 +32,7 @@
     <string name="open_menu">Ouverture du menu</string>
     <string name="close_menu">Fermeture du menu</string>
 
-    <!-- Notifications title -->
+    <!-- Notifications titre -->
     <string name="notif_news_title">News</string>
     <string name="notif_partiels_title">Attention partiels !</string>
     <string name="notif_anniv_title">Anniversaires du jour</string>
@@ -66,7 +66,7 @@
     </string-array>
 
     <!-- News fragment values -->
-    <string name="news_title">No title</string>
+    <string name="news_title">No titre</string>
     <string name="news_description">No content</string>
     <string name="title_activity_google_play_services">GooglePlayServicesActivity</string>
 
