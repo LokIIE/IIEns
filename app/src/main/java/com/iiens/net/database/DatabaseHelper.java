@@ -11,7 +11,7 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     /* Table anniversaires */
-    public static final String TABLE_ANNIVERSAIRES = "anniversaires";
+    public static final String TABLE_ANNIVERSAIRES = "ANNIVERSAIRES";
     public static final String ANNIV_ID = "_id";
     public static final String ANNIV_NOM = "nom";
     public static final String ANNIV_PRENOM = "prenom";
@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String ANNIV_DATE = "date";
 
     /* Table emploi du temps */
-    public static final String TABLE_EDT = "anniversaires";
+    public static final String TABLE_EDT = "EDT";
     public static final String EDT_ID = "_id";
     public static final String EDT_TITRE = "titre";
     public static final String EDT_TYPE = "type";
@@ -32,8 +32,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String EDT_DUREE = "duree";
     public static final String EDT_DATE = "date";
 
+    /* Table formulaire emploi du temps */
+    public static final String TABLE_FORM_EDT = "FORM_EDT";
+    public static final String FORM_ID = "_id";
+    public static final String FORM_CODE = "code";
+    public static final String FORM_LABEL = "label";
+    public static final String FORM_ANNEE = "annee";
+    public static final String FORM_OPTION_GROUP = "option_group";
+    public static final String FORM_OPTION_NUM = "option_num";
+    public static final String FORM_IS_LANGUE = "isLangue";
+    public static final String FORM_IS_COMMUNICATION = "isCommunication";
+
     /* Table news */
-    public static final String TABLE_NEWS = "news";
+    public static final String TABLE_NEWS = "NEWS";
     public static final String NEWS_ID = "_id";
     public static final String NEWS_TITRE = "titre";
     public static final String NEWS_CONTENU = "contenu";
@@ -90,6 +101,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + EDT_DUREE + " integer not null"
                     + ");";
 
+    // Commande sql pour la création de la table edt
+    private static final String CREATE_FORM_EDT =
+            "CREATE TABLE IF NOT EXISTS " + TABLE_FORM_EDT
+                    + "(" + FORM_ID + " integer primary key autoincrement, "
+                    + FORM_CODE + " text not null, "
+                    + FORM_LABEL + " text not null, "
+                    + FORM_ANNEE + " text null, "
+                    + FORM_OPTION_GROUP + " integer null, "
+                    + FORM_OPTION_NUM + " integer null, "
+                    + FORM_IS_LANGUE + " boolean not null, "
+                    + FORM_IS_COMMUNICATION + " boolean not null"
+                    + ");";
+
     // Commande sql pour la création de la table news
     private static final String CREATE_NEWS =
             "CREATE TABLE IF NOT EXISTS " + TABLE_NEWS
@@ -120,6 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(CREATE_ANNIV);
         // database.execSQL(CREATE_TRIGGER_ANNIV);
+        database.execSQL(CREATE_FORM_EDT);
         database.execSQL(CREATE_EDT);
         database.execSQL(CREATE_NEWS);
 //        database.execSQL(CREATE_TWITTER);
@@ -131,6 +156,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ANNIVERSAIRES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FORM_EDT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS);
 //        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TWITTER);

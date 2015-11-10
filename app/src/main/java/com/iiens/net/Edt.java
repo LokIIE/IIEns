@@ -13,6 +13,8 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.iiens.net.database.EdtDb;
+
 import org.json.JSONArray;
 
 import java.text.SimpleDateFormat;
@@ -38,10 +40,12 @@ public class Edt extends BaseFragment {
     private String[][] options2a;
     private String[][] options3a;
     private Bundle bundle;
+    private EdtDb dal;
 
     @Override // this method is only called once for this fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dal = new EdtDb(context);
         global = (GlobalState) getActivity().getApplicationContext();
         bundle = global.getBundle();
         options2a = new String[][]{{},
