@@ -26,9 +26,9 @@ public class Main extends Activity {
     // The Fragments corresponding to the items, based on the position in the list
     private final Fragment[] menuFragments = new Fragment[]{
             new News(),
-//            new Edt(),
+            new Edt(),
             new Anniv(),
-            new TwitterNews(),
+            new TwitterNews()
     };
     // Items shown on the menu, each corresponds to a Fragment
     private String[] menuItems;
