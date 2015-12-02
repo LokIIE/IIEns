@@ -8,13 +8,12 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+
 import java.util.concurrent.ExecutionException;
+
+import io.fabric.sdk.android.Fabric;
 
 public class GlobalState extends Application {
 
@@ -30,12 +29,17 @@ public class GlobalState extends Application {
     }
 
     public String getScriptURL() {
-        return resources.getString(R.string.url_script);
+        return resources.getString(R.string.url_apiie);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(
+                getString(R.string.tw_key),
+                getString(R.string.tw_secret));
+        Fabric.with(this, new Twitter(authConfig));
 
         resources = getResources();
 
@@ -55,49 +59,5 @@ public class GlobalState extends Application {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return (netInfo != null && netInfo.isConnectedOrConnecting());
-    }
-
-    void writeToInternalStorage(String content, String fileName) {
-        String eol = System.getProperty("line.separator");
-        BufferedWriter writer = null;
-        try {
-            writer =
-                    new BufferedWriter(new OutputStreamWriter(this.openFileOutput(fileName,
-                            Context.MODE_PRIVATE)));
-            writer.write(content + eol);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (writer != null) try {
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    String readFromInternalStorage(String fileName) {
-        String eol = System.getProperty("line.separator");
-        BufferedReader input;
-        String fileString = "";
-        try {
-            input = new BufferedReader(new InputStreamReader(this.openFileInput(fileName)));
-            String line;
-            StringBuilder buffer = new StringBuilder();
-            while ((line = input.readLine()) != null) {
-                buffer.append(line).append(eol);
-            }
-            input.close();
-            fileString = buffer.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return fileString;
-    }
-
-    boolean fileExists(String fname) {
-        File file = this.getFileStreamPath(fname);
-        return file.exists();
     }
 }
