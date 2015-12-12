@@ -28,6 +28,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@null"
-        android:text="@string/edt_newsearch_button" />
+        android:text="@string/edtForm_newSearch" />
 
 </LinearLayout>

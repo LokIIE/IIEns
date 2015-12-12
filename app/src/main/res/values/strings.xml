@@ -70,4 +70,37 @@
     <string name="news_description">No content</string>
     <string name="title_activity_google_play_services">GooglePlayServicesActivity</string>
 
+
+    <!-- EdtForm values -->
+    <string name="edtForm_title">Formulaire de recherche</string>
+    <string name="edt_search_txt">Emploi du temps &#8230; </string>
+    <string name="edt_result_title">Résultats de la recherche</string>
+    <string name="edtForm_1A">1A</string>
+    <string name="edtForm_2A">2A</string>
+    <string name="edtForm_3A">3A</string>
+    <string name="edtForm_week">Semaine :</string>
+    <string name="edtForm_group">Groupes :</string>
+    <string name="edtForm_grpcomm">Groupe de comm\' :</string>
+    <string name="edtForm_langue">Langue :</string>
+    <string name="edtForm_search">Rechercher</string>
+    <string name="edtForm_waitResult">Recherche en cours &#8230;</string>
+    <string name="edtForm_newSearch">Nouvelle recherche</string>
+    <string name="edtForm_tc">Tronc commun</string>
+    <string name="edtForm_op1">Option 1</string>
+    <string name="edtForm_op2">Option 2</string>
+    <string name="edtForm_op3">Option 3</string>
+    <string name="edtForm_op4">Option 4</string>
+    <string name="edtForm_op5">Option 5</string>
+    <string name="edtForm_op6">Option 6</string>
+    <string name="edtForm_emptyOp">---</string>
+    <string name="edtForm_choseGroup">Choisis une promo patate</string>
+    <string name="edtForm_noResult">Rien cette semaine là</string>
+
+    <!-- EdtResult values -->
+    <string name="export_to_calendar_title">Exporter vers l\'agenda</string>
+    <string name="export_item_to_calendar_msg">Voulez-vous exporter cet évènement vers votre agenda personnel ?</string>
+    <string name="export_week_to_calendar_msg">Voulez-vous exporter cette semaine vers votre agenda personnel ? (Attention : export basé sur les résultats de la recherche)</string>
+    <string name="export_week_to_calendar_done">Semaine ajoutée à votre agenda</string>
+    <string name="export_week_to_calendar_chose_group">Choisissez votre groupe</string>
+
 </resources>

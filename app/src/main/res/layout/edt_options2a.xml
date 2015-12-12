@@ -20,14 +20,13 @@
             android:layout_gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/edt_option1" />
+            android:text="@string/edtForm_op1" />
 
         <Spinner
             android:id="@+id/edt_option1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:entries="@array/edt_options2A_1"
             android:padding="8dp" >
         </Spinner>
     </LinearLayout>
@@ -43,14 +42,13 @@
            android:layout_gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/edt_option2" />
+            android:text="@string/edtForm_op2" />
 
         <Spinner
             android:id="@+id/edt_option2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:entries="@array/edt_options2A_2"
             android:padding="8dp" >
         </Spinner>
     </LinearLayout>
@@ -66,14 +64,13 @@
             android:layout_gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/edt_option3" />
+            android:text="@string/edtForm_op3" />
 
         <Spinner
             android:id="@+id/edt_option3"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:entries="@array/edt_options2A_3"
             android:padding="8dp" >
         </Spinner>
     </LinearLayout>
@@ -89,14 +86,13 @@
             android:layout_gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/edt_option4" />
+            android:text="@string/edtForm_op4" />
 
         <Spinner
             android:id="@+id/edt_option4"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:entries="@array/edt_options2A_4"
             android:padding="8dp" >
         </Spinner>
     </LinearLayout>
@@ -112,14 +108,13 @@
             android:layout_gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/edt_option5" />
+            android:text="@string/edtForm_op5" />
 
         <Spinner
             android:id="@+id/edt_option5"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:entries="@array/edt_options2A_5"
             android:padding="8dp" >
         </Spinner>
     </LinearLayout>
@@ -135,14 +130,13 @@
             android:layout_gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/edt_option6" />
+            android:text="@string/edtForm_op6" />
 
         <Spinner
             android:id="@+id/edt_option6"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:entries="@array/edt_options2A_6"
             android:padding="8dp" >
         </Spinner>
     </LinearLayout>
@@ -158,14 +152,13 @@
             android:layout_gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:text="@string/edt_optiontc" />
+            android:text="@string/edtForm_tc" />
 
         <Spinner
-            android:id="@+id/edt_optiontc"
+            android:id="@+id/form_tc"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:entries="@array/edt_options2A_tc"
             android:padding="8dp" >
         </Spinner>
     </LinearLayout>

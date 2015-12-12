@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * G�re la cr�ation des tables de la base de donn�es
+ * Gère la création des tables de la base de données
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -33,15 +33,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String EDT_DATE = "date";
 
     /* Table formulaire emploi du temps */
-    public static final String TABLE_FORM_EDT = "FORM_EDT";
-    public static final String FORM_ID = "_id";
-    public static final String FORM_CODE = "code";
-    public static final String FORM_LABEL = "label";
-    public static final String FORM_ANNEE = "annee";
-    public static final String FORM_OPTION_GROUP = "option_group";
-    public static final String FORM_OPTION_NUM = "option_num";
-    public static final String FORM_IS_LANGUE = "isLangue";
-    public static final String FORM_IS_COMMUNICATION = "isCommunication";
+    public static final String TABLE_EDTFORM = "EDTFORM";
+    public static final String EDTFORM_ID = "_id";
+    public static final String EDTFORM_NAME = "nom";
+    public static final String EDTFORM_PROMO = "promo";
+
+    /* Table options de l'emploi du temps */
+    public static final String TABLE_EDTOPT = "EDTOPT";
+    public static final String EDTOPT_ID = "_id";
+    public static final String EDTOPT_NAME = "nom";
+    public static final String EDTOPT_CODE = "code";
+    public static final String FK_EDTFORM = "fk_edtForm";
 
     /* Table news */
     public static final String TABLE_NEWS = "NEWS";
@@ -55,7 +57,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "IIEns.db";
     private static final int DATABASE_VERSION = 1;
 
-    // Commande sql pour la cr�ation de la table anniv
+    // Commande sql pour la création de la table anniv
     private static final String CREATE_ANNIV =
             "CREATE TABLE IF NOT EXISTS " + TABLE_ANNIVERSAIRES
                     + "(" + ANNIV_ID + " integer primary key autoincrement, "
@@ -66,18 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + ANNIV_DATE + " text not null"
                     + ");";
 
-    // Commande sql pour la cr�ation d'un trigger sur la table anniv
-    private static final String CREATE_TRIGGER_ANNIV =
-            "CREATE TRIGGER IF NOT EXISTS remove_anniversaires_passes "
-                    + "BEFORE INSERT ON " + TABLE_ANNIVERSAIRES
-                    + " BEGIN"
-                        + " DELETE FROM " + TABLE_ANNIVERSAIRES
-                        + " WHERE " + ANNIV_ID + " IN ("
-                        + " SELECT " + ANNIV_ID + " FROM " + TABLE_ANNIVERSAIRES
-                        + " WHERE " + ANNIV_DATE + " < GETDATE());"
-                    + " END";
-
-    // Commande sql pour la cr�ation de la table edt
+    // Commande sql pour la création de la table edt
     private static final String CREATE_EDT =
             "CREATE TABLE IF NOT EXISTS " + TABLE_EDT
                     + "(" + EDT_ID + " integer primary key autoincrement, "
@@ -92,20 +83,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + EDT_DUREE + " integer not null"
                     + ");";
 
-    // Commande sql pour la cr�ation de la table edt
-    private static final String CREATE_FORM_EDT =
-            "CREATE TABLE IF NOT EXISTS " + TABLE_FORM_EDT
-                    + "(" + FORM_ID + " integer primary key autoincrement, "
-                    + FORM_CODE + " text not null, "
-                    + FORM_LABEL + " text not null, "
-                    + FORM_ANNEE + " text null, "
-                    + FORM_OPTION_GROUP + " integer null, "
-                    + FORM_OPTION_NUM + " integer null, "
-                    + FORM_IS_LANGUE + " boolean not null, "
-                    + FORM_IS_COMMUNICATION + " boolean not null"
+    // Commande sql pour la création de la table edtOpt
+    private static final String CREATE_EDTOPT =
+            "CREATE TABLE IF NOT EXISTS " + TABLE_EDTOPT
+                    + "(" + EDTOPT_ID + " integer primary key autoincrement, "
+                    + EDTOPT_NAME + " text not null, "
+                    + EDTOPT_CODE + " text not null, "
+                    + FK_EDTFORM + " integer not null"
                     + ");";
 
-    // Commande sql pour la cr�ation de la table news
+    // Commande sql pour la création de la table edtForm
+    private static final String CREATE_EDTFORM =
+            "CREATE TABLE IF NOT EXISTS " + TABLE_EDTFORM
+                    + "(" + EDTFORM_ID + " integer primary key autoincrement, "
+                    + EDTFORM_NAME + " text not null, "
+                    + EDTFORM_PROMO + " integer not null"
+                    + ");";
+
+    // Commande sql pour la création de la table news
     private static final String CREATE_NEWS =
             "CREATE TABLE IF NOT EXISTS " + TABLE_NEWS
                     + "(" + NEWS_ID + " integer primary key autoincrement, "
@@ -122,11 +117,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL(CREATE_ANNIV);
-        // database.execSQL(CREATE_TRIGGER_ANNIV);
-        database.execSQL(CREATE_FORM_EDT);
-        database.execSQL(CREATE_EDT);
-        database.execSQL(CREATE_NEWS);
+        createDb(database);
     }
 
     @Override
@@ -135,9 +126,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ANNIVERSAIRES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FORM_EDT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDTOPT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDTFORM);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS);
-        onCreate(db);
+        this.onCreate(db);
     }
+
+    public void createDb(SQLiteDatabase db) {
+        SQLiteDatabase database = (db == null) ? super.getWritableDatabase() : db;
+        database.execSQL(CREATE_ANNIV);
+        database.execSQL(CREATE_EDTFORM);
+        database.execSQL(CREATE_EDTOPT);
+        database.execSQL(CREATE_EDT);
+        database.execSQL(CREATE_NEWS);
+    }
+
 }

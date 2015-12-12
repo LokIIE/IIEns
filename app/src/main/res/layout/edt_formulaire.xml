@@ -15,7 +15,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="16dp"
-                android:text="@string/edt_formulaire"
+                android:text="@string/edtForm_title"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -44,19 +44,19 @@
                         android:id="@+id/chk_1A"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/chk_1A" />
+                        android:text="@string/edtForm_1A" />
 
                     <RadioButton
                         android:id="@+id/chk_2A"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/chk_2A" />
+                        android:text="@string/edtForm_2A" />
 
                     <RadioButton
                         android:id="@+id/chk_3A"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/chk_3A" />
+                        android:text="@string/edtForm_3A" />
                 </RadioGroup>
             </LinearLayout>
 
@@ -71,7 +71,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/edt_date_txt"
+                    android:text="@string/edtForm_week"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -95,14 +95,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="@string/edt_groupe_txt" />
+                    android:text="@string/edtForm_group" />
 
                 <Spinner
                     android:id="@+id/edt_groupe"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:entries="@array/edt_search_option_groupe"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp" />
             </LinearLayout>
@@ -121,14 +120,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="@string/edt_comm_txt" />
+                    android:text="@string/edtForm_grpcomm" />
 
                 <Spinner
                     android:id="@+id/edt_comm_spin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:entries="@array/edt_comm_grp"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp" />
             </LinearLayout>
@@ -147,14 +145,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="@string/edt_langue_txt" />
+                    android:text="@string/edtForm_langue" />
 
                 <Spinner
                     android:id="@+id/edt_lang_spin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:entries="@array/edt_langue"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp" />
             </LinearLayout>
@@ -175,7 +172,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|bottom"
                     android:background="@null"
-                    android:text="@string/edt_search_button" />
+                    android:text="@string/edtForm_search" />
             </LinearLayout>
         </LinearLayout>
 

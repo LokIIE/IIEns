@@ -113,7 +113,7 @@ public class EdtResult extends FragmentActivity {
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 } catch (NullPointerException e) {
-                    Toast.makeText(global, getResources().getString(R.string.edt_no_result), Toast.LENGTH_LONG).show();
+                    Toast.makeText(global, getResources().getString(R.string.edtForm_noResult), Toast.LENGTH_LONG).show();
                 }
 
                 // Save the results if storage is activated
@@ -126,7 +126,7 @@ public class EdtResult extends FragmentActivity {
         }
 
         if (jResult == null) { // If it is the holidays for example
-            Toast.makeText(global, getResources().getString(R.string.edt_no_result), Toast.LENGTH_LONG).show();
+            Toast.makeText(global, getResources().getString(R.string.edtForm_noResult), Toast.LENGTH_LONG).show();
             finish();
         } else {
             bundle.putString("edtJArrayResult", jResult.toString());
@@ -265,17 +265,17 @@ public class EdtResult extends FragmentActivity {
 
     // Ask the user to chose a group (we assume it is his group) to reduce the number of items to add to the agenda
     private void dialogAlertPickGroup(final String[] filtre) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle(getResources().getString(R.string.export_week_to_calendar_chose_group))
-                .setItems(R.array.edt_groups, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        filtre[0] = getResources().getStringArray(R.array.edt_groupes_raw)[which];
-                        exportWeekToCalendar(filtre);
-                    }
-                });
-        alertDialogBuilder.create().show();
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//        alertDialogBuilder.setTitle(getResources().getString(R.string.export_week_to_calendar_chose_group))
+//                .setItems(R.array.edt_groups, new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        // The 'which' argument contains the index position
+//                        // of the selected item
+//                        filtre[0] = getResources().getStringArray(R.array.edt_groupes_raw)[which];
+//                        exportWeekToCalendar(filtre);
+//                    }
+//                });
+//        alertDialogBuilder.create().show();
     }
 
     private boolean eventAlreadyExists(String title, long eventTBegin, long eventTEnd) {

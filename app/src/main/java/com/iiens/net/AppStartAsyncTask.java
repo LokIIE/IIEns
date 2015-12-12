@@ -2,9 +2,15 @@ package com.iiens.net;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.iiens.net.database.FormEdtDb;
+import com.iiens.net.database.DatabaseHelper;
+import com.iiens.net.database.EdtFormDb;
+import com.iiens.net.database.EdtOptDb;
+import com.iiens.net.model.EdtFormItem;
+import com.iiens.net.model.EdtOptItem;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -48,15 +54,11 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     /**
-     * Création de la bdd des options du formulaire de l'emploi du temps
+     * Synchronisation du formulaire de l'emploi du temps
      */
-    private void getFormEdtOptions() throws IOException {
-        FormEdtDb dal = new FormEdtDb(context);
-        int timeout = 5000;
-        String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_edtOptions);
-
+    private void syncEdtForm() throws IOException, JSONException {
+        String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_edtForm);
         BufferedReader reader = null;
-        StringBuilder stringBuilder;
 
         try
         {
@@ -66,23 +68,84 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
             // just want to do an HTTP GET here
             connection.setRequestMethod("GET");
 
-            // uncomment this if you want to write output to this url
-            //connection.setDoOutput(true);
-
-            // give it 15 seconds to respond
-            connection.setReadTimeout(15*1000);
+            // give it 5 seconds to respond
+            connection.setReadTimeout(5000);
             connection.connect();
 
             // read the output from the server
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            stringBuilder = new StringBuilder();
-
             String line;
+
+            // put each item in database
+            EdtFormDb dal = new EdtFormDb(context);
+
             while ((line = reader.readLine()) != null)
             {
-                stringBuilder.append(line).append("\n");
+                JSONArray jArray = new JSONArray(line);
+                for (int i = 0; i < jArray.length(); i++) {
+                    if (!dal.createItem(new EdtFormItem(i, jArray.getJSONObject(i)))) {
+                        break;
+                    }
+                }
             }
-            Log.d("TEST", stringBuilder.toString());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw e;
+        }
+        finally
+        {
+            // close the reader; this can throw an exception too, so
+            // wrap it in another try/catch block.
+            if (reader != null)
+            {
+                try
+                {
+                    reader.close();
+                }
+                catch (IOException ioe)
+                {
+                    ioe.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * Synchronisation des options de l'emploi du temps
+     */
+    private void syncEdtOptions() throws IOException, JSONException {
+        String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_edtOptions);
+        BufferedReader reader = null;
+
+        try
+        {
+            // create the HttpURLConnection
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+
+            // just want to do an HTTP GET here
+            connection.setRequestMethod("GET");
+
+            // give it 5 seconds to respond
+            connection.setReadTimeout(5000);
+            connection.connect();
+
+            // read the output from the server
+            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+            String line;
+
+            // put each item in database
+            EdtOptDb dal = new EdtOptDb(context);
+
+            while ((line = reader.readLine()) != null)
+            {
+                JSONArray jArray = new JSONArray(line);
+                for (int i = 0; i < jArray.length(); i++) {
+                    dal.createItem(new EdtOptItem(jArray.getJSONObject(i)));
+                }
+            }
         }
         catch (Exception e)
         {
@@ -111,7 +174,7 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
      * Récupère les logos des clubs et les stocke localement
      */
     private void getAllClubLogo() throws IOException {
-        FormEdtDb dal = new FormEdtDb(context);
+        EdtFormDb dal = new EdtFormDb(context);
         int timeout = 5000;
         String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_logos);
 
@@ -173,12 +236,18 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
 //        }
     }
 
+
+
     @Override
     protected Boolean doInBackground(Void... voids) {
         try {
-            getFormEdtOptions();
+            new DatabaseHelper(context).createDb(null);
+            if (true) {
+                syncEdtForm();
+                syncEdtOptions();
+            }
             //getAllClubLogo();
-        } catch (IOException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return isAriseOnline();

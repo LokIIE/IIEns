@@ -1,6 +1,5 @@
 package com.iiens.net;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,9 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.iiens.net.database.EdtDb;
+import com.iiens.net.database.EdtOptDb;
 
 import org.json.JSONArray;
 
@@ -37,34 +35,15 @@ public class Edt extends BaseFragment {
     private LinearLayout mComm, mLangue, mOpt2a, mOpt3a;
     private Spinner mEdtWeekSpinner, mGroupSpinner, mCommSpinner, mLangSpinner, mOptSpinner1, mOptSpinner2, mOptSpinner3, mOptSpinner4, mOptSpinner5, mOptSpinner6, mOptSpinnerTc;
     private int currentWeekNumber = 1;
-    private String[][] options2a;
-    private String[][] options3a;
     private Bundle bundle;
-    private EdtDb dal;
+    private EdtOptDb dal;
 
     @Override // this method is only called once for this fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dal = new EdtDb(context);
+        dal = new EdtOptDb(context);
         global = (GlobalState) getActivity().getApplicationContext();
         bundle = global.getBundle();
-        options2a = new String[][]{{},
-                getResources().getStringArray(R.array.edt_options2A_1_raw),
-                getResources().getStringArray(R.array.edt_options2A_2_raw),
-                getResources().getStringArray(R.array.edt_options2A_3_raw),
-                getResources().getStringArray(R.array.edt_options2A_4_raw),
-                getResources().getStringArray(R.array.edt_options2A_5_raw),
-                getResources().getStringArray(R.array.edt_options2A_6_raw),
-                getResources().getStringArray(R.array.edt_options2A_tc_raw),
-        };
-        options3a = new String[][]{{},
-                getResources().getStringArray(R.array.edt_options3A_1_raw),
-                getResources().getStringArray(R.array.edt_options3A_2_raw),
-                getResources().getStringArray(R.array.edt_options3A_3_raw),
-                getResources().getStringArray(R.array.edt_options3A_4_raw),
-                getResources().getStringArray(R.array.edt_options3A_5_raw),
-                getResources().getStringArray(R.array.edt_options3A_6_raw),
-        };
 
         // retain this fragment
         setRetainInstance(true);
@@ -79,16 +58,31 @@ public class Edt extends BaseFragment {
 
         // display weeks in spinner
         mEdtWeekSpinner = (Spinner) view.findViewById(R.id.edt_week);
-        mEdtWeekSpinner.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item, generateWeeks()));
+        mEdtWeekSpinner.setAdapter(new ArrayAdapter<>(
+                getActivity(),
+                android.R.layout.simple_spinner_dropdown_item,
+                generateWeeks()));
         mEdtWeekSpinner.setSelection(2);
+
 
         mOpt2a = (LinearLayout) view.findViewById(R.id.edt_options2A);
         mOpt3a = (LinearLayout) view.findViewById(R.id.edt_options3A);
         mComm = (LinearLayout) view.findViewById(R.id.edt_comm);
         mLangue = (LinearLayout) view.findViewById(R.id.edt_langue);
+
+        // Find spinners
         mGroupSpinner = (Spinner) view.findViewById(R.id.edt_groupe);
         mCommSpinner = (Spinner) view.findViewById(R.id.edt_comm_spin);
         mLangSpinner = (Spinner) view.findViewById(R.id.edt_lang_spin);
+        mOptSpinner1 = (Spinner) view.findViewById(R.id.edt_option1);
+        mOptSpinner2 = (Spinner) view.findViewById(R.id.edt_option2);
+        mOptSpinner3 = (Spinner) view.findViewById(R.id.edt_option3);
+        mOptSpinner4 = (Spinner) view.findViewById(R.id.edt_option4);
+        mOptSpinner5 = (Spinner) view.findViewById(R.id.edt_option5);
+        mOptSpinner6 = (Spinner) view.findViewById(R.id.edt_option6);
+        mOptSpinnerTc = (Spinner) view.findViewById(R.id.form_tc);
+
+        this.initializeSpinners();
 
         radioPromoGroup = (RadioGroup) view.findViewById(R.id.chk_promo);
         radio1A = (RadioButton) view.findViewById(R.id.chk_1A);
@@ -114,6 +108,7 @@ public class Edt extends BaseFragment {
                 mOpt3a.setVisibility(View.GONE);
                 mComm.setVisibility(View.VISIBLE);
                 mLangue.setVisibility(View.VISIBLE);
+                loadOptionSpinners2A();
             }
 
         });
@@ -125,6 +120,7 @@ public class Edt extends BaseFragment {
                 mOpt3a.setVisibility(View.VISIBLE);
                 mComm.setVisibility(View.GONE);
                 mLangue.setVisibility(View.GONE);
+                loadOptionSpinners3A();
             }
         });
 
@@ -132,72 +128,72 @@ public class Edt extends BaseFragment {
         view.findViewById(R.id.edt_search_button).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // get selected radio button from radioGroup
-                int selectedId = radioPromoGroup.getCheckedRadioButtonId();
-                if (!(selectedId > 0)) {
-                    Toast.makeText(global, R.string.edt_group_missing, Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                // find the radiobutton by returned id and set filter accordingly
-                String[][] optionsPromo = null;
-                String promo = "", option1 = "", option2 = "", option3 = "", option4 = "", option5 = "", option6 = "", optiontc = "";
-                LinearLayout promoOptsLayout = null;
-
-                String commGroup = "";
-                String langGroup = "";
-                if (selectedId == radio1A.getId()) {
-                    promo = "1";
-                    commGroup = getResources().getStringArray(R.array.edt_comm_grp_raw)[mCommSpinner.getSelectedItemPosition()];
-                    langGroup = getResources().getStringArray(R.array.edt_langue_raw)[mLangSpinner.getSelectedItemPosition()];
-                } else if (selectedId == radio2A.getId()) {
-                    promo = "2";
-                    promoOptsLayout = mOpt2a;
-                    optionsPromo = options2a;
-                    commGroup = getResources().getStringArray(R.array.edt_comm_grp_raw)[mCommSpinner.getSelectedItemPosition()];
-                    langGroup = getResources().getStringArray(R.array.edt_langue_raw)[mLangSpinner.getSelectedItemPosition()];
-                } else if (selectedId == radio3A.getId()) {
-                    promo = "3";
-                    promoOptsLayout = mOpt3a;
-                    optionsPromo = options3a;
-                }
-
-                String studentGroup = getResources().getStringArray(R.array.edt_search_option_groupe_raw)[mGroupSpinner.getSelectedItemPosition()];
-
-                if (promoOptsLayout != null) { // if promo != 1
-                    mOptSpinner1 = (Spinner) promoOptsLayout.findViewById(R.id.edt_option1);
-                    option1 = optionsPromo[1][mOptSpinner1.getSelectedItemPosition()];
-                    mOptSpinner2 = (Spinner) promoOptsLayout.findViewById(R.id.edt_option2);
-                    option2 = optionsPromo[2][mOptSpinner2.getSelectedItemPosition()];
-                    mOptSpinner3 = (Spinner) promoOptsLayout.findViewById(R.id.edt_option3);
-                    option3 = optionsPromo[3][mOptSpinner3.getSelectedItemPosition()];
-                    mOptSpinner4 = (Spinner) promoOptsLayout.findViewById(R.id.edt_option4);
-                    option4 = optionsPromo[4][mOptSpinner4.getSelectedItemPosition()];
-                    mOptSpinner5 = (Spinner) promoOptsLayout.findViewById(R.id.edt_option5);
-                    option5 = optionsPromo[5][mOptSpinner5.getSelectedItemPosition()];
-                    mOptSpinner6 = (Spinner) promoOptsLayout.findViewById(R.id.edt_option6);
-                    option6 = optionsPromo[6][mOptSpinner6.getSelectedItemPosition()];
-                    if (promo.equals("2")) {
-                        mOptSpinnerTc = (Spinner) promoOptsLayout.findViewById(R.id.edt_optiontc);
-                        optiontc = optionsPromo[7][mOptSpinnerTc.getSelectedItemPosition()];
-                    }
-                }
-
-                String[] filtre = {studentGroup, commGroup, langGroup, option1, option2, option3, option4, option5, option6, optiontc};
-
-                String week = String.valueOf(currentWeekNumber - 2 + mEdtWeekSpinner.getSelectedItemPosition());
-
-                // make the request
-                if (global.isOnline()) {
-                    Intent i = new Intent(getActivity(), EdtResult.class);
-                    bundle.putString("week", week);
-                    bundle.putString("promo", promo);
-                    bundle.putStringArray("filtre", filtre);
-                    i.putExtra("bundle", bundle);
-                    startActivity(i);
-                } else {
-                    Toast.makeText(global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG).show();
-                }
+//                // get selected radio button from radioGroup
+//                int selectedId = radioPromoGroup.getCheckedRadioButtonId();
+//                if (!(selectedId > 0)) {
+//                    Toast.makeText(global, R.string.form_group_missing, Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//
+//                // find the radiobutton by returned id and set filter accordingly
+//                String[][] optionsPromo = null;
+//                String promo = "", option1 = "", option2 = "", option3 = "", option4 = "", option5 = "", option6 = "", optiontc = "";
+//                LinearLayout promoOptsLayout = null;
+//
+//                String commGroup = "";
+//                String langGroup = "";
+//                if (selectedId == radio1A.getId()) {
+//                    promo = "1";
+//                    commGroup = getResources().getStringArray(R.array.edt_comm_grp_raw)[mCommSpinner.getSelectedItemPosition()];
+//                    langGroup = getResources().getStringArray(R.array.edt_langue_raw)[mLangSpinner.getSelectedItemPosition()];
+//                } else if (selectedId == radio2A.getId()) {
+//                    promo = "2";
+//                    promoOptsLayout = mOpt2a;
+//                    optionsPromo = options2a;
+//                    commGroup = getResources().getStringArray(R.array.edt_comm_grp_raw)[mCommSpinner.getSelectedItemPosition()];
+//                    langGroup = getResources().getStringArray(R.array.edt_langue_raw)[mLangSpinner.getSelectedItemPosition()];
+//                } else if (selectedId == radio3A.getId()) {
+//                    promo = "3";
+//                    promoOptsLayout = mOpt3a;
+//                    optionsPromo = options3a;
+//                }
+//
+//                String studentGroup = getResources().getStringArray(R.array.edt_search_option_groupe_raw)[mGroupSpinner.getSelectedItemPosition()];
+//
+//                if (promoOptsLayout != null) { // if promo != 1
+//                    mOptSpinner1 = (Spinner) promoOptsLayout.findViewById(R.id.edt_option1);
+//                    option1 = optionsPromo[1][mOptSpinner1.getSelectedItemPosition()];
+//                    mOptSpinner2 = (Spinner) promoOptsLayout.findViewById(R.id.edt_option2);
+//                    option2 = optionsPromo[2][mOptSpinner2.getSelectedItemPosition()];
+//                    mOptSpinner3 = (Spinner) promoOptsLayout.findViewById(R.id.edt_option3);
+//                    option3 = optionsPromo[3][mOptSpinner3.getSelectedItemPosition()];
+//                    mOptSpinner4 = (Spinner) promoOptsLayout.findViewById(R.id.edt_option4);
+//                    option4 = optionsPromo[4][mOptSpinner4.getSelectedItemPosition()];
+//                    mOptSpinner5 = (Spinner) promoOptsLayout.findViewById(R.id.edt_option5);
+//                    option5 = optionsPromo[5][mOptSpinner5.getSelectedItemPosition()];
+//                    mOptSpinner6 = (Spinner) promoOptsLayout.findViewById(R.id.edt_option6);
+//                    option6 = optionsPromo[6][mOptSpinner6.getSelectedItemPosition()];
+//                    if (promo.equals("2")) {
+//                        mOptSpinnerTc = (Spinner) promoOptsLayout.findViewById(R.id.form_tc);
+//                        optiontc = optionsPromo[7][mOptSpinnerTc.getSelectedItemPosition()];
+//                    }
+//                }
+//
+//                String[] filtre = {studentGroup, commGroup, langGroup, option1, option2, option3, option4, option5, option6, optiontc};
+//
+//                String week = String.valueOf(currentWeekNumber - 2 + mEdtWeekSpinner.getSelectedItemPosition());
+//
+//                // make the request
+//                if (global.isOnline()) {
+//                    Intent i = new Intent(getActivity(), EdtResult.class);
+//                    bundle.putString("week", week);
+//                    bundle.putString("promo", promo);
+//                    bundle.putStringArray("filtre", filtre);
+//                    i.putExtra("bundle", bundle);
+//                    startActivity(i);
+//                } else {
+//                    Toast.makeText(global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG).show();
+//                }
 
             }
 
@@ -242,4 +238,66 @@ public class Edt extends BaseFragment {
 
     @Override
     protected void refreshDisplay() {}
+
+    private void initializeSpinners() {
+        mGroupSpinner.setAdapter(new ArrayAdapter<>(
+                getActivity(),
+                android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(1)));
+        mCommSpinner.setAdapter(new ArrayAdapter<>(
+                getActivity(),
+                android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(2)));
+        mLangSpinner.setAdapter(new ArrayAdapter<>(
+                getActivity(),
+                android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(16)));
+        mOptSpinnerTc.setAdapter(new ArrayAdapter<>(
+                getActivity(),
+                android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(15)
+        ));
+    }
+
+    private void loadOptionSpinners2A() {
+        mOptSpinner1.setAdapter(new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(3)));
+        mOptSpinner2.setAdapter(new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(4)));
+        mOptSpinner3.setAdapter(new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(5)));
+        mOptSpinner4.setAdapter(new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(6)));
+        mOptSpinner5.setAdapter(new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(7)));
+        mOptSpinner6.setAdapter(new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(8)));
+    }
+
+    private void loadOptionSpinners3A() {
+        mOptSpinner1.setAdapter(new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(9)));
+        mOptSpinner2.setAdapter(new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(10)));
+        mOptSpinner3.setAdapter(new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(11)));
+        mOptSpinner4.setAdapter(new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(12)));
+        mOptSpinner5.setAdapter(new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(13)));
+        mOptSpinner6.setAdapter(new ArrayAdapter<>(
+                getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                dal.getSpinnerItems(14)));
+    }
 }

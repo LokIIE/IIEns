@@ -21,15 +21,15 @@ public class SplashScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        // Verify if a gcm registration id exists, if not generates it
+        new GCMMain(getApplicationContext(), this).checkGcm();
     }
 
     /* Actions when the view is displayed on the screen */
     @Override
     protected void onStart() {
         super.onStart();
-
-        // Verify if a gcm registration id exists, if not generates it
-        new GCMMain(getApplicationContext(), this).checkGcm();
 
         // Go to main activity after the duration of the logo animation
         new Handler().postDelayed(new Runnable() {
