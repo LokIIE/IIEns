@@ -2,15 +2,21 @@ package com.iiens.net;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
- * EdtGetRequest
- * Classe permettant de récupérer l'emploi du temps en bdd
+ * Tâche asynchrone exécutant la recherche de l'emploi du temps
  */
-
-class EdtGetRequest extends AsyncTask<Void, Void, JSONArray> {
+public class EdtGetRequest extends AsyncTask<Void, Void, JSONArray> {
 
     private static Context context;
     private final String week;
@@ -25,87 +31,71 @@ class EdtGetRequest extends AsyncTask<Void, Void, JSONArray> {
 
     // Recupere une liste d'items de l'emploi du temps.
     private static JSONArray getEdtRequest(String week, String promo) {
+        BufferedReader reader = null;
+        JSONArray resJArray = null;
+        GlobalState global = (GlobalState) context.getApplicationContext();
 
-//        String result = "";
-//        ArrayList<NameValuePair> nameValuePairs = new ArrayList<>();
-//        GlobalState global = (GlobalState) context.getApplicationContext();
-//
-//        // Ajout des paramètres de la requête
-//        nameValuePairs.add(new BasicNameValuePair("type", context.getResources().getString(R.string.apiie_edt)));
-//        nameValuePairs.add(new BasicNameValuePair("week", week));
-//        nameValuePairs.add(new BasicNameValuePair("promo", promo));
-//
-//        try {
-//            SchemeRegistry schemeRegistry = new SSLArise().init(context);
-//            HttpParams params = new BasicHttpParams();
-//            ClientConnectionManager cm =
-//                    new ThreadSafeClientConnManager(params, schemeRegistry);
-//            HttpClient httpclient = new DefaultHttpClient(cm, params);
-//            HttpPost httppost = new HttpPost(global.getScriptURL());
-//            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-//
-//            // Envoi de la requête
-//            result = httpRequest(httpclient, httppost);
-//        } catch (UnsupportedEncodingException e) {
-//            Log.e("edt_get", "Error in encoding nameValuePairs (unsupported) " + e.toString());
-//        } catch (Exception e) {
-//            Log.e("edt_get", "Error in http connection " + e.toString());
-//        }
-//
-//        if (result.length() == 0) {
-//            return null;
-//        } // if there is no data
-//
-//        JSONArray resJArray = null;
-//        try {
-//            resJArray = new JSONArray(result);
-//        } catch (NullPointerException e) {
-//            e.printStackTrace();
-//        } catch (JSONException e) {
-//            Log.e("log_tag", "Error parsing data " + e.toString());
-//        }
+        if (!global.isOnline()) {
+            Toast.makeText(global,
+                    context.getResources().getString(R.string.internet_unavailable),
+                    Toast.LENGTH_LONG).show();
+        }
 
-        return null;
+        // URL avec paramètres de la requête
+        String url = global.getScriptURL() + context.getString(R.string.apiie_edt) + "/" + promo + "/" + week;
+
+        try
+        {
+            // create the HttpURLConnection
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            // just want to do an HTTP GET here
+            connection.setRequestMethod("GET");
+
+            // give it 5 seconds to respond
+            connection.setReadTimeout(5000);
+            connection.connect();
+
+            // read the output from the server
+            String result;
+
+            // Conversion de la requête en string
+            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            result = sb.toString();
+
+            if (result.length() == 0) {
+                return null;
+            }
+
+            resJArray = new JSONArray(result);
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        } finally
+        {
+            // close the reader; this can throw an exception too, so
+            // wrap it in another try/catch block.
+            if (reader != null)
+            {
+                try
+                {
+                    reader.close();
+                }
+                catch (IOException ioe)
+                {
+                    ioe.printStackTrace();
+                }
+            }
+        }
+
+        return resJArray;
     }
-
-//    private static String httpRequest(HttpClient httpclient, HttpPost httppost) {
-//        String result = "";
-//        InputStream is = null;
-//
-//        // Envoi de la requête au script PHP.
-//        try {
-//            HttpResponse response = httpclient.execute(httppost);
-//            HttpEntity entity = response.getEntity();
-//            if (entity != null) is = entity.getContent();
-//        } catch (NullPointerException e) {
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            Log.e("edt_get", "Error in http connection " + e.toString());
-//        }
-//
-//        // Conversion de la requête en string
-//        try {
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "utf-8"), 8);
-//            StringBuilder sb = new StringBuilder();
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                sb.append(line).append("\n");
-//            }
-//            is.close();
-//            result = sb.toString();
-//        } catch (NullPointerException e) {
-//            e.printStackTrace();
-//        } catch (UnsupportedEncodingException e) {
-//            Log.e("edt_get", "Error in encoding InputStreamReader (unsupported) " + e.toString());
-//        } catch (Exception e) {
-//            Log.e("edt_get", "Error converting result " + e.toString());
-//        }
-//        return result;
-//    }
 
     @Override
     protected JSONArray doInBackground(Void... voids) {
         return getEdtRequest(week, promo);
     }
-
 }

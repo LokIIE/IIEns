@@ -3,7 +3,6 @@ package com.iiens.net.model;
 import org.json.JSONObject;
 
 /**
- * EdtOptItem
  * Modèle d'une option de recherche de l'emploi du temps
  */
 
@@ -14,6 +13,12 @@ public class EdtOptItem {
     private int fk_edtForm;
 
     public EdtOptItem() {}
+
+    public static EdtOptItem getEmptyOptItem(String emptyName) {
+        EdtOptItem emptyItem = new EdtOptItem();
+        emptyItem.setName(emptyName);
+        return emptyItem;
+    }
 
     public EdtOptItem(JSONObject jObject) {
         try {
@@ -40,4 +45,12 @@ public class EdtOptItem {
     public int getFk_edtForm() { return this.fk_edtForm; }
 
     public void setFk_edtForm(int fk_edtForm) { this.fk_edtForm = fk_edtForm; }
+
+    /***
+     * Renvoie l'item sous forme de String
+     * Utile pour déterminer l'affichage de l'item dans un spinner
+     */
+    public String toString() {
+        return getName();
+    }
 }

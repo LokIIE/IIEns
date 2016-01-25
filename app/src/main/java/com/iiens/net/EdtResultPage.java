@@ -1,6 +1,5 @@
 package com.iiens.net;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,28 +21,26 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 /**
- * EdtResultPage
- * Fragment affichant les résultats de la recherche sur l'edt pour un jour donné
+ * Fragment d'affichage des événements d'une journée de l'emploi du temps
  */
 
 public class EdtResultPage extends Fragment {
 
-    private final String[] minutes = {"00", "15", "30", "45"};
+    /**
+     * Liste des items affichés sur la page
+     */
     private ArrayList<EdtItem> edtItemsList;
 
-    // newInstance constructor for creating fragment with arguments
+    /**
+     * Constructeur
+     */
     public EdtResultPage() {
+        this.edtItemsList = new ArrayList<>();
     }
 
-    @SuppressLint("ValidFragment")
-    public EdtResultPage(ArrayList<EdtItem> dayItems) {
-        this.edtItemsList = dayItems;
-    }
-
-    @Override // this method is only called once for this fragment
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setRetainInstance(true);
     }
 
@@ -69,14 +66,26 @@ public class EdtResultPage extends Fragment {
         return view;
     }
 
+    /**
+     * Ajout d'un EdtItem à la liste des items de la page
+     * @param item EdtItem à ajouter
+     */
+    public void addItem(EdtItem item) {
+        this.edtItemsList.add(item);
+    }
+
+    /**
+     * Affichage d'une fenêtre pour l'ajout de l'événement sélectionné à l'agenda
+     * @param position Position de l'item dans la liste
+     */
     private void dialogAlertForCalendar(final int position) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 getActivity());
 
-        // set title
+        // Titre de la fenêtre
         alertDialogBuilder.setTitle(R.string.export_to_calendar_title);
 
-        // set dialog message
+        // Message de la fenêtre et action des boutons
         alertDialogBuilder
                 .setMessage(R.string.export_item_to_calendar_msg)
                 .setCancelable(false)
@@ -93,32 +102,36 @@ public class EdtResultPage extends Fragment {
                     }
                 });
 
-        // create alert dialog
+        // Création et affichage de la fenêtre
         AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
         alertDialog.show();
     }
 
+    /**
+     * Export de l'item dans le calendrier
+     * @param item Item à exporter
+     */
     private void exportToCalendar(EdtItem item) {
         Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
         Intent intent = new Intent(Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI);
+        String[] hDebut = item.getHeureDebut().split("h");
+        String[] hFin = item.getHeureFin().split("h");
 
         intent.putExtra(CalendarContract.Events.TITLE, item.getTitre());
         cal.set(
                 Integer.valueOf(item.getJour().substring(0, 4)),     // year
                 Integer.valueOf(item.getJour().substring(5, 7)) - 1, // month
                 Integer.valueOf(item.getJour().substring(9, 10)),    // day
-                item.getHeure() / 4 - 1,                              // hour
-                Integer.valueOf(minutes[item.getHeure() % 4])         // minutes
+                Integer.valueOf(hDebut[0]) - 1,                      // hour
+                Integer.valueOf(hDebut[1])                           // minutes
         );
         intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, cal.getTime().getTime());
         cal.set(
-                Integer.valueOf(item.getJour().substring(0, 4)),                 // year
-                Integer.valueOf(item.getJour().substring(5, 7)) - 1,             // month
-                Integer.valueOf(item.getJour().substring(9, 10)),                // day
-                (item.getHeure() + item.getDuree()) / 4 % 24 - 1,                   // hour
-                Integer.valueOf(minutes[(item.getHeure() + item.getDuree()) % 4])   // minutes
+                Integer.valueOf(item.getJour().substring(0, 4)),     // year
+                Integer.valueOf(item.getJour().substring(5, 7)) - 1, // month
+                Integer.valueOf(item.getJour().substring(9, 10)),    // day
+                Integer.valueOf(hFin[0]) - 1,                        // hour
+                Integer.valueOf(hFin[1])                             // minutes
         );
         intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, cal.getTime().getTime());
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "ENSIIE - " + item.getLieu());

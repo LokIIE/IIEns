@@ -6,20 +6,59 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * EdtItem
  * Modèle d'un évènement de l'emploi du temps
  */
 
 public class EdtItem {
+    /**
+     * Liste des minutes pour la correspondance avec l'heure et la durée
+     */
+    public static final String[] minutes = {"00", "15", "30", "45"};
+
+    /**
+     * Identifiant de l'événement
+     */
     private long id;
-    private String jour; // "2014-12-31"
-    private String titre; // Intitulé de l'événement
-    private String auteur; // Cours : prof assurant le cours / Club : club faisant l'evenement
-    private Integer heure; // Heure de debut en quarts d'heure a partir de minuit (ex : 0h30 <=> 2)
-    private Integer duree; // Nombre de quarts d'heure
-    private String type; // Cours : T.D., T.P., Cours_td, controle, Cours / Club : assoce
-    private String groupe; // Cours : groupe du cours si defini / Club : vide
-    private String lieu; // Lieu du cours ou de l'evenement
+
+    /**
+     * Jour de l'événement (format AAAA-MM-JJ)
+     */
+    private String jour;
+
+    /**
+     * Intitulé de l'événement
+     */
+    private String titre;
+
+    /**
+     * Personne ou club assurant l'événement
+     */
+    private String auteur;
+
+    /**
+     * Heure de début de l'événement représenté sous forme de quarts d'heure depuis 0h00
+     */
+    private Integer heure;
+
+    /**
+     * Durée en nombre de quarts d'heure
+     */
+    private Integer duree;
+
+    /**
+     * Type d'événement
+     */
+    private String type;
+
+    /**
+     * Groupe concerné par l'événement
+     */
+    private String groupe;
+
+    /**
+     * Lieu de l'événement
+     */
+    private String lieu;
 
     public long getId() { return id; }
 
@@ -51,9 +90,7 @@ public class EdtItem {
         this.auteur = auteur;
     }
 
-    public Integer getHeure() {
-        return heure;
-    }
+    public Integer getHeure() { return heure; }
 
     private void setHeure(Integer heure) {
         this.heure = heure;
@@ -94,18 +131,28 @@ public class EdtItem {
         }
     }
 
-    public void mapJsonObject(JSONObject json_data) {
+    public static EdtItem mapJsonObject(JSONObject json_data) {
+        EdtItem item = new EdtItem();
         try {
-            setJour(json_data.getString("jour"));
-            setTitre(json_data.getString("titre"));
-            setAuteur(json_data.getString("auteur"));
-            setHeure(json_data.getInt("heure"));
-            setDuree(json_data.getInt("duree"));
-            setType(json_data.getString("nom_type"));
-            setGroupe(json_data.getString("groupe"));
-            setLieu(json_data.getString("lieu"));
+            item.setJour(json_data.getString("jour"));
+            item.setTitre(json_data.getString("titre"));
+            item.setAuteur(json_data.getString("auteur"));
+            item.setHeure(json_data.getInt("heure"));
+            item.setDuree(json_data.getInt("duree"));
+            item.setType(json_data.getString("nom_type"));
+            item.setGroupe(json_data.getString("groupe"));
+            item.setLieu(json_data.getString("lieu"));
         } catch (JSONException e) {
             Log.e("log_tag", "Error parsing data " + e.toString());
         }
+
+        return item;
+    }
+    public String getHeureDebut() {
+        return String.valueOf(this.heure / 4) + "h" + minutes[this.heure % 4];
+    }
+
+    public String getHeureFin() {
+        return String.valueOf((this.heure + this.duree) / 4 % 24) + "h" + minutes[(this.heure + this.duree) % 4];
     }
 }

@@ -74,9 +74,11 @@ public class EdtOptDb extends BaseDb<EdtOptItem>{
         return null;
     }
 
-    public List<String> getSpinnerItems(int idForm) {
-        List<String> result = new ArrayList<>();
-        result.add(context.getResources().getString(R.string.edtForm_emptyOp));
+    public List<EdtOptItem> getSpinnerItems(int idForm) {
+        List<EdtOptItem> result = new ArrayList<>();
+        result.add(EdtOptItem.getEmptyOptItem(
+                context.getResources().getString(R.string.edtForm_emptyOp)
+        ));
 
         // Ouverture de la connexion
         this.open();
@@ -91,7 +93,7 @@ public class EdtOptDb extends BaseDb<EdtOptItem>{
                 DatabaseHelper.EDTOPT_ID + " ASC");
 
         while (cursor.moveToNext()) {
-            result.add(readCursor(cursor).getName());
+            result.add(readCursor(cursor));
         }
         // Fermeture de la connexion
         cursor.close();

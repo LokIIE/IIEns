@@ -50,6 +50,10 @@ abstract class BaseFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Génère la page courante
+     * @param view Vue à remplir
+     */
     protected abstract void generateView(final View view);
 
     protected void apiRequest(final View view) {
@@ -68,8 +72,16 @@ abstract class BaseFragment extends Fragment {
             queue.add(request);
     }
 
+    /**
+     * Affichage des résultats d'une requête asynchrone
+     * @param view Vue à remplir
+     * @param result Données à afficher
+     */
     protected abstract void displayResult(View view, JSONArray result);
 
+    /**
+     * Actualisation des données de la vue courante
+     */
     protected void refreshDisplay() {
         this.apiRequest(getView());
 
@@ -77,5 +89,5 @@ abstract class BaseFragment extends Fragment {
         if (getView() != null) {
             getView().setAlpha((float) 0.3);
         }
-    };
+    }
 }

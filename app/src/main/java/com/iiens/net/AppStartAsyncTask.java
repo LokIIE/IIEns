@@ -113,7 +113,7 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     /**
-     * Synchronisation des options de l'emploi du temps
+     * Synchronisation du formulaire de l'emploi du temps
      */
     private void syncEdtOptions() throws IOException, JSONException {
         String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_edtOptions);
@@ -221,31 +221,27 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
             e.printStackTrace();
             throw e;
         }
-//        finally
-//        {
-//            // close the reader; this can throw an exception too, so
-//            // wrap it in another try/catch block.
-//            try
-//            {
-//                reader.close();
-//            }
-//            catch (IOException ioe)
-//            {
-//                ioe.printStackTrace();
-//            }
-//        }
+        finally
+        {
+            // close the reader; this can throw an exception too, so
+            // wrap it in another try/catch block.
+            try
+            {
+                reader.close();
+            }
+            catch (IOException ioe)
+            {
+                ioe.printStackTrace();
+            }
+        }
     }
-
-
 
     @Override
     protected Boolean doInBackground(Void... voids) {
         try {
             new DatabaseHelper(context).createDb(null);
-            if (true) {
-                syncEdtForm();
-                syncEdtOptions();
-            }
+            syncEdtForm();
+            syncEdtOptions();
             //getAllClubLogo();
         } catch (IOException | JSONException e) {
             e.printStackTrace();

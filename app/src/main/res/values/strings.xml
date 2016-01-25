@@ -20,6 +20,7 @@
     <string name="cal_all_sync_done">Synchronisation avec votre agenda terminée</string>
     <string name="cal_week_sync_done">La semaine a été ajoutée à votre agenda</string>
     <string name="cal_event_sync_done">L\'évènement a été ajouté à votre agenda</string>
+    <string name="internal_error">Erreur de traitement, veuillez réessayer</string>
 
     <string-array name="main_menu_entries">
         <item>News</item>
@@ -70,17 +71,15 @@
     <string name="news_description">No content</string>
     <string name="title_activity_google_play_services">GooglePlayServicesActivity</string>
 
-
     <!-- EdtForm values -->
-    <string name="edtForm_title">Formulaire de recherche</string>
-    <string name="edt_search_txt">Emploi du temps &#8230; </string>
+    <string name="edt_search_txt">Année</string>
     <string name="edt_result_title">Résultats de la recherche</string>
     <string name="edtForm_1A">1A</string>
     <string name="edtForm_2A">2A</string>
     <string name="edtForm_3A">3A</string>
     <string name="edtForm_week">Semaine :</string>
-    <string name="edtForm_group">Groupes :</string>
-    <string name="edtForm_grpcomm">Groupe de comm\' :</string>
+    <string name="edtForm_group">Groupe :</string>
+    <string name="edtForm_grpcomm">Communication :</string>
     <string name="edtForm_langue">Langue :</string>
     <string name="edtForm_search">Rechercher</string>
     <string name="edtForm_waitResult">Recherche en cours &#8230;</string>
@@ -102,5 +101,8 @@
     <string name="export_week_to_calendar_msg">Voulez-vous exporter cette semaine vers votre agenda personnel ? (Attention : export basé sur les résultats de la recherche)</string>
     <string name="export_week_to_calendar_done">Semaine ajoutée à votre agenda</string>
     <string name="export_week_to_calendar_chose_group">Choisissez votre groupe</string>
+
+    <!-- EdtItem format -->
+    <string name="edtItem_full_format">"<b>%1$s-%2$s</b> : %3$s %4$s %5$s (%6$s)"</string>
 
 </resources>
