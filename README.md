@@ -2,9 +2,9 @@ IIEns
 =====
 
 IIEns est l'application Android pour les élèves de l'ENSIIE. Elle permet d'avoir accès aux différents services disponibles sur le site des élèves de l'ENSIIE : http://www.iiens.net, en version mobile.
-Elle est supportée par plusieurs scripts PHP côté serveur (qui ne sont pas présents sur ce repo).
+Elle intéragit avec une API REST que j'ai créé côté serveur.
 
-[![Google Play](https://play.google.com/intl/en_us/badges/images/apps/fr-play-badge.png)](https://play.google.com/store/apps/details?id=com.iiens.net)
+<a href="https://play.google.com/store/apps/details?id=com.iiens.net"><img src="https://play.google.com/intl/en_us/badges/images/apps/fr-play-badge.png" width="200"/></a>
 
 #### Fonctionnalités
 
@@ -15,6 +15,7 @@ Affiche les news publiées sur iiens.net
 ###### Emploi du temps
 
 Permet de rechercher son emploi du temps suivant sa promo, son groupe et ses options.
+
 Permet également d'ajouter les résultats de la recherche à l'agenda installé sur l'appareil
 
 ###### Anniversaires
@@ -46,3 +47,18 @@ Le recrutement en 1ère année se fait sur le Concours Mines-Ponts pour les él�
 Le recrutement en 2e année se fait par Admission sur Titre pour les titulaires d’un Master 1 ou d’un diplôme équivalent.
 
 Pour plus d'informations, rendez-vous sur le [site web de l'école](http://www.ensiie.fr)
+
+#### TODO
+
+* Réorganisation des paramètres
+* Emploi du temps :
+  * Navigation entre les semaines de l'emploi du temps directement dans les résultats
+  * Intégration des résultats de recherche de l'emploi du temps dans un fragment
+  * Mon emploi du temps : sauvegarde des paramètres de recherche de l'emploi du temps
+* Adaptation au format tablette
+* Appeler l'accueil de l'école ou le BdE
+* Ouverture des liens des news dans le navigateur externe
+* Bréviaire intégré
+* SSL
+* Liens vers les différents sites des clubs
+* Carte avec les résidences étudiantes
