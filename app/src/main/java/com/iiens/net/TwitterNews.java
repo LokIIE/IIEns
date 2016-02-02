@@ -20,7 +20,7 @@ public class TwitterNews extends BaseFragment {
         this.mListView = (ListView) view.findViewById(R.id.listview);
 
         final SearchTimeline searchTimeline = new SearchTimeline.Builder()
-                .query("#ENSIIE OR @ENSIIE OR @A3IE")
+                .query("#ENSIIE OR @ENSIIE OR @BdE_ENSIIE OR @A3IE")
                 .build();
         final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(this.context)
                 .setTimeline(searchTimeline)
