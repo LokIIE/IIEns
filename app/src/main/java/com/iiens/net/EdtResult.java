@@ -1,18 +1,18 @@
 package com.iiens.net;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -34,7 +34,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Requête et traitement des résultats de la recherche de l'emploi du temps pour affichage
  */
-public class EdtResult extends FragmentActivity {
+public class EdtResult extends BaseFragment{
 
     /**
      * Bundle contenant les paramètres et/ou les résultats de la recherche
@@ -47,6 +47,21 @@ public class EdtResult extends FragmentActivity {
     private ArrayList<EdtItem> edtItemsList;
 
     /**
+     * Paramètres de recherche
+     */
+    ArrayList<String> searchParams;
+
+    /**
+     * Semaine à rechercher
+     */
+    private String requestWeek;
+
+    /**
+     * Promotion à rechercher
+     */
+    private String requestPromo;
+
+    /**
      * Parseur du format de la date d'un événement enregistré
      */
     private static SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
@@ -57,44 +72,46 @@ public class EdtResult extends FragmentActivity {
     private static SimpleDateFormat formatter = new SimpleDateFormat("EEEE dd MMMM", Locale.FRANCE);
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.viewpager);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.viewpager, container, false);
 
         if (savedInstanceState != null) {
             bundle.putAll(savedInstanceState.getBundle("edtResultBundle"));
         }
 
-        this.bundle = getIntent().getBundleExtra("bundle");
+        this.bundle = getArguments();
 
-        GlobalState global = (GlobalState) getApplicationContext();
-        Button btnNewSearch = (Button) findViewById(R.id.edt_newsearch_button);
+        Button btnNewSearch = (Button) view.findViewById(R.id.edt_newsearch_button);
         btnNewSearch.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                getFragmentManager().popBackStack();
             }
         });
 
-        if (getActionBar() != null) {
-            getActionBar().setTitle(getResources().getString(R.string.edt_result_title));
-        }
-
-        ArrayList<String> searchParams = bundle.getStringArrayList("edtParams");
+        searchParams = bundle.getStringArrayList("edtParams");
         assert searchParams != null;
-        String requestWeek = searchParams.get(0);
-        String requestPromo = searchParams.get(1);
+        requestWeek = searchParams.get(0);
+        requestPromo = searchParams.get(1);
 
+        this.generateView(view);
+
+        return view;
+    }
+
+    @Override
+    protected void generateView(View view) {
         // Gestion de la pagination des fragments
-        ViewPager vpPager = (ViewPager) findViewById(R.id.edt_pager);
-        vpPager.setAdapter(new EdtResultPagerAdapter(getSupportFragmentManager(), requestWeek));
+        ViewPager vpPager = (ViewPager) view.findViewById(R.id.edt_pager);
+        vpPager.setAdapter(new EdtResultPagerAdapter(getActivity().getFragmentManager(), requestWeek));
 
         JSONArray jEdtItems;
         try {
             if (bundle.containsKey("edtJArrayResult")) {
                 jEdtItems = new JSONArray(bundle.getString("edtJArrayResult"));
             } else {
-                EdtGetRequest getEdt = new EdtGetRequest(this, requestWeek, requestPromo);
+                EdtGetRequest getEdt = new EdtGetRequest(this.context, requestWeek, requestPromo);
                 jEdtItems = getEdt.execute().get();
             }
 
@@ -115,14 +132,16 @@ public class EdtResult extends FragmentActivity {
             e.printStackTrace();
         } catch (NullPointerException e) {
             Toast.makeText(global, getResources().getString(R.string.edtForm_noResult), Toast.LENGTH_LONG).show();
-        }
-    }
+        }}
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edt_result_menu, menu);
-        return true;
-    }
+    protected void displayResult(View view, JSONArray result) {}
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.edt_result_menu, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -181,8 +200,7 @@ public class EdtResult extends FragmentActivity {
     }
 
     private void dialogAlertForCalendar() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
         // set title
         alertDialogBuilder.setTitle(R.string.export_to_calendar_title);
@@ -220,16 +238,16 @@ public class EdtResult extends FragmentActivity {
      * @param filtre Paramètres de la recherche
      */
     private void dialogAlertPickGroup(final ArrayList<String> filtre) {
-        EdtOptDb dal = new EdtOptDb(getApplicationContext());
+        EdtOptDb dal = new EdtOptDb(this.context);
         final CharSequence[] groupList = (CharSequence[]) dal.getSpinnerItems(0).toArray();
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.context);
         alertDialogBuilder.setTitle(getResources().getString(R.string.export_week_to_calendar_chose_group))
                 .setItems(groupList, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // The 'which' argument contains the index position
                         // of the selected item
-                         filtre.set(0, groupList[which].toString());
-                         exportWeekToCalendar(filtre);
+                        filtre.set(0, groupList[which].toString());
+                        exportWeekToCalendar(filtre);
                     }
                 });
         alertDialogBuilder.create().show();
@@ -240,7 +258,7 @@ public class EdtResult extends FragmentActivity {
      * @param filtre Paramètres de la recherche
      */
     private void exportWeekToCalendar(ArrayList<String> filtre) {
-        CalendarExport calExport = new CalendarExport(getApplicationContext());
+        CalendarExport calExport = new CalendarExport(this.context);
 
         for (EdtItem item : edtItemsList) {
             if (filterGroup(item, filtre)) {
@@ -249,7 +267,7 @@ public class EdtResult extends FragmentActivity {
         }
 
         // Toast de confirmation de l'export
-        Toast.makeText(this, R.string.export_week_to_calendar_done, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.context, R.string.export_week_to_calendar_done, Toast.LENGTH_SHORT).show();
     }
 
     /**

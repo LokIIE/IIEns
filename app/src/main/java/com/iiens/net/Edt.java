@@ -1,6 +1,7 @@
 package com.iiens.net;
 
-import android.content.Intent;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,6 @@ import java.util.Locale;
  */
 public class Edt extends BaseFragment {
 
-    private GlobalState global;
     private RadioGroup radioPromoGroup;
     private RadioButton radio1A, radio2A, radio3A;
     private LinearLayout mComm, mLangue, mOptLayout, mOptTcLayout;
@@ -48,17 +48,12 @@ public class Edt extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dal = new EdtOptDb(context);
-        global = (GlobalState) getActivity().getApplicationContext();
         bundle = global.getBundle();
-
-        // retain this fragment
-        setRetainInstance(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.edt_formulaire, container, false);
 
         // Affichage des semaines dans le spinner
@@ -183,11 +178,8 @@ public class Edt extends BaseFragment {
 
                 // Transition d'activité pour effectuer la recherche et afficher les résultats
                 if (global.isOnline()) {
-                    // getFragmentManager().beginTransaction().replace(R.id.content_container, frag, getResources().getString(R.string.edt_result_title)).commit();
-                    Intent i = new Intent(getActivity(), EdtResult.class);
                     bundle.putStringArrayList("edtParams", edtForm.toArrayList());
-                    i.putExtra("bundle", bundle);
-                    startActivity(i);
+                    executeSearch();
                 } else {
                     Toast.makeText(global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG).show();
                 }
@@ -222,6 +214,27 @@ public class Edt extends BaseFragment {
             myCalendar.add(Calendar.DAY_OF_MONTH, 7);
         }
         return spinnerItems;
+    }
+
+    /**
+     * Exécution de la recherche et affichage des résultats
+     */
+    private void executeSearch() {
+        FragmentManager fm = this.getActivity().getFragmentManager();
+
+        // Création fragment détail
+        EdtResult resultFrag = new EdtResult();
+
+        // Envoi de l'item sélectionné au fragment
+        resultFrag.setArguments(bundle);
+
+        FragmentTransaction ft = fm.beginTransaction();
+        // Remplacement de la vue par le nouveau fragment
+        ft.replace(R.id.content_container, resultFrag);
+        // Ajout du nouveau fragment au backstack pour navigation arrière
+        ft.addToBackStack(null);
+
+        ft.commit();
     }
 
     /**
