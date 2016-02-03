@@ -3,10 +3,8 @@ package com.iiens.net;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -49,13 +47,11 @@ public class Edt extends BaseFragment {
         super.onCreate(savedInstanceState);
         dal = new EdtOptDb(context);
         bundle = global.getBundle();
+
+        this.layoutId = R.layout.edt_formulaire;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.edt_formulaire, container, false);
-
+    protected void generateView(View view) {
         // Affichage des semaines dans le spinner
         mEdtWeekSpinner = (Spinner) view.findViewById(R.id.edt_week);
         mEdtWeekSpinner.setAdapter(new ArrayAdapter<>(
@@ -186,8 +182,6 @@ public class Edt extends BaseFragment {
             }
 
         });
-
-        return view;
     }
 
     /**
@@ -406,8 +400,6 @@ public class Edt extends BaseFragment {
                     dal.getSpinnerItems(edtFormId));
         }
     }
-
-    protected void generateView(View view) {}
 
     @Override
     protected void displayResult(View view, JSONArray result) {}

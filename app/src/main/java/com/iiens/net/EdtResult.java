@@ -8,11 +8,9 @@ import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -49,7 +47,7 @@ public class EdtResult extends BaseFragment{
     /**
      * Paramètres de recherche
      */
-    ArrayList<String> searchParams;
+    private ArrayList<String> searchParams;
 
     /**
      * Semaine à rechercher
@@ -72,16 +70,16 @@ public class EdtResult extends BaseFragment{
     private static SimpleDateFormat formatter = new SimpleDateFormat("EEEE dd MMMM", Locale.FRANCE);
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.viewpager, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.layoutId = R.layout.viewpager;
+    }
 
-        if (savedInstanceState != null) {
-            bundle.putAll(savedInstanceState.getBundle("edtResultBundle"));
-        }
-
+    @Override
+    protected void generateView(View view) {
         this.bundle = getArguments();
 
+        // Ajout de l'action du bouton de nouvelle recherche
         Button btnNewSearch = (Button) view.findViewById(R.id.edt_newsearch_button);
         btnNewSearch.setOnClickListener(new OnClickListener() {
             @Override
@@ -90,18 +88,12 @@ public class EdtResult extends BaseFragment{
             }
         });
 
+        // Récupération des paramètres de la recherche
         searchParams = bundle.getStringArrayList("edtParams");
         assert searchParams != null;
         requestWeek = searchParams.get(0);
         requestPromo = searchParams.get(1);
 
-        this.generateView(view);
-
-        return view;
-    }
-
-    @Override
-    protected void generateView(View view) {
         // Gestion de la pagination des fragments
         ViewPager vpPager = (ViewPager) view.findViewById(R.id.edt_pager);
         vpPager.setAdapter(new EdtResultPagerAdapter(getActivity().getFragmentManager(), requestWeek));

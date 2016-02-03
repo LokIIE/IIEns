@@ -6,9 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -32,43 +30,19 @@ public class News extends BaseFragment {
 
     private final String TAG = getClass().getName();
     private NewsDb dal;
+    private ListView mListView;
 
-    @Override // this method is only called once for this fragment
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.apiKey = getResources().getString(R.string.apiie_news);
         this.dal = new NewsDb(context);
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.news_listview, container, false);
-        this.mListView = (ListView) view.findViewById(R.id.news_listview);
-
-        this.generateView(view);
-
-        return view;
-    }
-
-    private ArrayList<NewsItem> jArrayToArrayList(JSONArray jArray) {
-        ArrayList<NewsItem> newsItemsList = new ArrayList<>();
-
-        try {
-            for (int i = 0; i < jArray.length(); i++) {
-                JSONObject json_data = jArray.getJSONObject(i);
-                NewsItem newsItem = new NewsItem();
-                newsItem.fromJsonObject(json_data);
-                newsItemsList.add(newsItem);
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, "Error parsing data " + e.toString());
-        }
-
-        return newsItemsList;
+        this.layoutId = R.layout.listview;
     }
 
     protected void generateView(View view) {
+        this.mListView = (ListView) view.findViewById(R.id.listview);
         view.findViewById(R.id.progress_spinner).setVisibility(View.VISIBLE);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -83,7 +57,7 @@ public class News extends BaseFragment {
                 preferences.edit().putBoolean(getResources().getString(R.string.bool_news_update_name), false).apply();
             } else if (firstItem != null) {
                 Log.e(TAG, "from database");
-                this.setListView(dal.getAllItems());
+                this.setListViewContent(dal.getAllItems());
             } else if (global.isOnline()) { // If the file doesn't exist yet (first launch for example), fetch the data
                 Log.e(TAG, "from web");
                 this.apiRequest(view);
@@ -99,7 +73,7 @@ public class News extends BaseFragment {
         final ArrayList<NewsItem> itemList = this.jArrayToArrayList(jResult);
         // If the request was successful, save the items to save data consumption and populate listview
         if (jResult != null && jResult.length() > 0) {
-            this.setListView(itemList);
+            this.setListViewContent(itemList);
         }
 
         if (view != null) view.findViewById(R.id.progress_spinner).setVisibility(View.GONE);
@@ -118,7 +92,7 @@ public class News extends BaseFragment {
         }
     }
 
-    private void setListView(final ArrayList<NewsItem> itemList) {
+    private void setListViewContent(final ArrayList<NewsItem> itemList) {
         mListView.setAdapter(new NewsItemsAdapter(context, itemList));
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -142,5 +116,22 @@ public class News extends BaseFragment {
                 ft.commit();
             }
         });
+    }
+
+    private ArrayList<NewsItem> jArrayToArrayList(JSONArray jArray) {
+        ArrayList<NewsItem> newsItemsList = new ArrayList<>();
+
+        try {
+            for (int i = 0; i < jArray.length(); i++) {
+                JSONObject json_data = jArray.getJSONObject(i);
+                NewsItem newsItem = new NewsItem();
+                newsItem.fromJsonObject(json_data);
+                newsItemsList.add(newsItem);
+            }
+        } catch (JSONException e) {
+            Log.e(TAG, "Error parsing data " + e.toString());
+        }
+
+        return newsItemsList;
     }
 }

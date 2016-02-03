@@ -28,7 +28,7 @@ public class Main extends Activity {
             new News(),
             new Edt(),
             new Anniv(),
-            new TwitterNews()
+            new Twitter()
     };
     // Items shown on the menu, each corresponds to a Fragment
     private String[] menuItems;

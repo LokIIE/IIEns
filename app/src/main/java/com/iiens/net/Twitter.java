@@ -1,9 +1,7 @@
 package com.iiens.net;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.twitter.sdk.android.tweetui.SearchTimeline;
@@ -11,12 +9,19 @@ import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
 
 import org.json.JSONArray;
 
-public class TwitterNews extends BaseFragment {
+
+public class Twitter extends BaseFragment {
+
+    private ListView mListView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.listview, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.layoutId = R.layout.listview;
+    }
+
+    @Override
+    protected void generateView(View view) {
         this.mListView = (ListView) view.findViewById(R.id.listview);
 
         final SearchTimeline searchTimeline = new SearchTimeline.Builder()
@@ -25,13 +30,9 @@ public class TwitterNews extends BaseFragment {
         final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(this.context)
                 .setTimeline(searchTimeline)
                 .build();
+
         this.mListView.setAdapter(adapter);
-
-        return view;
     }
-
-    @Override
-    protected void generateView(View view) {}
 
     @Override
     protected void displayResult(View view, JSONArray result) {}

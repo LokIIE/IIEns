@@ -3,6 +3,7 @@ package com.iiens.net;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.iiens.net.adapter.AnnivItemsAdapter;
@@ -28,12 +29,15 @@ public class Anniv extends BaseFragment {
 
     private final String TAG = getClass().getName();
     private AnnivDb dal;
+    private ListView mListView;
 
-    @Override // this method is only called once for this fragment
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.apiKey = getResources().getString(R.string.apiie_anniv);
         this.dal = new AnnivDb(context);
+
+        this.layoutId = R.layout.listview;
     }
 
     private ArrayList<AnnivItem> getItemList(JSONArray jArray) {
@@ -52,6 +56,7 @@ public class Anniv extends BaseFragment {
     }
 
     protected void generateView(final View view) {
+        this.mListView = (ListView) view.findViewById(R.id.listview);
         view.findViewById(R.id.progress_spinner).setVisibility(View.VISIBLE);
 
         AnnivItem firstItem = dal.getFirstItem();
