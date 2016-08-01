@@ -101,6 +101,8 @@
     <string name="export_week_to_calendar_msg">Voulez-vous exporter cette semaine vers votre agenda personnel ? (Attention : export basé sur les résultats de la recherche)</string>
     <string name="export_week_to_calendar_done">Semaine ajoutée à votre agenda</string>
     <string name="export_week_to_calendar_chose_group">Choisissez votre groupe</string>
+    <string name="lastweek_btn"><![CDATA[<]]></string>
+    <string name="nextweek_btn"><![CDATA[>]]></string>
 
     <!-- EdtItem format -->
     <string name="edtItem_full_format">"<b>%1$s-%2$s</b> : %3$s %4$s %5$s (%6$s)"</string>

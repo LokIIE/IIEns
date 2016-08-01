@@ -69,16 +69,24 @@ public class EdtResult extends BaseFragment{
      */
     private static SimpleDateFormat formatter = new SimpleDateFormat("EEEE dd MMMM", Locale.FRANCE);
 
+    /**
+     * Clé des résultats dans le bundle
+     */
+    private static final String bundleKey = "edtResult";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if ((savedInstanceState != null) && savedInstanceState.containsKey("edtResultBundle")) {
+                this.bundle = savedInstanceState.getBundle("edtResultBunle");
+        } else {
+            this.bundle = getArguments();
+        }
         this.layoutId = R.layout.viewpager;
     }
 
     @Override
     protected void generateView(View view) {
-        this.bundle = getArguments();
-
         // Ajout de l'action du bouton de nouvelle recherche
         Button btnNewSearch = (Button) view.findViewById(R.id.edt_newsearch_button);
         btnNewSearch.setOnClickListener(new OnClickListener() {
@@ -100,8 +108,8 @@ public class EdtResult extends BaseFragment{
 
         JSONArray jEdtItems;
         try {
-            if (bundle.containsKey("edtJArrayResult")) {
-                jEdtItems = new JSONArray(bundle.getString("edtJArrayResult"));
+            if (bundle.containsKey(bundleKey)) {
+                jEdtItems = new JSONArray(bundle.getString(bundleKey));
             } else {
                 EdtGetRequest getEdt = new EdtGetRequest(this.context, requestWeek, requestPromo);
                 jEdtItems = getEdt.execute().get();
@@ -110,7 +118,7 @@ public class EdtResult extends BaseFragment{
             if (jEdtItems == null || jEdtItems.length() == 0) {
                 throw new NullPointerException();
             } else {
-                bundle.putString("edtJArrayResult", jEdtItems.toString());
+                bundle.putString(bundleKey, jEdtItems.toString());
                 // Transforme JSONArray en ArrayList
                 edtItemsList = jArrayToArrayList(jEdtItems, searchParams);
 
@@ -131,7 +139,7 @@ public class EdtResult extends BaseFragment{
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.edt_result_menu, menu);
+//        context.getMenuInflater().inflate(R.menu.edt_result_menu, menu);
 //        return true;
 //    }
 

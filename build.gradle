@@ -6,10 +6,20 @@ buildscript {
         maven { url 'https://maven.fabric.io/repo' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.3.1'
+        classpath 'com.android.tools.build:gradle:2.1.2'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
+}
+
+ext{
+    ANDROID_BUILD_MIN_SDK_VERSION=19
+    ANDROID_BUILD_TARGET_SDK_VERSION=23
+    ANDROID_BUILD_TOOLS_VERSION="24.0.0"
+    ANDROID_BUILD_SDK_VERSION=23
+
+    IIENS_VERSION_CODE=13
+    IIENS_VERSION_NAME="1.6"
 }
 
 allprojects {

@@ -21,14 +21,14 @@ import android.widget.ListView;
 
 public class Main extends Activity {
 
-    private static int currentFragment = 0;
     private static boolean inSettings = false;
-    // The Fragments corresponding to the items, based on the position in the list
     private final Fragment[] menuFragments = new Fragment[]{
             new News(),
             new Edt(),
             new Anniv(),
-            new Twitter()
+            new Twitter(),
+            // not in menu
+            new EdtResult()
     };
     // Items shown on the menu, each corresponds to a Fragment
     private String[] menuItems;
@@ -37,9 +37,15 @@ public class Main extends Activity {
     private ActionBarDrawerToggle drawerToggle;
     private FragmentManager fragmentManager;
 
+    /**
+     * Contexte de l'application
+     */
+    private GlobalState appContext;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Bundle mainBundle = ((GlobalState) this.getApplicationContext()).getBundle();
+        appContext = (GlobalState) this.getApplicationContext();
+        Bundle mainBundle = appContext.getBundle();
         fragmentManager = getFragmentManager();
 
         // Get back all info if the activity is recreated
@@ -63,7 +69,7 @@ public class Main extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        openFragment(currentFragment);
+        openFragment(appContext.getCurrentFragment());
         if (inSettings) goToSettings();
     }
 
@@ -91,7 +97,7 @@ public class Main extends Activity {
                     if (inSettings) return true;
                 {
                     // Start refreshing the display
-                    ((BaseFragment) menuFragments[currentFragment]).refreshDisplay();
+                    ((BaseFragment) menuFragments[appContext.getCurrentFragment()]).refreshDisplay();
                 }
                 return true;
                 default:
@@ -134,8 +140,8 @@ public class Main extends Activity {
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 drawerLayout.closeDrawer(menu); // Close the menu in all cases
 
-                if (currentFragment != position) { // if an other item is selected in the menu, open it
-                    currentFragment = position;
+                if (appContext.getCurrentFragment() != position) { // if an other item is selected in the menu, open it
+                    appContext.setCurrentFragment(position);
                     openFragment(position);
                 } else if (inSettings) { // If we get want to get back from settings to the current fragment
                     backFromSettings();
@@ -172,7 +178,7 @@ public class Main extends Activity {
     private void backFromSettings() {
         inSettings = false;
         getFragmentManager().popBackStack();
-        getActionBar().setTitle(menuItems[currentFragment]);
+        getActionBar().setTitle(menuItems[appContext.getCurrentFragment()]);
     }
 
     private void goToSettings() {

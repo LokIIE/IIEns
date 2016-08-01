@@ -8,7 +8,6 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import java.util.concurrent.ExecutionException;
@@ -19,14 +18,19 @@ public class GlobalState extends Application {
 
     private static Bundle appBundle = new Bundle();
     private static Resources resources;
+    private int currentFragment = 0;
 
-    Bundle getBundle() {
+    public Bundle getBundle() {
         return appBundle;
     }
 
-    void setBundle(Bundle bundle) {
+    public void setBundle(Bundle bundle) {
         appBundle = bundle;
     }
+
+    public int getCurrentFragment() { return this.currentFragment; }
+
+    public void setCurrentFragment(int currentFragmentId) { this.currentFragment = currentFragmentId; }
 
     public String getScriptURL() {
         return resources.getString(R.string.url_apiie);

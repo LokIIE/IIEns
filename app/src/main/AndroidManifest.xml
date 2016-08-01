@@ -44,7 +44,7 @@
 
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="@string/fabric_api_key" />
+            android:value="df274d812a88ccd398c6b5d86b4017c1925c79a8" />
 
         <activity
             android:name=".SplashScreen"

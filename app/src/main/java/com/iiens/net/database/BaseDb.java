@@ -93,7 +93,7 @@ public abstract class BaseDb<T> {
         this.close();
 
         return result;
-    };
+    }
 
     /**
      * Récupération du premier objet de la table
@@ -155,7 +155,7 @@ public abstract class BaseDb<T> {
         this.close();
 
         return result;
-    };
+    }
 
     /**
      * Récupération des tous les items d'une table

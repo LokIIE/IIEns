@@ -229,6 +229,8 @@ public class Edt extends BaseFragment {
         ft.addToBackStack(null);
 
         ft.commit();
+
+        global.setCurrentFragment(4);
     }
 
     /**
