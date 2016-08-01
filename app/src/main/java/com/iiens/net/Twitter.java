@@ -27,7 +27,7 @@ public class Twitter extends BaseFragment {
         final SearchTimeline searchTimeline = new SearchTimeline.Builder()
                 .query("#ENSIIE OR @ENSIIE OR @BdE_ENSIIE OR @A3IE")
                 .build();
-        final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(this.context)
+        final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(global.getApplicationContext())
                 .setTimeline(searchTimeline)
                 .build();
 
