@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
-import com.twitter.sdk.android.tweetui.SearchTimeline;
 import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
+import com.twitter.sdk.android.tweetui.TwitterListTimeline;
 
 import org.json.JSONArray;
 
@@ -24,11 +24,11 @@ public class Twitter extends BaseFragment {
     protected void generateView(View view) {
         this.mListView = (ListView) view.findViewById(R.id.listview);
 
-        final SearchTimeline searchTimeline = new SearchTimeline.Builder()
-                .query("#ENSIIE OR @ENSIIE OR @BdE_ENSIIE OR @A3IE")
+        TwitterListTimeline listTimeline = new TwitterListTimeline.Builder()
+                .id(Long.valueOf(context.getResources().getString(R.string.tw_list_id)))
                 .build();
         final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(global.getApplicationContext())
-                .setTimeline(searchTimeline)
+                .setTimeline(listTimeline)
                 .build();
 
         this.mListView.setAdapter(adapter);
