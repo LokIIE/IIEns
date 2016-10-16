@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.multidex.MultiDex;
 import android.widget.Toast;
 
 import com.twitter.sdk.android.Twitter;
@@ -17,9 +18,17 @@ import io.fabric.sdk.android.Fabric;
 
 public class GlobalState extends Application {
 
+    public static boolean debug = true;
+
     private static Bundle appBundle = new Bundle();
     private static Resources resources;
     private int currentFragment = 0;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     public Bundle getBundle() {
         return appBundle;
@@ -40,6 +49,8 @@ public class GlobalState extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        MultiDex.install(this);
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(
                 getString(R.string.tw_key),
@@ -64,5 +75,18 @@ public class GlobalState extends Application {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return (netInfo != null && netInfo.isConnectedOrConnecting());
+    }
+
+    public static class PrefsConst {
+        static String FIRST_LAUNCH = "firstLaunch";
+        static String UPDATE_FCM_TOKEN = "updateFcmToken";
+        static String HAS_PLAY_SERVICES = "hasPlayServices";
+        static String NO_PLAY_SERVICES_DIALOG = "noPlayServicesDialog";
+        static String SAVED_FCM_TOKEN = "savedFcmToken";
+        static String APP_NEW_VERSION = "appNewVersion";
+        static String SAVE_PREFERENCES = "savePreferences";
+        static String SAVE_CREDENTIALS = "saveCredentials";
+        static String SAVED_LOGIN = "savedLogin";
+        static String SAVED_PASSWORD = "savedPassword";
     }
 }

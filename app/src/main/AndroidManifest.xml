@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.iiens.net"
-    android:versionCode="13"
-    android:versionName="1.6" >
+    package="com.iiens.net">
 
-    <uses-sdk
-        android:minSdkVersion="19"
-        android:targetSdkVersion="23" />
-
-    <permission
-        android:name="com.iiens.net.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="com.iiens.net.permission.C2D_MESSAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
@@ -25,18 +13,19 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppBaseTheme" >
-        <receiver
-            android:name=".gcm.GCMBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+        android:theme="@style/AppBaseTheme">
+
+        <service android:name=".fcm.FbMessagingService">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
-                <category android:name="com.iiens.net" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
-        </receiver>
+        </service>
 
-        <service android:name=".gcm.GCMIntentService" />
+        <service android:name=".fcm.FbInstanceIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -60,12 +49,6 @@
             android:name=".Main"
             android:label="@string/app_name"
             android:launchMode="singleTask">
-        </activity>
-
-        <activity
-            android:name=".EdtResult"
-            android:label="@string/app_name"
-            android:launchMode="singleTask" >
         </activity>
     </application>
 
