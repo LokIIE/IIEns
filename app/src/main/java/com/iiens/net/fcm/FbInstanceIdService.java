@@ -63,5 +63,12 @@ public class FbInstanceIdService extends FirebaseInstanceIdService {
     private void sendRegistrationToServer(String token) {
         // TODO: Implement this method to send token to your app server.
         Toast.makeText(this.getApplicationContext(), token, Toast.LENGTH_SHORT).show();
+/*        URL url;
+        try {
+            url = new URL(ctx.getResources().getString(R.string.url_fcm_api) + regid);
+            HttpURLConnection httpclient = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
     }
 }

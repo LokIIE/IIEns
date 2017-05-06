@@ -28,7 +28,7 @@ public class SplashScreen extends Activity {
     private static final String TWITTER_SECRET = "nmxP2Dr3psD97pDLIf78EM6PJarw45Vor8Kodg3PQbq0Bnri3N";
 
 
-    private static final int SPLASH_TIME_OUT = 2000; // Splash screen duration
+    private static final int SPLASH_TIME_OUT = 1000; // Splash screen duration
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000; // Constante arbitraire
 
     /* Initialize the variables needed for this activity */

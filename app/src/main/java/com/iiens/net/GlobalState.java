@@ -6,12 +6,14 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.multidex.MultiDex;
 import android.widget.Toast;
 
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.concurrent.ExecutionException;
 
 import io.fabric.sdk.android.Fabric;
@@ -24,11 +26,13 @@ public class GlobalState extends Application {
     private static Resources resources;
     private int currentFragment = 0;
 
-    @Override
+    public static CookieManager cookieManager = new CookieManager();
+
+/*    @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
-    }
+    }*/
 
     public Bundle getBundle() {
         return appBundle;
@@ -50,7 +54,7 @@ public class GlobalState extends Application {
     public void onCreate() {
         super.onCreate();
 
-        MultiDex.install(this);
+        //MultiDex.install(this);
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(
                 getString(R.string.tw_key),
@@ -58,6 +62,9 @@ public class GlobalState extends Application {
         Fabric.with(this, new Twitter(authConfig));
 
         resources = getResources();
+
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        CookieHandler.setDefault( GlobalState.cookieManager );
 
         AppStartAsyncTask at = new AppStartAsyncTask(getApplicationContext());
         try {

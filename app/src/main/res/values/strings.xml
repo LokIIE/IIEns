@@ -12,6 +12,18 @@
     <string name="bool_news_update_name">news_new_update</string>
     <string name="bool_anniv_update_name">anniv_new_update</string>
 
+
+    <string name="hint_user">Identifiant ARISE</string>
+    <string name="hint_password">Mot de passe</string>
+    <string name="connect_button">CONNEXION</string>
+    <string name="offline_button">PASSER</string>
+    <string name="in_progress">Connexion en cours&#8230;</string>
+    <string name="authenticated">Connecté ! Récupération des infos&#8230;</string>
+    <string name="offline_mode">Récupération des infos&#8230;</string>
+    <string name="error_incorrect">Erreur d\'identifiants</string>
+    <string name="error_field_required">Champ obligatoire</string>
+    <string name="auto_connect">Connexion automatique</string>
+
     <!-- Toast messages -->
     <string name="arise_unavailable">Arise = 404 not found</string>
     <string name="internet_unavailable">Connexion à internet requise</string>

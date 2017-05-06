@@ -3,7 +3,6 @@ package com.iiens.net;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.iiens.net.database.DatabaseHelper;
 import com.iiens.net.database.EdtFormDb;
 import com.iiens.net.database.EdtOptDb;
 import com.iiens.net.model.EdtFormItem;
@@ -238,14 +237,14 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... voids) {
-        try {
-            new DatabaseHelper(context).createDb(null);
-            syncEdtForm();
-            syncEdtOptions();
-            //getAllClubLogo();
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            new DatabaseHelper(context).createDb(null);
+//            //syncEdtForm();
+//            //syncEdtOptions();
+//            //getAllClubLogo();
+//        } catch (IOException | JSONException e) {
+//            e.printStackTrace();
+//        }
         return isAriseOnline();
     }
 

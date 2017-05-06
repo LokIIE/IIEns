@@ -6,12 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.iiens.net.R;
 import com.iiens.net.SplashScreen;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
 
@@ -30,7 +25,7 @@ public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
     @Override
     protected String doInBackground(Void... arg0) {
         String msg;
-        try {
+       /* try {
             if (gcm == null) gcm = GoogleCloudMessaging.getInstance(ctx);
             regid = gcm.register(ctx.getResources().getString(R.string.gcm_id));
             msg = "Device registered, registration ID=" + regid;
@@ -48,7 +43,7 @@ public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
             // If there is an error, don't just keep trying to register.
             // Require the user to click a button again, or perform
             // exponential back-off.
-        }
+        }*/
         return msg;
     }
 
@@ -64,13 +59,13 @@ public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
 
 
     private void sendRegistrationIdToBackend() {
-        URL url;
+      /*  URL url;
         try {
             url = new URL(ctx.getResources().getString(R.string.url_gcm_register) + regid);
             HttpURLConnection httpclient = (HttpURLConnection) url.openConnection();
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
 

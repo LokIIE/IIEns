@@ -117,7 +117,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        createDb(database);
+        //createDb(database);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDTFORM);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS);
-        this.onCreate(db);
+        createDb(db);
     }
 
     public void createDb(SQLiteDatabase db) {
