@@ -14,11 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-/**
- * ActionBar
- * Gère le fonctionnement de la barre d'action
- */
-
 public class Main extends Activity {
 
     private static boolean inSettings = false;

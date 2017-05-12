@@ -1,8 +1,8 @@
 package com.iiens.net;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.os.Build;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +12,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -34,37 +35,60 @@ public class AriseWebViewClient {
     private LinearLayout container;
     private Button btnCloseWebview;
 
+    private boolean isLoginMode = false;
+    private EditText formLogin, formPassword;
+
     public AriseWebViewClient (Activity ctx, final AriseInterface callback ) {
 
         this.context = ctx;
         this.container = (LinearLayout) ctx.findViewById(R.id.arise_webview_container);
+
+        // if( this.container == null ) throw new MissingResourceException( "Missing resource" , ctx.getLocalClassName(), "arise_webview_container" );
+
         this.webView = (WebView) ctx.findViewById(R.id.arise_webview);
         this.callback = callback;
 
         this.jsInterface = new JSInterface();
 
+        initializeWebViewClients();
+    }
+
+    public void initializeWebViewClients () {
         this.webView.setWebChromeClient( new WebChromeClient() );
         this.webView.setWebViewClient( new WebViewClient() {
+
+            @Override
+            public void onLoadResource (WebView view,
+                            String url) {
+                Log.d("onLoadResource", url);
+            }
             @Override
             public void onPageFinished(WebView view, String url) {
                 view.loadUrl( getJsScript() );
+                Log.d( "PAGEFINISHED", url );
             }
 
-            @TargetApi(Build.VERSION_CODES.N)
             @Override
             public boolean shouldOverrideUrlLoading( WebView view, WebResourceRequest request ) {
+                Log.d( "TEST", request.getUrl().toString() );
                 return true;
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap bitmap) {
+                Log.d( "PAGESTARTED", url );
             }
 
             @SuppressWarnings("deprecation")
             @Override
             public boolean shouldOverrideUrlLoading( WebView view, String url ) {
                 view.loadUrl(url);
+                Log.d( "TEST2", url );
                 return true;
             }
         });
 
-        this.btnCloseWebview = (Button) ctx.findViewById(R.id.arise_webview_close);
+        this.btnCloseWebview = (Button) context.findViewById(R.id.arise_webview_close);
         this.btnCloseWebview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,10 +98,55 @@ public class AriseWebViewClient {
 
         this.webView.getSettings().setJavaScriptEnabled(true);
         this.webView.getSettings().setDomStorageEnabled(true);
+
+        this.webView.removeJavascriptInterface( "HtmlViewer" );
         this.webView.addJavascriptInterface( jsInterface, "HtmlViewer" );
     }
 
+    public void enableLoginMode (EditText formLogin, EditText formPassword) {
+
+        this.isLoginMode = true;
+        this.formLogin = formLogin;
+        this.formPassword = formPassword;
+
+        initializeWebViewClients();
+    }
+
+    public void disableLoginMode () {
+
+        this.isLoginMode = false;
+        this.formLogin = null;
+        this.formPassword = null;
+
+        initializeWebViewClients();
+    }
+
     public String getJsScript () {
+
+        if( isLoginMode ) {
+            return "javascript:( function () {" +
+                "window.HtmlViewer.hideWebView();" +
+                "var credential = document.getElementsByClassName('credential');" +
+                "var autorize = document.getElementsByClassName('well');" +
+                "var login = document.getElementById('login');" +
+                "var pass = document.getElementById('password');" +
+                "if( credential.length > 0 ) {" +
+                    "credential = credential[0].innerHTML;" +
+                    "window.HtmlViewer.autoSendVerifier( credential );" +
+                "} else if( autorize.length > 0 ) {" +
+                "   window.HtmlViewer.showWebView();" +
+                "} else if( document.location.href === '" + context.getResources().getString( R.string.url_oauth_forgot_password ) + "' ) {" +
+                    "window.HtmlViewer.showWebView();" +
+                "} else if( document.location.href === '" + context.getResources().getString( R.string.url_oauth_list_authorizations ) + "' ) {" +
+                    "window.HtmlViewer.connectionSuccess();" +
+                "} else if( login && pass ) {" +
+                    "login.value = '" + formLogin.getText().toString() + "';" +
+                    "pass.value = '" + formPassword.getText().toString() + "';" +
+                    "submit_btn = document.getElementsByClassName('btn-success')[0];" +
+                    "submit_btn.click();" +
+                "}" +
+                "})();";
+        }
 
         return "javascript:( function () {" +
             "window.HtmlViewer.hideWebView();" +
@@ -87,9 +156,13 @@ public class AriseWebViewClient {
                 "credential = credential[0].innerHTML;" +
                 "window.HtmlViewer.autoSendVerifier( credential );" +
             "} else if( autorize.length > 0 ) {" +
-                "window.HtmlViewer.expandWebView();" +
-            "}"+
-        "})();";
+                "window.HtmlViewer.showWebView();" +
+            "} else if( document.location.href === '" + context.getResources().getString( R.string.url_oauth_forgot_password ) + "' ) {" +
+                "window.HtmlViewer.showWebView();" +
+            "} else if( document.location.href === '" + context.getResources().getString( R.string.url_oauth_list_authorizations ) + "' ) {" +
+                "window.HtmlViewer.connectionSuccess();" +
+            "}" +
+            "})();";
     }
 
     public void loadUrl ( String url ) {
@@ -120,7 +193,7 @@ public class AriseWebViewClient {
 
                 postData.put( "verifier", ariseVerifier );
 
-                JsonObjectRequest loginVerifier = new JsonObjectRequest( context.getResources().getString(R.string.apiie_login_arise), postData,
+                JsonObjectRequest loginVerifier = new JsonObjectRequest( context.getResources().getString(R.string.url_apiie_login), postData,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
@@ -129,6 +202,7 @@ public class AriseWebViewClient {
 
                                     if( response.has("connection_status") && response.getString("connection_status").equals("ok") ) {
 
+                                        // TODO : récupérer l'URL de déconnexion
                                         callback.onConnectionSuccess();
 
                                     } else {
@@ -157,7 +231,12 @@ public class AriseWebViewClient {
         }
 
         @JavascriptInterface
-        public void expandWebView () {
+        public void connectionSuccess () {
+            callback.onConnectionSuccess();
+        }
+
+        @JavascriptInterface
+        public void showWebView () {
             // Log.d( "JSInterface", "expandWebView" );
             context.runOnUiThread( new Runnable() {
                 @Override

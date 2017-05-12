@@ -13,7 +13,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppBaseTheme">
+        android:theme="@style/IIEnsTheme">
 
         <!--<service android:name=".fcm.FbMessagingService">-->
             <!--<intent-filter>-->
@@ -35,18 +35,26 @@
             android:name="io.fabric.ApiKey"
             android:value="df274d812a88ccd398c6b5d86b4017c1925c79a8" />
 
-        <activity
-            android:name="Login"
+        <activity android:name=".SplashScreen"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.Material.NoActionBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="Itvtube"
+        <activity android:name="Login"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        </activity>
+
+        <activity android:name="Main"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Material">
+        </activity>
+
+        <activity android:name="Itvtube"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:configChanges="orientation|keyboardHidden|screenSize">

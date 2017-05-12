@@ -5,9 +5,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
@@ -23,8 +23,10 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class Itvtube extends Activity {
 
@@ -34,30 +36,39 @@ public class Itvtube extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.arise_login);
+        setContentView(R.layout.itvtube);
 
-        wv = (WebView) findViewById(R.id.arise_webview);
-        WebChromeClient wcClient = new WebChromeClient();
+        wv = (WebView) findViewById(R.id.itvtube_webview);
+        wv.setWebViewClient( new WebViewClient() {
 
-        wv.setWebChromeClient(wcClient);
+            @Override
+            public void onLoadResource ( WebView view, String url ) {
+                Log.d( "onLoadResource", url );
+
+                if( url == getResources().getString(R.string.url_itvtube_tags) || url == getResources().getString(R.string.url_itvtube_videos) || url == getResources().getString(R.string.url_itvtube_raw) ) {
+
+                    List<HttpCookie> cookies = GlobalState.cookieManager.getCookieStore().getCookies();
+                    for( HttpCookie cookie : cookies ) {
+                        Log.d( "COOKIE" , cookie.toString() );
+                    }
+                }
+            }
+
+            @Override
+            public void onPageFinished ( WebView view, String url ) {
+                Log.d( "FINISHED", url );
+
+                    List<HttpCookie> cookies = GlobalState.cookieManager.getCookieStore().getCookies();
+                    for( HttpCookie cookie : cookies ) {
+                        Log.d("COOKIE", cookie.toString());
+                    }
+            }
+        });
 
         WebSettings wv_settings = wv.getSettings();
         wv_settings.setJavaScriptEnabled(true);
         wv_settings.setBuiltInZoomControls(true);
         wv_settings.setDisplayZoomControls(false);
-
-/*        wv.setWebViewClient( new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                loadVideosList();
-            }
-        });*/
 
         if (savedInstanceState == null) {
             wv.loadUrl("https://itvtube.iiens.net");

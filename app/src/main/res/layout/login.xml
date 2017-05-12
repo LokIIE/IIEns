@@ -36,13 +36,12 @@
     </LinearLayout>
 
     <!-- Login form -->
-
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@drawable/login_bckgrd" >
+        android:background="@drawable/login_bckgrd">
 
         <LinearLayout
             style="@style/LoginFormContainer"
@@ -50,7 +49,11 @@
             android:layout_gravity="center"
             android:background="@drawable/card_background"
             android:gravity="center"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="8dp">
 
             <EditText
                 android:id="@+id/username"
@@ -58,9 +61,13 @@
                 android:layout_height="48dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
+                android:allowUndo="false"
                 android:background="@drawable/bottom_line"
                 android:hint="@string/hint_user"
+                android:inputType="textNoSuggestions"
                 android:paddingLeft="8dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <EditText
@@ -74,6 +81,8 @@
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:paddingLeft="8dp"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
                 android:textSize="16sp" />
 
             <CheckBox
@@ -89,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:gravity="center"
-                android:orientation="horizontal" >
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/connect_button"
@@ -109,7 +118,7 @@
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/offline_button"
+                    android:id="@+id/btn_offline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="4dp"
@@ -125,50 +134,20 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_forgot_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@null"
+                android:text="Mot de passe oublié"
+                android:textColor="@color/orange"
+                android:textSize="12sp" />
+
         </LinearLayout>
     </ScrollView>
 
-    <!-- Login webview - hidden -->
-    <LinearLayout
-        android:id="@+id/arise_webview_container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:gravity="center">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="30dp">
-
-                <WebView
-                    android:id="@+id/arise_webview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
-
-            </RelativeLayout>
-
-            <Button
-                android:id="@+id/arise_webview_close"
-                android:background="@drawable/round_button_background"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:text="X"
-                android:textColor="@color/black"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:visibility="gone"/>
-
-        </RelativeLayout>
-
-    </LinearLayout>
-
+    <!-- Webview arise -->
+    <include layout="@layout/arise_webview" />
 </merge>

@@ -39,7 +39,7 @@ public class TaskOauthToken extends AsyncTask<Void, Void, String> {
 
         try {
 
-            HttpsURLConnection connection = (HttpsURLConnection) new URL( context.getResources().getString(R.string.apiie_oauth) ).openConnection();
+            HttpsURLConnection connection = (HttpsURLConnection) new URL( context.getResources().getString(R.string.url_oauth) ).openConnection();
             connection.setConnectTimeout(timeout);
             connection.setReadTimeout(timeout);
             connection.setRequestMethod("GET");

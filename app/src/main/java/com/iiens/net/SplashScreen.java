@@ -1,20 +1,12 @@
 package com.iiens.net;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.twitter.sdk.android.Twitter;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
-
-import io.fabric.sdk.android.Fabric;
 
 /**
  * SplashScreen
@@ -35,52 +27,52 @@ public class SplashScreen extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
-        Fabric.with(this, new Twitter(authConfig));
+        //TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        //Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_splash);
 
-        final SharedPreferences prefs = getApplicationContext().getSharedPreferences(SplashScreen.class.getSimpleName(),
-                Context.MODE_PRIVATE);
-
-        if (checkPlayServices()) {
-            prefs.edit().putBoolean(GlobalState.PrefsConst.HAS_PLAY_SERVICES, true).apply();
-
-            // Verify if a gcm registration id exists, if not generates it
-            // GCM needs Google Play Services to function correctly
-            if (prefs.getBoolean(GlobalState.PrefsConst.HAS_PLAY_SERVICES, false)) {
-                if (prefs.getBoolean(GlobalState.PrefsConst.FIRST_LAUNCH, true)
-                        || prefs.getBoolean(GlobalState.PrefsConst.UPDATE_FCM_TOKEN, true)) {
-
-                    // TODO : vérification existence token, sinon création
-                    if (true) {
-                        String fcmToken = FirebaseInstanceId.getInstance().getToken();
-
-                        if (GlobalState.debug) {
-                            Log.d(this.getLocalClassName(), "New token : " + fcmToken);
-                        }
-                        // TODO : envoi token en base de données
-
+//        final SharedPreferences prefs = getApplicationContext().getSharedPreferences(SplashScreen.class.getSimpleName(),
+//                Context.MODE_PRIVATE);
+//
+//        if (checkPlayServices()) {
+//            prefs.edit().putBoolean(GlobalState.PrefsConst.HAS_PLAY_SERVICES, true).apply();
+//
+//            // Verify if a gcm registration id exists, if not generates it
+//            // GCM needs Google Play Services to function correctly
+//            if (prefs.getBoolean(GlobalState.PrefsConst.HAS_PLAY_SERVICES, false)) {
+//                if (prefs.getBoolean(GlobalState.PrefsConst.FIRST_LAUNCH, true)
+//                        || prefs.getBoolean(GlobalState.PrefsConst.UPDATE_FCM_TOKEN, true)) {
+//
+//                    // TODO : vérification existence token, sinon création
+//                    if (true) {
+//                        String fcmToken = FirebaseInstanceId.getInstance().getToken();
+//
+//                        if (GlobalState.debug) {
+//                            Log.d(this.getLocalClassName(), "New token : " + fcmToken);
+//                        }
+//                        // TODO : envoi token en base de données
+//
 //                        SharedPreferences.Editor editor = prefs.edit();
 //                        editor.putBoolean(GlobalState.PrefsConst.FIRST_LAUNCH, false);
 //                        editor.putBoolean(GlobalState.PrefsConst.UPDATE_FCM_TOKEN, false);
-//                        editor.putString(GlobalState.PrefsConst.SAVED_FCM_TOKEN, fcmToken);
+//                       editor.putString(GlobalState.PrefsConst.SAVED_FCM_TOKEN, fcmToken);
 //                        editor.commit();
-                    }
-                } else {
+//                    }
+//                } else {
+//
+//                    if (GlobalState.debug) {
+//                        Log.d(this.getLocalClassName(), "No Google Play Service");
+//                    }
+//                }
+//        } else {
+//            // TODO : dialogue pour notifications non dispo (1 fois)
+//            if (prefs.getBoolean(GlobalState.PrefsConst.NO_PLAY_SERVICES_DIALOG, true)) {
+//                prefs.edit().putBoolean(GlobalState.PrefsConst.NO_PLAY_SERVICES_DIALOG, false).apply();
+//            }
+//        }
 
-                    if (GlobalState.debug) {
-                        Log.d(this.getLocalClassName(), "No Google Play Service");
-                    }
-                }
-        } else {
-            // TODO : dialogue pour notifications non dispo (1 fois)
-            if (prefs.getBoolean(GlobalState.PrefsConst.NO_PLAY_SERVICES_DIALOG, true)) {
-                prefs.edit().putBoolean(GlobalState.PrefsConst.NO_PLAY_SERVICES_DIALOG, false).apply();
-            }
-        }
 
-
-        }
+//        }
     }
 
     /* Actions when the view is displayed on the screen */
@@ -92,7 +84,7 @@ public class SplashScreen extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(SplashScreen.this, Main.class);
+                Intent i = new Intent(SplashScreen.this, Login.class);
 
                 startActivity(i);
 
