@@ -1,12 +1,22 @@
 package com.iiens.net;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,6 +41,9 @@ public class Main extends Activity {
     private ListView menu;
     private ActionBarDrawerToggle drawerToggle;
     private FragmentManager fragmentManager;
+
+    long enqueue;
+    DownloadManager dm;
 
     /**
      * Contexte de l'application
@@ -83,18 +96,21 @@ public class Main extends Activity {
         else {
             // if an item of the right action menu was selected, handle it accordingly
             drawerLayout.closeDrawer(menu);
+
             switch (item.getItemId()) {
+
                 case R.id.action_settings:
                     if (!inSettings) goToSettings();
                     else backFromSettings();
                     return true;
+
                 case R.id.action_refresh:
                     if (inSettings) return true;
-                {
+
                     // Start refreshing the display
                     ((BaseFragment) menuFragments[appContext.getCurrentFragment()]).refreshDisplay();
-                }
-                return true;
+                    return true;
+
                 default:
                     return super.onOptionsItemSelected(item);
             }
@@ -137,7 +153,9 @@ public class Main extends Activity {
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 drawerLayout.closeDrawer(menu); // Close the menu in all cases
 
-                if (appContext.getCurrentFragment() != position) { // if an other item is selected in the menu, open it
+                if( position == 4 ) {
+                    openBreviaire(view);
+                } else if (appContext.getCurrentFragment() != position) { // if an other item is selected in the menu, open it
                     appContext.setCurrentFragment(position);
                     openFragment(position);
                 } else if (inSettings) { // If we get want to get back from settings to the current fragment
@@ -183,4 +201,65 @@ public class Main extends Activity {
         fragmentManager.beginTransaction().replace(R.id.content_container, new Settings()).addToBackStack(null).commit();
     }
 
+
+    public void openBreviaire ( View v ) {
+
+        dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        registerReceiver(onComplete,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+
+        final Uri uri= Uri.parse( appContext.getString(R.string.url_apiie) + appContext.getString(R.string.apiie_breviaire) );
+
+        final DownloadManager.Request request = new DownloadManager.Request(uri);
+        request.setDestinationInExternalFilesDir( Main.this, Environment.DIRECTORY_DOWNLOADS, "breviaire.pdf" );
+
+        new Thread() {
+            public void run() {
+                enqueue = dm.enqueue(request);
+            }
+        }.start();
+    }
+
+    BroadcastReceiver onComplete = new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            //check if the broadcast message is for our enqueued download
+            long referenceId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+
+            if(referenceId == enqueue) {
+                try {
+                    String action = intent.getAction();
+                    if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                        DownloadManager.Query query = new DownloadManager.Query();
+                        query.setFilterById(enqueue);
+                        Cursor c = dm.query(query);
+                        if (c.moveToFirst()) {
+                            int columnIndex = c
+                                    .getColumnIndex(DownloadManager.COLUMN_STATUS);
+                            if (DownloadManager.STATUS_SUCCESSFUL == c
+                                    .getInt(columnIndex)) {
+
+                                String uriString = c
+                                        .getString(c
+                                                .getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+
+                                Uri a = Uri.parse(uriString);
+                                Log.d( "FILE", uriString);
+                                Intent intentOpenPdf = new Intent(Intent.ACTION_VIEW);
+                                intentOpenPdf.setDataAndType(a, "application/pdf");
+                                intentOpenPdf.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intentOpenPdf);
+                            }
+                        }
+                    }
+                } catch (ActivityNotFoundException e) {
+                }
+            }
+        }
+    };
+
+    @Override
+    public void onDestroy () {
+        super.onDestroy();
+        unregisterReceiver(onComplete);
+    }
 }

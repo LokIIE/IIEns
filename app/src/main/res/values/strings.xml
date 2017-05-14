@@ -39,6 +39,7 @@
         <item>Emploi du temps</item>
         <item>Anniversaires</item>
         <item>Twitter</item>
+        <item>Bréviaire</item>
     </string-array>
 
     <!-- Values for activity_main.xml -->

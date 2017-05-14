@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -81,30 +80,20 @@ public class Login extends Activity {
     public void onStart () {
         super.onStart();
 
-        final Button btnConnect = (Button) findViewById( R.id.connect_button );
-        btnConnect.setOnClickListener( new View.OnClickListener() {
-            public void onClick( View v ) {
-                queue.cancelAll( this );
-                queue.add( uri_request );
-            }
-        });
-
-        final Button btnOffline = (Button) findViewById( R.id.btn_offline );
-        btnOffline.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startMainActivity();
-            }
-        });
-
-        final Button btnForgotPassword = (Button) findViewById( R.id.btn_forgot_password );
-        btnForgotPassword.setOnClickListener( new View.OnClickListener() {
-            public void onClick( View v ) {
-                wv.loadUrl( getResources().getString( R.string.url_oauth_forgot_password ) );
-            }
-        });
-
         queue.start();
+    }
+
+    public void onForgotPasswordClicked ( View v ) {
+        wv.loadUrl( getResources().getString( R.string.url_oauth_forgot_password ) );
+    }
+
+    public void onOfflineClicked ( View v ) {
+        startMainActivity();
+    }
+
+    public void onConnectClicked ( View v ) {
+        queue.cancelAll( this );
+        queue.add( uri_request );
     }
 
     @Override
@@ -139,7 +128,7 @@ public class Login extends Activity {
     }
 
     private void startMainActivity () {
-        Intent i = new Intent(Login.this, Itvtube.class);
+        Intent i = new Intent(Login.this, Main.class);
         startActivity(i);
     }
 }
