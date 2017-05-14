@@ -3,7 +3,6 @@ package com.iiens.net;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,7 +19,6 @@ import org.json.JSONObject;
 public class Login extends Activity {
 
     RequestQueue queue;
-    EditText form_login, form_password;
     AriseWebViewClient wv;
     JsonObjectRequest uri_request;
 
@@ -29,20 +27,19 @@ public class Login extends Activity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.login);
 
-        form_login = (EditText) findViewById( R.id.username );
-        form_password = (EditText) findViewById( R.id.password );
-
-        wv = new AriseWebViewClient( this,
-                new AriseWebViewClient.AriseInterface () {
+        wv = new AriseWebViewClient( this, new AriseWebViewClient.AriseInterface () {
                     public void onConnectionSuccess () {
                         startMainActivity();
                     }
         });
 
-        wv.enableLoginMode( form_login, form_password );
+        wv.enableLoginMode(
+                (EditText) findViewById( R.id.username ),
+                (EditText) findViewById( R.id.password )
+        );
 
-        // Request a string response from the provided URL.
-        uri_request = new JsonObjectRequest( getResources().getString( R.string.url_apiie_login ), new JSONObject(),
+        uri_request = new JsonObjectRequest( getResources().getString( R.string.url_apiie_login ),
+                new JSONObject(),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -54,21 +51,13 @@ public class Login extends Activity {
                                 wv.loadUrl( response.getString("redirect") );
                             }
                         } catch (JSONException e) {
-                            Toast.makeText(
-                                    getApplicationContext(),
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG
-                            ).show();
+                            Toast.makeText( getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG ).show();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        "Error: " + error.getMessage(),
-                        Toast.LENGTH_LONG
-                ).show();
+                Toast.makeText( getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG ).show();
             }
         }
         );
@@ -79,8 +68,38 @@ public class Login extends Activity {
     @Override
     public void onStart () {
         super.onStart();
-
         queue.start();
+    }
+
+    @Override
+    public void onDestroy () {
+        try {
+            RequestQueue queue = Volley.newRequestQueue( getApplicationContext() );
+            JSONObject postData = new JSONObject();
+            postData.put( "logout", "logout" );
+
+            JsonObjectRequest destroyClient = new JsonObjectRequest(
+                    getResources().getString( R.string.url_apiie_login ),
+                    postData,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText( getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+            queue.add( destroyClient );
+
+        } catch ( Exception e ) {
+            Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        super.onDestroy();
     }
 
     public void onForgotPasswordClicked ( View v ) {
@@ -96,39 +115,7 @@ public class Login extends Activity {
         queue.add( uri_request );
     }
 
-    @Override
-    public void onDestroy () {
-        try {
-            RequestQueue queue = Volley.newRequestQueue( getApplicationContext() );
-            JSONObject postData = new JSONObject();
-
-            postData.put( "logout", "logout" );
-            Log.d( "data" , postData.toString() );
-
-            JsonObjectRequest destroyClient = new JsonObjectRequest( getResources().getString( R.string.url_apiie_login ), postData,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.d( "DESTROY", response.toString() );
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
-
-            queue.add( destroyClient );
-
-        } catch ( Exception e ) {
-            Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
-        super.onDestroy();
-    }
-
     private void startMainActivity () {
-        Intent i = new Intent(Login.this, Main.class);
-        startActivity(i);
+        startActivity( new Intent(Login.this, Main.class) );
     }
 }

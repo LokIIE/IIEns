@@ -36,11 +36,12 @@
     </LinearLayout>
 
     <!-- Login form -->
-    <ScrollView
+    <LinearLayout
         android:id="@+id/login_form"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:gravity="center"
         android:background="@drawable/login_bckgrd">
 
         <LinearLayout
@@ -57,33 +58,18 @@
 
             <EditText
                 android:id="@+id/username"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
+                style="@style/LoginEditText"
                 android:allowUndo="false"
-                android:background="@drawable/bottom_line"
                 android:hint="@string/hint_user"
                 android:inputType="textNoSuggestions"
-                android:paddingLeft="8dp"
-                android:textAlignment="viewStart"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                 />
 
             <EditText
                 android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/bottom_line"
+                style="@style/LoginEditText"
                 android:hint="@string/hint_password"
                 android:imeOptions="actionUnspecified"
-                android:inputType="textPassword"
-                android:paddingLeft="8dp"
-                android:textAlignment="viewStart"
-                android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:inputType="textPassword" />
 
             <CheckBox
                 android:id="@+id/auto_connect"
@@ -102,54 +88,38 @@
 
                 <Button
                     android:id="@+id/btn_connect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:background="@null"
-                    android:minWidth="64dp"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="8dp"
+                    style="@style/LoginButton"
                     android:text="@string/connect_button"
-                    android:textColor="@color/orange"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:onClick="onConnectClicked" />
 
                 <Button
                     android:id="@+id/btn_offline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:background="@null"
-                    android:minWidth="64dp"
-                    android:paddingBottom="8dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="8dp"
+                    style="@style/LoginButton"
                     android:text="@string/offline_button"
-                    android:textColor="@color/orange"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:onClick="onOfflineClicked" />
             </LinearLayout>
-
-            <Button
-                android:id="@+id/btn_forgot_password"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@null"
-                android:text="Mot de passe oublié"
-                android:textColor="@color/orange"
-                android:textSize="12sp"
-                android:onClick="onForgotPasswordClicked" />
-
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/LoginFormContainer"
+        android:layout_width="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:background="@drawable/card_background"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_marginBottom="48dp">
+        <Button
+            android:id="@+id/btn_forgot_password"
+            style="@style/LoginButton"
+            android:text="Mot de passe oublié"
+            android:textSize="12sp"
+            android:onClick="onForgotPasswordClicked" />
+    </LinearLayout>
 
     <!-- Webview arise -->
     <include layout="@layout/arise_webview" />
