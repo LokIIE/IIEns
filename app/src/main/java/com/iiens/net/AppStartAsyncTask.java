@@ -28,7 +28,8 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
     private Context context;
 
-    public AppStartAsyncTask(Context context){
+    public AppStartAsyncTask ( Context context ){
+
         this.context = context;
     }
 
@@ -36,18 +37,22 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
      * Ping des serveurs d'Arise
      * @return True si les serveurs sont joignables, False sinon
      */
-    private boolean isAriseOnline() {
+    private boolean isAriseOnline () {
+
         int timeout = 5000;
         String url = context.getResources().getString(R.string.url_iiens);
 
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.setConnectTimeout(timeout);
-            connection.setReadTimeout(timeout);
-            connection.setRequestMethod("GET");
+
+            HttpURLConnection connection = (HttpURLConnection) new URL( url ).openConnection();
+            connection.setConnectTimeout( timeout );
+            connection.setReadTimeout( timeout );
+            connection.setRequestMethod( "GET" );
             int responseCode = connection.getResponseCode();
-            return (200 <= responseCode && responseCode <= 399);
-        } catch (IOException exception) {
+            return ( 200 <= responseCode && responseCode <= 399 );
+
+        } catch ( IOException exception ) {
+
             return false;
         }
     }
@@ -55,56 +60,58 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
     /**
      * Synchronisation du formulaire de l'emploi du temps
      */
-    private void syncEdtForm() throws IOException, JSONException {
+    private void syncEdtForm () throws IOException, JSONException {
+
         String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_edtForm);
         BufferedReader reader = null;
 
-        try
-        {
+        try {
+
             // create the HttpURLConnection
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URL( url ).openConnection();
 
             // just want to do an HTTP GET here
-            connection.setRequestMethod("GET");
+            connection.setRequestMethod( "GET" );
 
             // give it 5 seconds to respond
-            connection.setReadTimeout(5000);
+            connection.setReadTimeout( 5000 );
             connection.connect();
 
             // read the output from the server
-            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            reader = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
             String line;
 
             // put each item in database
-            EdtFormDb dal = new EdtFormDb(context);
+            EdtFormDb dal = new EdtFormDb( context );
 
-            while ((line = reader.readLine()) != null)
-            {
-                JSONArray jArray = new JSONArray(line);
-                for (int i = 0; i < jArray.length(); i++) {
-                    if (!dal.createItem(new EdtFormItem(i, jArray.getJSONObject(i)))) {
+            while ( ( line = reader.readLine() ) != null ) {
+
+                JSONArray jArray = new JSONArray( line );
+                for ( int i = 0; i < jArray.length(); i++ ) {
+
+                    if ( !dal.createItem( new EdtFormItem( i, jArray.getJSONObject( i ) ) ) ) {
                         break;
                     }
                 }
             }
-        }
-        catch (Exception e)
-        {
+
+        } catch ( Exception e ) {
+
             e.printStackTrace();
             throw e;
-        }
-        finally
-        {
+
+        } finally {
+
             // close the reader; this can throw an exception too, so
             // wrap it in another try/catch block.
-            if (reader != null)
-            {
-                try
-                {
+            if ( reader != null ) {
+
+                try {
+
                     reader.close();
-                }
-                catch (IOException ioe)
-                {
+
+                } catch ( IOException ioe ) {
+
                     ioe.printStackTrace();
                 }
             }
@@ -114,45 +121,47 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
     /**
      * Synchronisation du formulaire de l'emploi du temps
      */
-    private void syncEdtOptions() throws IOException, JSONException {
+    private void syncEdtOptions () throws IOException, JSONException {
+
         String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_edtOptions);
         BufferedReader reader = null;
 
-        try
-        {
+        try {
+
             // create the HttpURLConnection
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URL( url ).openConnection();
 
             // just want to do an HTTP GET here
-            connection.setRequestMethod("GET");
+            connection.setRequestMethod( "GET" );
 
             // give it 5 seconds to respond
-            connection.setReadTimeout(5000);
+            connection.setReadTimeout( 5000 );
             connection.connect();
 
             // read the output from the server
-            reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            reader = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
 
             String line;
 
             // put each item in database
-            EdtOptDb dal = new EdtOptDb(context);
+            EdtOptDb dal = new EdtOptDb( context );
 
-            while ((line = reader.readLine()) != null)
-            {
-                JSONArray jArray = new JSONArray(line);
-                for (int i = 0; i < jArray.length(); i++) {
-                    dal.createItem(new EdtOptItem(jArray.getJSONObject(i)));
+            while ( ( line = reader.readLine() ) != null ) {
+
+                JSONArray jArray = new JSONArray( line );
+                for ( int i = 0; i < jArray.length(); i++ ) {
+
+                    dal.createItem( new EdtOptItem( jArray.getJSONObject( i ) ) );
                 }
             }
-        }
-        catch (Exception e)
-        {
+
+        } catch ( Exception e ) {
+
             e.printStackTrace();
             throw e;
-        }
-        finally
-        {
+
+        } finally {
+
             // close the reader; this can throw an exception too, so
             // wrap it in another try/catch block.
             if (reader != null)
@@ -173,7 +182,8 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
      * Récupère les logos des clubs et les stocke localement
      */
     private void getAllClubLogo() throws IOException {
-        EdtFormDb dal = new EdtFormDb(context);
+
+        EdtFormDb dal = new EdtFormDb( context );
         int timeout = 5000;
         String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_logos);
 
@@ -182,10 +192,10 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
         int count;
 
-        try
-        {
+        try {
+
             // create the HttpURLConnection
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URL( url ).openConnection();
 
             // just want to do an HTTP GET here
             connection.setRequestMethod("GET");
@@ -194,49 +204,51 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
             //connection.setDoOutput(true);
 
             // give it 15 seconds to respond
-            connection.setReadTimeout(15*1000);
+            connection.setReadTimeout( 15*1000 );
             connection.connect();
 
             // download file from the server
-            InputStream input = new BufferedInputStream(connection.getInputStream());
-            FileOutputStream output = context.openFileOutput("logos.zip", Context.MODE_PRIVATE);
+            InputStream input = new BufferedInputStream( connection.getInputStream() );
+            FileOutputStream output = context.openFileOutput( "logos.zip", Context.MODE_PRIVATE );
             int lenghtOfFile = connection.getContentLength();
 
             byte data[] = new byte[1024];
 
             long total = 0;
 
-            while ((count = input.read(data)) != -1) {
+            while ( ( count = input.read( data ) ) != -1 ) {
+
                 total += count;
-                output.write(data, 0, count);
+                output.write( data, 0, count );
             }
 
             output.flush();
             output.close();
             input.close();
-        }
-        catch (Exception e)
-        {
+
+        } catch ( Exception e ) {
+
             e.printStackTrace();
             throw e;
-        }
-        finally
-        {
+
+        } finally {
+
             // close the reader; this can throw an exception too, so
             // wrap it in another try/catch block.
-            try
-            {
+            try {
+
                 reader.close();
-            }
-            catch (IOException ioe)
-            {
+
+            } catch ( IOException ioe ) {
+
                 ioe.printStackTrace();
             }
         }
     }
 
     @Override
-    protected Boolean doInBackground(Void... voids) {
+    protected Boolean doInBackground ( Void... voids ) {
+
 //        try {
 //            new DatabaseHelper(context).createDb(null);
 //            //syncEdtForm();

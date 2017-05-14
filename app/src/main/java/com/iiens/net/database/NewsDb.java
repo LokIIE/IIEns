@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * Gestion de la table News dans la bdd
  */
 public class NewsDb extends BaseDb<NewsItem> {
+
     // Champs de la base de données
     private String[] allColumns = {
             DatabaseHelper.NEWS_ID,
@@ -19,29 +20,33 @@ public class NewsDb extends BaseDb<NewsItem> {
             DatabaseHelper.NEWS_CONTENU,
             DatabaseHelper.NEWS_AUTEUR,
             DatabaseHelper.NEWS_DATE_EVENT,
-            DatabaseHelper.NEWS_DATE_PUBLICATION};
+            DatabaseHelper.NEWS_DATE_PUBLICATION
+    };
 
-    public NewsDb(Context context) {
-        super(context, DatabaseHelper.TABLE_NEWS);
+    public NewsDb ( Context context ) {
+
+        super( context, DatabaseHelper.TABLE_NEWS );
     }
 
-    public NewsItem readCursor(Cursor cursor) {
+    public NewsItem readCursor ( Cursor cursor) {
+
         NewsItem item = new NewsItem();
-        item.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.NEWS_ID)));
-        item.setTitre(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NEWS_TITRE)));
-        item.setAuteur(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NEWS_AUTEUR)));
-        item.setContenu(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NEWS_CONTENU)));
-        item.setDatePublication(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NEWS_DATE_PUBLICATION)));
-        item.setDateEvent(cursor.getString(cursor.getColumnIndex(DatabaseHelper.NEWS_DATE_EVENT)));
+        item.setId( cursor.getLong( cursor.getColumnIndex( DatabaseHelper.NEWS_ID ) ) );
+        item.setTitre( cursor.getString( cursor.getColumnIndex( DatabaseHelper.NEWS_TITRE ) ) );
+        item.setAuteur( cursor.getString( cursor.getColumnIndex( DatabaseHelper.NEWS_AUTEUR ) ) );
+        item.setContenu( cursor.getString( cursor.getColumnIndex( DatabaseHelper.NEWS_CONTENU ) ) );
+        item.setDatePublication( cursor.getString( cursor.getColumnIndex( DatabaseHelper.NEWS_DATE_PUBLICATION ) ) );
+        item.setDateEvent( cursor.getString( cursor.getColumnIndex( DatabaseHelper.NEWS_DATE_EVENT ) ) );
         return item;
     }
 
     @Override
-    public long findItemId(NewsItem item) {
+    public long findItemId ( NewsItem item ) {
+
         long result = 0;
 
-        // Connexion a la base de donnees et execution de la requete
         this.open();
+
         // TODO : erreur dans l'echappement des caractères
         Cursor cursor = database.query(
                 tableName,
@@ -52,61 +57,27 @@ public class NewsDb extends BaseDb<NewsItem> {
                 null,
                 null,
                 null,
-                null);
+                null
+        );
 
-        // Lecture des resultats
-        if (cursor.getCount() > 0) {
+        if ( cursor.getCount() > 0 ) {
+
             cursor.moveToFirst();
-            result = readCursor(cursor).getId();
+            result = readCursor( cursor ).getId();
         }
 
-        // Fermeture de la connexion
         cursor.close();
         this.close();
 
         return result;
     }
 
-    public ArrayList<NewsItem> getAllItems() {
+    public ArrayList<NewsItem> getAllItems () {
+
         ArrayList<NewsItem> itemArrayList = new ArrayList<>();
 
-        // Connexion a la base de donnees et execution de la requete
         this.open();
-        // Exécution de la requête
-        Cursor cursor = database.query(DatabaseHelper.TABLE_NEWS,
-                allColumns,
-                null,
-                null,
-                null,
-                null,
-                null);
 
-        // Lecture des résultats
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            NewsItem item = readCursor(cursor);
-            itemArrayList.add(item);
-            cursor.moveToNext();
-        }
-        // Fermeture de la connexion
-        cursor.close();
-        this.close();
-
-        return itemArrayList;
-    }
-
-    @Override
-    public NewsItem getItem(long id) {
-        return null;
-    }
-
-    @Override
-    public NewsItem getFirstItem() {
-        NewsItem result = null;
-
-        // Connexion a la base de donnees et execution de la requete
-        this.open();
-        // Exécution de la requête
         Cursor cursor = database.query(
                 DatabaseHelper.TABLE_NEWS,
                 allColumns,
@@ -114,13 +85,52 @@ public class NewsDb extends BaseDb<NewsItem> {
                 null,
                 null,
                 null,
-                DatabaseHelper.NEWS_ID + " ASC");
+                null
+        );
 
-        if (cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            result = readCursor(cursor);
+        cursor.moveToFirst();
+        while ( !cursor.isAfterLast() ) {
+
+            NewsItem item = readCursor( cursor );
+            itemArrayList.add( item );
+            cursor.moveToNext();
         }
-        // Fermeture de la connexion
+
+        cursor.close();
+        this.close();
+
+        return itemArrayList;
+    }
+
+    @Override
+    public NewsItem getItem ( long id ) {
+
+        return null;
+    }
+
+    @Override
+    public NewsItem getFirstItem () {
+
+        NewsItem result = null;
+
+        this.open();
+
+        Cursor cursor = database.query(
+                DatabaseHelper.TABLE_NEWS,
+                allColumns,
+                null,
+                null,
+                null,
+                null,
+                DatabaseHelper.NEWS_ID + " ASC"
+        );
+
+        if ( cursor.getCount() > 0 ) {
+
+            cursor.moveToFirst();
+            result = readCursor( cursor );
+        }
+
         cursor.close();
         this.close();
 
@@ -128,35 +138,35 @@ public class NewsDb extends BaseDb<NewsItem> {
     }
 
     @Override
-    public boolean createItem(NewsItem item) {
+    public boolean createItem ( NewsItem item ) {
+
         ContentValues values = new ContentValues();
         long insertId;
 
-        // Paramètres de la requête
-        values.put(DatabaseHelper.NEWS_TITRE, item.getTitre());
-        values.put(DatabaseHelper.NEWS_CONTENU, item.getContenu());
-        values.put(DatabaseHelper.NEWS_AUTEUR, item.getAuteur());
-        values.put(DatabaseHelper.NEWS_DATE_PUBLICATION, item.getDatePublication());
-        values.put(DatabaseHelper.NEWS_DATE_EVENT, "");
+        values.put( DatabaseHelper.NEWS_TITRE, item.getTitre() );
+        values.put( DatabaseHelper.NEWS_CONTENU, item.getContenu() );
+        values.put( DatabaseHelper.NEWS_AUTEUR, item.getAuteur() );
+        values.put( DatabaseHelper.NEWS_DATE_PUBLICATION, item.getDatePublication() );
+        values.put( DatabaseHelper.NEWS_DATE_EVENT, "" );
 
-        // Connexion à la base de données et exécution de la requête
         this.open();
-        // Insertion en base
-        insertId = database.insert(DatabaseHelper.TABLE_NEWS, null,
-                values);
-        // Fermeture de la connexion
+        insertId = database.insert(
+                DatabaseHelper.TABLE_NEWS,
+                null,
+                values
+        );
+
         this.close();
 
         return insertId > 0;
     }
 
     @Override
-    public boolean updateItem(NewsItem item) {
+    public boolean updateItem ( NewsItem item ) {
+
         return false;
     }
 
     @Override
-    public void cleanTable() {
-
-    }
+    public void cleanTable () {}
 }

@@ -22,10 +22,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * News
- * Fragment permettant l'affichage des news publiées
+ * Liste des nouvelles
  */
-
 public class News extends BaseFragment {
 
     private final String TAG = getClass().getName();
@@ -33,70 +31,92 @@ public class News extends BaseFragment {
     private ListView mListView;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate ( Bundle savedInstanceState ) {
+
+        super.onCreate( savedInstanceState );
         this.apiKey = getResources().getString(R.string.apiie_news);
-        this.dal = new NewsDb(context);
+        this.dal = new NewsDb( context );
 
         this.layoutId = R.layout.listview;
     }
 
-    protected void generateView(View view) {
-        this.mListView = (ListView) view.findViewById(R.id.listview);
-        view.findViewById(R.id.progress_spinner).setVisibility(View.VISIBLE);
+    protected void generateView ( View view ) {
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.mListView = (ListView) view.findViewById( R.id.listview );
+        view.findViewById(R.id.progress_spinner).setVisibility( View.VISIBLE );
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences( context );
         NewsItem firstItem = dal.getFirstItem();
 
         // Get the JSON data for this fragment
         try {
-            if (preferences.getBoolean(getResources().getString(R.string.bool_news_update_name), false) && global.isOnline()) { // If there is an update available and we are connected to the internet
-                Log.e(TAG, "from web with save");
+
+            if ( preferences.getBoolean( getResources().getString( R.string.bool_news_update_name ), false ) && global.isOnline() ) {
+
+                // If there is an update available and we are connected to the internet
+                Log.e( TAG, "from web with save" );
                 dal.deleteAll();
-                this.apiRequest(view);
-                preferences.edit().putBoolean(getResources().getString(R.string.bool_news_update_name), false).apply();
-            } else if (firstItem != null) {
-                Log.e(TAG, "from database");
-                this.setListViewContent(dal.getAllItems());
-            } else if (global.isOnline()) { // If the file doesn't exist yet (first launch for example), fetch the data
-                Log.e(TAG, "from web");
-                this.apiRequest(view);
-            } else { // If no connection or data stored, can't do anything
-                Toast.makeText(global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG).show();
+                this.apiRequest( view );
+                preferences.edit().putBoolean( getResources().getString( R.string.bool_news_update_name ), false ).apply();
+
+            } else if ( firstItem != null ) {
+
+                Log.e( TAG, "from database" );
+                this.setListViewContent( dal.getAllItems() );
+
+            } else if ( global.isOnline() ) {
+
+                // If the file doesn't exist yet (first launch for example), fetch the data
+                Log.e( TAG, "from web" );
+                this.apiRequest( view );
+
+            } else {
+
+                // If no connection or data stored, can't do anything
+                Toast.makeText( global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG ).show();
             }
+
         } catch (Exception e) {
+
             e.printStackTrace();
         }
     }
 
-    public void displayResult(View view, JSONArray jResult) {
-        final ArrayList<NewsItem> itemList = this.jArrayToArrayList(jResult);
+    public void displayResult ( View view, JSONArray jResult ) {
+
+        final ArrayList<NewsItem> itemList = this.jArrayToArrayList( jResult );
+
         // If the request was successful, save the items to save data consumption and populate listview
         if (jResult != null && jResult.length() > 0) {
-            this.setListViewContent(itemList);
+
+            this.setListViewContent( itemList );
         }
 
-        if (view != null) view.findViewById(R.id.progress_spinner).setVisibility(View.GONE);
+        if (view != null) view.findViewById( R.id.progress_spinner ).setVisibility( View.GONE );
 
         // In case the refresh button was triggered, stop the "animation"
-        if (getView() != null) {
-            getView().findViewById(R.id.progress_spinner).setVisibility(View.GONE);
+        if ( getView() != null ) {
+
+            getView().findViewById( R.id.progress_spinner ).setVisibility( View.GONE );
             getView().setAlpha((float) 1);
         }
 
         dal.deleteAll();
-        for(NewsItem item : itemList) {
+        for ( NewsItem item : itemList ) {
+
             //if (dal.findItemId(item) > 0) {
-            dal.createItem(item);
+            dal.createItem( item );
             //}
         }
     }
 
-    private void setListViewContent(final ArrayList<NewsItem> itemList) {
-        mListView.setAdapter(new NewsItemsAdapter(context, itemList));
+    private void setListViewContent ( final ArrayList<NewsItem> itemList ) {
+
+        mListView.setAdapter( new NewsItemsAdapter( context, itemList ) );
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+
                 FragmentManager fm = getActivity().getFragmentManager();
 
                 // Création fragment détail
@@ -104,31 +124,36 @@ public class News extends BaseFragment {
 
                 // Envoi de l'item sélectionné au fragment
                 Bundle bundle = new Bundle();
-                bundle.putString("item", itemList.get(position).toJsonObject().toString());
-                newsDetail.setArguments(bundle);
+                bundle.putString( "item", itemList.get( position ).toJsonObject().toString() );
+                newsDetail.setArguments( bundle );
 
                 FragmentTransaction ft = fm.beginTransaction();
                 // Remplacement de la vue par le nouveau fragment
-                ft.replace(R.id.content_container, newsDetail);
+                ft.replace( R.id.content_container, newsDetail );
                 // Ajout du nouveau fragment au backstack pour navigation arrière
-                ft.addToBackStack(null);
+                ft.addToBackStack( null );
 
                 ft.commit();
             }
         });
     }
 
-    private ArrayList<NewsItem> jArrayToArrayList(JSONArray jArray) {
+    private ArrayList<NewsItem> jArrayToArrayList ( JSONArray jArray ) {
+
         ArrayList<NewsItem> newsItemsList = new ArrayList<>();
 
         try {
+
             for (int i = 0; i < jArray.length(); i++) {
-                JSONObject json_data = jArray.getJSONObject(i);
+
+                JSONObject json_data = jArray.getJSONObject( i );
                 NewsItem newsItem = new NewsItem();
-                newsItem.fromJsonObject(json_data);
-                newsItemsList.add(newsItem);
+                newsItem.fromJsonObject( json_data );
+                newsItemsList.add( newsItem );
             }
+
         } catch (JSONException e) {
+
             Log.e(TAG, "Error parsing data " + e.toString());
         }
 

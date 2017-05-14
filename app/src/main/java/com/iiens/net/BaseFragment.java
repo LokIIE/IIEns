@@ -45,7 +45,8 @@ abstract class BaseFragment extends Fragment {
     protected int layoutId;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate ( Bundle savedInstanceState ) {
+
         super.onCreate(savedInstanceState);
         this.context = getActivity();
         this.global = (GlobalState) context.getApplicationContext();
@@ -55,8 +56,8 @@ abstract class BaseFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView( LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState ) {
+
         View view = inflater.inflate(this.layoutId, container, false);
         this.generateView(view);
 
@@ -67,9 +68,10 @@ abstract class BaseFragment extends Fragment {
      * Génère la page courante
      * @param view Vue à remplir
      */
-    protected abstract void generateView(final View view);
+    protected abstract void generateView ( final View view );
 
-    protected void apiRequest(final View view) {
+    protected void apiRequest ( final View view ) {
+
             RequestQueue queue = Volley.newRequestQueue(context);
             JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, global.getScriptURL() + apiKey, null, new Response.Listener<JSONArray>() {
                 @Override
@@ -90,13 +92,14 @@ abstract class BaseFragment extends Fragment {
      * @param view Vue à remplir
      * @param result Données à afficher
      */
-    protected abstract void displayResult(View view, JSONArray result);
+    protected abstract void displayResult ( View view, JSONArray result );
 
     /**
      * Actualisation des données de la vue courante
      */
-    protected void refreshDisplay() {
-        this.apiRequest(getView());
+    protected void refreshDisplay () {
+
+        this.apiRequest( getView() );
 
         // In case the refresh button was triggered, starts an "animation"
         if (getView() != null) {

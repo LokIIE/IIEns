@@ -1,14 +1,11 @@
 package com.iiens.net;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -25,6 +22,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Client web pour les pages d'Arise
+ */
 public class AriseWebViewClient {
 
     public WebView webView;
@@ -54,37 +54,13 @@ public class AriseWebViewClient {
     }
 
     public void initializeWebViewClients () {
+
         this.webView.setWebChromeClient( new WebChromeClient() );
         this.webView.setWebViewClient( new WebViewClient() {
 
             @Override
-            public void onLoadResource (WebView view,
-                            String url) {
-                Log.d("onLoadResource", url);
-            }
-            @Override
             public void onPageFinished(WebView view, String url) {
-                view.loadUrl( getJsScript() );
-                Log.d( "PAGEFINISHED", url );
-            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading( WebView view, WebResourceRequest request ) {
-                Log.d( "TEST", request.getUrl().toString() );
-                return true;
-            }
-
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap bitmap) {
-                Log.d( "PAGESTARTED", url );
-            }
-
-            @SuppressWarnings("deprecation")
-            @Override
-            public boolean shouldOverrideUrlLoading( WebView view, String url ) {
-                view.loadUrl(url);
-                Log.d( "TEST2", url );
-                return true;
+                view.loadUrl(getJsScript());
             }
         });
 
@@ -124,6 +100,7 @@ public class AriseWebViewClient {
     public String getJsScript () {
 
         if( isLoginMode ) {
+
             return "javascript:( function () {" +
                 "window.HtmlViewer.hideWebView();" +
                 "var credential = document.getElementsByClassName('credential');" +
@@ -177,14 +154,12 @@ public class AriseWebViewClient {
 
     public class JSInterface {
 
-        String ariseVerifier = "";
-
         JSInterface () {}
 
         @JavascriptInterface
         public void autoSendVerifier (String content) {
 
-            ariseVerifier = content.replace("<wbr xmlns=\"http://www.w3.org/1999/xhtml\" />", "");
+            String ariseVerifier = content.replace("<wbr xmlns=\"http://www.w3.org/1999/xhtml\" />", "");
 
             try {
 
@@ -218,6 +193,7 @@ public class AriseWebViewClient {
                         }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
                         Toast.makeText( context, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
@@ -237,10 +213,11 @@ public class AriseWebViewClient {
 
         @JavascriptInterface
         public void showWebView () {
-            // Log.d( "JSInterface", "expandWebView" );
+
             context.runOnUiThread( new Runnable() {
                 @Override
                 public void run() {
+
                     ViewGroup.LayoutParams containerLayoutParams = container.getLayoutParams();
                     containerLayoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
                     containerLayoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -253,10 +230,11 @@ public class AriseWebViewClient {
 
         @JavascriptInterface
         public void hideWebView () {
-            // Log.d( "JSInterface", "hideWebView" );
+
             context.runOnUiThread( new Runnable() {
                 @Override
                 public void run() {
+
                     ViewGroup.LayoutParams containerLayoutParams = container.getLayoutParams();
                     containerLayoutParams.width = (int) TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 0, context.getResources().getDisplayMetrics() );
                     containerLayoutParams.height = (int) TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, 0, context.getResources().getDisplayMetrics() );

@@ -25,9 +25,9 @@ public class Twitter extends BaseFragment {
         this.mListView = (ListView) view.findViewById(R.id.listview);
 
         TwitterListTimeline listTimeline = new TwitterListTimeline.Builder()
-                .id(Long.valueOf(context.getResources().getString(R.string.tw_list_id)))
+                .id( Long.valueOf( context.getResources().getString( R.string.tw_list_id ) ) )
                 .build();
-        final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder(global.getApplicationContext())
+        final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder( global.getApplicationContext() )
                 .setTimeline(listTimeline)
                 .build();
 

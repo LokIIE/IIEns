@@ -30,11 +30,11 @@ public class Tweet {
     //	@SerializedName("user")
     private TwitterUser User;
 
-    public Tweet() {
-    }
+    public Tweet () {}
 
-    public Tweet(String dateCreated, String id, String Text, String InReplyToScreenName, String InReplyToStatusId, String InReplyToUserId,
-                 String screenName, String name, String profileImageUrl) {
+    public Tweet ( String dateCreated, String id, String Text, String InReplyToScreenName, String InReplyToStatusId, String InReplyToUserId,
+                 String screenName, String name, String profileImageUrl ) {
+
         this.DateCreated = dateCreated;
         this.Id = id;
         this.Text = Text;
@@ -43,85 +43,88 @@ public class Tweet {
         this.InReplyToUserId = InReplyToUserId;
 
         TwitterUser user = new TwitterUser();
-        user.setScreenName(screenName);
-        user.setName(name);
-        user.setProfileImageUrl(profileImageUrl);
+        user.setScreenName( screenName );
+        user.setName( name );
+        user.setProfileImageUrl( profileImageUrl );
         this.User = user;
     }
 
-    public String getDateCreated() {
+    public String getDateCreated () {
         return DateCreated;
     }
 
-    public void setDateCreated(String dateCreated) {
+    public void setDateCreated ( String dateCreated ) {
         DateCreated = dateCreated;
     }
 
-    public String getId() {
+    public String getId () {
         return Id;
     }
 
-    public void setId(String id) {
+    public void setId ( String id ) {
         Id = id;
     }
 
-    public String getInReplyToScreenName() {
+    public String getInReplyToScreenName () {
         return InReplyToScreenName;
     }
 
-    public void setInReplyToScreenName(String inReplyToScreenName) {
+    public void setInReplyToScreenName ( String inReplyToScreenName ) {
+
         InReplyToScreenName = inReplyToScreenName;
     }
 
-    public String getInReplyToStatusId() {
+    public String getInReplyToStatusId () {
         return InReplyToStatusId;
     }
 
-    public void setInReplyToStatusId(String inReplyToStatusId) {
+    public void setInReplyToStatusId ( String inReplyToStatusId ) {
+
         InReplyToStatusId = inReplyToStatusId;
     }
 
-    public String getInReplyToUserId() {
+    public String getInReplyToUserId () {
         return InReplyToUserId;
     }
 
-    public void setInReplyToUserId(String inReplyToUserId) {
+    public void setInReplyToUserId ( String inReplyToUserId ) {
         InReplyToUserId = inReplyToUserId;
     }
 
-    public String getText() {
+    public String getText () {
         return Text;
     }
 
-    public void setText(String text) {
+    public void setText ( String text ) {
         Text = text;
     }
 
-    public TwitterUser getUser() {
+    public TwitterUser getUser () {
         return User;
     }
 
-    public void setUser(TwitterUser user) {
+    public void setUser ( TwitterUser user ) {
         User = user;
     }
 
     @Override
-    public String toString() {
+    public String toString () {
         return getText();
     }
 
-    public ArrayList<String> toArrayListString() {
+    public ArrayList<String> toArrayListString () {
+
         ArrayList<String> result = new ArrayList<>();
 
-        result.add(DateCreated);
-        result.add(Id);
-        result.add(Text);
-        result.add(InReplyToScreenName);
-        result.add(InReplyToStatusId);
-        result.add(InReplyToUserId);
-        result.add(User.getScreenName());
-        result.add(User.getName());
-        result.add(User.getProfileImageUrl());
+        result.add( DateCreated );
+        result.add( Id );
+        result.add( Text );
+        result.add( InReplyToScreenName );
+        result.add( InReplyToStatusId );
+        result.add( InReplyToUserId );
+        result.add( User.getScreenName() );
+        result.add( User.getName() );
+        result.add( User.getProfileImageUrl() );
 
         return result;
     }

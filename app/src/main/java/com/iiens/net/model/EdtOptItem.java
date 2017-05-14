@@ -7,6 +7,7 @@ import org.json.JSONObject;
  */
 
 public class EdtOptItem {
+
     private long id;
     private String code;
     private String name;
@@ -14,43 +15,48 @@ public class EdtOptItem {
 
     public EdtOptItem() {}
 
-    public static EdtOptItem getEmptyOptItem(String emptyName) {
+    public static EdtOptItem getEmptyOptItem ( String emptyName ) {
+
         EdtOptItem emptyItem = new EdtOptItem();
-        emptyItem.setName(emptyName);
+        emptyItem.setName( emptyName );
         return emptyItem;
     }
 
-    public EdtOptItem(JSONObject jObject) {
+    public EdtOptItem ( JSONObject jObject ) {
+
         try {
-            this.setName(jObject.getString("edtOpt_name"));
-            this.setCode(jObject.getString("edtOpt_code"));
-            this.setFk_edtForm(jObject.getInt("FK_edtForm"));
-        } catch (Exception e) {
+
+            this.setName( jObject.getString( "edtOpt_name" ) );
+            this.setCode( jObject.getString( "edtOpt_code" ) );
+            this.setFk_edtForm( jObject.getInt( "FK_edtForm" ) );
+
+        } catch ( Exception e ) {
+
             e.printStackTrace();
         }
     }
 
-    public long getId() { return id; }
+    public long getId () { return id; }
 
-    public void setId(long id) { this.id = id; }
+    public void setId ( long id ) { this.id = id; }
 
-    public String getName() { return this.name; }
+    public String getName () { return this.name; }
 
-    public void setName(String label) { this.name = label; }
+    public void setName ( String label ) { this.name = label; }
 
-    public String getCode() { return this.code; }
+    public String getCode () { return this.code; }
 
-    public void setCode(String code) { this.code = code; }
+    public void setCode ( String code ) { this.code = code; }
 
-    public int getFk_edtForm() { return this.fk_edtForm; }
+    public int getFk_edtForm () { return this.fk_edtForm; }
 
-    public void setFk_edtForm(int fk_edtForm) { this.fk_edtForm = fk_edtForm; }
+    public void setFk_edtForm ( int fk_edtForm ) { this.fk_edtForm = fk_edtForm; }
 
     /***
      * Renvoie l'item sous forme de String
      * Utile pour déterminer l'affichage de l'item dans un spinner
      */
-    public String toString() {
+    public String toString () {
         return getName();
     }
 }

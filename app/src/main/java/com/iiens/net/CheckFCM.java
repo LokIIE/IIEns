@@ -11,13 +11,12 @@ public class CheckFCM extends AsyncTask<Void, Void, Boolean> {
 
     private Context context;
 
-    public CheckFCM(Context context){
+    public CheckFCM ( Context context ){
         this.context = context;
     }
 
     @Override
-    protected Boolean doInBackground(Void... voids) {
+    protected Boolean doInBackground ( Void... voids ) {
         return false;
     }
-
 }

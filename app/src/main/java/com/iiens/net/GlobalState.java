@@ -34,57 +34,63 @@ public class GlobalState extends Application {
         MultiDex.install(this);
     }*/
 
-    public Bundle getBundle() {
+    public Bundle getBundle () {
         return appBundle;
     }
 
-    public void setBundle(Bundle bundle) {
+    public void setBundle ( Bundle bundle ) {
         appBundle = bundle;
     }
 
-    public int getCurrentFragment() { return this.currentFragment; }
+    public int getCurrentFragment () { return this.currentFragment; }
 
-    public void setCurrentFragment(int currentFragmentId) { this.currentFragment = currentFragmentId; }
+    public void setCurrentFragment ( int currentFragmentId ) { this.currentFragment = currentFragmentId; }
 
-    public String getScriptURL() {
+    public String getScriptURL () {
         return resources.getString(R.string.url_apiie);
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
+    public void onCreate () {
 
-        //MultiDex.install(this);
+        super.onCreate();
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(
                 getString(R.string.tw_key),
                 getString(R.string.tw_secret));
-        Fabric.with(this, new Twitter(authConfig));
+        Fabric.with( this, new Twitter( authConfig ) );
 
         resources = getResources();
 
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        cookieManager.setCookiePolicy( CookiePolicy.ACCEPT_ALL );
         CookieHandler.setDefault( GlobalState.cookieManager );
 
-        AppStartAsyncTask at = new AppStartAsyncTask(getApplicationContext());
+        AppStartAsyncTask at = new AppStartAsyncTask( getApplicationContext() );
+
         try {
+
             boolean ariseOnline = at.execute().get();
-            if (!ariseOnline) {
-                Toast.makeText(getApplicationContext(), resources.getString(R.string.arise_unavailable), Toast.LENGTH_LONG).show();
+            if ( !ariseOnline ) {
+
+                Toast.makeText( getApplicationContext(), resources.getString(R.string.arise_unavailable), Toast.LENGTH_LONG ).show();
             }
-        } catch (InterruptedException | ExecutionException e) {
+
+        } catch ( InterruptedException | ExecutionException e ) {
+
             e.printStackTrace();
         }
     }
 
-    public boolean isOnline() {
+    public boolean isOnline () {
+
         ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) getSystemService( Context.CONNECTIVITY_SERVICE );
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return (netInfo != null && netInfo.isConnectedOrConnecting());
+        return ( netInfo != null && netInfo.isConnectedOrConnecting() );
     }
 
     public static class PrefsConst {
+
         static String FIRST_LAUNCH = "firstLaunch";
         static String UPDATE_FCM_TOKEN = "updateFcmToken";
         static String HAS_PLAY_SERVICES = "hasPlayServices";

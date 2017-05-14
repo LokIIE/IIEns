@@ -9,27 +9,20 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 /**
- * SplashScreen
- * Animation lors du lancement de l'appli et création d'un compte sur GCM pour les notifications
+ * Ecran d'attente au lancement
  */
-
 public class SplashScreen extends Activity {
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private static final String TWITTER_KEY = "S3TQM4DSB34hwSuigO1EccDzZ";
-    private static final String TWITTER_SECRET = "nmxP2Dr3psD97pDLIf78EM6PJarw45Vor8Kodg3PQbq0Bnri3N";
+    // private static final String TWITTER_KEY = "S3TQM4DSB34hwSuigO1EccDzZ";
+    // private static final String TWITTER_SECRET = "nmxP2Dr3psD97pDLIf78EM6PJarw45Vor8Kodg3PQbq0Bnri3N";
 
-
-    private static final int SPLASH_TIME_OUT = 1000; // Splash screen duration
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000; // Constante arbitraire
-
-    /* Initialize the variables needed for this activity */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate ( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
         //TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         //Fabric.with(this, new Twitter(authConfig));
-        setContentView(R.layout.activity_splash);
+        setContentView( R.layout.activity_splash );
 
 //        final SharedPreferences prefs = getApplicationContext().getSharedPreferences(SplashScreen.class.getSimpleName(),
 //                Context.MODE_PRIVATE);
@@ -75,23 +68,17 @@ public class SplashScreen extends Activity {
 //        }
     }
 
-    /* Actions when the view is displayed on the screen */
     @Override
-    protected void onStart() {
+    protected void onStart () {
         super.onStart();
 
-        // Go to main activity after the duration of the logo animation
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent i = new Intent(SplashScreen.this, Login.class);
-
-                startActivity(i);
-
-                // Destroy this activity (no longer needed)
+                startActivity( new Intent( SplashScreen.this, Login.class ) );
                 finish();
             }
-        }, SPLASH_TIME_OUT);
+        }, 1000);
     }
 
     /**
@@ -99,17 +86,22 @@ public class SplashScreen extends Activity {
      * it doesn't, display a dialog that allows users to download the APK from
      * the Google Play Store or enable it in the device's system settings.
      */
-
     private boolean checkPlayServices() {
+
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-        int resultCode = googleAPI.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (googleAPI.isUserResolvableError(resultCode)) {
-                googleAPI.getErrorDialog(this, resultCode,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+        int resultCode = googleAPI.isGooglePlayServicesAvailable( this );
+        if ( resultCode != ConnectionResult.SUCCESS ) {
+            if ( googleAPI.isUserResolvableError( resultCode ) ) {
+                googleAPI.getErrorDialog(
+                        this,
+                        resultCode,
+                        9000
+                ).show();
             }
+
             return false;
         }
+
         return true;
     }
 }

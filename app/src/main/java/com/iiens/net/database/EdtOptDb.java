@@ -13,7 +13,8 @@ import java.util.List;
 /**
  * Gestion de la table EdtForm dans la bdd
  */
-public class EdtOptDb extends BaseDb<EdtOptItem>{
+public class EdtOptDb extends BaseDb<EdtOptItem> {
+
     // Champs de la base de donnees
     private String[] allColumns = {
             DatabaseHelper.EDTOPT_ID,
@@ -24,28 +25,30 @@ public class EdtOptDb extends BaseDb<EdtOptItem>{
 
     private Context context;
 
-    public EdtOptDb(Context context) {
-        super(context, DatabaseHelper.TABLE_EDTOPT);
+    public EdtOptDb ( Context context ) {
+
+        super( context, DatabaseHelper.TABLE_EDTOPT );
         super.tableColumns = allColumns;
         this.context = context;
     }
 
-    public EdtOptItem readCursor(Cursor cursor) {
+    public EdtOptItem readCursor ( Cursor cursor ) {
+
         EdtOptItem item = new EdtOptItem();
-        item.setId(cursor.getLong(cursor.getColumnIndex(DatabaseHelper.EDTOPT_ID)));
-        item.setName(cursor.getString(cursor.getColumnIndex(DatabaseHelper.EDTOPT_NAME)));
-        item.setCode(cursor.getString(cursor.getColumnIndex(DatabaseHelper.EDTOPT_CODE)));
-        item.setFk_edtForm(cursor.getInt(cursor.getColumnIndex(DatabaseHelper.FK_EDTFORM)));
+        item.setId( cursor.getLong( cursor.getColumnIndex( DatabaseHelper.EDTOPT_ID ) ) );
+        item.setName( cursor.getString( cursor.getColumnIndex( DatabaseHelper.EDTOPT_NAME ) ) );
+        item.setCode( cursor.getString( cursor.getColumnIndex( DatabaseHelper.EDTOPT_CODE ) ) );
+        item.setFk_edtForm( cursor.getInt( cursor.getColumnIndex( DatabaseHelper.FK_EDTFORM ) ) );
         return item;
     }
 
     @Override
-    public long findItemId(EdtOptItem item) {
+    public long findItemId ( EdtOptItem item ) {
+
         long result = 0;
 
-        // Ouverture de la connexion
         this.open();
-        // Execution de la requete
+
         Cursor cursor = database.query(
                 DatabaseHelper.TABLE_EDTOPT,
                 tableColumns,
@@ -56,13 +59,15 @@ public class EdtOptDb extends BaseDb<EdtOptItem>{
                 null,
                 null,
                 null,
-                DatabaseHelper.EDTOPT_ID + " ASC");
+                DatabaseHelper.EDTOPT_ID + " ASC"
+        );
 
-        if (cursor.getCount() > 0) {
+        if ( cursor.getCount() > 0 ) {
+
             cursor.moveToFirst();
-            result = readCursor(cursor).getId();
+            result = readCursor( cursor ).getId();
         }
-        // Fermeture de la connexion
+
         cursor.close();
         this.close();
 
@@ -70,19 +75,20 @@ public class EdtOptDb extends BaseDb<EdtOptItem>{
     }
 
     @Override
-    public EdtOptItem getItem(long id) {
+    public EdtOptItem getItem ( long id ) {
+
         return null;
     }
 
-    public List<EdtOptItem> getSpinnerItems(int idForm) {
+    public List<EdtOptItem> getSpinnerItems ( int idForm ) {
+
         List<EdtOptItem> result = new ArrayList<>();
         result.add(EdtOptItem.getEmptyOptItem(
                 context.getResources().getString(R.string.edtForm_emptyOp)
         ));
 
-        // Ouverture de la connexion
         this.open();
-        // Execution de la requete
+
         Cursor cursor = database.query(
                 DatabaseHelper.TABLE_EDTOPT,
                 tableColumns,
@@ -90,12 +96,14 @@ public class EdtOptDb extends BaseDb<EdtOptItem>{
                 null,
                 null,
                 null,
-                DatabaseHelper.EDTOPT_ID + " ASC");
+                DatabaseHelper.EDTOPT_ID + " ASC"
+        );
 
-        while (cursor.moveToNext()) {
-            result.add(readCursor(cursor));
+        while ( cursor.moveToNext() ) {
+
+            result.add( readCursor( cursor ) );
         }
-        // Fermeture de la connexion
+
         cursor.close();
         this.close();
 
@@ -103,42 +111,43 @@ public class EdtOptDb extends BaseDb<EdtOptItem>{
     }
 
     @Override
-    public EdtOptItem getFirstItem() {
+    public EdtOptItem getFirstItem () {
+
         return null;
     }
 
-    public boolean createItem(EdtOptItem item) {
+    public boolean createItem ( EdtOptItem item ) {
+
         ContentValues values = new ContentValues();
         long insertId;
 
-        if (findItemId(item) > 0) {
+        if ( findItemId(item) > 0 ) {
+
             return false;
         }
 
-        // Parametres de la requete
-        values.put(DatabaseHelper.EDTOPT_NAME, item.getName());
-        values.put(DatabaseHelper.EDTOPT_CODE, item.getCode());
-        values.put(DatabaseHelper.FK_EDTFORM, item.getFk_edtForm());
+        values.put( DatabaseHelper.EDTOPT_NAME, item.getName() );
+        values.put( DatabaseHelper.EDTOPT_CODE, item.getCode() );
+        values.put( DatabaseHelper.FK_EDTFORM, item.getFk_edtForm() );
 
-        // Ouverture de la connexion
         this.open();
-        // Insertion en base
+
         insertId = database.insert(
                 DatabaseHelper.TABLE_EDTOPT,
                 null,
                 values);
-        // Fermeture de la connexion
         this.close();
 
         return insertId > 0;
     }
 
     @Override
-    public boolean updateItem(EdtOptItem item) {
+    public boolean updateItem ( EdtOptItem item ) {
+
         return false;
     }
 
-    public void deleteItem(long id) {}
+    public void deleteItem ( long id ) {}
 
     @Override
     public void cleanTable() {

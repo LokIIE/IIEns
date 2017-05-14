@@ -36,22 +36,25 @@ public abstract class BaseDb<T> {
      * @param context contexte
      * @param tableName nom de la table
      */
-    public BaseDb(Context context, String tableName) {
-        this.dbHelper = new DatabaseHelper(context);
+    public BaseDb ( Context context, String tableName ) {
+
+        this.dbHelper = new DatabaseHelper( context );
         this.tableName = tableName;
     }
 
     /**
      * Ouverture de la connexion à la base de données
      */
-    public void open() {
+    public void open () {
+
         this.database = dbHelper.getWritableDatabase();
     }
 
     /**
      * Fermeture de la connexion à la base de données
      */
-    public void close() {
+    public void close () {
+
         this.database.close();
     }
 
@@ -59,7 +62,8 @@ public abstract class BaseDb<T> {
      * Référence de la connexion à la base de données
      * @return Référence de la connexion à la base de données
      */
-    public SQLiteDatabase getDbConnexion() {
+    public SQLiteDatabase getDbConnexion () {
+
         return database;
     }
 
@@ -68,7 +72,8 @@ public abstract class BaseDb<T> {
      * @param id Id de l'item à récupérer
      * @return Modèle d'objet alimenté
      */
-    public T getItem(long id){
+    public T getItem ( long id ) {
+
         T result = null;
 
         // Connexion à la base de données et exécution de la requête
@@ -80,12 +85,14 @@ public abstract class BaseDb<T> {
                 null,
                 null,
                 null,
-                null);
+                null
+        );
 
         // Lecture des résultats
         cursor.moveToFirst();
-        if (cursor.getCount() > 0) {
-            result = readCursor(cursor);
+        if ( cursor.getCount() > 0 ) {
+
+            result = readCursor( cursor );
         }
 
         // Fermeture de la connexion
@@ -99,7 +106,8 @@ public abstract class BaseDb<T> {
      * Récupération du premier objet de la table
      * @return Modèle d'objet alimenté
      */
-    public T getFirstItem() {
+    public T getFirstItem () {
+
         T result = null;
 
         // Connexion à la base de données et exécution de la requête
@@ -114,9 +122,10 @@ public abstract class BaseDb<T> {
                 tableColumns[0] + " ASC");
 
         // Lecture des résultats
-        if (cursor != null && cursor.getCount() > 0) {
+        if ( cursor != null && cursor.getCount() > 0 ) {
+
             cursor.moveToFirst();
-            result = readCursor(cursor);
+            result = readCursor( cursor );
         }
 
         // Fermeture de la connexion
@@ -130,7 +139,8 @@ public abstract class BaseDb<T> {
      * Récupération du dernier objet de la table
      * @return Modèle d'objet alimenté
      */
-    public T getLastItem() {
+    public T getLastItem () {
+
         T result = null;
 
         // Connexion à la base de données et exécution de la requête
@@ -145,9 +155,10 @@ public abstract class BaseDb<T> {
                 tableColumns[0] + " DESC");
 
         // Lecture des résultats
-        if (cursor.getCount() > 0) {
+        if ( cursor.getCount() > 0 ) {
+
             cursor.moveToFirst();
-            result = readCursor(cursor);
+            result = readCursor( cursor );
         }
 
         // Fermeture de la connexion
@@ -161,7 +172,8 @@ public abstract class BaseDb<T> {
      * Récupération des tous les items d'une table
      * @return Liste des objets de la table
      */
-    public ArrayList<T> getAllItems() {
+    public ArrayList<T> getAllItems () {
+
         ArrayList<T> itemArrayList = new ArrayList<>();
 
         // Connexion à la base de données et exécution de la requête
@@ -177,7 +189,8 @@ public abstract class BaseDb<T> {
 
         // Lecture des résultats
         cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
+        while ( !cursor.isAfterLast() ) {
+
             T item = readCursor(cursor);
             itemArrayList.add(item);
             cursor.moveToNext();
@@ -194,49 +207,51 @@ public abstract class BaseDb<T> {
      * Lecture de l'emplacement du curseur
      * @param cursor Curseur de la requête
      */
-    public abstract T readCursor(Cursor cursor);
+    public abstract T readCursor ( Cursor cursor );
 
     /**
      * Récupération de l'id d'un item
      * @param item Item à rechercher
      */
-    public abstract long findItemId(T item);
+    public abstract long findItemId ( T item );
 
     /**
      * Insertion d'un item
      * @param item Item à créer
      */
-    public abstract boolean createItem(T item);
+    public abstract boolean createItem ( T item );
 
     /**
      * Mise à jour d'un item
      * @param item Item mis à jour
      */
-    public abstract boolean updateItem(T item);
+    public abstract boolean updateItem ( T item );
 
     /**
      * Suppression d'un item
      * @param id Id de l'objet à supprimer
      */
-    public void deleteItem(long id) {
+    public void deleteItem ( long id ) {
+
         this.open();
         database.delete(
                 tableName,
                 tableColumns[0] + " = " + id,
                 null);
         this.close();
-        System.out.println("Item avec l'id: " + id + " supprimé de la table " + tableName);
+        System.out.println( "Item avec l'id: " + id + " supprimé de la table " + tableName );
     }
 
     /**
      * Suppression des valeurs inutiles de la tables
      */
-    public abstract void cleanTable();
+    public abstract void cleanTable ();
 
     /**
      * Suppression de toutes les valeurs de la table
      */
-    public void deleteAll() {
+    public void deleteAll () {
+
         this.open();
         database.delete(
                 tableName,
@@ -244,6 +259,6 @@ public abstract class BaseDb<T> {
                 null
         );
         this.close();
-        System.out.println("Tous les objets de la table : " + tableName + " ont été supprimés");
+        System.out.println( "Tous les objets de la table : " + tableName + " ont été supprimés" );
     }
 }

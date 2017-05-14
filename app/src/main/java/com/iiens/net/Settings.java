@@ -12,12 +12,14 @@ public class Settings extends PreferenceFragment {
 
     /* Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate ( Bundle savedInstanceState ) {
 
-        addPreferencesFromResource(R.xml.preferences);
-        if (getActivity().getActionBar() != null) {
-            getActivity().getActionBar().setTitle(R.string.settings);
+        super.onCreate( savedInstanceState );
+
+        addPreferencesFromResource( R.xml.preferences );
+        if ( getActivity().getActionBar() != null ) {
+
+            getActivity().getActionBar().setTitle( R.string.settings );
         }
     }
 }

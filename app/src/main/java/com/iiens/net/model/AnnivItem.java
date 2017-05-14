@@ -11,6 +11,7 @@ import org.json.JSONObject;
  */
 
 public class AnnivItem {
+
     private long id = 0;
     private String nom = "";
     private String prenom = "";
@@ -18,75 +19,79 @@ public class AnnivItem {
     private String anniv = "";
     private String age = "";
 
-    public void setId (long id) {
+    public void setId ( long id ) {
         this.id = id;
     }
 
-    public long getId() {
+    public long getId () {
         return id;
     }
 
-    public String getNom() {
+    public String getNom () {
         return nom;
     }
 
-    public void setNom(String nom) {
+    public void setNom ( String nom ) {
         this.nom = nom;
     }
 
-    public String getPrenom() {
+    public String getPrenom () {
         return prenom;
     }
 
-    public void setPrenom(String prenom) {
+    public void setPrenom ( String prenom ) {
         this.prenom = prenom;
     }
 
-    public String getPseudo() {
+    public String getPseudo () {
         return pseudo;
     }
 
-    public void setPseudo(String pseudo) {
+    public void setPseudo ( String pseudo ) {
         this.pseudo = pseudo;
     }
 
-    public String getAnniv() {
+    public String getAnniv () {
         return anniv;
     }
 
-    public void setAnniv(String anniv) {
+    public void setAnniv ( String anniv ) {
         this.anniv = anniv;
     }
 
-    public String getAge() {
+    public String getAge () {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge ( String age ) {
         this.age = age;
     }
 
-    public AnnivItem() {
+    public AnnivItem () {}
+
+    public AnnivItem ( String nom, String prenom, String pseudo, String anniv, String age ) {
+
+        setNom( nom );
+        setPrenom( prenom );
+        setPseudo( pseudo );
+        setAnniv( anniv );
+        setAge( age );
     }
 
-    public AnnivItem(String nom, String prenom, String pseudo, String anniv, String age) {
-        setNom(nom);
-        setPrenom(prenom);
-        setPseudo(pseudo);
-        setAnniv(anniv);
-        setAge(age);
-    }
+    public static AnnivItem load ( JSONObject json_data ) {
 
-    public static AnnivItem load(JSONObject json_data) {
         AnnivItem item = new AnnivItem();
         try {
-            item.nom = json_data.getString("nom");
-            item.prenom = json_data.getString("prenom");
-            item.pseudo = json_data.getString("surnom");
-            item.anniv = json_data.getString("anniv");
-            item.age = json_data.getString("age");
+
+            item.nom = json_data.getString( "nom" );
+            item.prenom = json_data.getString( "prenom" );
+            item.pseudo = json_data.getString( "surnom" );
+            item.anniv = json_data.getString( "anniv" );
+            item.age = json_data.getString( "age" );
+
         } catch (JSONException e) {
-            Log.e("log_tag", "Error parsing data " + e.toString());
+
+            Log.e( "log_tag", "Error parsing data " + e.toString() );
         }
 
         return item;

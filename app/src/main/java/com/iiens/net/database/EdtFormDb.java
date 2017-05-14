@@ -9,68 +9,77 @@ import com.iiens.net.model.EdtFormItem;
 /**
  * Gestion de la table EdtForm dans la bdd
  */
-public class EdtFormDb extends BaseDb<EdtFormItem>{
+public class EdtFormDb extends BaseDb<EdtFormItem> {
+
     // Champs de la base de donnees
     private String[] allColumns = {
             DatabaseHelper.EDTFORM_ID,
             DatabaseHelper.EDTFORM_NAME,
-            DatabaseHelper.EDTFORM_PROMO};
+            DatabaseHelper.EDTFORM_PROMO
+    };
 
-    public EdtFormDb(Context context) {
-        super(context, DatabaseHelper.TABLE_EDTFORM);
+    public EdtFormDb ( Context context ) {
+
+        super( context, DatabaseHelper.TABLE_EDTFORM );
         super.tableColumns = allColumns;
     }
 
-    public EdtFormItem readCursor(Cursor cursor) {
+    public EdtFormItem readCursor ( Cursor cursor ) {
+
         return null;
     }
 
     @Override
-    public long findItemId(EdtFormItem item) {
+    public long findItemId ( EdtFormItem item ) {
+
         return 0;
     }
 
     @Override
-    public EdtFormItem getItem(long id) {
+    public EdtFormItem getItem ( long id ) {
+
         return null;
     }
 
     @Override
-    public EdtFormItem getFirstItem() {
+    public EdtFormItem getFirstItem () {
+
         return null;
     }
 
-    public boolean createItem(EdtFormItem item) {
+    public boolean createItem ( EdtFormItem item ) {
+
         ContentValues values = new ContentValues();
         long insertId;
 
-        // Parametres de la requete
-        values.put(DatabaseHelper.EDTFORM_ID, item.getId());
-        values.put(DatabaseHelper.EDTFORM_NAME, item.getName());
-        values.put(DatabaseHelper.EDTFORM_PROMO, item.getPromo());
+        values.put( DatabaseHelper.EDTFORM_ID, item.getId() );
+        values.put( DatabaseHelper.EDTFORM_NAME, item.getName() );
+        values.put( DatabaseHelper.EDTFORM_PROMO, item.getPromo() );
 
-        // Ouverture de la connexion
         this.open();
-        // Insertion en base
+
         insertId = database.insert(
                 DatabaseHelper.TABLE_EDTFORM,
                 null,
-                values);
-        // Fermeture de la connexion
+                values
+        );
+
         this.close();
 
         return insertId > 0;
     }
 
     @Override
-    public boolean updateItem(EdtFormItem item) {
+    public boolean updateItem ( EdtFormItem item ) {
+
         return false;
     }
 
-    public void deleteItem(long id) {}
+    public void deleteItem ( long id ) {}
 
     @Override
     public void cleanTable() {
-        database.delete(DatabaseHelper.TABLE_EDTFORM, null, null);
+
+        database.delete( DatabaseHelper.TABLE_EDTFORM, null, null );
     }
 }

@@ -34,32 +34,34 @@ public class EdtResultPage extends Fragment {
     /**
      * Constructeur
      */
-    public EdtResultPage() {
+    public EdtResultPage () {
         this.edtItemsList = new ArrayList<>();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+    public void onCreate ( Bundle savedInstanceState ) {
+
+        super.onCreate( savedInstanceState );
+        setRetainInstance( true );
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView ( LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState ) {
 
-        View view = inflater.inflate(R.layout.edt_result_page, container, false);
-        ListView mListView = (ListView) view.findViewById(R.id.listview);
-        view.findViewById(R.id.progress_spinner).setVisibility(View.GONE);
+        super.onCreate( savedInstanceState );
 
-        mListView.setAdapter(new EdtItemsAdapter(getActivity().getApplicationContext(), edtItemsList));
-        mListView.setClickable(true);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        View view = inflater.inflate( R.layout.edt_result_page, container, false );
+        ListView mListView = (ListView) view.findViewById( R.id.listview );
+        view.findViewById( R.id.progress_spinner ).setVisibility( View.GONE );
+
+        mListView.setAdapter( new EdtItemsAdapter( getActivity().getApplicationContext(), edtItemsList ) );
+        mListView.setClickable( true );
+        mListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                dialogAlertForCalendar(position);
+                dialogAlertForCalendar( position );
             }
         });
 
@@ -70,32 +72,34 @@ public class EdtResultPage extends Fragment {
      * Ajout d'un EdtItem à la liste des items de la page
      * @param item EdtItem à ajouter
      */
-    public void addItem(EdtItem item) {
-        this.edtItemsList.add(item);
+    public void addItem ( EdtItem item ) {
+
+        this.edtItemsList.add( item );
     }
 
     /**
      * Affichage d'une fenêtre pour l'ajout de l'événement sélectionné à l'agenda
      * @param position Position de l'item dans la liste
      */
-    private void dialogAlertForCalendar(final int position) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                getActivity());
+    private void dialogAlertForCalendar ( final int position ) {
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder( getActivity() );
 
         // Titre de la fenêtre
-        alertDialogBuilder.setTitle(R.string.export_to_calendar_title);
+        alertDialogBuilder.setTitle( R.string.export_to_calendar_title );
 
         // Message de la fenêtre et action des boutons
         alertDialogBuilder
-                .setMessage(R.string.export_item_to_calendar_msg)
-                .setCancelable(false)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                .setMessage( R.string.export_item_to_calendar_msg )
+                .setCancelable( false )
+                .setPositiveButton( R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        exportToCalendar(edtItemsList.get(position));
+                        exportToCalendar( edtItemsList.get( position ) );
                     }
                 })
-                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                .setNegativeButton( R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
                         // if this button is clicked, just close
                         // the dialog box and do nothing
                         dialog.cancel();
@@ -111,31 +115,32 @@ public class EdtResultPage extends Fragment {
      * Export de l'item dans le calendrier
      * @param item Item à exporter
      */
-    private void exportToCalendar(EdtItem item) {
-        Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
-        Intent intent = new Intent(Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI);
-        String[] hDebut = item.getHeureDebut().split("h");
-        String[] hFin = item.getHeureFin().split("h");
+    private void exportToCalendar ( EdtItem item ) {
 
-        intent.putExtra(CalendarContract.Events.TITLE, item.getTitre());
+        Calendar cal = new GregorianCalendar( TimeZone.getTimeZone( "GMT" ) );
+        Intent intent = new Intent( Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI );
+        String[] hDebut = item.getHeureDebut().split( "h" );
+        String[] hFin = item.getHeureFin().split( "h" );
+
+        intent.putExtra( CalendarContract.Events.TITLE, item.getTitre() );
         cal.set(
-                Integer.valueOf(item.getJour().substring(0, 4)),     // year
-                Integer.valueOf(item.getJour().substring(5, 7)) - 1, // month
-                Integer.valueOf(item.getJour().substring(9, 10)),    // day
-                Integer.valueOf(hDebut[0]) - 1,                      // hour
-                Integer.valueOf(hDebut[1])                           // minutes
+                Integer.valueOf( item.getJour().substring( 0, 4 ) ),     // year
+                Integer.valueOf( item.getJour().substring( 5, 7 ) ) - 1, // month
+                Integer.valueOf( item.getJour().substring( 9, 10 ) ),    // day
+                Integer.valueOf( hDebut[0] ) - 1,                      // hour
+                Integer.valueOf( hDebut[1] )                           // minutes
         );
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, cal.getTime().getTime());
+        intent.putExtra( CalendarContract.EXTRA_EVENT_BEGIN_TIME, cal.getTime().getTime() );
         cal.set(
-                Integer.valueOf(item.getJour().substring(0, 4)),     // year
-                Integer.valueOf(item.getJour().substring(5, 7)) - 1, // month
-                Integer.valueOf(item.getJour().substring(9, 10)),    // day
-                Integer.valueOf(hFin[0]) - 1,                        // hour
-                Integer.valueOf(hFin[1])                             // minutes
+                Integer.valueOf( item.getJour().substring( 0, 4 ) ),     // year
+                Integer.valueOf( item.getJour().substring( 5, 7 ) ) - 1, // month
+                Integer.valueOf( item.getJour().substring( 9, 10 ) ),    // day
+                Integer.valueOf( hFin[0] ) - 1,                        // hour
+                Integer.valueOf( hFin[1] )                             // minutes
         );
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, cal.getTime().getTime());
-        intent.putExtra(CalendarContract.Events.EVENT_LOCATION, "ENSIIE - " + item.getLieu());
-        intent.putExtra(CalendarContract.Events.ACCESS_LEVEL, CalendarContract.Events.ACCESS_PRIVATE);
-        startActivity(intent);
+        intent.putExtra( CalendarContract.EXTRA_EVENT_END_TIME, cal.getTime().getTime() );
+        intent.putExtra( CalendarContract.Events.EVENT_LOCATION, "ENSIIE - " + item.getLieu() );
+        intent.putExtra( CalendarContract.Events.ACCESS_LEVEL, CalendarContract.Events.ACCESS_PRIVATE );
+        startActivity( intent );
     }
 }

@@ -111,35 +111,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + NEWS_DATE_PUBLICATION + " text not null"
                     + ");";
 
-    public DatabaseHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    public DatabaseHelper ( Context context ) {
+
+        super( context, DATABASE_NAME, null, DATABASE_VERSION );
     }
 
     @Override
-    public void onCreate(SQLiteDatabase database) {
+    public void onCreate ( SQLiteDatabase database ) {
+
         //createDb(database);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade ( SQLiteDatabase db, int oldVersion, int newVersion ) {
+
         Log.w(this.getClass().getName(),
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ANNIVERSAIRES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDTOPT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDTFORM);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EDT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWS);
-        createDb(db);
+        db.execSQL( "DROP TABLE IF EXISTS " + TABLE_ANNIVERSAIRES );
+        db.execSQL( "DROP TABLE IF EXISTS " + TABLE_EDTOPT );
+        db.execSQL( "DROP TABLE IF EXISTS " + TABLE_EDTFORM );
+        db.execSQL( "DROP TABLE IF EXISTS " + TABLE_EDT );
+        db.execSQL( "DROP TABLE IF EXISTS " + TABLE_NEWS );
+        createDb( db );
     }
 
-    public void createDb(SQLiteDatabase db) {
+    public void createDb ( SQLiteDatabase db ) {
+
         SQLiteDatabase database = (db == null) ? super.getWritableDatabase() : db;
-        database.execSQL(CREATE_ANNIV);
-        database.execSQL(CREATE_EDTFORM);
-        database.execSQL(CREATE_EDTOPT);
-        database.execSQL(CREATE_EDT);
-        database.execSQL(CREATE_NEWS);
+        database.execSQL( CREATE_ANNIV );
+        database.execSQL( CREATE_EDTFORM );
+        database.execSQL( CREATE_EDTOPT );
+        database.execSQL( CREATE_EDT );
+        database.execSQL( CREATE_NEWS );
     }
 
 }

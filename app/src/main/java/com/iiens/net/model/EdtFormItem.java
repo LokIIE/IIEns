@@ -8,31 +8,36 @@ import org.json.JSONObject;
  */
 
 public class EdtFormItem {
+
     private long id;
     private String name;
     private int promo;
 
-    public EdtFormItem(int i, JSONObject jsonObject) {
+    public EdtFormItem (int i, JSONObject jsonObject ) {
+
         try {
-            this.setId(i);
-            this.setName(jsonObject.getString("edtForm_name"));
-            this.setPromo(jsonObject.getInt("edtForm_promo"));
-        } catch (Exception e) {
+
+            this.setId( i );
+            this.setName( jsonObject.getString( "edtForm_name" ) );
+            this.setPromo( jsonObject.getInt( "edtForm_promo" ) );
+
+        } catch ( Exception e ) {
+
             e.printStackTrace();
         }
     }
 
-    public long getId() { return this.id; }
+    public long getId () { return this.id; }
 
-    public void setId(long id) { this.id = id; }
+    public void setId ( long id ) { this.id = id; }
 
-    public String getName() { return this.name; }
+    public String getName () { return this.name; }
 
-    public void setName(String name) { this.name = name; }
+    public void setName ( String name ) { this.name = name; }
 
-    public int getPromo() { return this.promo; }
+    public int getPromo () { return this.promo; }
 
-    public void setPromo(int promo) { this.promo = promo; }
+    public void setPromo ( int promo ) { this.promo = promo; }
 
     /**
      * Enumération des identifiants des catégories de données
@@ -64,14 +69,14 @@ public class EdtFormItem {
          * Constructeur
          * @param _id Identifiant de la catégorie
          */
-        EnumFormId(int _id) {
+        EnumFormId ( int _id ) {
             this.id = _id;
         }
 
         /**
          * Retourne l'identifiant sous forme de int
          */
-        public int getValue() {
+        public int getValue () {
             return this.id;
         }
     }

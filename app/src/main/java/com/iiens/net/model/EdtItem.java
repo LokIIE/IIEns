@@ -10,6 +10,7 @@ import org.json.JSONObject;
  */
 
 public class EdtItem {
+
     /**
      * Liste des minutes pour la correspondance avec l'heure et la durée
      */
@@ -60,99 +61,105 @@ public class EdtItem {
      */
     private String lieu;
 
-    public long getId() { return id; }
+    public long getId () { return id; }
 
-    public void setId(long id) {
+    public void setId ( long id ) {
         this.id = id;
     }
 
-    public String getJour() {
+    public String getJour () {
         return jour;
     }
 
-    private void setJour(String jour) {
+    private void setJour ( String jour ) {
         this.jour = jour;
     }
 
-    public String getTitre() {
+    public String getTitre () {
         return titre;
     }
 
-    private void setTitre(String titre) {
+    private void setTitre ( String titre ) {
         this.titre = titre;
     }
 
-    public String getAuteur() {
+    public String getAuteur () {
         return auteur;
     }
 
-    private void setAuteur(String auteur) {
+    private void setAuteur ( String auteur ) {
         this.auteur = auteur;
     }
 
-    public Integer getHeure() { return heure; }
+    public Integer getHeure () { return heure; }
 
-    private void setHeure(Integer heure) {
+    private void setHeure ( Integer heure ) {
         this.heure = heure;
     }
 
-    public Integer getDuree() {
+    public Integer getDuree () {
         return duree;
     }
 
-    private void setDuree(Integer duree) {
+    private void setDuree ( Integer duree ) {
         this.duree = duree;
     }
 
-    public String getType() {
+    public String getType () {
         return type;
     }
 
-    private void setType(String nom_type) {
+    private void setType ( String nom_type ) {
         this.type = nom_type;
     }
 
-    public String getGroupe() {
+    public String getGroupe () {
         return groupe;
     }
 
-    private void setGroupe(String groupe) {
+    private void setGroupe ( String groupe ) {
         this.groupe = groupe;
     }
 
-    public String getLieu() {
+    public String getLieu () {
         return lieu;
     }
 
-    private void setLieu(String salle) {
+    private void setLieu ( String salle ) {
+
         this.lieu = salle;
-        if (salle.equals("2")) {
-            this.lieu = "amphi " + salle;
-        }
+        if ( salle.equals("2") ) this.lieu = "amphi " + salle;
     }
 
-    public static EdtItem mapJsonObject(JSONObject json_data) {
+    public static EdtItem mapJsonObject ( JSONObject json_data ) {
+
         EdtItem item = new EdtItem();
+
         try {
-            item.setJour(json_data.getString("jour"));
-            item.setTitre(json_data.getString("titre"));
-            item.setAuteur(json_data.getString("auteur"));
-            item.setHeure(json_data.getInt("heure"));
-            item.setDuree(json_data.getInt("duree"));
-            item.setType(json_data.getString("nom_type"));
-            item.setGroupe(json_data.getString("groupe"));
-            item.setLieu(json_data.getString("lieu"));
-        } catch (JSONException e) {
-            Log.e("log_tag", "Error parsing data " + e.toString());
+
+            item.setJour( json_data.getString("jour") );
+            item.setTitre( json_data.getString("titre") );
+            item.setAuteur( json_data.getString("auteur") );
+            item.setHeure( json_data.getInt("heure") );
+            item.setDuree( json_data.getInt("duree") );
+            item.setType( json_data.getString("nom_type") );
+            item.setGroupe( json_data.getString("groupe") );
+            item.setLieu( json_data.getString("lieu") );
+
+        } catch ( JSONException e ) {
+
+            Log.e( "log_tag", "Error parsing data " + e.toString() );
         }
 
         return item;
     }
-    public String getHeureDebut() {
-        return String.valueOf(this.heure / 4) + "h" + minutes[this.heure % 4];
+    public String getHeureDebut () {
+
+        return String.valueOf( this.heure / 4 ) + "h" + minutes[ this.heure % 4 ];
     }
 
-    public String getHeureFin() {
-        return String.valueOf((this.heure + this.duree) / 4 % 24) + "h" + minutes[(this.heure + this.duree) % 4];
+    public String getHeureFin () {
+
+        return String.valueOf( (this.heure + this.duree) / 4 % 24 ) + "h" + minutes[ (this.heure + this.duree) % 4 ];
     }
 }

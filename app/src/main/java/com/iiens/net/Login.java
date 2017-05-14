@@ -16,6 +16,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Page de connexion
+ */
 public class Login extends Activity {
 
     RequestQueue queue;
@@ -43,37 +46,45 @@ public class Login extends Activity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
                         try {
-                            if( response.has("connection_status") && response.getString("connection_status").equals("ok") ) {
+
+                            if( response.has( "connection_status" ) && response.getString( "connection_status" ).equals( "ok" ) ) {
 
                             } else {
 
                                 wv.loadUrl( response.getString("redirect") );
                             }
+
                         } catch (JSONException e) {
+
                             Toast.makeText( getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG ).show();
                         }
                     }
                 }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText( getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG ).show();
-            }
-        }
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText( getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG ).show();
+                    }
+                }
         );
 
-        queue = Volley.newRequestQueue(this);
+        queue = Volley.newRequestQueue( this );
     }
 
     @Override
     public void onStart () {
+
         super.onStart();
         queue.start();
     }
 
     @Override
     public void onDestroy () {
+
         try {
+
             RequestQueue queue = Volley.newRequestQueue( getApplicationContext() );
             JSONObject postData = new JSONObject();
             postData.put( "logout", "logout" );
@@ -83,39 +94,45 @@ public class Login extends Activity {
                     postData,
                     new Response.Listener<JSONObject>() {
                         @Override
-                        public void onResponse(JSONObject response) {
+                        public void onResponse ( JSONObject response ) {
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText( getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        public void onErrorResponse ( VolleyError error ) {
+
+                            Toast.makeText( getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG ).show();
                         }
                     });
 
             queue.add( destroyClient );
 
         } catch ( Exception e ) {
-            Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+
+            Toast.makeText( getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG ).show();
         }
 
         super.onDestroy();
     }
 
     public void onForgotPasswordClicked ( View v ) {
+
         wv.loadUrl( getResources().getString( R.string.url_oauth_forgot_password ) );
     }
 
     public void onOfflineClicked ( View v ) {
+
         startMainActivity();
     }
 
     public void onConnectClicked ( View v ) {
+
         queue.cancelAll( this );
         queue.add( uri_request );
     }
 
     private void startMainActivity () {
+
         startActivity( new Intent(Login.this, Main.class) );
     }
 }

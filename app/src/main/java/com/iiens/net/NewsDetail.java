@@ -24,43 +24,48 @@ public class NewsDetail extends BaseFragment {
     private NewsItem newsItem;
 
     @Override // this method is only called once for this fragment
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate ( Bundle savedInstanceState ) {
+
+        super.onCreate( savedInstanceState );
         this.apiKey = getResources().getString(R.string.apiie_news);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.news_detail, container, false);
+    public View onCreateView ( LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState ) {
+
+        View view = inflater.inflate( R.layout.news_detail, container, false );
 
         this.newsItem = new NewsItem();
-        if (this.getArguments() != null) {
-            this.generateView(view);
+        if ( this.getArguments() != null ) {
+
+            this.generateView( view );
         }
 
         return view;
     }
 
-    protected void generateView(View view) {
-        TextView newsTitle = (TextView) view.findViewById(R.id.news_title);
-        TextView newsDescription = (TextView) view.findViewById(R.id.news_description);
+    protected void generateView ( View view ) {
+
+        TextView newsTitle = (TextView) view.findViewById( R.id.news_title );
+        TextView newsDescription = (TextView) view.findViewById( R.id.news_description );
         JSONObject jsonObject = null;
 
         try {
-            jsonObject = new JSONObject(this.getArguments().getString("item"));
-        } catch (JSONException e) {
+
+            jsonObject = new JSONObject( this.getArguments().getString( "item" ) );
+
+        } catch ( JSONException e ) {
+
             e.printStackTrace();
         }
-        this.newsItem.fromJsonObject(jsonObject);
+        this.newsItem.fromJsonObject( jsonObject );
 
-        if (this.newsItem.getTitre().length() > 0) newsTitle.setText(this.newsItem.getTitre());
-        if (newsItem.getContenu().length() > 0)
-            newsDescription.setText(Html.fromHtml(this.newsItem.getContenu()));
-        int logoId = context.getResources().getIdentifier(this.newsItem.getAuteur(), "drawable", "com.iiens.net");
-        if (logoId != 0) newsTitle.setCompoundDrawablesWithIntrinsicBounds(logoId, 0, 0, 0);
+        if ( this.newsItem.getTitre().length() > 0 ) newsTitle.setText( this.newsItem.getTitre() );
+        if ( newsItem.getContenu().length() > 0 ) newsDescription.setText( Html.fromHtml( this.newsItem.getContenu() ) );
+        int logoId = context.getResources().getIdentifier( this.newsItem.getAuteur(), "drawable", "com.iiens.net" );
+        if ( logoId != 0 ) newsTitle.setCompoundDrawablesWithIntrinsicBounds( logoId, 0, 0, 0 );
     }
 
-    public void displayResult(View view, JSONArray jResult) {
-    }
+    public void displayResult ( View view, JSONArray jResult ) {}
 }

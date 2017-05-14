@@ -23,41 +23,46 @@ public class NewsItemsAdapter extends BaseAdapter {
     private final List<NewsItem> newsItemsList;
     private final Context context;
 
-    public NewsItemsAdapter(Context context, ArrayList<NewsItem> getNews) {
+    public NewsItemsAdapter ( Context context, ArrayList<NewsItem> getNews ) {
+
         this.newsItemsList = getNews;
         this.context = context;
     }
 
     @Override
-    public int getCount() {
+    public int getCount () {
+
         return newsItemsList.size();
     }
 
     @Override
-    public NewsItem getItem(int arg0) {
-        return newsItemsList.get(arg0);
+    public NewsItem getItem ( int arg0 ) {
+
+        return newsItemsList.get( arg0 );
     }
 
     @Override
-    public long getItemId(int arg0) {
+    public long getItemId ( int arg0 ) {
+
         return arg0;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView ( int position, View convertView, ViewGroup parent ) {
 
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.news_item, parent, false);
+        if ( convertView == null ) {
+
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+            convertView = inflater.inflate( R.layout.news_item, parent, false );
         }
 
-        TextView newsTitle = (TextView) convertView.findViewById(R.id.news_title);
+        TextView newsTitle = (TextView) convertView.findViewById( R.id.news_title );
 
-        NewsItem newsItem = newsItemsList.get(position);
+        NewsItem newsItem = newsItemsList.get( position );
 
-        if (newsItem.getTitre().length() > 0) newsTitle.setText(newsItem.getTitre());
-        int logoId = context.getResources().getIdentifier(newsItem.getAuteur(), "drawable", "com.iiens.net");
-        if (logoId != 0) newsTitle.setCompoundDrawablesWithIntrinsicBounds(logoId, 0, 0, 0);
+        if ( newsItem.getTitre().length() > 0 ) newsTitle.setText( newsItem.getTitre() );
+        int logoId = context.getResources().getIdentifier( newsItem.getAuteur(), "drawable", "com.iiens.net" );
+        if ( logoId != 0 ) newsTitle.setCompoundDrawablesWithIntrinsicBounds( logoId, 0, 0, 0 );
 
         return convertView;
     }

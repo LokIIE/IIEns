@@ -20,19 +20,21 @@ public class TwitterUser {
 
     private Bitmap profileImage;
 
-    public String getProfileImageUrl() {
+    public String getProfileImageUrl () {
         return profileImageUrl;
     }
 
-    public void setProfileImageUrl(String profileImageUrl) {
+    public void setProfileImageUrl ( String profileImageUrl ) {
+
         this.profileImageUrl = profileImageUrl;
     }
 
-    public Bitmap getProfileImage() {
+    public Bitmap getProfileImage () {
         return profileImage;
     }
 
-    public void setProfileImage(String profileImageUrl) {
+    public void setProfileImage ( String profileImageUrl ) {
+
 //        HttpClient httpclient = new DefaultHttpClient();
 //        HttpResponse response;
 //        try {
@@ -44,19 +46,19 @@ public class TwitterUser {
 //        }
     }
 
-    public String getScreenName() {
+    public String getScreenName () {
         return screenName;
     }
 
-    public void setScreenName(String screenName) {
+    public void setScreenName ( String screenName ) {
         this.screenName = screenName;
     }
 
-    public String getName() {
+    public String getName () {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName ( String name ) {
         this.name = name;
     }
 }
