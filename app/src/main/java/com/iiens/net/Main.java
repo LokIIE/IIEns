@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -267,15 +266,14 @@ public class Main extends Activity {
                             if (DownloadManager.STATUS_SUCCESSFUL == c
                                     .getInt(columnIndex)) {
 
-                                String uriString = c
-                                        .getString(c
-                                                .getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+                                String uriString = c.getString(
+                                        c.getColumnIndex( DownloadManager.COLUMN_LOCAL_URI )
+                                );
 
-                                Uri a = Uri.parse(uriString);
-                                Log.d( "FILE", uriString);
-                                Intent intentOpenPdf = new Intent(Intent.ACTION_VIEW);
-                                intentOpenPdf.setDataAndType(a, "application/pdf");
-                                intentOpenPdf.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                Uri a = Uri.parse( uriString );
+                                Intent intentOpenPdf = new Intent( Intent.ACTION_VIEW );
+                                intentOpenPdf.setDataAndType( a, "application/pdf" );
+                                intentOpenPdf.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
                                 startActivity(intentOpenPdf);
                             }
                         }

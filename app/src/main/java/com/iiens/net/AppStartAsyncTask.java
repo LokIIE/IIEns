@@ -34,30 +34,6 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     /**
-     * Ping des serveurs d'Arise
-     * @return True si les serveurs sont joignables, False sinon
-     */
-    private boolean isAriseOnline () {
-
-        int timeout = 5000;
-        String url = context.getResources().getString(R.string.url_iiens);
-
-        try {
-
-            HttpURLConnection connection = (HttpURLConnection) new URL( url ).openConnection();
-            connection.setConnectTimeout( timeout );
-            connection.setReadTimeout( timeout );
-            connection.setRequestMethod( "GET" );
-            int responseCode = connection.getResponseCode();
-            return ( 200 <= responseCode && responseCode <= 399 );
-
-        } catch ( IOException exception ) {
-
-            return false;
-        }
-    }
-
-    /**
      * Synchronisation du formulaire de l'emploi du temps
      */
     private void syncEdtForm () throws IOException, JSONException {
@@ -257,7 +233,7 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
 //        } catch (IOException | JSONException e) {
 //            e.printStackTrace();
 //        }
-        return isAriseOnline();
+        return false;// isAriseOnline();
     }
 
 }

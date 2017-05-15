@@ -2,12 +2,11 @@ package com.iiens.net;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.widget.Toast;
 
+import com.iiens.net.tasks.TaskPingArise;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
@@ -23,16 +22,9 @@ public class GlobalState extends Application {
     public static boolean debug = true;
 
     private static Bundle appBundle = new Bundle();
-    private static Resources resources;
     private int currentFragment = 0;
 
     public static CookieManager cookieManager = new CookieManager();
-
-/*    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }*/
 
     public Bundle getBundle () {
         return appBundle;
@@ -46,9 +38,7 @@ public class GlobalState extends Application {
 
     public void setCurrentFragment ( int currentFragmentId ) { this.currentFragment = currentFragmentId; }
 
-    public String getScriptURL () {
-        return resources.getString(R.string.url_apiie);
-    }
+    public String getScriptURL () { return getResources().getString( R.string.url_apiie ); }
 
     @Override
     public void onCreate () {
@@ -58,27 +48,10 @@ public class GlobalState extends Application {
         TwitterAuthConfig authConfig = new TwitterAuthConfig(
                 getString(R.string.tw_key),
                 getString(R.string.tw_secret));
-        Fabric.with( this, new Twitter( authConfig ) );
-
-        resources = getResources();
+        Fabric.with(this, new Twitter(authConfig));
 
         cookieManager.setCookiePolicy( CookiePolicy.ACCEPT_ALL );
         CookieHandler.setDefault( GlobalState.cookieManager );
-
-        AppStartAsyncTask at = new AppStartAsyncTask( getApplicationContext() );
-
-        try {
-
-            boolean ariseOnline = at.execute().get();
-            if ( !ariseOnline ) {
-
-                Toast.makeText( getApplicationContext(), resources.getString(R.string.arise_unavailable), Toast.LENGTH_LONG ).show();
-            }
-
-        } catch ( InterruptedException | ExecutionException e ) {
-
-            e.printStackTrace();
-        }
     }
 
     public boolean isOnline () {
@@ -86,8 +59,14 @@ public class GlobalState extends Application {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService( Context.CONNECTIVITY_SERVICE );
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return ( netInfo != null && netInfo.isConnectedOrConnecting() );
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+
+    public boolean isAriseAvailable () throws ExecutionException, InterruptedException {
+
+        return ! ( new TaskPingArise( this ).execute().get() instanceof Exception );
+    }
+
 
     public static class PrefsConst {
 

@@ -10,39 +10,47 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Vérification de la connexion et mise à jour des ressources
+ * Vérification de la connexion
  */
 
-public class TaskPingArise extends AsyncTask<Void, Void, Boolean> {
+public class TaskPingArise extends AsyncTask<Void, Void, Object> {
 
     private Context context;
 
-    public TaskPingArise(Context context){
+    public TaskPingArise ( Context context ) {
+
         this.context = context;
     }
 
     @Override
-    protected Boolean doInBackground(Void... voids) {
+    protected Object doInBackground ( Void... voids ) {
 
         try {
 
             int timeout = 5000;
             String url = context.getResources().getString(R.string.url_iiens);
 
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.setConnectTimeout(timeout);
-            connection.setReadTimeout(timeout);
-            connection.setRequestMethod("GET");
+            HttpURLConnection connection = (HttpURLConnection) new URL( url ).openConnection();
+            connection.setConnectTimeout( timeout );
+            connection.setReadTimeout( timeout );
+            connection.setRequestMethod( "GET" );
 
             int responseCode = connection.getResponseCode();
-            return (200 <= responseCode && responseCode <= 399);
+            return ( 200 <= responseCode && responseCode <= 399 );
 
         } catch ( Exception e ) {
 
-            Toast.makeText( context, e.getMessage(), Toast.LENGTH_LONG );
+           return e;
         }
-
-        return false;
     }
 
+    @Override
+    protected void onPostExecute ( Object result ) {
+
+        if( result instanceof Exception ) {
+
+            Toast.makeText( context, context.getResources().getString( R.string.arise_unavailable ), Toast.LENGTH_LONG )
+                    .show();
+        }
+    }
 }

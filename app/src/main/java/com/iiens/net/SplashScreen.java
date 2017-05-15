@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * Ecran d'attente au lancement
@@ -19,10 +22,12 @@ public class SplashScreen extends Activity {
 
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
+
         super.onCreate( savedInstanceState );
         //TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         //Fabric.with(this, new Twitter(authConfig));
         setContentView( R.layout.activity_splash );
+
 
 //        final SharedPreferences prefs = getApplicationContext().getSharedPreferences(SplashScreen.class.getSimpleName(),
 //                Context.MODE_PRIVATE);
@@ -70,15 +75,27 @@ public class SplashScreen extends Activity {
 
     @Override
     protected void onStart () {
+
         super.onStart();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity( new Intent( SplashScreen.this, Login.class ) );
-                finish();
+        if ( ((GlobalState) getApplicationContext()).isOnline() ) {
+
+            try {
+
+                Boolean statutArise = ((GlobalState) getApplicationContext()).isAriseAvailable();
+                displayActivity( statutArise ? Login.class : Main.class );
+
+            } catch ( InterruptedException | ExecutionException e) {
+
+                e.printStackTrace();
             }
-        }, 1000);
+
+        } else {
+
+            displayActivity( Main.class );
+            Toast.makeText( this, getResources().getString( R.string.internet_unavailable ), Toast.LENGTH_LONG )
+                    .show();
+        }
     }
 
     /**
@@ -103,5 +120,16 @@ public class SplashScreen extends Activity {
         }
 
         return true;
+    }
+
+    private void displayActivity ( final Class<?> intentTarget ) {
+
+        new Handler().postDelayed( new Runnable() {
+            @Override
+            public void run() {
+                startActivity( new Intent( SplashScreen.this, intentTarget ) );
+                finish();
+            }
+        }, 1000);
     }
 }

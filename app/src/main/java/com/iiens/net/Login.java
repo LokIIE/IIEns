@@ -58,14 +58,16 @@ public class Login extends Activity {
 
                         } catch (JSONException e) {
 
-                            Toast.makeText( getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG ).show();
+                            Toast.makeText( getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG )
+                                    .show();
                         }
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Toast.makeText( getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG ).show();
+                        Toast.makeText( getApplicationContext(), "Error: " + error.getMessage(), Toast.LENGTH_LONG )
+                                .show();
                     }
                 }
         );

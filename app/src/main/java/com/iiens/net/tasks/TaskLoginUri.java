@@ -23,12 +23,12 @@ public class TaskLoginUri extends AsyncTask<Void, Void, String> {
     private Context context;
     private String login_uri = "";
 
-    public TaskLoginUri(Context context){
+    public TaskLoginUri ( Context context ){
         this.context = context;
     }
 
     @Override
-    protected String doInBackground(final Void... params) {
+    protected String doInBackground ( final Void... params ) {
 
         RequestQueue queue = Volley.newRequestQueue( this.context );
 
@@ -39,22 +39,24 @@ public class TaskLoginUri extends AsyncTask<Void, Void, String> {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
                         try {
                             if( response.has("redirect") ) {
 
                                 login_uri = response.getString("redirect");
                             }
-                        } catch (JSONException e) {
-                            Toast.makeText( context,
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
+                        } catch ( JSONException e ) {
+
+                            Toast.makeText( context, "Error: " + e.getMessage(), Toast.LENGTH_LONG )
+                                    .show();
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText( context, "Error: " + error.getMessage(), Toast.LENGTH_LONG )
+                                .show();
                     }
                 }
         );
