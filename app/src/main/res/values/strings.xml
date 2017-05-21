@@ -12,7 +12,6 @@
     <string name="bool_news_update_name">news_new_update</string>
     <string name="bool_anniv_update_name">anniv_new_update</string>
 
-
     <string name="hint_user">Identifiant ARISE</string>
     <string name="hint_password">Mot de passe</string>
     <string name="connect_button">CONNEXION</string>
@@ -28,11 +27,14 @@
     <string name="arise_unavailable">Arise = 404 not found</string>
     <string name="internet_unavailable">Connexion à internet requise</string>
     <string name="api_error">Données introuvables</string>
-    <string name="google_play_services_unavailable">Google Play Services requis pour recevoir des notifications</string>
     <string name="cal_all_sync_done">Synchronisation avec votre agenda terminée</string>
     <string name="cal_week_sync_done">La semaine a été ajoutée à votre agenda</string>
     <string name="cal_event_sync_done">L\'évènement a été ajouté à votre agenda</string>
     <string name="internal_error">Erreur de traitement, veuillez réessayer</string>
+    
+    <!-- AlertDialogs messages -->
+    <string name="alert_no_gps_title">Google Play Services indisponible</string>
+    <string name="alert_no_gps_msg">L\'application ne pourra pas recevoir et afficher les notifications</string>
 
     <string-array name="main_menu_entries">
         <item>News</item>
