@@ -1,11 +1,11 @@
-package com.iiens.net.tasks;
+package com.iiens.net.tasks.sync;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
 import com.iiens.net.R;
-import com.iiens.net.database.EdtFormDb;
-import com.iiens.net.model.EdtFormItem;
+import com.iiens.net.database.EdtOptDb;
+import com.iiens.net.model.EdtOptItem;
 
 import org.json.JSONArray;
 
@@ -16,21 +16,20 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Synchronisation du formulaire de l'emploi du temps
+ * Mise à jour des options de l'emploi du temps
  */
 
-public class TaskSyncEdtForm extends AsyncTask<Void, Void, Boolean> {
+public class TaskSyncEdtOptions extends AsyncTask<Void, Void, Boolean> {
 
     private Context context;
 
-    public TaskSyncEdtForm(Context context){
+    public TaskSyncEdtOptions(Context context){
         this.context = context;
     }
 
     @Override
     protected Boolean doInBackground(Void... voids) {
-
-        String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_edtForm);
+        String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_edtOptions);
         BufferedReader reader = null;
 
         try {
@@ -41,19 +40,13 @@ public class TaskSyncEdtForm extends AsyncTask<Void, Void, Boolean> {
             connection.connect();
 
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
             String line;
-
-            EdtFormDb dal = new EdtFormDb(context);
-
+            EdtOptDb dal = new EdtOptDb(context);
             while ((line = reader.readLine()) != null) {
-
                 JSONArray jArray = new JSONArray(line);
                 for (int i = 0; i < jArray.length(); i++) {
-
-                    if (!dal.createItem(new EdtFormItem(i, jArray.getJSONObject(i)))) {
-
-                        break;
-                    }
+                    dal.createItem(new EdtOptItem(jArray.getJSONObject(i)));
                 }
             }
 
@@ -64,7 +57,6 @@ public class TaskSyncEdtForm extends AsyncTask<Void, Void, Boolean> {
         } finally {
 
             if (reader != null) {
-
                 try {
 
                     reader.close();

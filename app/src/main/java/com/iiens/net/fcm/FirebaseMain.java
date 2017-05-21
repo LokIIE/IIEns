@@ -1,4 +1,4 @@
-package com.iiens.net.gcm;
+package com.iiens.net.fcm;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -8,7 +8,7 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.iiens.net.SplashScreen;
 
-public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
+public class FirebaseMain extends AsyncTask<Void, Void, String> {
 
     private static final String TAG = "GCMRelated";
     private final Context ctx;
@@ -16,7 +16,7 @@ public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
     private GoogleCloudMessaging gcm;
     private String regid = null;
 
-    public GCMRegisterApp(Context ctx, GoogleCloudMessaging gcm, int appVersion) {
+    public FirebaseMain(Context ctx, GoogleCloudMessaging gcm, int appVersion) {
         this.ctx = ctx;
         this.gcm = gcm;
         this.appVersion = appVersion;
@@ -24,7 +24,7 @@ public class GCMRegisterApp extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... arg0) {
-        String msg;
+        String msg = "";
        /* try {
             if (gcm == null) gcm = GoogleCloudMessaging.getInstance(ctx);
             regid = gcm.register(ctx.getResources().getString(R.string.gcm_id));

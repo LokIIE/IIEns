@@ -1,14 +1,29 @@
 package com.iiens.net;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -20,57 +35,36 @@ public class SplashScreen extends Activity {
     // private static final String TWITTER_KEY = "S3TQM4DSB34hwSuigO1EccDzZ";
     // private static final String TWITTER_SECRET = "nmxP2Dr3psD97pDLIf78EM6PJarw45Vor8Kodg3PQbq0Bnri3N";
 
+    GlobalState context;
+    SharedPreferences prefs;
+    RequestQueue queue;
+
+    BroadcastReceiver tokenRefreshed = new BroadcastReceiver () {
+        @Override
+        public void onReceive ( Context context, Intent intent ) {
+
+            Log.d( "tokenRefreshed", "Intent received" );
+
+            onFirstLaunch( queue );
+        }
+    };
+
     @Override
     protected void onCreate ( Bundle savedInstanceState ) {
 
-        super.onCreate( savedInstanceState );
+        super.onCreate(savedInstanceState);
         //TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         //Fabric.with(this, new Twitter(authConfig));
-        setContentView( R.layout.activity_splash );
+        setContentView(R.layout.activity_splash);
 
+        context = (GlobalState) getApplicationContext();
+        prefs = context.getPreferences();
+        queue = Volley.newRequestQueue( this );
 
-//        final SharedPreferences prefs = getApplicationContext().getSharedPreferences(SplashScreen.class.getSimpleName(),
-//                Context.MODE_PRIVATE);
-//
-//        if (checkPlayServices()) {
-//            prefs.edit().putBoolean(GlobalState.PrefsConst.HAS_PLAY_SERVICES, true).apply();
-//
-//            // Verify if a gcm registration id exists, if not generates it
-//            // GCM needs Google Play Services to function correctly
-//            if (prefs.getBoolean(GlobalState.PrefsConst.HAS_PLAY_SERVICES, false)) {
-//                if (prefs.getBoolean(GlobalState.PrefsConst.FIRST_LAUNCH, true)
-//                        || prefs.getBoolean(GlobalState.PrefsConst.UPDATE_FCM_TOKEN, true)) {
-//
-//                    // TODO : v√©rification existence token, sinon cr√©ation
-//                    if (true) {
-//                        String fcmToken = FirebaseInstanceId.getInstance().getToken();
-//
-//                        if (GlobalState.debug) {
-//                            Log.d(this.getLocalClassName(), "New token : " + fcmToken);
-//                        }
-//                        // TODO : envoi token en base de donn√©es
-//
-//                        SharedPreferences.Editor editor = prefs.edit();
-//                        editor.putBoolean(GlobalState.PrefsConst.FIRST_LAUNCH, false);
-//                        editor.putBoolean(GlobalState.PrefsConst.UPDATE_FCM_TOKEN, false);
-//                       editor.putString(GlobalState.PrefsConst.SAVED_FCM_TOKEN, fcmToken);
-//                        editor.commit();
-//                    }
-//                } else {
-//
-//                    if (GlobalState.debug) {
-//                        Log.d(this.getLocalClassName(), "No Google Play Service");
-//                    }
-//                }
-//        } else {
-//            // TODO : dialogue pour notifications non dispo (1 fois)
-//            if (prefs.getBoolean(GlobalState.PrefsConst.NO_PLAY_SERVICES_DIALOG, true)) {
-//                prefs.edit().putBoolean(GlobalState.PrefsConst.NO_PLAY_SERVICES_DIALOG, false).apply();
-//            }
-//        }
-
-
-//        }
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                tokenRefreshed,
+                new IntentFilter( "tokenRefreshed" )
+        );
     }
 
     @Override
@@ -78,11 +72,14 @@ public class SplashScreen extends Activity {
 
         super.onStart();
 
-        if ( ((GlobalState) getApplicationContext()).isOnline() ) {
+        boolean hasPlayServices = context.checkPlayServices();
+        prefs.edit().putBoolean( GlobalState.PrefsConst.HAS_PLAY_SERVICES, hasPlayServices ).apply();
+
+        if ( context.isOnline() ) {
 
             try {
 
-                Boolean statutArise = ((GlobalState) getApplicationContext()).isAriseAvailable();
+                Boolean statutArise = context.isAriseAvailable();
                 displayActivity( statutArise ? Login.class : Main.class );
 
             } catch ( InterruptedException | ExecutionException e) {
@@ -90,36 +87,185 @@ public class SplashScreen extends Activity {
                 e.printStackTrace();
             }
 
+            if( hasPlayServices ) {
+
+                queue.start();
+
+                if( prefs.getBoolean( GlobalState.PrefsConst.FIRST_LAUNCH, true ) ) Log.d( "FIRSTLAUNCH", "En attente du broadcast ..." );
+                else if( prefs.getBoolean( GlobalState.PrefsConst.UPDATE_FCM_TOKEN, false ) ) updateFcmToken( context, queue );
+                else updateDerniereActivite( context, queue );
+
+            } else {
+
+                // TODO : afficher popup Google Play Services manquants
+                prefs.edit().putBoolean( GlobalState.PrefsConst.NO_PLAY_SERVICES_DIALOG, false ).apply();
+            }
+
         } else {
 
-            displayActivity( Main.class );
             Toast.makeText( this, getResources().getString( R.string.internet_unavailable ), Toast.LENGTH_LONG )
                     .show();
+
+            if ( prefs.getBoolean( GlobalState.PrefsConst.FIRST_LAUNCH, true ) ) finish();
+            else displayActivity( Main.class );
         }
     }
 
     /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
+     * Actions aprËs l'enregistrement du token FCM
      */
-    private boolean checkPlayServices() {
+    private void onFirstLaunch ( RequestQueue queue ) {
 
-        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-        int resultCode = googleAPI.isGooglePlayServicesAvailable( this );
-        if ( resultCode != ConnectionResult.SUCCESS ) {
-            if ( googleAPI.isUserResolvableError( resultCode ) ) {
-                googleAPI.getErrorDialog(
-                        this,
-                        resultCode,
-                        9000
-                ).show();
-            }
+        try {
 
-            return false;
+            Resources res = getResources();
+            String registerUrl = res.getString( R.string.url_fcm_api ) + res.getString( R.string.fcm_register );
+            JSONObject data = new JSONObject();
+            data.put( "token", FirebaseInstanceId.getInstance().getToken() );
+
+            JsonObjectRequest request = new JsonObjectRequest( registerUrl, data,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse ( JSONObject response ) {
+
+                            if( response.length() > 0 ) {
+
+                                try {
+
+                                    SharedPreferences.Editor editor = getSharedPreferences(
+                                            getResources().getString( R.string.app_settings ),
+                                            Context.MODE_PRIVATE
+                                    ).edit();
+
+                                    editor.putBoolean( GlobalState.PrefsConst.FIRST_LAUNCH, false );
+                                    editor.putBoolean( GlobalState.PrefsConst.UPDATE_FCM_TOKEN, false );
+                                    editor.putString( GlobalState.PrefsConst.APP_TOKEN, response.getString( "token" ) );
+                                    editor.apply();
+
+                                    Log.d( "onFirstLaunch", "SUCCESS, token : " + response.getString( "token" ) );
+
+                                } catch ( JSONException e ) {
+
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse ( VolleyError error ) {
+
+                            Log.e( "onFirstLaunch", error.getMessage() );
+                        }
+                    }
+            );
+
+            queue.add( request );
+
+        } catch ( JSONException e ) {
+
+            e.printStackTrace();
         }
+    }
 
-        return true;
+    /**
+     * Mise ‡ jour du token FCM
+     */
+    private void updateFcmToken ( GlobalState context, final RequestQueue queue ) {
+
+        // TODO
+        try {
+
+            FirebaseInstanceId.getInstance().deleteInstanceId();
+
+            final String token = FirebaseInstanceId.getInstance().getToken();
+
+            Resources res = getResources();
+            String registerUrl = res.getString( R.string.url_fcm_api ) + res.getString( R.string.fcm_register );
+            JSONObject data = new JSONObject();
+            data.put( "appToken", prefs.getString( GlobalState.PrefsConst.APP_TOKEN, "" ) );
+            data.put( "token", token );
+
+            JsonObjectRequest request = new JsonObjectRequest( registerUrl, data,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse ( JSONObject response ) {
+
+                            if( response.length() > 0 ) {
+
+                                try {
+
+                                    SharedPreferences.Editor editor = getSharedPreferences(
+                                            getResources().getString( R.string.app_settings ),
+                                            Context.MODE_PRIVATE
+                                    ).edit();
+
+                                    editor.putBoolean( GlobalState.PrefsConst.UPDATE_FCM_TOKEN, false );
+                                    editor.putString( GlobalState.PrefsConst.APP_TOKEN, response.getString( "token" ) );
+                                    editor.apply();
+
+                                    Log.d( "updateFcmToken", "SUCCESS" );
+
+                                } catch ( JSONException e ) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse ( VolleyError error ) {
+
+                            Log.e( "updateFcmToken", error.getMessage() );
+                        }
+                    }
+            );
+
+            queue.add( request );
+
+        } catch ( JSONException | IOException e ) {
+
+            e.printStackTrace();
+        }
+    }
+
+    private void updateDerniereActivite ( GlobalState context, final RequestQueue queue ) {
+
+        try {
+
+            Resources res = getResources();
+            String url = res.getString( R.string.url_apiie ) + res.getString( R.string.apiie_appLaunched );
+            JSONObject data = new JSONObject();
+            data.put( "appToken", prefs.getString( GlobalState.PrefsConst.APP_TOKEN, "" ) );
+
+            Log.d( "appToken", prefs.getString( GlobalState.PrefsConst.APP_TOKEN, "" ) );
+
+            JsonObjectRequest request = new JsonObjectRequest( url, data,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse ( JSONObject response ) {
+
+                            if( response.length() > 0 ) {
+
+                                Log.d( "updateDerniereActivite", "SUCCESS" );
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse ( VolleyError error ) {
+
+                            Log.e( "updateDerniereActivite", error.getMessage() );
+                        }
+                    }
+            );
+
+            queue.add( request );
+
+        } catch ( JSONException e ) {
+
+            e.printStackTrace();
+        }
     }
 
     private void displayActivity ( final Class<?> intentTarget ) {

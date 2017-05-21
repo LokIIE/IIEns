@@ -1,4 +1,4 @@
-package com.iiens.net.tasks;
+package com.iiens.net.tasks.sync;
 
 import android.content.Context;
 import android.os.AsyncTask;
