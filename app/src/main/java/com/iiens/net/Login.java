@@ -3,6 +3,7 @@ package com.iiens.net;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,7 +30,7 @@ public class Login extends Activity {
     protected void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.login);
+        setContentView( R.layout.activity_login );
 
         wv = new AriseWebViewClient( this, new AriseWebViewClient.AriseInterface () {
                     public void onConnectionSuccess () {
@@ -52,10 +53,9 @@ public class Login extends Activity {
 
                             if( response.has( "connection_status" ) && response.getString( "connection_status" ).equals( "ok" ) ) {
 
-                            } else {
+                                Log.d( "Login", "CONNECTE" );
 
-                                wv.loadUrl( response.getString("redirect") );
-                            }
+                            } else wv.loadUrl( response.getString("redirect") );
 
                         } catch (JSONException e) {
 

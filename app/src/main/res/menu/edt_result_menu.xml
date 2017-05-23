@@ -2,7 +2,6 @@
 
     <item
         android:id="@+id/export_to_calendar"
-        android:showAsAction="ifRoom"
         android:icon="@drawable/ic_calendar"
         android:title="@string/export_to_calendar_title"/>
 

@@ -52,7 +52,7 @@ public class SplashScreen extends Activity {
     protected void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView( R.layout.activity_splashscreen );
 
         context = (GlobalState) getApplicationContext();
         prefs = context.getPreferences();

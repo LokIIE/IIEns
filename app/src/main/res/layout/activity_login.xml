@@ -59,7 +59,6 @@
             <EditText
                 android:id="@+id/username"
                 style="@style/LoginEditText"
-                android:allowUndo="false"
                 android:hint="@string/hint_user"
                 android:inputType="textNoSuggestions"
                  />
@@ -116,7 +115,7 @@
         <Button
             android:id="@+id/btn_forgot_password"
             style="@style/LoginButton"
-            android:text="Mot de passe oublié"
+            android:text="@string/forgot_password"
             android:textSize="12sp"
             android:onClick="onForgotPasswordClicked" />
     </LinearLayout>
