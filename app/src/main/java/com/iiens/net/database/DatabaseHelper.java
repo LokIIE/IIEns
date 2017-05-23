@@ -8,51 +8,51 @@ import android.util.Log;
 /**
  * Gère la création des tables de la base de données
  */
-public class DatabaseHelper extends SQLiteOpenHelper {
+class DatabaseHelper extends SQLiteOpenHelper {
 
     /* Table anniversaires */
-    public static final String TABLE_ANNIVERSAIRES = "ANNIVERSAIRES";
-    public static final String ANNIV_ID = "_id";
-    public static final String ANNIV_NOM = "nom";
-    public static final String ANNIV_PRENOM = "prenom";
-    public static final String ANNIV_SURNOM = "surnom";
-    public static final String ANNIV_AGE = "age";
-    public static final String ANNIV_DATE = "date";
+    static final String TABLE_ANNIVERSAIRES = "ANNIVERSAIRES";
+    static final String ANNIV_ID = "_id";
+    static final String ANNIV_NOM = "nom";
+    static final String ANNIV_PRENOM = "prenom";
+    static final String ANNIV_SURNOM = "surnom";
+    static final String ANNIV_AGE = "age";
+    static final String ANNIV_DATE = "date";
 
     /* Table emploi du temps */
-    public static final String TABLE_EDT = "EDT";
-    public static final String EDT_ID = "_id";
-    public static final String EDT_TITRE = "titre";
-    public static final String EDT_TYPE = "type";
-    public static final String EDT_HOTE = "hote";
-    public static final String EDT_LIEU = "lieu";
-    public static final String EDT_GROUPE = "groupe";
-    public static final String EDT_HEURE_DEBUT = "heure_debut";
-    public static final String EDT_HEURE_FIN = "heure_fin";
-    public static final String EDT_DUREE = "duree";
-    public static final String EDT_DATE = "date";
+    static final String TABLE_EDT = "EDT";
+    static final String EDT_ID = "_id";
+    static final String EDT_TITRE = "titre";
+    static final String EDT_TYPE = "type";
+    static final String EDT_HOTE = "hote";
+    static final String EDT_LIEU = "lieu";
+    static final String EDT_GROUPE = "groupe";
+    static final String EDT_HEURE_DEBUT = "heure_debut";
+    static final String EDT_HEURE_FIN = "heure_fin";
+    static final String EDT_DUREE = "duree";
+    static final String EDT_DATE = "date";
 
     /* Table formulaire emploi du temps */
-    public static final String TABLE_EDTFORM = "EDTFORM";
-    public static final String EDTFORM_ID = "_id";
-    public static final String EDTFORM_NAME = "nom";
-    public static final String EDTFORM_PROMO = "promo";
+    static final String TABLE_EDTFORM = "EDTFORM";
+    static final String EDTFORM_ID = "_id";
+    static final String EDTFORM_NAME = "nom";
+    static final String EDTFORM_PROMO = "promo";
 
     /* Table options de l'emploi du temps */
-    public static final String TABLE_EDTOPT = "EDTOPT";
-    public static final String EDTOPT_ID = "_id";
-    public static final String EDTOPT_NAME = "nom";
-    public static final String EDTOPT_CODE = "code";
-    public static final String FK_EDTFORM = "fk_edtForm";
+    static final String TABLE_EDTOPT = "EDTOPT";
+    static final String EDTOPT_ID = "_id";
+    static final String EDTOPT_NAME = "nom";
+    static final String EDTOPT_CODE = "code";
+    static final String FK_EDTFORM = "fk_edtForm";
 
     /* Table news */
-    public static final String TABLE_NEWS = "NEWS";
-    public static final String NEWS_ID = "_id";
-    public static final String NEWS_TITRE = "titre";
-    public static final String NEWS_CONTENU = "contenu";
-    public static final String NEWS_AUTEUR = "auteur";
-    public static final String NEWS_DATE_EVENT = "date_event";
-    public static final String NEWS_DATE_PUBLICATION = "date_publication";
+    static final String TABLE_NEWS = "NEWS";
+    static final String NEWS_ID = "_id";
+    static final String NEWS_TITRE = "titre";
+    static final String NEWS_CONTENU = "contenu";
+    static final String NEWS_AUTEUR = "auteur";
+    static final String NEWS_DATE_EVENT = "date_event";
+    static final String NEWS_DATE_PUBLICATION = "date_publication";
 
     private static final String DATABASE_NAME = "IIEns.db";
     private static final int DATABASE_VERSION = 1;
@@ -111,7 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     + NEWS_DATE_PUBLICATION + " text not null"
                     + ");";
 
-    public DatabaseHelper ( Context context ) {
+    DatabaseHelper ( Context context ) {
 
         super( context, DATABASE_NAME, null, DATABASE_VERSION );
     }
@@ -119,15 +119,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate ( SQLiteDatabase database ) {
 
-        //createDb(database);
+        createDb( database );
+        Log.d( "DatabaseHelper", "Création DB" );
     }
 
     @Override
     public void onUpgrade ( SQLiteDatabase db, int oldVersion, int newVersion ) {
 
-        Log.w(this.getClass().getName(),
-                "Upgrading database from version " + oldVersion + " to "
-                        + newVersion + ", which will destroy all old data");
+        Log.d( "DatabaseHelper", "Upgrading database from version " + oldVersion + " to "
+                + newVersion + ", which will destroy all old data" );
         db.execSQL( "DROP TABLE IF EXISTS " + TABLE_ANNIVERSAIRES );
         db.execSQL( "DROP TABLE IF EXISTS " + TABLE_EDTOPT );
         db.execSQL( "DROP TABLE IF EXISTS " + TABLE_EDTFORM );
@@ -136,7 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         createDb( db );
     }
 
-    public void createDb ( SQLiteDatabase db ) {
+    private void createDb ( SQLiteDatabase db ) {
 
         SQLiteDatabase database = (db == null) ? super.getWritableDatabase() : db;
         database.execSQL( CREATE_ANNIV );

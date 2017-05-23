@@ -22,8 +22,6 @@ import io.fabric.sdk.android.Fabric;
 
 public class GlobalState extends Application {
 
-    public static boolean debug = true;
-
     private static Bundle appBundle = new Bundle();
     private int currentFragment = 0;
 
@@ -103,17 +101,17 @@ public class GlobalState extends Application {
         return resultCode == ConnectionResult.SUCCESS;
     }
 
-    public static class PrefsConst {
+    static class PrefsConst {
 
-        public static String FIRST_LAUNCH = "firstLaunch";
-        public static String UPDATE_FCM_TOKEN = "updateFcmToken";
-        public static String HAS_PLAY_SERVICES = "hasPlayServices";
-        public static String NO_PLAY_SERVICES_DIALOG = "noPlayServicesDialog";
-        public static String APP_TOKEN = "appToken";
-        public static String APP_NEW_VERSION = "appNewVersion";
-        public static String SAVE_PREFERENCES = "savePreferences";
-        public static String SAVE_CREDENTIALS = "saveCredentials";
-        public static String SAVED_LOGIN = "savedLogin";
-        public static String SAVED_PASSWORD = "savedPassword";
+        static String FIRST_LAUNCH = "firstLaunch";
+        static String UPDATE_FCM_TOKEN = "updateFcmToken";
+        static String HAS_PLAY_SERVICES = "hasPlayServices";
+        static String NO_PLAY_SERVICES_DIALOG = "noPlayServicesDialog";
+        static String APP_TOKEN = "appToken";
+        static String APP_NEW_VERSION = "appNewVersion";
+        static String SAVE_PREFERENCES = "savePreferences";
+        static String SAVE_CREDENTIALS = "saveCredentials";
+        static String SAVED_LOGIN = "savedLogin";
+        static String SAVED_PASSWORD = "savedPassword";
     }
 }
