@@ -1,6 +1,7 @@
 package com.iiens.net;
 
 import android.app.Application;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -19,7 +20,7 @@ import java.util.concurrent.ExecutionException;
 public class GlobalState extends Application {
 
     private static Bundle appBundle = new Bundle();
-    private int currentFragment = 0;
+    private Fragment currentFragment = null;
 
     private SharedPreferences prefs;
 
@@ -33,9 +34,9 @@ public class GlobalState extends Application {
         appBundle = bundle;
     }
 
-    public int getCurrentFragment () { return this.currentFragment; }
+    public Fragment getCurrentFragment () { return ( this.currentFragment != null ) ? this.currentFragment : new News(); }
 
-    public void setCurrentFragment ( int currentFragmentId ) { this.currentFragment = currentFragmentId; }
+    public void setCurrentFragment ( Fragment value ) { this.currentFragment = value; }
 
     public String getScriptURL () { return getResources().getString( R.string.url_apiie ); }
 

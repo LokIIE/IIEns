@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
     <style name="IIEnsTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:textColor">@color/black</item>
         <item name="android:colorPrimary">@color/orange</item>
-        <item name="android:colorPrimaryDark">@color/orange</item>
+        <item name="android:colorPrimaryDark">@color/darkorange</item>
 
-        <item name="android:actionBarStyle">@style/ActionBar</item>
         <item name="android:checkboxStyle">@style/Widget.AppCompat.CompoundButton.CheckBox</item>
     </style>
 
-    <style name="ActionBar">
-        <item name="android:colorPrimary">@color/aqua</item>
-        <item name="android:colorPrimaryDark">@color/red</item>
-        <item name="android:statusBarColor">@color/blue</item>
+    <style name="ActionBar" parent="IIEnsTheme">
+        <item name="android:background">@color/orange</item>
+    </style>
+
+    <style name="NavigationDrawer" parent="IIEnsTheme">
+        <item name="android:textColor">@color/red</item>
+        <item name="android:colorPrimaryDark">@color/black</item>
+    </style>
+
+    <style name="BottomNavigation" parent="IIEnsTheme">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:colorPrimaryDark">@color/ltGray</item>
     </style>
 
     <style name="LoginFormContainer">

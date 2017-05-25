@@ -1,18 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.iiens.net.Main" >
+    tools:context="com.iiens.net.Main">
 
     <group android:id="@+id/navigation_base">
 
-        <item android:id="@+id/action_news"
+        <item android:id="@+id/action_nav_news"
               android:title="@string/menu_news"
               android:icon="@drawable/ic_chrome_reader_mode" />
 
-        <item android:id="@+id/action_edt"
+        <item android:id="@+id/action_nav_edt"
               android:title="@string/menu_edt"
               android:icon="@drawable/ic_school" />
 
-        <item android:id="@+id/action_twitter"
+        <item android:id="@+id/action_nav_twitter"
               android:title="@string/menu_twitter"
               android:icon="@drawable/tw__ic_logo_default" />
 
@@ -23,11 +23,11 @@
         <menu>
             <group>
 
-                <item android:id="@+id/action_clubs"
+                <item android:id="@+id/action_nav_clubs"
                       android:title="@string/menu_clubs"
                       android:icon="@drawable/ic_people" />
 
-                <item android:id="@+id/action_breviaire"
+                <item android:id="@+id/action_nav_breviaire"
                       android:title="@string/menu_breviaire"
                       android:icon="@drawable/ic_music_note" />
 
@@ -37,7 +37,7 @@
 
     <group android:id="@+id/navigation_other">
 
-        <item android:id="@+id/action_parametres"
+        <item android:id="@+id/action_nav_parametres"
               android:title="@string/menu_settings"
               android:icon="@drawable/ic_settings" />
 
