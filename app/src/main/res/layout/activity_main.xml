@@ -49,7 +49,7 @@
             android:layout_alignParentBottom="true"
             android:theme="@style/BottomNavigation"
             app:itemBackground="?android:attr/colorPrimaryDark"
-            app:itemIconTint="?android:attr/colorPrimary"
+            app:itemIconTint="@drawable/selector"
             app:itemTextColor="?android:attr/textColor"
             app:menu="@menu/bottom_navigation" />
 
