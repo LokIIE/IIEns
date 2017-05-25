@@ -4,10 +4,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 
+import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
 import com.twitter.sdk.android.tweetui.TwitterListTimeline;
 
 import org.json.JSONArray;
+
+import io.fabric.sdk.android.Fabric;
 
 
 public class Twitter extends BaseFragment {
@@ -18,6 +21,11 @@ public class Twitter extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.layoutId = R.layout.listview;
+
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(
+                getString(R.string.tw_key),
+                getString(R.string.tw_secret));
+        Fabric.with( getActivity().getApplicationContext(), new com.twitter.sdk.android.Twitter(authConfig));
     }
 
     @Override

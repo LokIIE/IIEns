@@ -10,15 +10,11 @@ import android.os.Bundle;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.iiens.net.tasks.TaskPingArise;
-import com.twitter.sdk.android.Twitter;
-import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 import java.util.concurrent.ExecutionException;
-
-import io.fabric.sdk.android.Fabric;
 
 public class GlobalState extends Application {
 
@@ -47,11 +43,6 @@ public class GlobalState extends Application {
     public void onCreate () {
 
         super.onCreate();
-
-        TwitterAuthConfig authConfig = new TwitterAuthConfig(
-                getString(R.string.tw_key),
-                getString(R.string.tw_secret));
-        Fabric.with(this, new Twitter(authConfig));
 
         cookieManager.setCookiePolicy( CookiePolicy.ACCEPT_ALL );
         CookieHandler.setDefault( GlobalState.cookieManager );
