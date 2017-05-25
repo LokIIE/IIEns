@@ -6,34 +6,46 @@
 
     <PreferenceCategory android:title="@string/pref_notifs_txt" >
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
+            android:disableDependentsState="false"
+            android:icon="@drawable/ic_chrome_reader_mode"
             android:key="@string/pref_news_key"
+            android:persistent="false"
+            android:summary="Affichage des "
             android:summaryOff="@string/pref_deactivated"
             android:summaryOn="@string/pref_activated"
-            android:title="@string/pref_news_title" />
+            android:switchTextOff="@string/pref_deactivated"
+            android:switchTextOn="@string/pref_activated"
+            android:title="@string/pref_news_title"/>
 
-        <CheckBoxPreference
-            android:defaultValue="true"
+        <SwitchPreference
+            android:defaultValue="false"
+            android:icon="@drawable/ic_cake"
             android:key="@string/pref_anniv_key"
             android:summaryOff="@string/pref_deactivated"
             android:summaryOn="@string/pref_activated"
-            android:title="@string/pref_anniv_title" />
+            android:switchTextOff="@string/pref_deactivated"
+            android:switchTextOn="@string/pref_activated"
+            android:title="@string/pref_anniv_title"/>
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="true"
+            android:icon="@drawable/ic_school"
             android:key="@string/pref_events_key"
             android:summaryOff="@string/pref_deactivated"
             android:summaryOn="@string/pref_activated"
-            android:title="@string/pref_events_title" />
+            android:switchTextOff="@string/pref_deactivated"
+            android:switchTextOn="@string/pref_activated"
+            android:title="@string/pref_events_title"/>
 
         <ListPreference
-            android:defaultValue="none"
             android:entries="@array/pref_partiel_entries"
             android:entryValues="@array/pref_partiel_values"
+            android:icon="@drawable/ic_warning"
             android:key="@string/pref_partiel_key"
             android:summary="@string/pref_partiel_summary"
-            android:title="@string/pref_partiel_title" />
+            android:title="@string/pref_partiel_title"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
