@@ -58,12 +58,15 @@
     <!-- Navigation drawer -->
 
     <android.support.design.widget.NavigationView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/navigation_drawer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:theme="@style/NavigationDrawer"
-        app:itemIconTint="?android:attr/colorPrimaryDark"
+        app:itemIconTint="@drawable/selector"
+        app:itemTextColor="?android:attr/textColor"
         app:menu="@menu/navigation_drawer"
         android:elevation="4dp" />
 

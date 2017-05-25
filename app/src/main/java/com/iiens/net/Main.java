@@ -117,32 +117,32 @@ public class Main extends AppCompatActivity
             switch ( id ) {
 
                 case R.id.action_nav_news:
-                    navDrawer.setCheckedItem( R.id.action_nav_news );
                     bottomNav.setSelectedItemId( R.id.action_news );
                     break;
 
                 case R.id.action_news:
                     openFragment( new News() );
+                    navDrawer.setCheckedItem( R.id.action_nav_news );
                     currentSelectedId = id;
                     break;
 
                 case R.id.action_nav_edt:
-                    navDrawer.setCheckedItem( R.id.action_nav_edt );
                     bottomNav.setSelectedItemId( R.id.action_edt );
                     break;
 
                 case R.id.action_edt:
                     openFragment( new Edt() );
+                    navDrawer.setCheckedItem( R.id.action_nav_edt );
                     currentSelectedId = id;
                     break;
 
                 case R.id.action_nav_twitter:
-                    navDrawer.setCheckedItem( R.id.action_nav_twitter );
                     bottomNav.setSelectedItemId( R.id.action_twitter );
                     break;
 
                 case R.id.action_twitter:
                     openFragment( new Twitter() );
+                    navDrawer.setCheckedItem( R.id.action_nav_twitter );
                     currentSelectedId = id;
                     break;
 
@@ -151,12 +151,12 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_nav_parametres:
-                    navDrawer.setCheckedItem( R.id.action_nav_parametres );
                     bottomNav.setSelectedItemId( R.id.action_parametres );
                     break;
 
                 case R.id.action_parametres:
                     openFragment( new Settings() );
+                    navDrawer.setCheckedItem( R.id.action_nav_parametres );
                     currentSelectedId = id;
                     break;
 

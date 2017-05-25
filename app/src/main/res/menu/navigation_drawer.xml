@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.iiens.net.Main">
 
-    <group android:id="@+id/navigation_base">
+    <group android:id="@+id/navigation_base"
+           android:checkableBehavior="single">
 
         <item android:id="@+id/action_nav_news"
               android:title="@string/menu_news"
@@ -21,7 +22,8 @@
     <item android:id="@+id/menu_group_pages"
         android:title="@string/menu_group_pages">
         <menu>
-            <group>
+            <group
+                android:checkableBehavior="single">
 
                 <item android:id="@+id/action_nav_clubs"
                       android:title="@string/menu_clubs"
@@ -29,17 +31,20 @@
 
                 <item android:id="@+id/action_nav_breviaire"
                       android:title="@string/menu_breviaire"
-                      android:icon="@drawable/ic_music_note" />
+                      android:icon="@drawable/ic_music_note"
+                      android:checkable="false" />
 
             </group>
         </menu>
     </item>
 
-    <group android:id="@+id/navigation_other">
+    <group android:id="@+id/navigation_other"
+           android:checkableBehavior="single">
 
         <item android:id="@+id/action_nav_parametres"
               android:title="@string/menu_settings"
               android:icon="@drawable/ic_settings" />
 
     </group>
+
 </menu>
