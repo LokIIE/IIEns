@@ -1,6 +1,5 @@
 package com.iiens.net;
 
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -9,21 +8,23 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class Main extends Activity {
+public class Main extends AppCompatActivity {
 
     private static boolean inSettings = false;
     private final Fragment[] menuFragments = new Fragment[]{
@@ -41,6 +42,75 @@ public class Main extends Activity {
     private ActionBarDrawerToggle drawerToggle;
     private FragmentManager fragmentManager;
 
+    private BottomNavigationView.OnNavigationItemSelectedListener mBottomNavigationListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected ( @NonNull MenuItem item ) {
+
+            switch ( item.getItemId() ) {
+
+                case R.id.action_news:
+                    openFragment( 0 );
+                    break;
+
+                case R.id.action_edt:
+                    openFragment( 1 );
+                    break;
+
+                case R.id.action_twitter:
+                    openFragment( 3 );
+                    break;
+
+                case R.id.action_parametres:
+                    goToSettings();
+                    break;
+
+                default:
+                    break;
+            }
+
+            return true;
+        }
+    };
+
+    private NavigationView.OnNavigationItemSelectedListener mDrawerNavigationListener
+            = new NavigationView.OnNavigationItemSelectedListener () {
+
+        @Override
+        public boolean onNavigationItemSelected ( MenuItem menuItem ) {
+
+            int id = menuItem.getItemId();
+
+            switch ( id ) {
+
+                case R.id.action_news:
+                    openFragment( 0 );
+                    break;
+
+                case R.id.action_edt:
+                    openFragment( 1 );
+                    break;
+
+                case R.id.action_twitter:
+                    openFragment( 3 );
+                    break;
+
+                case R.id.action_parametres:
+                    goToSettings();
+                    break;
+
+                default:
+                    break;
+            }
+
+            return true;
+        }
+    };
+
+    private NavigationView navDrawer;
+    private Toolbar toolbar;
+
     long enqueue;
     DownloadManager dm;
 
@@ -51,6 +121,8 @@ public class Main extends Activity {
 
     @Override
     public void onCreate ( Bundle savedInstanceState ) {
+
+        setContentView( R.layout.activity_main );
 
         appContext = (GlobalState) this.getApplicationContext();
         Bundle mainBundle = appContext.getBundle();
@@ -63,16 +135,46 @@ public class Main extends Activity {
             mainBundle.putAll( savedInstanceState );
         }
 
-        setContentView( R.layout.activity_main );
-        menuItems = getResources().getStringArray( R.array.main_menu_entries );
+        initToolbar();
+        initNavigationControls();
+    }
 
-        // Creation of the side menu
+    private void initToolbar () {
+
+        toolbar = (Toolbar) findViewById( R.id.toolbar );
+        setSupportActionBar( toolbar );
+        getSupportActionBar().setDisplayHomeAsUpEnabled( true );
+    }
+
+    private void initNavigationControls () {
+
+        navDrawer = (NavigationView) findViewById( R.id.navigation_drawer );
         drawerLayout = (DrawerLayout) findViewById( R.id.drawer_layout );
-        drawerToggle = new ActionBarDrawerToggle( this, drawerLayout, null,
-                R.string.open_menu,
-                R.string.close_menu);
-        menu = (ListView) findViewById( R.id.drawerMenu );
-        createMenu();
+
+        // Navigation drawer
+
+        navDrawer.setNavigationItemSelectedListener( mDrawerNavigationListener );
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle( this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer ) {
+
+            @Override
+            public void onDrawerClosed ( View v ) {
+                super.onDrawerClosed( v );
+            }
+
+            @Override
+            public void onDrawerOpened(View v) {
+                super.onDrawerOpened( v );
+            }
+        };
+
+        drawerLayout.addDrawerListener( actionBarDrawerToggle );
+        actionBarDrawerToggle.syncState();
+
+        // Bottom navigation
+
+        BottomNavigationView navigation = (BottomNavigationView) findViewById( R.id.bottom_navigation );
+        navigation.setOnNavigationItemSelectedListener( mBottomNavigationListener );
     }
 
     @Override
@@ -87,98 +189,98 @@ public class Main extends Activity {
     @Override
     public boolean onCreateOptionsMenu ( Menu menu ) {
 
-        getMenuInflater().inflate( R.menu.main_menu, menu );
+        getMenuInflater().inflate( R.menu.navigation_drawer, menu );
         return true;
     }
 
     /* Determines the actions to do when an action bar item is selected */
-    @Override
-    public boolean onOptionsItemSelected ( MenuItem item ) {
+//    @Override
+//    public boolean onOptionsItemSelected ( MenuItem item ) {
+//
+////        // if the icon of the drawerLayout menu was selected
+////        if ( drawerToggle.onOptionsItemSelected( item ) ) return true;
+////        else {
+////
+////            // if an item of the right action menu was selected, handle it accordingly
+////            drawerLayout.closeDrawer( menu );
+////
+////            switch ( item.getItemId() ) {
+//
+////                case R.id.action_settings:
+////                    if ( !inSettings ) goToSettings();
+////                    else backFromSettings();
+////                    return true;
+////
+////                case R.id.action_refresh:
+////                    if ( inSettings ) return true;
+////
+////                    // Start refreshing the display
+////                    ( (BaseFragment) menuFragments[ appContext.getCurrentFragment() ] ).refreshDisplay();
+////                    return true;
+//
+//                default:
+//                    return super.onOptionsItemSelected( item );
+//            }
+//        }
+//    }
 
-        // if the icon of the drawerLayout menu was selected
-        if ( drawerToggle.onOptionsItemSelected( item ) ) return true;
-        else {
+//    /* To sync the toggle state after onRestoreInstanceState has occurred */
+//    @Override
+//    protected void onPostCreate( Bundle savedInstanceState ) {
+//
+//        super.onPostCreate( savedInstanceState );
+//        drawerToggle.syncState();
+//    }
+//
+//    @Override
+//    public void onConfigurationChanged ( Configuration newConfig ) {
+//
+//        super.onConfigurationChanged( newConfig );
+//        drawerToggle.onConfigurationChanged( newConfig ); // Pass any configuration change to the drawer toggle
+//    }
 
-            // if an item of the right action menu was selected, handle it accordingly
-            drawerLayout.closeDrawer( menu );
-
-            switch ( item.getItemId() ) {
-
-                case R.id.action_settings:
-                    if ( !inSettings ) goToSettings();
-                    else backFromSettings();
-                    return true;
-
-                case R.id.action_refresh:
-                    if ( inSettings ) return true;
-
-                    // Start refreshing the display
-                    ( (BaseFragment) menuFragments[ appContext.getCurrentFragment() ] ).refreshDisplay();
-                    return true;
-
-                default:
-                    return super.onOptionsItemSelected( item );
-            }
-        }
-    }
-
-    /* To sync the toggle state after onRestoreInstanceState has occurred */
-    @Override
-    protected void onPostCreate( Bundle savedInstanceState ) {
-
-        super.onPostCreate( savedInstanceState );
-        drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged ( Configuration newConfig ) {
-
-        super.onConfigurationChanged( newConfig );
-        drawerToggle.onConfigurationChanged( newConfig ); // Pass any configuration change to the drawer toggle
-    }
-
-    /* Create the drawer menu and set its components */
-    private void createMenu () {
-
-        ArrayAdapter<String> menuAdapter = new ArrayAdapter<>( this, android.R.layout.simple_list_item_1, menuItems );
-        menu.setAdapter( menuAdapter );
-
-        // enabling action bar app icon and behaving it as toggle button
-        if ( getActionBar() != null ) {
-
-            getActionBar().setDisplayHomeAsUpEnabled( true );
-            getActionBar().setHomeButtonEnabled( true );
-        }
-
-        // Menu icon on the action bar
-        drawerLayout.setDrawerListener( drawerToggle ); // Link the drawerToggle and the drawerLayout
-
-        // Set the list's click listener
-        menu.setOnItemClickListener( new ListView.OnItemClickListener() {
-            @Override
-            @SuppressWarnings("rawtypes")
-            public void onItemClick(AdapterView parent, View view, int position, long id) {
-
-                drawerLayout.closeDrawer( menu ); // Close the menu in all cases
-
-                if( position == 4 ) {
-
-                    openBreviaire( view );
-
-                } else if ( appContext.getCurrentFragment() != position ) {
-
-                    // if an other item is selected in the menu, open it
-                    appContext.setCurrentFragment( position );
-                    openFragment( position );
-
-                } else if ( inSettings ) {
-
-                    // If we get want to get back from settings to the current fragment
-                    backFromSettings();
-                }
-            }
-        });
-    }
+//    /* Create the drawer menu and set its components */
+//    private void createMenu () {
+//
+//        ArrayAdapter<String> menuAdapter = new ArrayAdapter<>( this, android.R.layout.simple_list_item_1, menuItems );
+//        menu.setAdapter( menuAdapter );
+//
+//        // enabling action bar app icon and behaving it as toggle button
+//        if ( getActionBar() != null ) {
+//
+//            getActionBar().setDisplayHomeAsUpEnabled( true );
+//            getActionBar().setHomeButtonEnabled( true );
+//        }
+//
+//        // Menu icon on the action bar
+//        drawerLayout.setDrawerListener( drawerToggle ); // Link the drawerToggle and the drawerLayout
+//
+//        // Set the list's click listener
+//        menu.setOnItemClickListener( new ListView.OnItemClickListener() {
+//            @Override
+//            @SuppressWarnings("rawtypes")
+//            public void onItemClick(AdapterView parent, View view, int position, long id) {
+//
+//                drawerLayout.closeDrawer( menu ); // Close the menu in all cases
+//
+//                if( position == 4 ) {
+//
+//                    openBreviaire( view );
+//
+//                } else if ( appContext.getCurrentFragment() != position ) {
+//
+//                    // if an other item is selected in the menu, open it
+//                    appContext.setCurrentFragment( position );
+//                    openFragment( position );
+//
+//                } else if ( inSettings ) {
+//
+//                    // If we get want to get back from settings to the current fragment
+//                    backFromSettings();
+//                }
+//            }
+//        });
+//    }
 
     /* Specify the fragment to open based on the position of the menu item clicked */
     private void openFragment ( int position ) {
@@ -195,11 +297,12 @@ public class Main extends Activity {
         if ( ( frag = menuFragments[ position ] ) != null ) {
 
             fragmentManager.beginTransaction()
-                    .replace( R.id.content_container, frag, menuItems[ position ] )
+                    .replace( R.id.content_container, frag, String.valueOf( position ) )
                     .commit();
-            getActionBar().setTitle( menuItems[ position ] );
+            //getActionBar().setTitle( menuItems[ position ] );
         }
-        drawerLayout.closeDrawer(menu);
+
+//        drawerLayout.closeDrawer(menu);
     }
 
     @Override
@@ -217,7 +320,7 @@ public class Main extends Activity {
 
         inSettings = false;
         getFragmentManager().popBackStack();
-        getActionBar().setTitle( menuItems[ appContext.getCurrentFragment() ] );
+        // getActionBar().setTitle( menuItems[ appContext.getCurrentFragment() ] );
     }
 
     private void goToSettings () {
@@ -250,7 +353,7 @@ public class Main extends Activity {
 
     BroadcastReceiver onComplete = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
-            //check if the broadcast message is for our enqueued download
+            // check if the broadcast message is for our enqueued download
             long referenceId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
 
             if(referenceId == enqueue) {

@@ -12,8 +12,10 @@
     <string name="bool_news_update_name">news_new_update</string>
     <string name="bool_anniv_update_name">anniv_new_update</string>
 
+    <!-- Activité Splash Screen -->
     <string name="hint_logo">Logo ENSIIE</string>
 
+    <!-- Activité Login -->
     <string name="hint_user">Identifiant ARISE</string>
     <string name="hint_password">Mot de passe</string>
     <string name="connect_button">CONNEXION</string>
@@ -25,6 +27,16 @@
     <string name="error_incorrect">Erreur d\'identifiants</string>
     <string name="error_field_required">Champ obligatoire</string>
     <string name="auto_connect">Connexion automatique</string>
+
+    <!-- Menu de navigation -->
+    <string name="menu_news">News</string>
+    <string name="menu_edt">Emploi du temps</string>
+    <string name="menu_twitter">Twitter</string>
+    <string name="menu_group_pages">Par AriseID</string>
+    <string name="menu_clubs">Itvtube</string>
+    <string name="menu_breviaire">Bréviaire</string>
+    <string name="menu_ariseId">AriseId</string>
+    <string name="menu_settings">Paramètres</string>
 
     <!-- Toast messages -->
     <string name="arise_unavailable">Arise = 404 not found</string>
@@ -48,8 +60,8 @@
     </string-array>
 
     <!-- Values for activity_main.xml -->
-    <string name="open_menu">Ouverture du menu</string>
-    <string name="close_menu">Fermeture du menu</string>
+    <string name="open_drawer">Ouvrir</string>
+    <string name="close_drawer">Fermer</string>
 
     <!-- Notifications titre -->
     <string name="notif_news_title">News</string>
