@@ -72,7 +72,7 @@
             android:switchTextOff="@string/pref_deactivated"
             android:switchTextOn="@string/pref_activated"
             android:persistent="true"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
 
     </PreferenceCategory>
 
