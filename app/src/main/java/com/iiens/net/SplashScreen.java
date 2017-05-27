@@ -45,6 +45,7 @@ public class SplashScreen extends Activity {
 
             Log.d( "tokenRefreshed", "Intent received" );
             sendTokenToServer( queue );
+            unregisterReceiver( this );
         }
     };
 
@@ -88,8 +89,10 @@ public class SplashScreen extends Activity {
 
             } else if( prefs.getBoolean( GlobalState.PrefsConst.NO_PLAY_SERVICES_DIALOG, true ) ) {
 
-                noPlayServicesDialog = createNoPlayServicesDialog();
-                noPlayServicesDialog.show();
+                new AlertDialog.Builder( this, Theme_DeviceDefault_Light_Dialog_Alert )
+                        .setTitle( R.string.alert_no_gps_title )
+                        .setMessage( R.string.alert_no_gps_msg )
+                        .show();
                 prefs.edit().putBoolean( GlobalState.PrefsConst.NO_PLAY_SERVICES_DIALOG, false ).apply();
 
                 postDelayed = 5000;
@@ -285,20 +288,13 @@ public class SplashScreen extends Activity {
 
     private void displayActivity ( final Class<?> intentTarget ) {
 
+        final Activity splashScreen = this;
         new Handler().postDelayed( new Runnable() {
             @Override
             public void run() {
                 startActivity( new Intent( SplashScreen.this, intentTarget ) );
-                finish();
+                splashScreen.finish();
             }
         }, 1000);
-    }
-
-    private AlertDialog createNoPlayServicesDialog () {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder( this, Theme_DeviceDefault_Light_Dialog_Alert );
-        return builder.setTitle( R.string.alert_no_gps_title )
-                .setMessage( R.string.alert_no_gps_msg )
-                .create();
     }
 }
