@@ -3,7 +3,6 @@ package com.iiens.net;
 import android.app.DownloadManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,7 +33,6 @@ public class Main extends AppCompatActivity
 
     private GlobalState appContext;
     private Toolbar toolbar;
-    private FragmentManager fragmentManager;
     private DrawerLayout drawerLayout;
     private NavigationView navDrawer;
     private BottomNavigationView bottomNav;
@@ -98,16 +96,31 @@ public class Main extends AppCompatActivity
         setContentView( R.layout.activity_main );
 
         appContext = (GlobalState) this.getApplicationContext();
-        fragmentManager = getFragmentManager();
 
         initToolbar();
         initNavigationControls();
+
+        if ( savedInstanceState != null ) {
+
+            actionBarDrawerToggle.syncState();
+        }
     }
 
     @Override
     public void onStart () {
 
         super.onStart();
+
+        registerReceiver( onComplete,
+                new IntentFilter( DownloadManager.ACTION_DOWNLOAD_COMPLETE ) );
+
+        openFragment( appContext.getCurrentFragment() );
+    }
+
+    @Override
+    protected void onSaveInstanceState ( Bundle outState ) {
+
+        super.onSaveInstanceState( outState );
     }
 
     @Override
@@ -117,7 +130,7 @@ public class Main extends AppCompatActivity
         openFragment( appContext.getCurrentFragment() );
     }
 
-    public boolean onNavigationItemSelected (@NonNull MenuItem menuItem ) {
+    public boolean onNavigationItemSelected ( @NonNull MenuItem menuItem ) {
 
         int id = menuItem.getItemId();
 
@@ -130,7 +143,7 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_news:
-                    openFragment( new News() );
+                    openFragment( News.class.getName() );
                     navDrawer.setCheckedItem( R.id.action_nav_news );
                     currentSelectedId = id;
                     break;
@@ -140,7 +153,7 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_edt:
-                    openFragment( new Edt() );
+                    openFragment( Edt.class.getName() );
                     navDrawer.setCheckedItem( R.id.action_nav_edt );
                     currentSelectedId = id;
                     break;
@@ -150,7 +163,7 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_twitter:
-                    openFragment( new Twitter() );
+                    openFragment( Twitter.class.getName() );
                     navDrawer.setCheckedItem( R.id.action_nav_twitter );
                     currentSelectedId = id;
                     break;
@@ -164,7 +177,7 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_parametres:
-                    openFragment( new Settings() );
+                    openFragment( Settings.class.getName() );
                     navDrawer.setCheckedItem( R.id.action_nav_parametres );
                     currentSelectedId = id;
                     break;
@@ -187,21 +200,22 @@ public class Main extends AppCompatActivity
     /* Specify the fragment to open based on the position of the menu item clicked */
     private void openFragment ( Fragment frag ) {
 
+        getFragmentManager().beginTransaction()
+                .replace( R.id.content_container, frag, frag.getClass().getName() )
+                .addToBackStack(null)
+                .commit();
+
+        appContext.setCurrentFragment( frag );
+    }
+
+    private void openFragment ( String fragClass ) {
+
         FragmentManager fManager = getFragmentManager();
-        FragmentTransaction fTransaction = fManager.beginTransaction();
-        Fragment fragment = fManager.findFragmentByTag( frag.getClass().getName() );
+        Fragment fragment = fManager.findFragmentByTag( fragClass );
 
-        if ( fragment == null ) {
+        if( fragment == null ) fragment = Fragment.instantiate( this, fragClass );
 
-            fTransaction.replace( R.id.content_container, frag, frag.getClass().getName() );
-
-        } else {
-
-            fTransaction.replace( R.id.content_container, fragment, frag.getClass().getName() );
-        }
-
-        fTransaction.addToBackStack(null);
-        fTransaction.commit();
+        openFragment( fragment );
     }
 
     @Override
@@ -271,8 +285,6 @@ public class Main extends AppCompatActivity
     public void openBreviaire () {
 
         dm = (DownloadManager) getSystemService( DOWNLOAD_SERVICE );
-        registerReceiver( onComplete,
-                new IntentFilter( DownloadManager.ACTION_DOWNLOAD_COMPLETE ) );
 
         final Uri uri= Uri.parse( appContext.getScriptURL() + appContext.getString(R.string.apiie_breviaire) );
 
