@@ -82,6 +82,12 @@
     <string name="pref_partiel_summary">Notifications pour les partiels</string>
     <string name="pref_activated">Activé</string>
     <string name="pref_deactivated">Désactivé</string>
+    <string name="pref_fonctionnement">Fonctionnement</string>
+    <string name="pref_login_screen">Page de connexion au lancement</string>
+    <string name="pref_bottom_nav">Barre de navigation basse</string>
+    <string name="pref_bottom_nav_key">bottom_navigation</string>
+    <string name="pref_mode_nuit">Mode nuit</string>
+    <string name="pref_mode_nuit_key">nightmode</string>
 
     <string-array name="pref_partiel_entries">
         <item value="0">Désactivé</item>

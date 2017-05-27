@@ -3,7 +3,8 @@
     tools:context="com.iiens.net.Main">
 
     <group android:id="@+id/navigation_base"
-           android:checkableBehavior="single">
+           android:checkableBehavior="single"
+            android:visible="false">
 
         <item android:id="@+id/action_nav_news"
               android:title="@string/menu_news"

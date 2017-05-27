@@ -51,7 +51,8 @@
             app:itemBackground="?android:attr/colorPrimaryDark"
             app:itemIconTint="@drawable/selector"
             app:itemTextColor="?android:attr/textColor"
-            app:menu="@menu/bottom_navigation" />
+            app:menu="@menu/bottom_navigation"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 

@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,7 +28,8 @@ import android.view.View;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        BottomNavigationView.OnNavigationItemSelectedListener {
+        BottomNavigationView.OnNavigationItemSelectedListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private GlobalState appContext;
     private Toolbar toolbar;
@@ -102,6 +104,12 @@ public class Main extends AppCompatActivity
     }
 
     @Override
+    public void onStart () {
+
+        super.onStart();
+    }
+
+    @Override
     protected void onResume () {
 
         super.onResume();
@@ -170,6 +178,11 @@ public class Main extends AppCompatActivity
         return true;
     }
 
+    public void onSharedPreferenceChanged ( SharedPreferences sharedPreferences, String key ) {
+
+        if( key.equals( getString( R.string.pref_bottom_nav_key ) ) ) setControlsVisibility();
+    }
+
     /* Specify the fragment to open based on the position of the menu item clicked */
     private void openFragment ( Fragment frag ) {
 
@@ -225,6 +238,21 @@ public class Main extends AppCompatActivity
         // Bottom navigation
         bottomNav = (BottomNavigationView) findViewById( R.id.bottom_navigation );
         bottomNav.setOnNavigationItemSelectedListener( this );
+
+        setControlsVisibility();
+    }
+
+    private void setControlsVisibility () {
+
+        // Application des paramètres
+        SharedPreferences prefs = ((GlobalState) getApplicationContext()).getPreferences();
+        navDrawer.getMenu().setGroupVisible(
+                R.id.navigation_base,
+                ! prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), false )
+        );
+        bottomNav.setVisibility(
+                ( prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), true ) ) ? View.VISIBLE : View.GONE
+        );
     }
 
     public void openBreviaire () {
