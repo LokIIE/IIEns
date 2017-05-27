@@ -3,6 +3,7 @@ package com.iiens.net;
 import android.app.DownloadManager;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -186,9 +187,21 @@ public class Main extends AppCompatActivity
     /* Specify the fragment to open based on the position of the menu item clicked */
     private void openFragment ( Fragment frag ) {
 
-        fragmentManager.beginTransaction()
-                .replace( R.id.content_container, frag )
-                .commit();
+        FragmentManager fManager = getFragmentManager();
+        FragmentTransaction fTransaction = fManager.beginTransaction();
+        Fragment fragment = fManager.findFragmentByTag( frag.getClass().getName() );
+
+        if ( fragment == null ) {
+
+            fTransaction.replace( R.id.content_container, frag, frag.getClass().getName() );
+
+        } else {
+
+            fTransaction.replace( R.id.content_container, fragment, frag.getClass().getName() );
+        }
+
+        fTransaction.addToBackStack(null);
+        fTransaction.commit();
     }
 
     @Override
