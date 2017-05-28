@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true"
           android:color="@color/orange"
-          android:drawable="@color/orange" />
+          android:drawable="@drawable/bottom_navigation_border" />
     <item android:color="@color/ltGray"
           android:drawable="@color/white" />
 </selector>
