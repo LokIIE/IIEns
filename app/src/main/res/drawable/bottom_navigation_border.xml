@@ -5,7 +5,7 @@
             <stroke
                 android:width="2dp"
                 android:color="@color/orange" />
-            <solid android:color="@color/white"/>
+            <solid android:color="?android:attr/colorPrimary"/>
         </shape>
     </item>
 
@@ -14,7 +14,7 @@
         <shape android:shape="rectangle">
             <stroke
                 android:width="2dp"
-                android:color="@color/white" />
+                android:color="?android:attr/colorPrimary" />
         </shape>
     </item>
 </layer-list>

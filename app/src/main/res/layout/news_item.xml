@@ -13,15 +13,14 @@
             android:id="@+id/news_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/header_news"
-            android:drawableLeft="@drawable/aeiie"
+            android:background="?android:attr/colorBackground"
+            android:drawableStart="@drawable/aeiie"
             android:gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingTop="8dp"
-            android:singleLine="false"
             android:text="@string/news_title"
-            android:textColor="@color/black"
+            android:textColor="?android:attr/textColor"
             android:textSize="20sp"
             android:textStyle="bold" />
 </LinearLayout>

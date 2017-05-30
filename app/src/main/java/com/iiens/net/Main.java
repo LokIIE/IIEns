@@ -92,10 +92,15 @@ public class Main extends AppCompatActivity
     @Override
     public void onCreate ( Bundle savedInstanceState ) {
 
+        appContext = (GlobalState) this.getApplicationContext();
+
+        setTheme( appContext.getPreferences().getBoolean( getString( R.string.pref_mode_nuit_key ), false ) ?
+                R.style.IIEnsTheme_Dark
+                : R.style.IIEnsTheme_Light
+        );
+
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
-
-        appContext = (GlobalState) this.getApplicationContext();
 
         initToolbar();
         initNavigationControls();
@@ -195,6 +200,10 @@ public class Main extends AppCompatActivity
     public void onSharedPreferenceChanged ( SharedPreferences sharedPreferences, String key ) {
 
         if( key.equals( getString( R.string.pref_bottom_nav_key ) ) ) setControlsVisibility();
+        else if( key.equals( getString( R.string.pref_mode_nuit_key ) ) ) {
+
+           recreate();
+        }
     }
 
     /* Specify the fragment to open based on the position of the menu item clicked */

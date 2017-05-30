@@ -20,7 +20,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:theme="@style/ActionBar"
+            android:theme="?android:actionBarStyle"
             android:elevation="4dp" />
 
         <FrameLayout
@@ -49,9 +49,9 @@
             android:layout_alignParentBottom="true"
             android:animateLayoutChanges="true"
             android:background="@color/white"
-            android:theme="@style/BottomNavigation"
-            app:itemBackground="@drawable/selector"
-            app:itemIconTint="@drawable/selector"
+            android:theme="?attr/bottomNavigationStyle"
+            app:itemBackground="?attr/selectorRef"
+            app:itemIconTint="?attr/selectorRef"
             app:itemTextColor="?android:attr/textColor"
             app:menu="@menu/bottom_navigation"
             android:visibility="gone"/>
@@ -67,8 +67,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:theme="@style/NavigationDrawer"
-        app:itemIconTint="@drawable/selector"
+        android:theme="?attr/navigationDrawerStyle"
+        app:itemIconTint="?attr/selectorRef"
         app:itemTextColor="?android:attr/textColor"
         app:menu="@menu/navigation_drawer"
         android:elevation="4dp" />

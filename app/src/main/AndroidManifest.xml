@@ -52,7 +52,7 @@
 
         <activity android:name="Main"
             android:label="@string/app_name"
-            android:theme="@style/IIEnsTheme">
+            android:theme="@style/IIEnsTheme.Light">
         </activity>
 
         <activity android:name="Itvtube"
