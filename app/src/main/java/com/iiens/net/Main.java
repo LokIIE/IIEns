@@ -13,6 +13,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
@@ -27,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -41,6 +43,9 @@ public class Main extends AppCompatActivity
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
     private int currentSelectedId = 0;
+
+    boolean doubleBackToExitPressedOnce = false;
+    Toast tMsg;
 
     long enqueue;
     DownloadManager dm;
@@ -137,6 +142,44 @@ public class Main extends AppCompatActivity
         openFragment( appContext.getCurrentFragment() );
     }
 
+    @Override
+    public void onBackPressed () {
+
+        if ( getFragmentManager().getBackStackEntryCount() > 0 ) {
+
+            getFragmentManager().popBackStack();
+
+        } else if ( ! doubleBackToExitPressedOnce ) {
+
+            this.doubleBackToExitPressedOnce = true;
+            tMsg = Toast.makeText( this, getString( R.string.back_exit_warning ), Toast.LENGTH_SHORT );
+            tMsg.show();
+
+            new Handler().postDelayed( new Runnable() {
+
+                @Override
+                public void run() {
+
+                    tMsg = null;
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000 );
+
+        } else {
+
+            super.onBackPressed();
+            tMsg.cancel();
+            return;
+        }
+    }
+
+    @Override
+    public void onDestroy () {
+
+        super.onDestroy();
+        unregisterReceiver( onComplete );
+    }
+
     public boolean onNavigationItemSelected ( @NonNull MenuItem menuItem ) {
 
         int id = menuItem.getItemId();
@@ -229,13 +272,6 @@ public class Main extends AppCompatActivity
         if( fragment == null ) fragment = Fragment.instantiate( this, fragClass );
 
         openFragment( fragment );
-    }
-
-    @Override
-    public void onDestroy () {
-
-        super.onDestroy();
-        unregisterReceiver( onComplete );
     }
 
     private void initToolbar () {

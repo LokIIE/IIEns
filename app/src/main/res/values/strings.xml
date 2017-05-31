@@ -46,6 +46,7 @@
     <string name="cal_week_sync_done">La semaine a été ajoutée à votre agenda</string>
     <string name="cal_event_sync_done">L\'évènement a été ajouté à votre agenda</string>
     <string name="internal_error">Erreur de traitement, veuillez réessayer</string>
+    <string name="back_exit_warning">Cliquer à nouveau pour quitter</string>
     
     <!-- AlertDialogs messages -->
     <string name="alert_no_gps_title">Google Play Services indisponible</string>
