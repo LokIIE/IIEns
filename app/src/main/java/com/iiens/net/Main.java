@@ -25,6 +25,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -199,8 +201,11 @@ public class Main extends AppCompatActivity
 
     public void onSharedPreferenceChanged ( SharedPreferences sharedPreferences, String key ) {
 
-        if( key.equals( getString( R.string.pref_bottom_nav_key ) ) ) setControlsVisibility();
-        else if( key.equals( getString( R.string.pref_mode_nuit_key ) ) ) {
+        if( key.equals( getString( R.string.pref_bottom_nav_key ) ) ) {
+
+            setControlsVisibility( true );
+
+        } else if( key.equals( getString( R.string.pref_mode_nuit_key ) ) ) {
 
            recreate();
         }
@@ -275,10 +280,10 @@ public class Main extends AppCompatActivity
         bottomNav = (BottomNavigationView) findViewById( R.id.bottom_navigation );
         bottomNav.setOnNavigationItemSelectedListener( this );
 
-        setControlsVisibility();
+        setControlsVisibility( false );
     }
 
-    private void setControlsVisibility () {
+    private void setControlsVisibility ( boolean animate ) {
 
         // Application des paramètres
         SharedPreferences prefs = ((GlobalState) getApplicationContext()).getPreferences();
@@ -286,6 +291,14 @@ public class Main extends AppCompatActivity
                 R.id.navigation_base,
                 ! prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), false )
         );
+
+        if( animate ) {
+
+            int animRef = ( prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), true ) ) ? R.anim.bottom_in : R.anim.bottom_out;
+            Animation anim = AnimationUtils.loadAnimation( getApplicationContext(), animRef );
+            bottomNav.startAnimation( anim );
+        }
+
         bottomNav.setVisibility(
                 ( prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), true ) ) ? View.VISIBLE : View.GONE
         );

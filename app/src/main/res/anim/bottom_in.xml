@@ -4,8 +4,9 @@
  
 <translate
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:fromYDelta="100%p"
+    android:fromYDelta="20%p"
     android:toYDelta="0%"
-    android:duration="500" />
+    android:duration="500"
+    android:interpolator="@android:anim/linear_interpolator"/>
  
 </set>
