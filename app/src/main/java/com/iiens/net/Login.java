@@ -137,5 +137,6 @@ public class Login extends Activity {
     private void startMainActivity () {
 
         startActivity( new Intent(Login.this, Main.class) );
+        finish();
     }
 }

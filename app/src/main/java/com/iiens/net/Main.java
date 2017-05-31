@@ -216,7 +216,6 @@ public class Main extends AppCompatActivity
 
         getFragmentManager().beginTransaction()
                 .replace( R.id.content_container, frag, frag.getClass().getName() )
-                .addToBackStack(null)
                 .commit();
 
         appContext.setCurrentFragment( frag );
