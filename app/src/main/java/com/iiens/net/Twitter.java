@@ -1,5 +1,6 @@
 package com.iiens.net;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
@@ -16,11 +17,14 @@ import io.fabric.sdk.android.Fabric;
 public class Twitter extends BaseFragment {
 
     private ListView mListView;
+    private SharedPreferences prefs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.layoutId = R.layout.listview;
+
+        this.prefs = ((GlobalState) getActivity().getApplicationContext()).getPreferences();
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(
                 getString(R.string.tw_key),
@@ -37,6 +41,7 @@ public class Twitter extends BaseFragment {
                 .build();
         final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder( global.getApplicationContext() )
                 .setTimeline(listTimeline)
+                .setViewStyle( prefs.getBoolean( getString( R.string.pref_mode_nuit_key ), false ) ? R.style.tw__TweetDarkStyle : R.style.tw__TweetLightStyle )
                 .build();
 
         this.mListView.setAdapter(adapter);
