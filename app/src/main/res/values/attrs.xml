@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="navigationDrawerStyle" format="reference"/>
-    <attr name="bottomNavigationStyle" format="reference"/>
-    <attr name="selectorRef" format="reference"/>
+    <attr name="navigationDrawerStyle" format="reference" />
+    <attr name="bottomNavigationStyle" format="reference" />
+    <attr name="selectorRef" format="reference" />
 </resources>

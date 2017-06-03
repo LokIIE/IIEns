@@ -8,7 +8,7 @@
         <item name="android:colorBackground">@color/white</item>
         <item name="android:windowTranslucentStatus">true</item>
 
-        <item name="android:preferenceScreenStyle">@style/PreferenceScreen.Light</item>
+        <item name="android:preferenceStyle">@style/PreferenceScreenLight</item>
         <item name="android:actionBarStyle">@style/ActionBarLight</item>
         <item name="navigationDrawerStyle">@style/NavigationDrawer.Light</item>
         <item name="bottomNavigationStyle">@style/BottomNavigation.Light</item>
@@ -22,7 +22,7 @@
         <item name="android:colorBackground">@color/black</item>
         <item name="android:windowTranslucentStatus">true</item>
 
-        <item name="android:preferenceStyle">@style/PreferenceScreen.Dark</item>
+        <item name="android:preferenceStyle">@style/PreferenceScreenDark</item>
         <item name="android:actionBarStyle">@style/ActionBarDark</item>
         <item name="navigationDrawerStyle">@style/NavigationDrawer.Dark</item>
         <item name="bottomNavigationStyle">@style/BottomNavigation.Dark</item>
@@ -39,20 +39,12 @@
         <item name="android:background">@color/dkGray</item>
     </style>
 
-    <style name="PreferenceScreen.Light" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:colorPrimary">@color/orange</item>
-        <item name="android:colorPrimaryDark">@color/orange</item>
-        <item name="android:textColor">@color/aqua</item>
-        <item name="android:windowBackground">@color/blue</item>
+    <style name="PreferenceScreenLight">
         <item name="android:background">@color/white</item>
     </style>
 
-    <style name="PreferenceScreen.Dark" parent="Theme.AppCompat.Light.Dialog">
-        <item name="android:colorPrimary">@color/orange</item>
-        <item name="android:colorPrimaryDark">@color/orange</item>
-        <item name="android:textColor">@color/red</item>
-        <item name="android:windowBackground">@color/green</item>
-        <item name="android:background">@color/ltGray</item>
+    <style name="PreferenceScreenDark">
+        <item name="android:background">@color/dkGray</item>
     </style>
 
     <style name="NavigationDrawer.Light" parent="IIEnsTheme.Light">

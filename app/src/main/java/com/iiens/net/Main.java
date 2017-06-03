@@ -250,7 +250,7 @@ public class Main extends AppCompatActivity
 
         } else if( key.equals( getString( R.string.pref_mode_nuit_key ) ) ) {
 
-           recreate();
+            recreate();
         }
     }
 
