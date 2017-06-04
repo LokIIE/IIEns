@@ -254,8 +254,12 @@ public class Main extends AppCompatActivity
         }
     }
 
-    /* Specify the fragment to open based on the position of the menu item clicked */
     private void openFragment ( Fragment frag ) {
+
+        if( getFragmentManager().getBackStackEntryCount() > 0 ) {
+
+            getFragmentManager().popBackStack();
+        }
 
         getFragmentManager().beginTransaction()
                 .replace( R.id.content_container, frag, frag.getClass().getName() )

@@ -3,14 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="?android:colorBackground">
+    android:backgroundTint="?android:colorBackground">
 
-    <ListView android:id="@+id/listview"
-              android:layout_width="fill_parent"
-              android:layout_height="match_parent"
-              android:cacheColorHint="#0000"
-              android:divider="@null"
-        />
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="?android:colorBackground"/>
 
 </LinearLayout>
 

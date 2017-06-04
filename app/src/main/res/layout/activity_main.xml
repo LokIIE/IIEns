@@ -47,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:background="@color/white"
+            android:background="?android:colorBackground"
             android:theme="?attr/bottomNavigationStyle"
             app:itemBackground="?attr/selectorRef"
             app:itemIconTint="?attr/selectorRef"

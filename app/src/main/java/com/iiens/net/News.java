@@ -1,7 +1,6 @@
 package com.iiens.net;
 
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -123,13 +122,10 @@ public class News extends BaseFragment {
                 bundle.putString( "item", itemList.get( position ).toJsonObject().toString() );
                 newsDetail.setArguments( bundle );
 
-                FragmentTransaction ft = fm.beginTransaction();
-                // Remplacement de la vue par le nouveau fragment
-                ft.replace( R.id.content_container, newsDetail );
-                // Ajout du nouveau fragment au backstack pour navigation arrière
-                ft.addToBackStack( null );
-
-                ft.commit();
+                fm.beginTransaction()
+                        .replace( R.id.content_container, newsDetail )
+                        .addToBackStack( null )
+                        .commit();
             }
         });
     }
