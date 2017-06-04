@@ -12,7 +12,5 @@
               android:divider="@null"
         />
 
-    <include layout="@layout/progress_spinner" />
-
 </LinearLayout>
 

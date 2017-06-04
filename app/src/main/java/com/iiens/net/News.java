@@ -43,7 +43,6 @@ public class News extends BaseFragment {
     protected void generateView ( View view ) {
 
         this.mListView = (ListView) view.findViewById( R.id.listview );
-        view.findViewById(R.id.progress_spinner).setVisibility( View.VISIBLE );
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences( context );
         NewsItem firstItem = dal.getFirstItem();
@@ -92,12 +91,9 @@ public class News extends BaseFragment {
             this.setListViewContent( itemList );
         }
 
-        if (view != null) view.findViewById( R.id.progress_spinner ).setVisibility( View.GONE );
-
         // In case the refresh button was triggered, stop the "animation"
         if ( getView() != null ) {
 
-            getView().findViewById( R.id.progress_spinner ).setVisibility( View.GONE );
             getView().setAlpha((float) 1);
         }
 

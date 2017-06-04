@@ -53,7 +53,6 @@ public class EdtResultPage extends Fragment {
 
         View view = inflater.inflate( R.layout.edt_result_page, container, false );
         ListView mListView = (ListView) view.findViewById( R.id.listview );
-        view.findViewById( R.id.progress_spinner ).setVisibility( View.GONE );
 
         mListView.setAdapter( new EdtItemsAdapter( getActivity().getApplicationContext(), edtItemsList ) );
         mListView.setClickable( true );

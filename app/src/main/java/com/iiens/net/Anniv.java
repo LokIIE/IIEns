@@ -63,7 +63,6 @@ public class Anniv extends BaseFragment {
     protected void generateView ( final View view ) {
 
         this.mListView = (ListView) view.findViewById( R.id.listview );
-        view.findViewById( R.id.progress_spinner ).setVisibility( View.VISIBLE );
 
         AnnivItem firstItem = dal.getFirstItem();
 
@@ -79,7 +78,6 @@ public class Anniv extends BaseFragment {
             if ( firstItem != null && firstDate != null && firstDate.compareTo( today ) < 0 ) {
 
                 mListView.setAdapter( new AnnivItemsAdapter( context, dal.getAllItems() ) );
-                view.findViewById( R.id.progress_spinner ).setVisibility( View.GONE );
 
             } else if ( global.isOnline() ) {
 
@@ -110,7 +108,6 @@ public class Anniv extends BaseFragment {
             mListView.setAdapter( new AnnivItemsAdapter( context, getItemList( jResult ) ) );
         }
 
-        view.findViewById( R.id.progress_spinner ).setVisibility( View.GONE );
         view.setAlpha( (float) 1 );
 
         for ( AnnivItem item : annivItemArrayList ) {
