@@ -42,14 +42,14 @@ public class Settings extends BaseFragment {
 
             super.onCreate( savedInstanceState );
 
-            addPreferencesFromResource( R.xml.preferences );
-
             PreferenceManager prefManager = getPreferenceManager();
 
             prefManager.setSharedPreferencesName( getString( R.string.app_settings ) );
             prefManager.setSharedPreferencesMode( Context.MODE_PRIVATE );
 
             prefManager.getSharedPreferences().registerOnSharedPreferenceChangeListener( (Main) getActivity() );
+
+            addPreferencesFromResource( R.xml.preferences );
         }
     }
 

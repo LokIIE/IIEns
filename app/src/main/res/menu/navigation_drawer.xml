@@ -12,7 +12,7 @@
 
         <item android:id="@+id/action_nav_edt"
               android:title="@string/menu_edt"
-              android:icon="@drawable/ic_school" />
+              android:icon="@drawable/dw_school" />
 
         <item android:id="@+id/action_nav_twitter"
               android:title="@string/menu_twitter"

@@ -3,15 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/ltGray">
+    android:background="?android:colorBackground">
 
     <ListView android:id="@+id/news_listview"
         android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="#0000"
-        android:divider="@null" />
-
-    <include layout="@layout/progress_spinner" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>
 

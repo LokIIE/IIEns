@@ -41,7 +41,7 @@ public class Twitter extends BaseFragment {
                 .build();
         final TweetTimelineListAdapter adapter = new TweetTimelineListAdapter.Builder( global.getApplicationContext() )
                 .setTimeline(listTimeline)
-                .setViewStyle( prefs.getBoolean( getString( R.string.pref_mode_nuit_key ), false ) ? R.style.tw__TweetDarkStyle : R.style.tw__TweetLightStyle )
+                .setViewStyle( prefs.getBoolean( getString( R.string.pref_mode_nuit_key ), false ) ? R.style.TweetDarkStyle : R.style.TweetLightStyle )
                 .build();
 
         this.mListView.setAdapter(adapter);

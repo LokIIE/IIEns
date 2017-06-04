@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/ltGray">
+    android:background="?android:colorBackground">
 
     <FrameLayout
         android:id="@+id/settings_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:theme="?android:preferenceStyle" />
+        android:background="?android:colorBackground" />
 
 </LinearLayout>
 

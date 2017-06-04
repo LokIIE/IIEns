@@ -3,4 +3,5 @@
     <attr name="navigationDrawerStyle" format="reference" />
     <attr name="bottomNavigationStyle" format="reference" />
     <attr name="selectorRef" format="reference" />
+    <attr name="iconColor" format="reference" />
 </resources>
