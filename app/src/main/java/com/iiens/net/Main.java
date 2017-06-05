@@ -194,7 +194,7 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_news:
-                    openFragment( News.class.getName() );
+                    openFragment( News.class.getName(), null );
                     navDrawer.setCheckedItem( R.id.action_nav_news );
                     currentSelectedId = id;
                     break;
@@ -204,7 +204,7 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_edt:
-                    openFragment( Edt.class.getName() );
+                    openFragment( Edt.class.getName(), null );
                     navDrawer.setCheckedItem( R.id.action_nav_edt );
                     currentSelectedId = id;
                     break;
@@ -214,7 +214,7 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_twitter:
-                    openFragment( Twitter.class.getName() );
+                    openFragment( Twitter.class.getName(), null );
                     navDrawer.setCheckedItem( R.id.action_nav_twitter );
                     currentSelectedId = id;
                     break;
@@ -227,12 +227,18 @@ public class Main extends AppCompatActivity
                     openBreviaire();
                     break;
 
+                case R.id.action_nav_arise:
+                    Bundle params = new Bundle();
+                    params.putString( "url", getString( R.string.url_arise ));
+                    openFragment( ClubPageWebView.class.getName(), params );
+                    break;
+
                 case R.id.action_nav_parametres:
                     bottomNav.setSelectedItemId( R.id.action_parametres );
                     break;
 
                 case R.id.action_parametres:
-                    openFragment( Settings.class.getName() );
+                    openFragment( Settings.class.getName(), null );
                     navDrawer.setCheckedItem( R.id.action_nav_parametres );
                     currentSelectedId = id;
                     break;
@@ -273,12 +279,16 @@ public class Main extends AppCompatActivity
         appContext.setCurrentFragment( frag );
     }
 
-    private void openFragment ( String fragClass ) {
+    private void openFragment ( String fragClass, Bundle params ) {
 
         FragmentManager fManager = getFragmentManager();
         Fragment fragment = fManager.findFragmentByTag( fragClass );
 
         if( fragment == null ) fragment = Fragment.instantiate( this, fragClass );
+
+        if( fragment.isVisible() ) return;
+
+        if( params != null ) fragment.setArguments( params );
 
         openFragment( fragment );
     }
