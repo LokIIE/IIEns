@@ -14,55 +14,50 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/IIEnsTheme.Dark">
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingStart="@null"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:contentDescription="@null"
+        app:srcCompat="@drawable/logo_notification"/>
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:paddingEnd="@dimen/activity_horizontal_margin"
-            app:srcCompat="@drawable/logo_notification"/>
+    <android.widget.Button
+        android:id="@+id/nav_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/darkorange"
+        android:text="@string/connect_button"
+        android:textColor="?android:textColor"/>
 
-        <android.widget.Button
-            android:id="@+id/nav_connect"
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/nav_user_infos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/nav_pseudo"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/darkorange"
-            android:text="@string/connect_button"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textColor="?android:textColor"/>
 
-        <LinearLayout
-            android:id="@+id/nav_user_infos"
+        <TextView
+            android:id="@+id/nav_full_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="?android:textColor"/>
 
-            <TextView
-                android:id="@+id/nav_pseudo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:textColor="?android:textColor"/>
-
-            <TextView
-                android:id="@+id/nav_full_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="?android:textColor"/>
-
-            <TextView
-                android:id="@+id/nav_promo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="?android:textColor"/>
-        </LinearLayout>
-
+        <TextView
+            android:id="@+id/nav_promo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="?android:textColor"/>
     </LinearLayout>
 
 </LinearLayout>
