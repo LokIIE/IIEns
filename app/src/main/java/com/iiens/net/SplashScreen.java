@@ -25,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import static android.R.style.Theme_DeviceDefault_Light_Dialog_Alert;
 
@@ -34,12 +33,12 @@ import static android.R.style.Theme_DeviceDefault_Light_Dialog_Alert;
  */
 public class SplashScreen extends Activity {
 
-    GlobalState context;
-    SharedPreferences prefs;
-    RequestQueue queue;
-    AlertDialog noPlayServicesDialog = null;
+    private GlobalState context;
+    private SharedPreferences prefs;
+    private RequestQueue queue;
+    private AlertDialog noPlayServicesDialog = null;
 
-    BroadcastReceiver tokenRefreshed = new BroadcastReceiver () {
+    private final BroadcastReceiver tokenRefreshed = new BroadcastReceiver () {
         @Override
         public void onReceive ( Context context, Intent intent ) {
 
@@ -89,7 +88,7 @@ public class SplashScreen extends Activity {
 
             } else if( prefs.getBoolean( GlobalState.PrefsConst.NO_PLAY_SERVICES_DIALOG, true ) ) {
 
-                new AlertDialog.Builder( this, Theme_DeviceDefault_Light_Dialog_Alert )
+                noPlayServicesDialog = new AlertDialog.Builder( this, Theme_DeviceDefault_Light_Dialog_Alert )
                         .setTitle( R.string.alert_no_gps_title )
                         .setMessage( R.string.alert_no_gps_msg )
                         .show();
@@ -98,34 +97,24 @@ public class SplashScreen extends Activity {
                 postDelayed = 5000;
             }
 
-            (new Handler()).postDelayed( new Runnable() {
+        } else if ( prefs.getBoolean( GlobalState.PrefsConst.FIRST_LAUNCH, true ) ) {
 
-                @Override
-                public void run () {
+            Toast.makeText( this, getResources().getString( R.string.internet_unavailable ), Toast.LENGTH_LONG )
+                    .show();
+            finish();
+        }
 
-                    try {
+        (new Handler()).postDelayed( new Runnable() {
 
-                        displayActivity( context.isAriseAvailable() && !context.isOauthConnected() ? Login.class : Main.class );
+            @Override
+            public void run () {
 
-                        if( noPlayServicesDialog != null && noPlayServicesDialog.isShowing() ) noPlayServicesDialog.dismiss();
-
-                    } catch ( InterruptedException | ExecutionException e) {
-
-                        e.printStackTrace();
-                    }
-                }
-            }, postDelayed );
-
-        } else {
-
-            if ( prefs.getBoolean( GlobalState.PrefsConst.FIRST_LAUNCH, true ) ) {
-
-                Toast.makeText( this, getResources().getString( R.string.internet_unavailable ), Toast.LENGTH_LONG )
-                        .show();
+                startActivity( new Intent( SplashScreen.this, Main.class ) );
                 finish();
 
-            } else displayActivity( Main.class );
-        }
+                if( noPlayServicesDialog != null && noPlayServicesDialog.isShowing() ) noPlayServicesDialog.dismiss();
+            }
+        }, postDelayed );
     }
 
     /**
@@ -283,17 +272,5 @@ public class SplashScreen extends Activity {
 
             e.printStackTrace();
         }
-    }
-
-    private void displayActivity ( final Class<?> intentTarget ) {
-
-        final Activity splashScreen = this;
-        new Handler().postDelayed( new Runnable() {
-            @Override
-            public void run() {
-                startActivity( new Intent( SplashScreen.this, intentTarget ) );
-                splashScreen.finish();
-            }
-        }, 1000);
     }
 }
