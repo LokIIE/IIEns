@@ -326,9 +326,18 @@ public class Main extends AppCompatActivity
 
         setControlsVisibility( false );
 
+        View navDrawerHeader = navDrawer.getHeaderView( 0 );
+        navDrawerHeader.findViewById( R.id.nav_connect ).setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick ( View v ) {
+
+                onNavConnectClicked( v );
+            }
+        } );
+
         if( appContext.isOauthConnected() ) {
 
-            View navDrawerHeader = navDrawer.getHeaderView( 0 );
             navDrawerHeader.findViewById( R.id.nav_connect ).setVisibility( View.GONE );
             navDrawerHeader.findViewById( R.id.nav_user_infos ).setVisibility( View.VISIBLE );
 
@@ -376,5 +385,11 @@ public class Main extends AppCompatActivity
                 enqueue = dm.enqueue( request );
             }
         }.start();
+    }
+
+    public void onNavConnectClicked ( View v ) {
+
+        startActivity( new Intent( Main.this, Login.class ) );
+        finish();
     }
 }
