@@ -105,8 +105,7 @@ public class SplashScreen extends Activity {
 
                     try {
 
-                        Boolean statutArise = context.isAriseAvailable();
-                        displayActivity( statutArise ? Login.class : Main.class );
+                        displayActivity( context.isAriseAvailable() && !context.isOauthConnected() ? Login.class : Main.class );
 
                         if( noPlayServicesDialog != null && noPlayServicesDialog.isShowing() ) noPlayServicesDialog.dismiss();
 

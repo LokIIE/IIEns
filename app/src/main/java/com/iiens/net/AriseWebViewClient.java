@@ -177,7 +177,9 @@ public class AriseWebViewClient {
 
                                     if( response.has("connection_status") && response.getString("connection_status").equals("ok") ) {
 
-                                        // TODO : récupérer l'URL de déconnexion
+                                        ((GlobalState) context.getApplicationContext())
+                                                .setOauthConnected( true )
+                                                .setUserInfos( response );
                                         callback.onConnectionSuccess();
 
                                     } else {

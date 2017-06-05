@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Main extends AppCompatActivity
@@ -168,8 +169,8 @@ public class Main extends AppCompatActivity
         } else {
 
             super.onBackPressed();
+            ((GlobalState) getApplicationContext()).setOauthConnected( false );
             tMsg.cancel();
-            return;
         }
     }
 
@@ -216,6 +217,10 @@ public class Main extends AppCompatActivity
                     openFragment( Twitter.class.getName() );
                     navDrawer.setCheckedItem( R.id.action_nav_twitter );
                     currentSelectedId = id;
+                    break;
+
+                case R.id.action_nav_itvtube:
+                    startActivity( new Intent( this, Itvtube.class ) );
                     break;
 
                 case R.id.action_nav_breviaire:
@@ -320,6 +325,20 @@ public class Main extends AppCompatActivity
         bottomNav.setOnNavigationItemSelectedListener( this );
 
         setControlsVisibility( false );
+
+        if( appContext.isOauthConnected() ) {
+
+            View navDrawerHeader = navDrawer.getHeaderView( 0 );
+            navDrawerHeader.findViewById( R.id.nav_connect ).setVisibility( View.GONE );
+            navDrawerHeader.findViewById( R.id.nav_user_infos ).setVisibility( View.VISIBLE );
+
+            ((TextView) navDrawerHeader.findViewById( R.id.nav_pseudo ))
+                    .setText( appContext.getUserInfo( "surnom" ) );
+            ((TextView) navDrawerHeader.findViewById( R.id.nav_full_name ))
+                    .setText( appContext.getUserInfo( "prenom" ).concat( " " ).concat( appContext.getUserInfo( "nom" ) ) );
+            ((TextView) navDrawerHeader.findViewById( R.id.nav_promo ))
+                    .setText( String.format( "Promo %s", appContext.getUserInfo( "promo" ) ) );
+        }
     }
 
     private void setControlsVisibility ( boolean animate ) {

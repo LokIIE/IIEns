@@ -1,38 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?><LinearLayout
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_drawer_header"
     android:layout_width="match_parent"
     android:layout_height="@dimen/navigation_drawer_header_height"
     android:background="@drawable/nav_drawer_header_background"
     android:gravity="bottom"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/IIEnsTheme.Dark">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        app:srcCompat="@android:drawable/sym_def_app_icon"/>
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:text="Android Studio"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="?android:attr/textColor"/>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            app:srcCompat="@drawable/logo_notification"/>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="android.studio@android.com"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="?android:attr/textColor"/>
+        <android.widget.Button
+            android:id="@+id/nav_connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/darkorange"
+            android:text="@string/connect_button"
+            android:textColor="?android:textColor"/>
+
+        <LinearLayout
+            android:id="@+id/nav_user_infos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/nav_pseudo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textColor="?android:textColor"/>
+
+            <TextView
+                android:id="@+id/nav_full_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="?android:textColor"/>
+
+            <TextView
+                android:id="@+id/nav_promo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="?android:textColor"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

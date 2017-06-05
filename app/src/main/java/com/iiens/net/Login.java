@@ -3,7 +3,6 @@ package com.iiens.net;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -53,7 +52,10 @@ public class Login extends Activity {
 
                             if( response.has( "connection_status" ) && response.getString( "connection_status" ).equals( "ok" ) ) {
 
-                                Log.d( "Login", "CONNECTE" );
+                                ((GlobalState) getApplicationContext())
+                                        .setOauthConnected( true )
+                                        .setUserInfos( response );
+                                startMainActivity();
 
                             } else wv.loadUrl( response.getString("redirect") );
 
@@ -98,6 +100,7 @@ public class Login extends Activity {
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse ( JSONObject response ) {
+                            ((GlobalState) getApplicationContext()).setOauthConnected( false );
                         }
                     },
                     new Response.ErrorListener() {

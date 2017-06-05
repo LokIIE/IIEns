@@ -7,20 +7,27 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.ArrayMap;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.iiens.net.tasks.TaskPingArise;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
 public class GlobalState extends Application {
 
     private static Bundle appBundle = new Bundle();
     private Fragment currentFragment = null;
+    private ArrayMap<String, String> userInfos = new ArrayMap<>();
+    private boolean connectionOAuthStatus = false;
 
     private SharedPreferences prefs;
 
@@ -57,6 +64,41 @@ public class GlobalState extends Application {
     public SharedPreferences getPreferences () {
 
         return this.prefs;
+    }
+
+    public GlobalState setOauthConnected ( boolean status ) {
+
+        this.connectionOAuthStatus = status;
+        return this;
+    }
+
+    public boolean isOauthConnected () {
+
+        return connectionOAuthStatus;
+    }
+
+    public GlobalState setUserInfos ( JSONObject data ) {
+
+        this.userInfos.clear();
+
+        try {
+
+            Iterator keys = data.keys();
+            while( keys.hasNext() )  {
+
+                String key = (String) keys.next();
+                this.userInfos.put( key, data.getString( key ) );
+            }
+
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
+    public String getUserInfo ( String key ) {
+
+        return this.userInfos.get( key );
     }
 
     /**
