@@ -45,11 +45,13 @@ public class Main extends AppCompatActivity
 
     private int currentSelectedId = 0;
 
-    boolean doubleBackToExitPressedOnce = false;
-    Toast tMsg;
+    private boolean doubleBackToExitPressedOnce = false;
+    private Toast tMsg;
 
-    long enqueue;
-    DownloadManager dm;
+    public long enqueue;
+    private DownloadManager dm;
+
+    private SharedPreferences prefs;
 
     BroadcastReceiver onComplete = new BroadcastReceiver () {
 
@@ -101,8 +103,9 @@ public class Main extends AppCompatActivity
     public void onCreate ( Bundle savedInstanceState ) {
 
         appContext = (GlobalState) this.getApplicationContext();
+        prefs = appContext.getPreferences();
 
-        setTheme( appContext.getPreferences().getBoolean( getString( R.string.pref_mode_nuit_key ), false ) ?
+        setTheme( prefs.getBoolean( getString( R.string.pref_mode_nuit_key ), false ) ?
                 R.style.IIEnsTheme_Dark
                 : R.style.IIEnsTheme_Light
         );
@@ -228,9 +231,9 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_nav_arise:
-                    Bundle params = new Bundle();
-                    params.putString( "url", getString( R.string.url_arise ));
-                    openFragment( ClubPageWebView.class.getName(), params );
+                    Intent i = new Intent( this, ClubPage.class );
+                    i.putExtra( "url", getString( R.string.url_arise ) );
+                    startActivity( i );
                     break;
 
                 case R.id.action_nav_parametres:
@@ -363,7 +366,6 @@ public class Main extends AppCompatActivity
     private void setControlsVisibility ( boolean animate ) {
 
         // Application des paramètres
-        SharedPreferences prefs = ((GlobalState) getApplicationContext()).getPreferences();
         navDrawer.getMenu().setGroupVisible(
                 R.id.navigation_base,
                 ! prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), false )
@@ -371,9 +373,7 @@ public class Main extends AppCompatActivity
 
         if( animate ) {
 
-            int animRef = ( prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), true ) ) ? R.anim.bottom_in : R.anim.bottom_out;
-            Animation anim = AnimationUtils.loadAnimation( getApplicationContext(), animRef );
-            bottomNav.startAnimation( anim );
+            changeBottomNavigationVisibility( prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), true ) );
         }
 
         bottomNav.setVisibility(
@@ -385,7 +385,7 @@ public class Main extends AppCompatActivity
 
         dm = (DownloadManager) getSystemService( DOWNLOAD_SERVICE );
 
-        final Uri uri= Uri.parse( appContext.getScriptURL() + appContext.getString(R.string.apiie_breviaire) );
+        final Uri uri = Uri.parse( appContext.getScriptURL() + appContext.getString(R.string.apiie_breviaire) );
 
         final DownloadManager.Request request = new DownloadManager.Request( uri );
         request.setDestinationInExternalFilesDir( Main.this, Environment.DIRECTORY_DOWNLOADS, "breviaire.pdf" );
@@ -401,5 +401,12 @@ public class Main extends AppCompatActivity
 
         startActivity( new Intent( Main.this, Login.class ) );
         finish();
+    }
+
+    public void changeBottomNavigationVisibility ( Boolean visibility ) {
+
+        int animRef = ( visibility ) ? R.anim.bottom_in : R.anim.bottom_out;
+        Animation anim = AnimationUtils.loadAnimation( getApplicationContext(), animRef );
+        bottomNav.startAnimation( anim );
     }
 }
