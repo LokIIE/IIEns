@@ -16,6 +16,14 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="df274d812a88ccd398c6b5d86b4017c1925c79a8" />
+
         <!--<service android:name=".fcm.FbMessagingService">-->
             <!--<intent-filter>-->
                 <!--<action android:name="com.google.firebase.MESSAGING_EVENT"/>-->
@@ -28,13 +36,17 @@
             </intent-filter>
         </service>
 
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.iiens.net.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="df274d812a88ccd398c6b5d86b4017c1925c79a8" />
+
 
         <activity android:name=".SplashScreen"
             android:label="@string/app_name"

@@ -3,11 +3,15 @@ package com.iiens.net;
 import android.app.Application;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
 import android.util.ArrayMap;
+import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -16,6 +20,7 @@ import com.iiens.net.tasks.TaskPingArise;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -25,6 +30,7 @@ import java.util.concurrent.ExecutionException;
 public class GlobalState extends Application {
 
     private static Bundle appBundle = new Bundle();
+    private String AUTHORITY = "com.iiens.net.fileprovider";
     private Fragment currentFragment = null;
     private ArrayMap<String, String> userInfos = new ArrayMap<>();
     private boolean connectionOAuthStatus = false;
@@ -133,6 +139,28 @@ public class GlobalState extends Application {
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
         int resultCode = googleAPI.isGooglePlayServicesAvailable( this );
         return resultCode == ConnectionResult.SUCCESS;
+    }
+
+    public void openPdf ( String uriString ) {
+
+        try {
+
+            String filename = uriString.substring( uriString.lastIndexOf( "/" ) + 1 );
+            File file = new File( new File( this.getFilesDir(), "Download" ) , filename );
+
+            Uri pdfURI = FileProvider.getUriForFile( GlobalState.this, AUTHORITY, file );
+            Log.d( "LocalURI", uriString );
+            Log.d( "ContentURI", pdfURI.toString() );
+            Intent intent = new Intent( Intent.ACTION_VIEW );
+            intent.setDataAndType( pdfURI, "application/pdf" )
+                    .setFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION );
+
+            if ( intent.resolveActivity( getPackageManager() ) != null ) startActivity( intent );
+
+        } catch ( Exception e ) {
+
+            Log.d( "FileProviderError", e.getMessage() );
+        }
     }
 
     static class PrefsConst {
