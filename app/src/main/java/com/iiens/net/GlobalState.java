@@ -30,7 +30,6 @@ import java.util.concurrent.ExecutionException;
 public class GlobalState extends Application {
 
     private static Bundle appBundle = new Bundle();
-    private String AUTHORITY = "com.iiens.net.fileprovider";
     private Fragment currentFragment = null;
     private ArrayMap<String, String> userInfos = new ArrayMap<>();
     private boolean connectionOAuthStatus = false;
@@ -38,6 +37,46 @@ public class GlobalState extends Application {
     private SharedPreferences prefs;
 
     public static CookieManager cookieManager = new CookieManager();
+
+/*    public DownloadManager dm;
+    public long enqueue;
+
+    public BroadcastReceiver onComplete = new BroadcastReceiver () {
+
+        public void onReceive ( Context ctxt, Intent intent ) {
+            // check if the broadcast message is for our enqueued download
+            long referenceId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+
+            if( referenceId == enqueue ) {
+
+                try {
+
+                    String action = intent.getAction();
+
+                    if ( DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals( action ) ) {
+
+                        DownloadManager.Query query = new DownloadManager.Query();
+                        query.setFilterById( enqueue );
+                        Cursor c = dm.query( query );
+
+                        if ( c.moveToFirst() ) {
+
+                            int columnIndex = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
+
+                            if ( DownloadManager.STATUS_SUCCESSFUL == c.getInt( columnIndex ) ) {
+
+                                String uriString = c.getString( c.getColumnIndex( DownloadManager.COLUMN_LOCAL_URI ) );
+                                openPdf(  uriString );
+                            }
+                        }
+                    }
+                } catch ( ActivityNotFoundException e ) {
+
+                    Log.e( "onComplete", "ActivityNotFound" );
+                }
+            }
+        }
+    };*/
 
     public Bundle getBundle () {
         return appBundle;
@@ -60,6 +99,8 @@ public class GlobalState extends Application {
 
         cookieManager.setCookiePolicy( CookiePolicy.ACCEPT_ALL );
         CookieHandler.setDefault( GlobalState.cookieManager );
+
+        // dm = (DownloadManager) getSystemService( DOWNLOAD_SERVICE );
 
         prefs = getSharedPreferences(
                 getResources().getString( R.string.app_settings ),
@@ -141,21 +182,34 @@ public class GlobalState extends Application {
         return resultCode == ConnectionResult.SUCCESS;
     }
 
+    /*public Thread downloadPdf ( Uri uri ) {
+
+        String filename = uri.toString().substring(  uri.toString().lastIndexOf( "/" ) + 1 );
+
+        final DownloadManager.Request request = new DownloadManager.Request( uri );
+        request.setDestinationInExternalPublicDir( Environment.DIRECTORY_DOWNLOADS, filename );
+
+        return new Thread() {
+
+            public void run () { enqueue = dm.enqueue( request ); }
+
+        };
+    }*/
+
     public void openPdf ( String uriString ) {
 
         try {
 
             String filename = uriString.substring( uriString.lastIndexOf( "/" ) + 1 );
-            File file = new File( new File( this.getFilesDir(), "Download" ) , filename );
+            File file = new File( getFilesDir(), filename );
 
-            Uri pdfURI = FileProvider.getUriForFile( GlobalState.this, AUTHORITY, file );
-            Log.d( "LocalURI", uriString );
-            Log.d( "ContentURI", pdfURI.toString() );
-            Intent intent = new Intent( Intent.ACTION_VIEW );
-            intent.setDataAndType( pdfURI, "application/pdf" )
-                    .setFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION );
+            Uri pdfURI = FileProvider.getUriForFile( this, "com.iiens.net.fileprovider", file );
+            Intent pdfIntent = new Intent();
+            pdfIntent.setAction( Intent.ACTION_VIEW )
+                    .setDataAndType( pdfURI, "application/pdf" )
+                    .addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION );
 
-            if ( intent.resolveActivity( getPackageManager() ) != null ) startActivity( intent );
+            if ( pdfIntent.resolveActivity( getPackageManager() ) != null ) startActivity( pdfIntent );
 
         } catch ( Exception e ) {
 

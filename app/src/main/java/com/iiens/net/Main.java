@@ -31,6 +31,8 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         BottomNavigationView.OnNavigationItemSelectedListener,
@@ -73,24 +75,16 @@ public class Main extends AppCompatActivity
 
                         if ( c.moveToFirst() ) {
 
-                            int columnIndex = c
-                                    .getColumnIndex(DownloadManager.COLUMN_STATUS);
+                            int columnIndex = c.getColumnIndex(DownloadManager.COLUMN_STATUS);
 
-                            if ( DownloadManager.STATUS_SUCCESSFUL == c
-                                    .getInt( columnIndex ) ) {
+                            if ( DownloadManager.STATUS_SUCCESSFUL == c.getInt( columnIndex ) ) {
 
-                                String uriString = c.getString(
-                                        c.getColumnIndex( DownloadManager.COLUMN_LOCAL_URI )
-                                );
-
-                                Uri a = Uri.parse( uriString );
-                                Intent intentOpenPdf = new Intent( Intent.ACTION_VIEW );
-                                intentOpenPdf.setDataAndType( a, "application/pdf" );
-                                intentOpenPdf.setFlags( Intent.FLAG_ACTIVITY_CLEAR_TOP );
-                                startActivity(intentOpenPdf);
+                                String uriString = c.getString( c.getColumnIndex( DownloadManager.COLUMN_LOCAL_URI ) );
+                                appContext.openPdf( uriString );
                             }
                         }
                     }
+
                 } catch ( ActivityNotFoundException e ) {
 
                     Log.e( "onComplete", "ActivityNotFound" );
@@ -383,18 +377,26 @@ public class Main extends AppCompatActivity
 
     public void openBreviaire () {
 
-        dm = (DownloadManager) getSystemService( DOWNLOAD_SERVICE );
-
         final Uri uri = Uri.parse( appContext.getScriptURL() + appContext.getString(R.string.apiie_breviaire) );
+        File breviaire = new File( getExternalFilesDir( Environment.DIRECTORY_DOWNLOADS ), "breviaire.pdf" );
 
-        final DownloadManager.Request request = new DownloadManager.Request( uri );
-        request.setDestinationInExternalFilesDir( Main.this, Environment.DIRECTORY_DOWNLOADS, "breviaire.pdf" );
+        if( breviaire.exists() ) {
 
-        new Thread() {
-            public void run() {
-                enqueue = dm.enqueue( request );
-            }
-        }.start();
+            appContext.openPdf( Uri.fromFile( breviaire ).toString() );
+
+        } else {
+
+            dm = (DownloadManager) getSystemService( DOWNLOAD_SERVICE );
+            final DownloadManager.Request request = new DownloadManager.Request( uri );
+            request.setDestinationInExternalFilesDir( this, Environment.DIRECTORY_DOWNLOADS, "breviaire.pdf" )
+                    .setNotificationVisibility( DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED );
+
+            new Thread() {
+                public void run() {
+                    enqueue = dm.enqueue( request );
+                }
+            }.start();
+        }
     }
 
     public void onNavConnectClicked ( View v ) {
