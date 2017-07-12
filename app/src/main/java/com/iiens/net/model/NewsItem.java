@@ -95,10 +95,10 @@ public class NewsItem {
 
         String pUnderlined = "(?i)(:underlined.*?:)(.+?)(:underlined:)";
         String pBold = "(?i)(:bold.*?:)(.+?)(:bold:)";
-        String pItalic = "(?i)(:italic.*?:)(.+?)(:italic:)";
+        String pItalic = "(?i):italic:(.+?):italic:";
         formatContenu = formatContenu.replaceAll( pUnderlined, "<u>" + "$2" + "</u>" );
         formatContenu = formatContenu.replaceAll( pBold, "<b>" + "$2" + "</b>" );
-        formatContenu = formatContenu.replaceAll( pItalic, "<i>" + "$2" + "</i>" );
+        formatContenu = formatContenu.replaceAll( pItalic, "<i>" + "$1" + "</i>" );
 
         String pUrlLinkText = "(?i)(:urllink.*?:)(.+?)(:urllink:)(:urltext*?:)(.+?)(:urltext:)";
         String pUrl = "(?i)(:url.*?:)(.+?)(:url:)";
