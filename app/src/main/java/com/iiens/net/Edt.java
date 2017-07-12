@@ -1,7 +1,6 @@
 package com.iiens.net;
 
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -250,15 +249,12 @@ public class Edt extends BaseFragment {
         // Envoi de l'item sélectionné au fragment
         resultFrag.setArguments( bundle );
 
-        FragmentTransaction ft = fm.beginTransaction();
-        // Remplacement de la vue par le nouveau fragment
-        ft.replace( R.id.content_container, resultFrag );
-        // Ajout du nouveau fragment au backstack pour navigation arrière
-        ft.addToBackStack( null );
+        fm.beginTransaction()
+                .replace( R.id.content_container, resultFrag )
+                .addToBackStack( null )
+                .commit();
 
-        ft.commit();
-
-        global.setCurrentFragment( 4 );
+        global.setCurrentFragment( new EdtResult() );
     }
 
     /**
