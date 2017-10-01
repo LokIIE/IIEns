@@ -121,8 +121,7 @@ public class Main extends AppCompatActivity
 
         super.onStart();
 
-        registerReceiver( onComplete,
-                new IntentFilter( DownloadManager.ACTION_DOWNLOAD_COMPLETE ) );
+        registerReceiver( onComplete, new IntentFilter( DownloadManager.ACTION_DOWNLOAD_COMPLETE ) );
 
         openFragment( appContext.getCurrentFragment() );
     }
@@ -154,10 +153,8 @@ public class Main extends AppCompatActivity
             tMsg.show();
 
             new Handler().postDelayed( new Runnable() {
-
                 @Override
                 public void run() {
-
                     tMsg = null;
                     doubleBackToExitPressedOnce = false;
                 }
