@@ -81,7 +81,7 @@ abstract class BaseFragment extends Fragment {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(global, apiKey + " : " + R.string.api_error, Toast.LENGTH_LONG).show();
+                    Toast.makeText(global, apiKey + " : " + getResources().getString( R.string.api_error ), Toast.LENGTH_LONG).show();
                 }
             });
             queue.add(request);
