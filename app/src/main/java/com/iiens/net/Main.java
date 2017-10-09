@@ -198,7 +198,7 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_edt:
-                    openFragment( Edt.class.getName(), null );
+                    openFragment( Edtv2.class.getName(), null );
                     navDrawer.setCheckedItem( R.id.action_nav_edt );
                     currentSelectedId = id;
                     break;

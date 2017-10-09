@@ -2,14 +2,20 @@ package com.iiens.net;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.vision.text.Line;
 import com.iiens.net.model.EdtFormItemv2;
 
 import org.json.JSONArray;
@@ -19,6 +25,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,6 +42,9 @@ public class Edtv2 extends BaseFragment {
     private int currentWeekNumber = 1;
     private Bundle bundle;
 
+    private ArrayMap<String, ArrayAdapter> common = new ArrayMap<>();
+    private JSONObject elements, conf;
+
     @Override
     public void onCreate ( Bundle savedInstanceState ) {
 
@@ -48,64 +58,43 @@ public class Edtv2 extends BaseFragment {
     protected void generateView ( View view ) {
 
         // Affichage des semaines dans le spinner
-        mEdtWeekSpinner = (Spinner) view.findViewById(R.id.edt_week);
+        mEdtWeekSpinner = view.findViewById(R.id.edt_week);
         mEdtWeekSpinner.setAdapter(new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
                 generateWeeks()));
         mEdtWeekSpinner.setSelection(2);
 
+        // Références des radio boutons
+        radioPromoGroup = view.findViewById( R.id.chk_promo );
+        radio1A = view.findViewById( R.id.chk_1A );
+        radio2A = view.findViewById( R.id.chk_2A );
+        radio3A = view.findViewById( R.id.chk_3A );
+
         // Références des layouts
-        mOptLayout = (LinearLayout) view.findViewById( R.id.edt_options );
-        mComm = (LinearLayout) view.findViewById( R.id.edt_comm_layout );
-        mLangue = (LinearLayout) view.findViewById( R.id.edt_langue_layout );
+        mOptLayout = view.findViewById( R.id.edt_options );
+        mComm = view.findViewById( R.id.edt_comm_layout );
+        mLangue = view.findViewById( R.id.edt_langue_layout );
 
         // Références des spinners
-        mGroupSpinner = (Spinner) view.findViewById( R.id.edt_groupe );
-        mCommSpinner = (Spinner) view.findViewById( R.id.edt_comm );
-        mLangSpinner = (Spinner) view.findViewById( R.id.edt_lang );
+        mGroupSpinner = view.findViewById( R.id.edt_groupe );
+        mCommSpinner = view.findViewById( R.id.edt_comm );
+        mLangSpinner = view.findViewById( R.id.edt_lang );
 
         // Initialialisation des spinners
         this.initializeAdapters();
         this.initializeSpinners();
 
+        // Ids des éléments fixes du formulaire
+        common.put( "gp[]", mGroupAdapter );
+        common.put( "gpcomm[]", mCommAdapter );
+        common.put( "langue[]", mLangAdapter );
+
+        // Génération dynamique des éléments du formulaire et mise en places des triggers
         this.apiRequest( view );
 
-        // Références des radio boutons
-        /*radioPromoGroup = (RadioGroup) view.findViewById( R.id.chk_promo );
-        radio1A = (RadioButton) view.findViewById( R.id.chk_1A );
-        radio2A = (RadioButton) view.findViewById( R.id.chk_2A );
-        radio3A = (RadioButton) view.findViewById( R.id.chk_3A );
-
-        // Affichage ou non des layouts ou spinners suivant le radio bouton choisi
-        radio1A.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-
-        });
-
-        radio2A.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-
-        });
-
-        radio3A.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-            }
-        });
-
         // Action du bouton de recherche
-        view.findViewById( R.id.edt_search_button ).setOnClickListener(new OnClickListener() {
+        /*view.findViewById( R.id.edt_search_button ).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Récupération de tous les paramètres de recherche saisis
@@ -145,7 +134,6 @@ public class Edtv2 extends BaseFragment {
                     Toast.makeText( global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG ).show();
                 }
             }
-
         });*/
     }
 
@@ -158,15 +146,72 @@ public class Edtv2 extends BaseFragment {
     protected void displayResult ( View view, JSONArray result ) {
 
         try {
-            JSONArray grpElements = (JSONArray) result.getJSONObject( 0 ).getJSONArray( "gp[]" ).get(0);
-            Log.d( "DATA", grpElements.toString() + " - " + grpElements.length() );
-            for ( int i = 0; i < grpElements.length(); i++ ) {
 
-                JSONObject option = grpElements.getJSONObject( i );
-                mGroupAdapter.add( new EdtFormItemv2( "gp[]", option.getString( "text" ), option.getString( "value" ) ) );
+            elements = result.getJSONObject( 0 );
+            Log.d( "DATA", elements.toString() + " - " + elements.length() );
+
+            conf = elements.getJSONObject( "conf" );
+
+            for ( String key : common.keySet() ) {
+
+                JSONObject spinnerConfig = elements.getJSONObject( key );
+                String label = spinnerConfig.keys().next();
+
+                JSONArray spinnerElements = spinnerConfig.getJSONArray( label );
+                Log.d( "DATA", spinnerElements.toString() + " - " + spinnerElements.length() );
+
+                for ( int i = 0; i < spinnerElements.length(); i++ ) {
+                    JSONObject option = spinnerElements.getJSONObject( i );
+                    common.get( key ).add( new EdtFormItemv2( key, option.getString( "text" ), option.getString( "value" ) ) );
+                }
+
+                common.get( key ).notifyDataSetChanged();
             }
 
-            mGroupAdapter.notifyDataSetChanged();
+            mOptLayout.addView( loadOptionSpinners( "2A" ) );
+            mOptLayout.addView( loadOptionSpinners( "3A" ) );
+
+            // Affichage ou non des layouts ou spinners suivant le radio bouton choisi et la conf actuelle
+            radio1A.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    try {
+
+                        JSONArray conf1A = conf.getJSONArray("1A");
+                        Log.d( "CONF1A", conf1A.toString() );
+                        for ( int i = 0; i < conf1A.length(); i++ ) {
+                            Log.d( "CONF1A", conf1A.getString( i ) );
+                        }
+
+                        mOptLayout.setVisibility( View.INVISIBLE );
+                        mOptLayout.findViewWithTag( "2A" ).setVisibility( View.GONE );
+                        mOptLayout.findViewWithTag( "3A" ).setVisibility( View.GONE );
+
+                    } catch ( JSONException e ) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            radio2A.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOptLayout.setVisibility( View.VISIBLE );
+                    mOptLayout.findViewWithTag( "2A" ).setVisibility( View.VISIBLE );
+                    mOptLayout.findViewWithTag( "3A" ).setVisibility( View.GONE );
+                }
+            });
+
+            radio3A.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    mOptLayout.setVisibility( View.VISIBLE );
+                    mOptLayout.findViewWithTag( "2A" ).setVisibility( View.GONE );
+                    mOptLayout.findViewWithTag( "3A" ).setVisibility( View.VISIBLE );
+                }
+            });
 
         } catch ( JSONException e ) {
             e.printStackTrace();
@@ -253,19 +298,82 @@ public class Edtv2 extends BaseFragment {
 
         mGroupSpinner.setAdapter( mGroupAdapter );
         mCommSpinner.setAdapter( mCommAdapter );
+        mLangSpinner.setAdapter( mLangAdapter );
     }
 
     /**
-     * Chargement des spinners avec les données des options des 2A
+     * Chargement des spinners avec les données des options
+     * @param confKey : Clé de configuration du formulaire
      */
-    private void loadOptionSpinners2A () {
+    private LinearLayout loadOptionSpinners ( String confKey ) {
 
-    }
+        LinearLayout optionLayout = new LinearLayout( context );
+        optionLayout.setTag( confKey );
+        optionLayout.setOrientation( LinearLayout.VERTICAL );
+        optionLayout.setLayoutParams( new ViewGroup.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT ) );
 
-    /**
-     * Chargement des spinners avec les données des options des 3A
-     */
-    private void loadOptionSpinners3A () {
+        try {
 
+            JSONArray confAnnee = conf.getJSONArray( confKey );
+            Log.d( confKey, confAnnee.toString() );
+
+            for ( int i = 0; i < confAnnee.length(); i++ ) {
+
+                String spinnerKey = confAnnee.getString( i );
+
+                if ( ! common.containsKey( spinnerKey ) ) {
+
+                    JSONObject spinners = elements.getJSONObject( spinnerKey );
+                    Iterator<String> spinnersNames = spinners.keys();
+
+                    for ( int j = 0; j < spinners.length(); j++ ) {
+
+                        String label = spinnersNames.next();
+                        JSONArray spinnerElements = spinners.getJSONArray( label );
+
+                        Spinner spinner = new Spinner( context );
+                        spinner.setLayoutParams( new ViewGroup.LayoutParams( ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT ) );
+                        spinner.setPadding( 16, 0, 16, 0 );
+
+                        ArrayAdapter<EdtFormItemv2> spinnerAdapter = new ArrayAdapter( getActivity(), android.R.layout.simple_spinner_dropdown_item );
+                        spinner.setAdapter( spinnerAdapter );
+                        spinner.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
+
+                            @Override
+                            public boolean onItemLongClick ( AdapterView<?> adapterView, View view, int i, long l ) {
+
+                                Toast.makeText( context, ((EdtFormItemv2) adapterView.getItemAtPosition( i )).getLabel(), Toast.LENGTH_LONG ).show();
+                                return false;
+                            }
+                        } );
+
+                        for ( int k = 0; k < spinnerElements.length(); k++ ) {
+                            final JSONObject spinnerOption = spinnerElements.getJSONObject( k );
+                            spinnerAdapter.add( new EdtFormItemv2( spinnerKey, spinnerOption.getString( "text" ), spinnerOption.getString( "value" ) ) );
+                        }
+
+                        LinearLayout spinnerView = new LinearLayout( context );
+                        spinnerView.setOrientation( LinearLayout.HORIZONTAL );
+                        spinnerView.setLayoutParams( new ViewGroup.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT ) );
+
+                        TextView spinnerLabel = new TextView( context );
+                        spinnerLabel.setText( label );
+
+                        spinnerView.addView( spinnerLabel );
+                        spinnerView.addView( spinner );
+
+                        optionLayout.addView( spinnerView );
+
+                        spinnerAdapter.notifyDataSetChanged();
+                        Log.d( confKey, spinnerElements.toString() );
+                    }
+                }
+            }
+
+        } catch ( JSONException e ) {
+            e.printStackTrace();
+        }
+
+        return optionLayout;
     }
 }

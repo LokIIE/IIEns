@@ -109,7 +109,7 @@
     <string name="title_activity_google_play_services">GooglePlayServicesActivity</string>
 
     <!-- EdtForm values -->
-    <string name="edt_search_txt">Année</string>
+    <string name="edt_search_txt">Année :</string>
     <string name="edt_result_title">Résultats de la recherche</string>
     <string name="edtForm_1A">1A</string>
     <string name="edtForm_2A">2A</string>
