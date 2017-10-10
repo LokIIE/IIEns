@@ -2,7 +2,6 @@ package com.iiens.net;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.util.ArrayMap;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.vision.text.Line;
 import com.iiens.net.model.EdtFormItemv2;
 
 import org.json.JSONArray;
@@ -36,14 +34,12 @@ public class Edtv2 extends BaseFragment {
 
     private RadioGroup radioPromoGroup;
     private RadioButton radio1A, radio2A, radio3A;
-    private LinearLayout mComm, mLangue, mOptLayout;
+    private LinearLayout mOptLayout;
     private Spinner mEdtWeekSpinner, mGroupSpinner, mCommSpinner, mLangSpinner;
-    private ArrayAdapter<EdtFormItemv2> mGroupAdapter, mCommAdapter, mLangAdapter;
     private int currentWeekNumber = 1;
     private Bundle bundle;
 
-    private ArrayMap<String, ArrayAdapter> common = new ArrayMap<>();
-    private JSONObject elements, conf;
+    private JSONObject elements, conf, confBase;
 
     @Override
     public void onCreate ( Bundle savedInstanceState ) {
@@ -55,14 +51,14 @@ public class Edtv2 extends BaseFragment {
         this.layoutId = R.layout.edt_formulaire_v2;
     }
 
-    protected void generateView ( View view ) {
+    protected void generateView ( final View view ) {
 
         // Affichage des semaines dans le spinner
         mEdtWeekSpinner = view.findViewById(R.id.edt_week);
-        mEdtWeekSpinner.setAdapter(new ArrayAdapter<>(
+        mEdtWeekSpinner.setAdapter( new ArrayAdapter<>(
                 getActivity(),
                 android.R.layout.simple_spinner_dropdown_item,
-                generateWeeks()));
+                generateWeeks()) );
         mEdtWeekSpinner.setSelection(2);
 
         // Références des radio boutons
@@ -73,8 +69,6 @@ public class Edtv2 extends BaseFragment {
 
         // Références des layouts
         mOptLayout = view.findViewById( R.id.edt_options );
-        mComm = view.findViewById( R.id.edt_comm_layout );
-        mLangue = view.findViewById( R.id.edt_langue_layout );
 
         // Références des spinners
         mGroupSpinner = view.findViewById( R.id.edt_groupe );
@@ -82,39 +76,46 @@ public class Edtv2 extends BaseFragment {
         mLangSpinner = view.findViewById( R.id.edt_lang );
 
         // Initialialisation des spinners
-        this.initializeAdapters();
-        this.initializeSpinners();
+        mGroupSpinner.setAdapter( new ArrayAdapter<EdtFormItemv2>( getActivity(), android.R.layout.simple_spinner_dropdown_item ) );
+        mGroupSpinner.setTag( "gp[]" );
 
-        // Ids des éléments fixes du formulaire
-        common.put( "gp[]", mGroupAdapter );
-        common.put( "gpcomm[]", mCommAdapter );
-        common.put( "langue[]", mLangAdapter );
+        mCommSpinner.setAdapter( new ArrayAdapter<EdtFormItemv2>( getActivity(), android.R.layout.simple_spinner_dropdown_item ) );
+        mCommSpinner.setTag( "gpcomm[]" );
+
+        mLangSpinner.setAdapter( new ArrayAdapter<EdtFormItemv2>( getActivity(), android.R.layout.simple_spinner_dropdown_item ) );
+        mLangSpinner.setTag( "langue[]" );
 
         // Génération dynamique des éléments du formulaire et mise en places des triggers
         this.apiRequest( view );
 
         // Action du bouton de recherche
-        /*view.findViewById( R.id.edt_search_button ).setOnClickListener(new View.OnClickListener() {
+        view.findViewById( R.id.edt_search_button ).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Récupération de tous les paramètres de recherche saisis
-                EdtForm edtForm = new EdtForm();
+                ArrayList<String> searchParams = new ArrayList<>();
 
                 // Promotion, obligatoire sinon annulation
                 int selectedRadioId = radioPromoGroup.getCheckedRadioButtonId();
+                int promoNumber = -1;
+                String promoConf = "";
+
                 if ( selectedRadioId > 0 ) {
 
                     if ( selectedRadioId == radio1A.getId() ) {
 
-                        edtForm.promoNumber = 1;
+                        promoNumber = 1;
+                        promoConf = "1A";
 
                     } else if ( selectedRadioId == radio2A.getId() ) {
 
-                        edtForm.promoNumber = 2;
+                        promoNumber = 2;
+                        promoConf = "2A";
 
                     } else if ( selectedRadioId == radio3A.getId() ) {
 
-                        edtForm.promoNumber = 3;
+                        promoNumber = 3;
+                        promoConf = "3A";
                     }
 
                 } else {
@@ -123,10 +124,33 @@ public class Edtv2 extends BaseFragment {
                     return;
                 }
 
+                // Promo
+                searchParams.add( String.valueOf( promoNumber ) );
+
+                // Semaine
+                searchParams.add( String.valueOf( currentWeekNumber - 2 + mEdtWeekSpinner.getSelectedItemPosition() ) );
+
+//                // Options
+//                if ( promoNumber > 1 ) {
+//
+//                    try {
+//
+//                        JSONArray spinTags = conf.getJSONArray( promoConf );
+//                        for ( int i = 0; i < spinTags.length(); i++ ) {
+//
+//                            Spinner spinner = view.findViewWithTag( spinTags.getString( i ) );
+//                            searchParams.add( ((EdtFormItemv2) spinner.getSelectedItem()).getValue() );
+//                        }
+//
+//                    } catch ( JSONException e ) {
+//                        e.printStackTrace();
+//                    }
+//                }
+
                 // Transition d'activité pour effectuer la recherche et afficher les résultats
                 if ( global.isOnline() ) {
 
-                    bundle.putStringArrayList( "edtParams", edtForm.toArrayList() );
+                    bundle.putStringArrayList( "edtParams", searchParams );
                     executeSearch();
 
                 } else {
@@ -134,11 +158,11 @@ public class Edtv2 extends BaseFragment {
                     Toast.makeText( global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG ).show();
                 }
             }
-        });*/
+        });
     }
 
     /**
-     * Création du dynamique du formulaire de l'emploi du temps
+     * Création du dynamique du formulaire de l'edt suivant la version du formulaire du site web
      * @param view Vue à remplir
      * @param result Données à afficher
      */
@@ -148,26 +172,34 @@ public class Edtv2 extends BaseFragment {
         try {
 
             elements = result.getJSONObject( 0 );
-            Log.d( "DATA", elements.toString() + " - " + elements.length() );
 
             conf = elements.getJSONObject( "conf" );
+            confBase = conf.getJSONObject( "base" );
+            Iterator<String> confBaseKeys = confBase.keys();
 
-            for ( String key : common.keySet() ) {
+            while ( confBaseKeys.hasNext() ) {
+                String key = confBaseKeys.next();
+                Spinner currentSpinner = view.findViewWithTag( key );
+                ArrayAdapter<EdtFormItemv2> currentAdapter = (ArrayAdapter<EdtFormItemv2>) currentSpinner.getAdapter();
 
+                // Actualisation des tags des spinners
+                currentSpinner.setTag( confBase.getString( key ) );
+
+                // Ajout des éléments du select au spinnerAdapter respectif
                 JSONObject spinnerConfig = elements.getJSONObject( key );
-                String label = spinnerConfig.keys().next();
+                String label = spinnerConfig.names().get( 0 ).toString();
 
                 JSONArray spinnerElements = spinnerConfig.getJSONArray( label );
-                Log.d( "DATA", spinnerElements.toString() + " - " + spinnerElements.length() );
 
                 for ( int i = 0; i < spinnerElements.length(); i++ ) {
                     JSONObject option = spinnerElements.getJSONObject( i );
-                    common.get( key ).add( new EdtFormItemv2( key, option.getString( "text" ), option.getString( "value" ) ) );
+                    currentAdapter.add( new EdtFormItemv2( key, option.getString( "text" ), option.getString( "value" ) ) );
                 }
 
-                common.get( key ).notifyDataSetChanged();
+                currentAdapter.notifyDataSetChanged();
             }
 
+            // Chargement des spinners des options
             mOptLayout.addView( loadOptionSpinners( "2A" ) );
             mOptLayout.addView( loadOptionSpinners( "3A" ) );
 
@@ -180,10 +212,6 @@ public class Edtv2 extends BaseFragment {
 
                         JSONArray conf1A = conf.getJSONArray("1A");
                         Log.d( "CONF1A", conf1A.toString() );
-                        for ( int i = 0; i < conf1A.length(); i++ ) {
-                            Log.d( "CONF1A", conf1A.getString( i ) );
-                        }
-
                         mOptLayout.setVisibility( View.INVISIBLE );
                         mOptLayout.findViewWithTag( "2A" ).setVisibility( View.GONE );
                         mOptLayout.findViewWithTag( "3A" ).setVisibility( View.GONE );
@@ -197,55 +225,34 @@ public class Edtv2 extends BaseFragment {
             radio2A.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mOptLayout.setVisibility( View.VISIBLE );
-                    mOptLayout.findViewWithTag( "2A" ).setVisibility( View.VISIBLE );
-                    mOptLayout.findViewWithTag( "3A" ).setVisibility( View.GONE );
+                    try {
+                        Log.d( "CONF1A", conf.getJSONArray("2A").toString() );
+                        mOptLayout.setVisibility( View.VISIBLE );
+                        mOptLayout.findViewWithTag( "2A" ).setVisibility( View.VISIBLE );
+                        mOptLayout.findViewWithTag( "3A" ).setVisibility( View.GONE );
+                    } catch ( JSONException e ) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
             radio3A.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    mOptLayout.setVisibility( View.VISIBLE );
-                    mOptLayout.findViewWithTag( "2A" ).setVisibility( View.GONE );
-                    mOptLayout.findViewWithTag( "3A" ).setVisibility( View.VISIBLE );
+                    try {
+                        Log.d( "CONF1A", conf.getJSONArray( "3A" ).toString() );
+                        mOptLayout.setVisibility( View.VISIBLE );
+                        mOptLayout.findViewWithTag( "2A" ).setVisibility( View.GONE );
+                        mOptLayout.findViewWithTag( "3A" ).setVisibility( View.VISIBLE );
+                    } catch ( JSONException e ) {
+                        e.printStackTrace();
+                    }
                 }
             });
 
         } catch ( JSONException e ) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Génération de la liste des libellés des semaines du spinner du formulaire
-     * @return Liste des libellés des semaines
-     */
-    private List<String> generateWeeks () {
-
-        List<String> spinnerItems = new ArrayList<>();
-        Calendar myCalendar = Calendar.getInstance( Locale.FRENCH );
-        myCalendar.setFirstDayOfWeek( Calendar.MONDAY );
-        currentWeekNumber = myCalendar.get( Calendar.WEEK_OF_YEAR );
-        myCalendar.add( Calendar.WEEK_OF_YEAR, -2 );
-        SimpleDateFormat monthName = new SimpleDateFormat( "MMM", Locale.FRENCH );
-
-        for (int i = 0; i < 11; i++) {
-
-            myCalendar.setFirstDayOfWeek( Calendar.MONDAY );
-
-            myCalendar.set( Calendar.DAY_OF_WEEK, Calendar.MONDAY );
-            String lundi = String.valueOf( myCalendar.get( Calendar.DAY_OF_MONTH ) ) + " " + monthName.format( myCalendar.getTime() );
-
-            myCalendar.set( Calendar.DAY_OF_WEEK, Calendar.FRIDAY );
-            String vendredi = String.valueOf( myCalendar.get( Calendar.DAY_OF_MONTH ) ) + " " + monthName.format( myCalendar.getTime() );
-
-            spinnerItems.add("Du " + lundi + " au " + vendredi);
-            myCalendar.add( Calendar.DAY_OF_MONTH, 7 );
-        }
-
-        return spinnerItems;
     }
 
     /**
@@ -281,24 +288,33 @@ public class Edtv2 extends BaseFragment {
     }
 
     /**
-     * Initialisation des adapters des spinners
+     * Génération de la liste des libellés des semaines du spinner du formulaire
+     * @return Liste des libellés des semaines
      */
-    private void initializeAdapters () {
+    private List<String> generateWeeks () {
 
-        // Initialisation des spinners avec des données constantes
-        mGroupAdapter = new ArrayAdapter<EdtFormItemv2>( getActivity(), android.R.layout.simple_spinner_dropdown_item );
-        mCommAdapter = new ArrayAdapter<EdtFormItemv2>( getActivity(), android.R.layout.simple_spinner_dropdown_item );
-        mLangAdapter = new ArrayAdapter<EdtFormItemv2>( getActivity(), android.R.layout.simple_spinner_dropdown_item );
-    }
+        List<String> spinnerItems = new ArrayList<>();
+        Calendar myCalendar = Calendar.getInstance( Locale.FRENCH );
+        myCalendar.setFirstDayOfWeek( Calendar.MONDAY );
+        currentWeekNumber = myCalendar.get( Calendar.WEEK_OF_YEAR );
+        myCalendar.add( Calendar.WEEK_OF_YEAR, -2 );
+        SimpleDateFormat monthName = new SimpleDateFormat( "MMM", Locale.FRENCH );
 
-    /**
-     * Affectation des adapters aux spinners
-     */
-    private void initializeSpinners () {
+        for (int i = 0; i < 11; i++) {
 
-        mGroupSpinner.setAdapter( mGroupAdapter );
-        mCommSpinner.setAdapter( mCommAdapter );
-        mLangSpinner.setAdapter( mLangAdapter );
+            myCalendar.setFirstDayOfWeek( Calendar.MONDAY );
+
+            myCalendar.set( Calendar.DAY_OF_WEEK, Calendar.MONDAY );
+            String lundi = String.valueOf( myCalendar.get( Calendar.DAY_OF_MONTH ) ) + " " + monthName.format( myCalendar.getTime() );
+
+            myCalendar.set( Calendar.DAY_OF_WEEK, Calendar.FRIDAY );
+            String vendredi = String.valueOf( myCalendar.get( Calendar.DAY_OF_MONTH ) ) + " " + monthName.format( myCalendar.getTime() );
+
+            spinnerItems.add("Du " + lundi + " au " + vendredi);
+            myCalendar.add( Calendar.DAY_OF_MONTH, 7 );
+        }
+
+        return spinnerItems;
     }
 
     /**
@@ -315,27 +331,26 @@ public class Edtv2 extends BaseFragment {
         try {
 
             JSONArray confAnnee = conf.getJSONArray( confKey );
-            Log.d( confKey, confAnnee.toString() );
 
             for ( int i = 0; i < confAnnee.length(); i++ ) {
 
                 String spinnerKey = confAnnee.getString( i );
 
-                if ( ! common.containsKey( spinnerKey ) ) {
+                if ( ! confBase.names().toString().contains( spinnerKey ) ) {
 
                     JSONObject spinners = elements.getJSONObject( spinnerKey );
-                    Iterator<String> spinnersNames = spinners.keys();
+                    Iterator<String> spinnerKeys = spinners.keys();
 
-                    for ( int j = 0; j < spinners.length(); j++ ) {
+                    while( spinnerKeys.hasNext() ) {
 
-                        String label = spinnersNames.next();
+                        String label = spinnerKeys.next();
                         JSONArray spinnerElements = spinners.getJSONArray( label );
 
                         Spinner spinner = new Spinner( context );
                         spinner.setLayoutParams( new ViewGroup.LayoutParams( ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT ) );
                         spinner.setPadding( 16, 0, 16, 0 );
 
-                        ArrayAdapter<EdtFormItemv2> spinnerAdapter = new ArrayAdapter( getActivity(), android.R.layout.simple_spinner_dropdown_item );
+                        ArrayAdapter<EdtFormItemv2> spinnerAdapter = new ArrayAdapter<>( getActivity(), android.R.layout.simple_spinner_dropdown_item );
                         spinner.setAdapter( spinnerAdapter );
                         spinner.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
 
@@ -365,7 +380,6 @@ public class Edtv2 extends BaseFragment {
                         optionLayout.addView( spinnerView );
 
                         spinnerAdapter.notifyDataSetChanged();
-                        Log.d( confKey, spinnerElements.toString() );
                     }
                 }
             }
