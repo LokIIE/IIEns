@@ -124,6 +124,10 @@ public class GlobalState extends Application {
                 .build();
     }
 
+    /**
+     * Génération dynamique de l'Adapter des tweets
+     * @return Adapter
+     */
     public TweetTimelineListAdapter getTwListAdapter () {
 
         return new TweetTimelineListAdapter.Builder(this )
