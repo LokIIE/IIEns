@@ -16,6 +16,10 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.iiens.net.tasks.TaskPingArise;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
+import com.twitter.sdk.android.tweetui.TweetTimelineListAdapter;
+import com.twitter.sdk.android.tweetui.TwitterListTimeline;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +39,9 @@ public class GlobalState extends Application {
     private boolean connectionOAuthStatus = false;
 
     private SharedPreferences prefs;
+
+    private TwitterConfig twitterConfig;
+    private TwitterListTimeline twListTimeline;
 
     public static CookieManager cookieManager = new CookieManager();
 
@@ -102,10 +109,27 @@ public class GlobalState extends Application {
 
         // dm = (DownloadManager) getSystemService( DOWNLOAD_SERVICE );
 
-        prefs = getSharedPreferences(
+        this.prefs = getSharedPreferences(
                 getResources().getString( R.string.app_settings ),
                 Context.MODE_PRIVATE
         );
+
+        this.twitterConfig = new TwitterConfig.Builder( this )
+                .twitterAuthConfig( new TwitterAuthConfig( getString(R.string.tw_key), getString(R.string.tw_secret) ) )
+                .build();
+        com.twitter.sdk.android.core.Twitter.initialize( this.twitterConfig );
+
+        this.twListTimeline = new TwitterListTimeline.Builder()
+                .id( Long.valueOf( getResources().getString( R.string.tw_list_id ) ) )
+                .build();
+    }
+
+    public TweetTimelineListAdapter getTwListAdapter () {
+
+        return new TweetTimelineListAdapter.Builder(this )
+                .setTimeline( twListTimeline )
+                .setViewStyle( prefs.getBoolean( getString( R.string.pref_mode_nuit_key ), false ) ? R.style.TweetDarkStyle : R.style.TweetLightStyle )
+                .build();
     }
 
     public SharedPreferences getPreferences () {
