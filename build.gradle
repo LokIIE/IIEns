@@ -20,6 +20,8 @@ ext {
 
     IIENS_VERSION_CODE=14
     IIENS_VERSION_NAME="2.0"
+
+    archRoomVersion = "1.0.0-beta2"
 }
 
 allprojects {

@@ -69,7 +69,7 @@ public class AnnivItemsAdapter extends BaseAdapter {
 
             String str_anniv = annivItem.getPrenom() + pseudo + annivItem.getNom() + " (" + annivItem.getAge().trim() + " ans)";
 
-            mAnnivDate.setText( annivItem.getAnniv() + " : " );
+            mAnnivDate.setText( annivItem.getDate() + " : " );
             mAnnivPerson.setText( str_anniv );
         }
 

@@ -11,7 +11,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.iiens.net.adapter.NewsItemsAdapter;
-import com.iiens.net.database.NewsDb;
+import com.iiens.net.database.AppDb;
+import com.iiens.net.database.NewsDao;
 import com.iiens.net.model.NewsItem;
 
 import org.json.JSONArray;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 public class News extends BaseFragment {
 
     private final String TAG = getClass().getName();
-    private NewsDb dal;
+    private NewsDao dal;
     private ListView mListView;
 
     @Override
@@ -34,7 +35,8 @@ public class News extends BaseFragment {
 
         super.onCreate( savedInstanceState );
         this.apiKey = getResources().getString(R.string.apiie_news);
-        this.dal = new NewsDb( context );
+        AppDb mDb = AppDb.getAppDb( context );
+        this.dal = mDb.newsDao();
 
         this.layoutId = R.layout.listview;
     }
@@ -44,7 +46,7 @@ public class News extends BaseFragment {
         this.mListView = (ListView) view.findViewById( R.id.listview );
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences( context );
-        NewsItem firstItem = dal.getFirstItem();
+        NewsItem firstItem = dal.getFirst();
 
         // Get the JSON data for this fragment
         try {
@@ -60,7 +62,7 @@ public class News extends BaseFragment {
             } else if ( firstItem != null ) {
 
                 Log.e( TAG, "from database" );
-                this.setListViewContent( dal.getAllItems() );
+                this.setListViewContent( new ArrayList<>( dal.getAll() ) );
 
             } else if ( global.isOnline() ) {
 
@@ -97,11 +99,10 @@ public class News extends BaseFragment {
         }
 
         dal.deleteAll();
+
         for ( NewsItem item : itemList ) {
 
-            //if (dal.findItemId(item) > 0) {
-            dal.createItem( item );
-            //}
+            dal.insert( item );
         }
     }
 

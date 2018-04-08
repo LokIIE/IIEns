@@ -1,29 +1,29 @@
 package com.iiens.net.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * AnnivItem
- * Modèle d'un anniversaire
- */
-
+@Entity(tableName = "anniversaires")
 public class AnnivItem {
 
-    private long id = 0;
-    private String nom = "";
-    private String prenom = "";
-    private String pseudo = "";
-    private String anniv = "";
-    private String age = "";
+    @PrimaryKey(autoGenerate = true)
+    private int id;
 
-    public void setId ( long id ) {
+    private String nom;
+    private String prenom;
+    private String pseudo;
+    private String date;
+    private String age;
+
+    public void setId ( int id ) {
         this.id = id;
     }
 
-    public long getId () {
+    public int getId () {
         return id;
     }
 
@@ -51,12 +51,12 @@ public class AnnivItem {
         this.pseudo = pseudo;
     }
 
-    public String getAnniv () {
-        return anniv;
+    public String getDate () {
+        return date;
     }
 
-    public void setAnniv ( String anniv ) {
-        this.anniv = anniv;
+    public void setDate ( String date ) {
+        this.date = date;
     }
 
     public String getAge () {
@@ -69,25 +69,16 @@ public class AnnivItem {
 
     public AnnivItem () {}
 
-    public AnnivItem ( String nom, String prenom, String pseudo, String anniv, String age ) {
-
-        setNom( nom );
-        setPrenom( prenom );
-        setPseudo( pseudo );
-        setAnniv( anniv );
-        setAge( age );
-    }
-
-    public static AnnivItem load ( JSONObject json_data ) {
+    public static AnnivItem load ( JSONObject data ) {
 
         AnnivItem item = new AnnivItem();
         try {
 
-            item.nom = json_data.getString( "nom" );
-            item.prenom = json_data.getString( "prenom" );
-            item.pseudo = json_data.getString( "surnom" );
-            item.anniv = json_data.getString( "anniv" );
-            item.age = json_data.getString( "age" );
+            item.nom = data.getString( "nom" );
+            item.prenom = data.getString( "prenom" );
+            item.pseudo = data.getString( "surnom" );
+            item.date = data.getString( "anniv" );
+            item.age = data.getString( "age" );
 
         } catch (JSONException e) {
 

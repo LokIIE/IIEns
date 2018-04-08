@@ -7,7 +7,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.iiens.net.adapter.AnnivItemsAdapter;
-import com.iiens.net.database.AnnivDb;
+import com.iiens.net.database.AnnivDao;
+import com.iiens.net.database.AppDb;
 import com.iiens.net.model.AnnivItem;
 
 import org.json.JSONArray;
@@ -27,7 +28,7 @@ import java.util.Locale;
 public class Anniv extends BaseFragment {
 
     private final String TAG = getClass().getName();
-    private AnnivDb dal;
+    private AnnivDao dal;
     private ListView mListView;
 
     @Override
@@ -35,7 +36,7 @@ public class Anniv extends BaseFragment {
 
         super.onCreate( savedInstanceState );
         this.apiKey = getResources().getString(R.string.apiie_anniv);
-        this.dal = new AnnivDb( context );
+        this.dal = AppDb.getAppDb( context ).annivDao();
 
         this.layoutId = R.layout.listview;
     }
@@ -64,20 +65,20 @@ public class Anniv extends BaseFragment {
 
         this.mListView = (ListView) view.findViewById( R.id.listview );
 
-        AnnivItem firstItem = dal.getFirstItem();
+        AnnivItem firstItem = dal.getFirst();
 
         // Get the JSON data for this fragment
         try {
 
             DateFormat dateFormat = new SimpleDateFormat( "EEEE dd MMMM", Locale.FRENCH );
             Date firstDate = ( firstItem != null ) ?
-                    dateFormat.parse( firstItem.getAnniv() ) : null;
+                    dateFormat.parse( firstItem.getDate() ) : null;
             Date today = new Date();
 
             // Aucun anniversaire n'est passé
             if ( firstItem != null && firstDate != null && firstDate.compareTo( today ) < 0 ) {
 
-                mListView.setAdapter( new AnnivItemsAdapter( context, dal.getAllItems() ) );
+                mListView.setAdapter( new AnnivItemsAdapter( context, new ArrayList<>( dal.getAll() ) ) );
 
             } else if ( global.isOnline() ) {
 
@@ -112,9 +113,9 @@ public class Anniv extends BaseFragment {
 
         for ( AnnivItem item : annivItemArrayList ) {
 
-            if ( dal.findItemId( item ) == 0 ) {
+            if ( dal.findId( item.getNom(), item.getPrenom(), item.getPseudo() ) == 0 ) {
 
-                dal.createItem( item );
+                dal.insert( item );
             }
         }
     }

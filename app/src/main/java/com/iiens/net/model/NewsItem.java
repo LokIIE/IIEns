@@ -1,28 +1,27 @@
 package com.iiens.net.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * NewsItem
- * Modèle d'une news
- */
-
+@Entity(tableName = "news")
 public class NewsItem {
 
-    public long id;
-    private String titre = "";
-    private String contenu = "";
-    private String auteur = "";
-    private String datePublication = "";
+    @PrimaryKey(autoGenerate = true)
+    public int id;
 
-    public long getId () { return this.id; }
+    private String titre;
+    private String contenu;
+    private String auteur;
+    private String datePublication;
+    private String dateEvent;
 
-    public void setId ( long id ) { this.id = id; }
+    public int getId () { return this.id; }
 
-    private String dateEvent = "";
+    public void setId ( int id ) { this.id = id; }
 
     public String getTitre () { return this.titre; }
 

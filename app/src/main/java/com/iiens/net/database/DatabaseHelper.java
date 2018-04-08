@@ -10,15 +10,6 @@ import android.util.Log;
  */
 class DatabaseHelper extends SQLiteOpenHelper {
 
-    /* Table anniversaires */
-    static final String TABLE_ANNIVERSAIRES = "ANNIVERSAIRES";
-    static final String ANNIV_ID = "_id";
-    static final String ANNIV_NOM = "nom";
-    static final String ANNIV_PRENOM = "prenom";
-    static final String ANNIV_SURNOM = "surnom";
-    static final String ANNIV_AGE = "age";
-    static final String ANNIV_DATE = "date";
-
     /* Table emploi du temps */
     static final String TABLE_EDT = "EDT";
     static final String EDT_ID = "_id";
@@ -45,28 +36,8 @@ class DatabaseHelper extends SQLiteOpenHelper {
     static final String EDTOPT_CODE = "code";
     static final String FK_EDTFORM = "fk_edtForm";
 
-    /* Table news */
-    static final String TABLE_NEWS = "NEWS";
-    static final String NEWS_ID = "_id";
-    static final String NEWS_TITRE = "titre";
-    static final String NEWS_CONTENU = "contenu";
-    static final String NEWS_AUTEUR = "auteur";
-    static final String NEWS_DATE_EVENT = "date_event";
-    static final String NEWS_DATE_PUBLICATION = "date_publication";
-
     private static final String DATABASE_NAME = "IIEns.db";
     private static final int DATABASE_VERSION = 1;
-
-    // Commande sql pour la création de la table anniv
-    private static final String CREATE_ANNIV =
-            "CREATE TABLE IF NOT EXISTS " + TABLE_ANNIVERSAIRES
-                    + "(" + ANNIV_ID + " integer primary key autoincrement, "
-                    + ANNIV_NOM + " text not null, "
-                    + ANNIV_PRENOM + " text not null, "
-                    + ANNIV_SURNOM + " text null, "
-                    + ANNIV_AGE + " integer not null, "
-                    + ANNIV_DATE + " text not null"
-                    + ");";
 
     // Commande sql pour la création de la table edt
     private static final String CREATE_EDT =
@@ -100,17 +71,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     + EDTFORM_PROMO + " integer not null"
                     + ");";
 
-    // Commande sql pour la création de la table news
-    private static final String CREATE_NEWS =
-            "CREATE TABLE IF NOT EXISTS " + TABLE_NEWS
-                    + "(" + NEWS_ID + " integer primary key autoincrement, "
-                    + NEWS_TITRE + " text not null, "
-                    + NEWS_CONTENU + " text not null, "
-                    + NEWS_AUTEUR + " text default null, "
-                    + NEWS_DATE_EVENT + " text not null, "
-                    + NEWS_DATE_PUBLICATION + " text not null"
-                    + ");";
-
     DatabaseHelper ( Context context ) {
 
         super( context, DATABASE_NAME, null, DATABASE_VERSION );
@@ -128,22 +88,18 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
         Log.d( "DatabaseHelper", "Upgrading database from version " + oldVersion + " to "
                 + newVersion + ", which will destroy all old data" );
-        db.execSQL( "DROP TABLE IF EXISTS " + TABLE_ANNIVERSAIRES );
         db.execSQL( "DROP TABLE IF EXISTS " + TABLE_EDTOPT );
         db.execSQL( "DROP TABLE IF EXISTS " + TABLE_EDTFORM );
         db.execSQL( "DROP TABLE IF EXISTS " + TABLE_EDT );
-        db.execSQL( "DROP TABLE IF EXISTS " + TABLE_NEWS );
         createDb( db );
     }
 
     private void createDb ( SQLiteDatabase db ) {
 
         SQLiteDatabase database = (db == null) ? super.getWritableDatabase() : db;
-        database.execSQL( CREATE_ANNIV );
         database.execSQL( CREATE_EDTFORM );
         database.execSQL( CREATE_EDTOPT );
         database.execSQL( CREATE_EDT );
-        database.execSQL( CREATE_NEWS );
     }
 
 }
