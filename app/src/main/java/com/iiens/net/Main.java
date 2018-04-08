@@ -227,6 +227,10 @@ public class Main extends AppCompatActivity
                     startActivity( i );
                     break;
 
+                case R.id.action_nav_anniv:
+                    openFragment( Anniv.class.getName(), null );
+                    break;
+
                 case R.id.action_nav_parametres:
                     bottomNav.setSelectedItemId( R.id.action_parametres );
                     break;

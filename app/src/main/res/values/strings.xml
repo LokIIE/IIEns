@@ -37,6 +37,7 @@
     <string name="menu_breviaire">Bréviaire</string>
     <string name="menu_arise">Arise</string>
     <string name="menu_settings">Paramètres</string>
+    <string name="menu_anniv">Anniversaires</string>
 
     <!-- Toast messages -->
     <string name="arise_unavailable">Arise = 404 not found</string>
