@@ -75,7 +75,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     + EDT_TITRE + " text not null, "
                     + EDT_TYPE + " text not null, "
                     + EDT_HOTE + " text not null, "
-                    + EDT_GROUPE + " text null, "
+                    + EDT_GROUPE + " text default null, "
                     + EDT_LIEU + " integer not null, "
                     + EDT_DATE + " text not null, "
                     + EDT_HEURE_DEBUT + " hour not null, "
@@ -106,7 +106,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     + "(" + NEWS_ID + " integer primary key autoincrement, "
                     + NEWS_TITRE + " text not null, "
                     + NEWS_CONTENU + " text not null, "
-                    + NEWS_AUTEUR + " text null, "
+                    + NEWS_AUTEUR + " text default null, "
                     + NEWS_DATE_EVENT + " text not null, "
                     + NEWS_DATE_PUBLICATION + " text not null"
                     + ");";
