@@ -1,7 +1,9 @@
 package com.iiens.net;
 
 import android.app.FragmentManager;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.iiens.net.model.EdtFormItemv2;
+import com.iiens.net.database.AppDb;
+import com.iiens.net.database.EdtSearchCategoryDao;
+import com.iiens.net.database.EdtSearchOptionDao;
+import com.iiens.net.model.EdtSearchCategory;
+import com.iiens.net.model.EdtSearchOption;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +36,7 @@ import java.util.Locale;
 /**
  * Formulaire de recherche de l'emploi du temps
  */
-public class Edtv2 extends BaseFragment {
+public class EdtSearch extends BaseFragment {
 
     private RadioGroup radioPromoGroup;
     private RadioButton radio1A, radio2A, radio3A;
@@ -41,6 +47,9 @@ public class Edtv2 extends BaseFragment {
 
     private JSONObject elements, conf, confBase;
 
+    private EdtSearchCategoryDao dal;
+    private EdtSearchOptionDao dalOptions;
+
     @Override
     public void onCreate ( Bundle savedInstanceState ) {
 
@@ -48,7 +57,10 @@ public class Edtv2 extends BaseFragment {
         bundle = global.getBundle();
 
         this.apiKey = "edtFormScrapper";
-        this.layoutId = R.layout.edt_formulaire_v2;
+        this.layoutId = R.layout.edt_search_form;
+
+        this.dal = AppDb.getAppDb( context ).edtSearchCategoryDao();
+        this.dalOptions = AppDb.getAppDb( context ).edtSearchOptionDao();
     }
 
     protected void generateView ( final View view ) {
@@ -76,17 +88,14 @@ public class Edtv2 extends BaseFragment {
         mLangSpinner = view.findViewById( R.id.edt_lang );
 
         // Initialialisation des spinners
-        mGroupSpinner.setAdapter( new ArrayAdapter<EdtFormItemv2>( getActivity(), android.R.layout.simple_spinner_dropdown_item ) );
+        mGroupSpinner.setAdapter( new ArrayAdapter<EdtSearchOption>( getActivity(), android.R.layout.simple_spinner_dropdown_item ) );
         mGroupSpinner.setTag( "gp[]" );
 
-        mCommSpinner.setAdapter( new ArrayAdapter<EdtFormItemv2>( getActivity(), android.R.layout.simple_spinner_dropdown_item ) );
+        mCommSpinner.setAdapter( new ArrayAdapter<EdtSearchOption>( getActivity(), android.R.layout.simple_spinner_dropdown_item ) );
         mCommSpinner.setTag( "gpcomm[]" );
 
-        mLangSpinner.setAdapter( new ArrayAdapter<EdtFormItemv2>( getActivity(), android.R.layout.simple_spinner_dropdown_item ) );
+        mLangSpinner.setAdapter( new ArrayAdapter<EdtSearchOption>( getActivity(), android.R.layout.simple_spinner_dropdown_item ) );
         mLangSpinner.setTag( "langue[]" );
-
-        // Génération dynamique des éléments du formulaire et mise en places des triggers
-        this.apiRequest( view );
 
         // Action du bouton de recherche
         view.findViewById( R.id.edt_search_button ).setOnClickListener(new View.OnClickListener() {
@@ -98,24 +107,20 @@ public class Edtv2 extends BaseFragment {
                 // Promotion, obligatoire sinon annulation
                 int selectedRadioId = radioPromoGroup.getCheckedRadioButtonId();
                 int promoNumber = -1;
-                String promoConf = "";
 
                 if ( selectedRadioId > 0 ) {
 
                     if ( selectedRadioId == radio1A.getId() ) {
 
                         promoNumber = 1;
-                        promoConf = "1A";
 
                     } else if ( selectedRadioId == radio2A.getId() ) {
 
                         promoNumber = 2;
-                        promoConf = "2A";
 
                     } else if ( selectedRadioId == radio3A.getId() ) {
 
                         promoNumber = 3;
-                        promoConf = "3A";
                     }
 
                 } else {
@@ -130,28 +135,25 @@ public class Edtv2 extends BaseFragment {
                 // Semaine
                 searchParams.add( String.valueOf( currentWeekNumber - 2 + mEdtWeekSpinner.getSelectedItemPosition() ) );
 
-//                // Options
-//                if ( promoNumber > 1 ) {
-//
-//                    try {
-//
-//                        JSONArray spinTags = conf.getJSONArray( promoConf );
-//                        for ( int i = 0; i < spinTags.length(); i++ ) {
-//
-//                            Spinner spinner = view.findViewWithTag( spinTags.getString( i ) );
-//                            searchParams.add( ((EdtFormItemv2) spinner.getSelectedItem()).getValue() );
-//                        }
-//
-//                    } catch ( JSONException e ) {
-//                        e.printStackTrace();
-//                    }
-//                }
-
                 // Transition d'activité pour effectuer la recherche et afficher les résultats
                 if ( global.isOnline() ) {
 
                     bundle.putStringArrayList( "edtParams", searchParams );
-                    executeSearch();
+
+                    FragmentManager fm = getActivity().getFragmentManager();
+
+                    // Création fragment détail
+                    EdtView resultFrag = new EdtView();
+
+                    // Envoi de l'item sélectionné au fragment
+                    resultFrag.setArguments( bundle );
+
+                    fm.beginTransaction()
+                            .replace( R.id.content_container, resultFrag )
+                            .addToBackStack( null )
+                            .commit();
+
+                    global.setCurrentFragment( new EdtView() );
 
                 } else {
 
@@ -159,6 +161,34 @@ public class Edtv2 extends BaseFragment {
                 }
             }
         });
+
+        // Génération dynamique des éléments du formulaire et mise en places des triggers
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences( context );
+        EdtSearchCategory firstItem = dal.getFirst();
+
+        try {
+
+            if ( global.isOnline() && ( preferences.getBoolean( getResources().getString( R.string.bool_edtSearch_update_name ), false ) || firstItem == null ) ) {
+
+                // Récupération configuration formulaire et stockage local
+                dal.deleteAll();
+                this.apiRequest( view );
+                Log.e( "EdtSearch", "from web" );
+
+            } else if( firstItem != null ) {
+
+                this.generateView( view );
+
+            } else {
+
+                // If no connection or data stored, can't do anything
+                Toast.makeText( global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG ).show();
+            }
+
+        } catch ( Exception e ) {
+
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -178,9 +208,23 @@ public class Edtv2 extends BaseFragment {
             Iterator<String> confBaseKeys = confBase.keys();
 
             while ( confBaseKeys.hasNext() ) {
+
                 String key = confBaseKeys.next();
                 Spinner currentSpinner = view.findViewWithTag( key );
-                ArrayAdapter<EdtFormItemv2> currentAdapter = (ArrayAdapter<EdtFormItemv2>) currentSpinner.getAdapter();
+                ArrayAdapter<EdtSearchOption> currentAdapter = (ArrayAdapter<EdtSearchOption>) currentSpinner.getAdapter();
+
+                EdtSearchCategory edtCategory = dal.getByValue( key );
+                if( edtCategory == null ) {
+
+                    edtCategory = new EdtSearchCategory();
+                    edtCategory.setPromo( "" );
+                    edtCategory.setLabel( "" );
+                    edtCategory.setName( key );
+                    edtCategory.setValue( key );
+                    dal.insert( edtCategory );
+
+                    edtCategory = dal.getByValue( key );
+                }
 
                 // Actualisation des tags des spinners
                 currentSpinner.setTag( confBase.getString( key ) );
@@ -189,11 +233,17 @@ public class Edtv2 extends BaseFragment {
                 JSONObject spinnerConfig = elements.getJSONObject( key );
                 String label = spinnerConfig.names().get( 0 ).toString();
 
+                Log.d( "label", label );
+
                 JSONArray spinnerElements = spinnerConfig.getJSONArray( label );
 
                 for ( int i = 0; i < spinnerElements.length(); i++ ) {
                     JSONObject option = spinnerElements.getJSONObject( i );
-                    currentAdapter.add( new EdtFormItemv2( key, option.getString( "text" ), option.getString( "value" ) ) );
+
+                    EdtSearchOption edtOption = new EdtSearchOption( i, option.getString( "text" ), option.getString( "value" ) );
+                    dalOptions.insert( edtOption );
+
+                    currentAdapter.add( edtOption );
                 }
 
                 currentAdapter.notifyDataSetChanged();
@@ -204,76 +254,45 @@ public class Edtv2 extends BaseFragment {
             mOptLayout.addView( loadOptionSpinners( "3A" ) );
 
             // Affichage ou non des layouts ou spinners suivant le radio bouton choisi et la conf actuelle
-            radio1A.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            radio1A.setOnClickListener( v -> {
+                try {
 
-                    try {
+                    JSONArray conf1A = conf.getJSONArray("1A");
+                    Log.d( "CONF1A", conf1A.toString() );
+                    mOptLayout.setVisibility( View.INVISIBLE );
+                    mOptLayout.findViewWithTag( "2A" ).setVisibility( View.GONE );
+                    mOptLayout.findViewWithTag( "3A" ).setVisibility( View.GONE );
 
-                        JSONArray conf1A = conf.getJSONArray("1A");
-                        Log.d( "CONF1A", conf1A.toString() );
-                        mOptLayout.setVisibility( View.INVISIBLE );
-                        mOptLayout.findViewWithTag( "2A" ).setVisibility( View.GONE );
-                        mOptLayout.findViewWithTag( "3A" ).setVisibility( View.GONE );
-
-                    } catch ( JSONException e ) {
-                        e.printStackTrace();
-                    }
+                } catch ( JSONException e ) {
+                    e.printStackTrace();
                 }
-            });
+            } );
 
-            radio2A.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Log.d( "CONF1A", conf.getJSONArray("2A").toString() );
-                        mOptLayout.setVisibility( View.VISIBLE );
-                        mOptLayout.findViewWithTag( "2A" ).setVisibility( View.VISIBLE );
-                        mOptLayout.findViewWithTag( "3A" ).setVisibility( View.GONE );
-                    } catch ( JSONException e ) {
-                        e.printStackTrace();
-                    }
+            radio2A.setOnClickListener( v -> {
+                try {
+                    Log.d( "CONF1A", conf.getJSONArray("2A").toString() );
+                    mOptLayout.setVisibility( View.VISIBLE );
+                    mOptLayout.findViewWithTag( "2A" ).setVisibility( View.VISIBLE );
+                    mOptLayout.findViewWithTag( "3A" ).setVisibility( View.GONE );
+                } catch ( JSONException e ) {
+                    e.printStackTrace();
                 }
-            });
+            } );
 
-            radio3A.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Log.d( "CONF1A", conf.getJSONArray( "3A" ).toString() );
-                        mOptLayout.setVisibility( View.VISIBLE );
-                        mOptLayout.findViewWithTag( "2A" ).setVisibility( View.GONE );
-                        mOptLayout.findViewWithTag( "3A" ).setVisibility( View.VISIBLE );
-                    } catch ( JSONException e ) {
-                        e.printStackTrace();
-                    }
+            radio3A.setOnClickListener( v -> {
+                try {
+                    Log.d( "CONF1A", conf.getJSONArray( "3A" ).toString() );
+                    mOptLayout.setVisibility( View.VISIBLE );
+                    mOptLayout.findViewWithTag( "2A" ).setVisibility( View.GONE );
+                    mOptLayout.findViewWithTag( "3A" ).setVisibility( View.VISIBLE );
+                } catch ( JSONException e ) {
+                    e.printStackTrace();
                 }
-            });
+            } );
 
         } catch ( JSONException e ) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Exécution de la recherche et affichage des résultats
-     */
-    private void executeSearch () {
-
-        FragmentManager fm = this.getActivity().getFragmentManager();
-
-        // Création fragment détail
-        EdtResult resultFrag = new EdtResult();
-
-        // Envoi de l'item sélectionné au fragment
-        resultFrag.setArguments( bundle );
-
-        fm.beginTransaction()
-                .replace( R.id.content_container, resultFrag )
-                .addToBackStack( null )
-                .commit();
-
-        global.setCurrentFragment( new EdtResult() );
     }
 
     /**
@@ -346,25 +365,43 @@ public class Edtv2 extends BaseFragment {
                         String label = spinnerKeys.next();
                         JSONArray spinnerElements = spinners.getJSONArray( label );
 
+                        EdtSearchCategory edtCategory = dal.getByValue( spinnerKey );
+                        if( edtCategory == null ) {
+
+                            edtCategory = new EdtSearchCategory();
+                            edtCategory.setPromo( confKey );
+                            edtCategory.setLabel( label );
+                            edtCategory.setName( spinnerKey );
+                            edtCategory.setValue( spinnerKey );
+                            dal.insert( edtCategory );
+
+                            edtCategory = dal.getByValue( spinnerKey );
+                        }
+
                         Spinner spinner = new Spinner( context );
                         spinner.setLayoutParams( new ViewGroup.LayoutParams( ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT ) );
                         spinner.setPadding( 16, 0, 16, 0 );
 
-                        ArrayAdapter<EdtFormItemv2> spinnerAdapter = new ArrayAdapter<>( getActivity(), android.R.layout.simple_spinner_dropdown_item );
+                        ArrayAdapter<EdtSearchOption> spinnerAdapter = new ArrayAdapter<>( getActivity(), android.R.layout.simple_spinner_dropdown_item );
                         spinner.setAdapter( spinnerAdapter );
                         spinner.setOnItemLongClickListener( new AdapterView.OnItemLongClickListener() {
 
                             @Override
                             public boolean onItemLongClick ( AdapterView<?> adapterView, View view, int i, long l ) {
 
-                                Toast.makeText( context, ((EdtFormItemv2) adapterView.getItemAtPosition( i )).getLabel(), Toast.LENGTH_LONG ).show();
+                                Toast.makeText( context, ((EdtSearchOption) adapterView.getItemAtPosition( i )).getLabel(), Toast.LENGTH_LONG ).show();
                                 return false;
                             }
                         } );
 
                         for ( int k = 0; k < spinnerElements.length(); k++ ) {
+
                             final JSONObject spinnerOption = spinnerElements.getJSONObject( k );
-                            spinnerAdapter.add( new EdtFormItemv2( spinnerKey, spinnerOption.getString( "text" ), spinnerOption.getString( "value" ) ) );
+
+                            EdtSearchOption edtOption = new EdtSearchOption( edtCategory.getId(), spinnerOption.getString( "text" ), spinnerOption.getString( "value" ) );
+                            dalOptions.insert( edtOption );
+
+                            spinnerAdapter.add( edtOption );
                         }
 
                         LinearLayout spinnerView = new LinearLayout( context );

@@ -6,13 +6,16 @@ import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
 import com.iiens.net.model.AnnivItem;
+import com.iiens.net.model.EdtSearchCategory;
+import com.iiens.net.model.EdtSearchOption;
 import com.iiens.net.model.NewsItem;
 
-@Database(entities = {NewsItem.class, AnnivItem.class}, version = 1)
+@Database(entities = {NewsItem.class, AnnivItem.class, EdtSearchCategory.class, EdtSearchOption.class}, version = 1)
 public abstract class AppDb extends RoomDatabase {
 
     public abstract NewsDao newsDao();
-//  public abstract EdtSearchDao edtSearchDao();
+    public abstract EdtSearchCategoryDao edtSearchCategoryDao();
+    public abstract EdtSearchOptionDao edtSearchOptionDao();
     public abstract AnnivDao annivDao();
 //  public abstract EdtItemDao edtItemDao();
 

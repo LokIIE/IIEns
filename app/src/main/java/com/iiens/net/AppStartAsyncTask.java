@@ -3,12 +3,6 @@ package com.iiens.net;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.iiens.net.database.EdtFormDb;
-import com.iiens.net.database.EdtOptDb;
-import com.iiens.net.model.EdtFormItem;
-import com.iiens.net.model.EdtOptItem;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.BufferedInputStream;
@@ -58,18 +52,18 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
             String line;
 
             // put each item in database
-            EdtFormDb dal = new EdtFormDb( context );
+            // EdtSearchCategoryDao dal = context
 
-            while ( ( line = reader.readLine() ) != null ) {
-
-                JSONArray jArray = new JSONArray( line );
-                for ( int i = 0; i < jArray.length(); i++ ) {
-
-                    if ( !dal.createItem( new EdtFormItem( i, jArray.getJSONObject( i ) ) ) ) {
-                        break;
-                    }
-                }
-            }
+//            while ( ( line = reader.readLine() ) != null ) {
+//
+//                JSONArray jArray = new JSONArray( line );
+//                for ( int i = 0; i < jArray.length(); i++ ) {
+//
+//                    if ( !dal.createItem( new EdtSearchCategory( i, jArray.getJSONObject( i ) ) ) ) {
+//                        break;
+//                    }
+//                }
+//            }
 
         } catch ( Exception e ) {
 
@@ -119,17 +113,17 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
             String line;
 
-            // put each item in database
-            EdtOptDb dal = new EdtOptDb( context );
-
-            while ( ( line = reader.readLine() ) != null ) {
-
-                JSONArray jArray = new JSONArray( line );
-                for ( int i = 0; i < jArray.length(); i++ ) {
-
-                    dal.createItem( new EdtOptItem( jArray.getJSONObject( i ) ) );
-                }
-            }
+//            // put each item in database
+//            EdtOptDb dal = new EdtOptDb( context );
+//
+//            while ( ( line = reader.readLine() ) != null ) {
+//
+//                JSONArray jArray = new JSONArray( line );
+//                for ( int i = 0; i < jArray.length(); i++ ) {
+//
+//                    dal.createItem( new EdtSearchOption( jArray.getJSONObject( i ) ) );
+//                }
+//            }
 
         } catch ( Exception e ) {
 
@@ -159,7 +153,7 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
      */
     private void getAllClubLogo() throws IOException {
 
-        EdtFormDb dal = new EdtFormDb( context );
+        // EdtSearchDao dal = new EdtSearchDao( context );
         int timeout = 5000;
         String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_logos);
 

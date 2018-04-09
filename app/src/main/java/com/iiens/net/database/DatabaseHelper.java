@@ -23,19 +23,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
     static final String EDT_DUREE = "duree";
     static final String EDT_DATE = "date";
 
-    /* Table formulaire emploi du temps */
-    static final String TABLE_EDTFORM = "EDTFORM";
-    static final String EDTFORM_ID = "_id";
-    static final String EDTFORM_NAME = "nom";
-    static final String EDTFORM_PROMO = "promo";
-
-    /* Table options de l'emploi du temps */
-    static final String TABLE_EDTOPT = "EDTOPT";
-    static final String EDTOPT_ID = "_id";
-    static final String EDTOPT_NAME = "nom";
-    static final String EDTOPT_CODE = "code";
-    static final String FK_EDTFORM = "fk_edtForm";
-
     private static final String DATABASE_NAME = "IIEns.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -52,23 +39,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     + EDT_HEURE_DEBUT + " hour not null, "
                     + EDT_HEURE_FIN + " hour not null, "
                     + EDT_DUREE + " integer not null"
-                    + ");";
-
-    // Commande sql pour la création de la table edtOpt
-    private static final String CREATE_EDTOPT =
-            "CREATE TABLE IF NOT EXISTS " + TABLE_EDTOPT
-                    + "(" + EDTOPT_ID + " integer primary key autoincrement, "
-                    + EDTOPT_NAME + " text not null, "
-                    + EDTOPT_CODE + " text not null, "
-                    + FK_EDTFORM + " integer not null"
-                    + ");";
-
-    // Commande sql pour la création de la table edtForm
-    private static final String CREATE_EDTFORM =
-            "CREATE TABLE IF NOT EXISTS " + TABLE_EDTFORM
-                    + "(" + EDTFORM_ID + " integer primary key autoincrement, "
-                    + EDTFORM_NAME + " text not null, "
-                    + EDTFORM_PROMO + " integer not null"
                     + ");";
 
     DatabaseHelper ( Context context ) {
@@ -88,8 +58,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
         Log.d( "DatabaseHelper", "Upgrading database from version " + oldVersion + " to "
                 + newVersion + ", which will destroy all old data" );
-        db.execSQL( "DROP TABLE IF EXISTS " + TABLE_EDTOPT );
-        db.execSQL( "DROP TABLE IF EXISTS " + TABLE_EDTFORM );
         db.execSQL( "DROP TABLE IF EXISTS " + TABLE_EDT );
         createDb( db );
     }
@@ -97,8 +65,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
     private void createDb ( SQLiteDatabase db ) {
 
         SQLiteDatabase database = (db == null) ? super.getWritableDatabase() : db;
-        database.execSQL( CREATE_EDTFORM );
-        database.execSQL( CREATE_EDTOPT );
         database.execSQL( CREATE_EDT );
     }
 

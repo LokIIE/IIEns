@@ -11,6 +11,7 @@
     <!-- Settings boolean values names -->
     <string name="bool_news_update_name">news_new_update</string>
     <string name="bool_anniv_update_name">anniv_new_update</string>
+    <string name="bool_edtSearch_update_name">edtSearch_new_update</string>
 
     <!-- Activité Splash Screen -->
     <string name="hint_logo">Logo ENSIIE</string>

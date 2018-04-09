@@ -24,7 +24,7 @@ import java.util.TimeZone;
  * Fragment d'affichage des événements d'une journée de l'emploi du temps
  */
 
-public class EdtResultPage extends Fragment {
+public class EdtViewPage extends Fragment {
 
     /**
      * Liste des items affichés sur la page
@@ -34,7 +34,7 @@ public class EdtResultPage extends Fragment {
     /**
      * Constructeur
      */
-    public EdtResultPage () {
+    public EdtViewPage () {
         this.edtItemsList = new ArrayList<>();
     }
 
@@ -51,7 +51,7 @@ public class EdtResultPage extends Fragment {
 
         super.onCreate( savedInstanceState );
 
-        View view = inflater.inflate( R.layout.edt_result_page, container, false );
+        View view = inflater.inflate( R.layout.edt_view_page, container, false );
         ListView mListView = (ListView) view.findViewById( R.id.listview );
 
         mListView.setAdapter( new EdtItemsAdapter( getActivity().getApplicationContext(), edtItemsList ) );

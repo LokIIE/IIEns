@@ -14,7 +14,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.iiens.net.database.EdtOptDb;
 import com.iiens.net.model.EdtItem;
 
 import org.json.JSONArray;
@@ -32,7 +31,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Requête et traitement des résultats de la recherche de l'emploi du temps pour affichage
  */
-public class EdtResult extends BaseFragment {
+public class EdtView extends BaseFragment {
 
     /**
      * Bundle contenant les paramètres et/ou les résultats de la recherche
@@ -270,21 +269,21 @@ public class EdtResult extends BaseFragment {
      */
     private void dialogAlertPickGroup ( final ArrayList<String> filtre ) {
 
-        EdtOptDb dal = new EdtOptDb( this.context );
-        final CharSequence[] groupList = (CharSequence[]) dal.getSpinnerItems(0).toArray();
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder( this.context );
-        alertDialogBuilder
-                .setTitle( getResources().getString(R.string.export_week_to_calendar_chose_group) )
-                .setItems( groupList, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        filtre.set( 0, groupList[which].toString() );
-                        exportWeekToCalendar( filtre );
-                    }
-                });
-        alertDialogBuilder.create().show();
+//        EdtOptDb dal = new EdtOptDb( this.context );
+//        final CharSequence[] groupList = (CharSequence[]) dal.getSpinnerItems(0).toArray();
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder( this.context );
+//        alertDialogBuilder
+//                .setTitle( getResources().getString(R.string.export_week_to_calendar_chose_group) )
+//                .setItems( groupList, new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                        // The 'which' argument contains the index position
+//                        // of the selected item
+//                        filtre.set( 0, groupList[which].toString() );
+//                        exportWeekToCalendar( filtre );
+//                    }
+//                });
+//        alertDialogBuilder.create().show();
     }
 
     /**
@@ -320,7 +319,7 @@ public class EdtResult extends BaseFragment {
         /**
          * Liste des fragments / pages
          */
-        private List<EdtResultPage> edtPageList = new ArrayList<>();
+        private List<EdtViewPage> edtPageList = new ArrayList<>();
 
         /**
          * Liste des jours servant d'en-tête aux fragments
@@ -338,7 +337,7 @@ public class EdtResult extends BaseFragment {
 
             for ( int i = 0; i < NUM_ITEMS; i++ ) {
 
-                edtPageList.add( new EdtResultPage() );
+                edtPageList.add( new EdtViewPage() );
             }
 
             Calendar myCalendar = Calendar.getInstance( Locale.FRENCH );

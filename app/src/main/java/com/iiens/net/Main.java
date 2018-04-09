@@ -152,12 +152,9 @@ public class Main extends AppCompatActivity
             tMsg = Toast.makeText( this, getString( R.string.back_exit_warning ), Toast.LENGTH_SHORT );
             tMsg.show();
 
-            new Handler().postDelayed( new Runnable() {
-                @Override
-                public void run() {
-                    tMsg = null;
-                    doubleBackToExitPressedOnce = false;
-                }
+            new Handler().postDelayed( () -> {
+                tMsg = null;
+                doubleBackToExitPressedOnce = false;
             }, 2000 );
 
         } else {
@@ -198,7 +195,7 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_edt:
-                    openFragment( Edtv2.class.getName(), null );
+                    openFragment( EdtSearch.class.getName(), null );
                     navDrawer.setCheckedItem( R.id.action_nav_edt );
                     currentSelectedId = id;
                     break;
@@ -293,7 +290,7 @@ public class Main extends AppCompatActivity
 
     private void initToolbar () {
 
-        toolbar = (Toolbar) findViewById( R.id.toolbar );
+        toolbar = findViewById( R.id.toolbar );
         setSupportActionBar( toolbar );
         ActionBar actionBar = getSupportActionBar();
 
@@ -307,8 +304,8 @@ public class Main extends AppCompatActivity
     private void initNavigationControls () {
 
         // Navigation drawer
-        navDrawer = (NavigationView) findViewById( R.id.navigation_drawer );
-        drawerLayout = (DrawerLayout) findViewById( R.id.main_drawer );
+        navDrawer = findViewById( R.id.navigation_drawer );
+        drawerLayout = findViewById( R.id.main_drawer );
 
         actionBarDrawerToggle = new ActionBarDrawerToggle( this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer ) {
 
@@ -329,7 +326,7 @@ public class Main extends AppCompatActivity
         navDrawer.setNavigationItemSelectedListener( this );
 
         // Bottom navigation
-        bottomNav = (BottomNavigationView) findViewById( R.id.bottom_navigation );
+        bottomNav = findViewById( R.id.bottom_navigation );
         bottomNav.setOnNavigationItemSelectedListener( this );
 
         setControlsVisibility( false );
