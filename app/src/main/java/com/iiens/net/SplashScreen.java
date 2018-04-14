@@ -44,7 +44,6 @@ public class SplashScreen extends Activity {
 
             Log.d( "tokenRefreshed", "Intent received" );
             sendTokenToServer( queue );
-            unregisterReceiver( this );
         }
     };
 
