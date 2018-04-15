@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +29,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,7 @@ public class Main extends AppCompatActivity
     private GlobalState appContext;
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
+    private FrameLayout mainContainer;
     private NavigationView navDrawer;
     private BottomNavigationView bottomNav;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -106,6 +110,8 @@ public class Main extends AppCompatActivity
 
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
+
+        mainContainer = findViewById( R.id.content_container );
 
         initToolbar();
         initNavigationControls();
@@ -367,6 +373,13 @@ public class Main extends AppCompatActivity
 
             changeBottomNavigationVisibility( prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), true ) );
         }
+
+        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mainContainer.getLayoutParams();
+        TypedArray styledAttributes = getTheme().obtainStyledAttributes(new int[] { android.R.attr.actionBarSize });
+        int actionBarSize = (int) styledAttributes.getDimension(0, 0);
+        styledAttributes.recycle();
+        lp.setMargins( 0, 0, 0, prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), true ) ? actionBarSize : 0 );
+        mainContainer.setLayoutParams( lp );
 
         bottomNav.setVisibility(
                 ( prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), true ) ) ? View.VISIBLE : View.GONE
