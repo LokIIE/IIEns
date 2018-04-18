@@ -56,22 +56,25 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="Login"
+        <activity android:name=".IntroActivity"
+            android:label="@string/app_name" />
+
+        <activity android:name=".Login"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
         </activity>
 
-        <activity android:name="Main"
+        <activity android:name=".Main"
             android:label="@string/app_name"
             android:theme="@style/IIEnsTheme.Light">
         </activity>
 
-        <activity android:name="ClubPage"
+        <activity android:name=".ClubPage"
                   android:label="@string/app_name"
                   android:theme="@style/IIEnsTheme.Light">
         </activity>
 
-        <activity android:name="Itvtube"
+        <activity android:name=".Itvtube"
             android:label="@string/app_name"
             android:theme="@style/IIEnsTheme.Light"
             android:configChanges="orientation|keyboardHidden|screenSize">

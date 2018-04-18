@@ -108,7 +108,14 @@ public class SplashScreen extends Activity {
             @Override
             public void run () {
 
-                startActivity( new Intent( SplashScreen.this, Main.class ) );
+                if ( prefs.getBoolean( GlobalState.PrefsConst.FIRST_LAUNCH, true ) ) {
+
+                    startActivity( new Intent( SplashScreen.this, IntroActivity.class ) );
+
+                } else {
+
+                    startActivity( new Intent( SplashScreen.this, Main.class ) );
+                }
                 finish();
 
                 if( noPlayServicesDialog != null && noPlayServicesDialog.isShowing() ) noPlayServicesDialog.dismiss();

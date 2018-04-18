@@ -16,6 +16,21 @@
     <!-- Activité Splash Screen -->
     <string name="hint_logo">Logo ENSIIE</string>
 
+    <!-- Activité intro -->
+    <string name="intro_titre_1">Bienvenue sur IIEns !</string>
+    <string name="intro_description_1">Retrouvez les services d\'iiens.net et un peu plus</string>
+    <string name="intro_titre_2">News et anniversaires</string>
+    <string name="intro_description_2">Consultez et soyez notifiés des news publiés et des anniversaires du jour</string>
+    <string name="intro_titre_3">Emploi du temps</string>
+    <string name="intro_description_3">Retrouvez votre emploi du temps sur votre mobile et synchronisez-le avec votre agenda local</string>
+    <string name="intro_titre_4">Twitter</string>
+    <string name="intro_description_4">Retrouvez les gazouillis (...c\'est dans le dico) des comptes de l\'école et des partenaires</string>
+    <string name="intro_titre_5">AriseID et ItvTube</string>
+    <string name="intro_description_5">Connectez-vous avec vos identifiant AriseID et regardez les projs d\'Itvtube où vous voulez</string>
+    <string name="intro_titre_6">Profitez-bien !</string>
+    <string name="intro_description_6">Et y\'en a plus encore !\nN\'hésitez pas à contribuer à l\'appli sur Github :)\nPar Loki (promo 2014)</string>
+    <string name="intro_ok">Ok</string>
+
     <!-- Activité Login -->
     <string name="hint_user">Identifiant ARISE</string>
     <string name="hint_password">Mot de passe</string>
