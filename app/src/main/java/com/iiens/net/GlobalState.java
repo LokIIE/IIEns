@@ -93,7 +93,7 @@ public class GlobalState extends Application {
         appBundle = bundle;
     }
 
-    public Fragment getCurrentFragment () { return ( this.currentFragment != null ) ? this.currentFragment : new News(); }
+    public Fragment getCurrentFragment () { return ( this.currentFragment != null ) ? this.currentFragment : new Home(); }
 
     public void setCurrentFragment ( Fragment value ) { this.currentFragment = value; }
 

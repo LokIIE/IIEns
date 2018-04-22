@@ -24,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Liste des nouvelles
  */
-public class News extends BaseFragment {
+public class Home extends BaseFragment {
 
     private final String TAG = getClass().getName();
     private NewsDao dal;

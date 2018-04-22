@@ -45,7 +45,7 @@
     <string name="auto_connect">Connexion automatique</string>
 
     <!-- Menu de navigation -->
-    <string name="menu_news">News</string>
+    <string name="menu_home">Accueil</string>
     <string name="menu_edt">Emploi du temps</string>
     <string name="menu_twitter">Twitter</string>
     <string name="menu_group_pages">Par AriseID</string>
@@ -70,7 +70,7 @@
     <string name="alert_no_gps_msg">L\'application ne pourra pas recevoir et afficher les notifications</string>
 
     <string-array name="main_menu_entries">
-        <item>News</item>
+        <item>Accueil</item>
         <item>Emploi du temps</item>
         <item>Anniversaires</item>
         <item>Twitter</item>

@@ -186,13 +186,13 @@ public class Main extends AppCompatActivity
 
             switch ( id ) {
 
-                case R.id.action_nav_news:
-                    bottomNav.setSelectedItemId( R.id.action_news );
+                case R.id.action_nav_home:
+                    bottomNav.setSelectedItemId( R.id.action_home );
                     break;
 
-                case R.id.action_news:
-                    openFragment( News.class.getName(), null );
-                    navDrawer.setCheckedItem( R.id.action_nav_news );
+                case R.id.action_home:
+                    openFragment( Home.class.getName(), null );
+                    navDrawer.setCheckedItem( R.id.action_nav_home );
                     currentSelectedId = id;
                     break;
 

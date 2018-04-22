@@ -8,8 +8,8 @@
         android:visible="false">
 
         <item
-            android:id="@+id/action_nav_news"
-            android:title="@string/menu_news"
+            android:id="@+id/action_nav_home"
+            android:title="@string/menu_home"
             android:icon="@drawable/ic_chrome_reader_mode" />
 
         <item
