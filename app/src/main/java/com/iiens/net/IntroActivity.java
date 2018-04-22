@@ -1,15 +1,17 @@
 package com.iiens.net;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import com.github.paolorotolo.appintro.AppIntro;
+import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.github.paolorotolo.appintro.model.SliderPage;
 
-public class IntroActivity extends AppIntro {
+public class IntroActivity extends AppIntro2 {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -27,46 +29,51 @@ public class IntroActivity extends AppIntro {
 
         slide.setTitle( getResources().getString( R.string.intro_titre_1 ) );
         slide.setDescription( getResources().getString( R.string.intro_description_1 ) );
-        slide.setImageDrawable( R.drawable.ic_launcher );
+        slide.setImageDrawable( R.drawable.intro_iiens );
         slide.setBgColor( getResources().getColor( R.color.orange ) );
 
         addSlide( AppIntroFragment.newInstance( slide ) );
 
         slide.setTitle( getResources().getString( R.string.intro_titre_2 ) );
         slide.setDescription( getResources().getString( R.string.intro_description_2 ) );
+        slide.setImageDrawable( R.drawable.intro_news );
+        slide.setBgColor( getResources().getColor( R.color.intro_news ) );
 
         addSlide( AppIntroFragment.newInstance( slide ) );
 
         slide.setTitle( getResources().getString( R.string.intro_titre_3 ) );
         slide.setDescription( getResources().getString( R.string.intro_description_3 ) );
+        slide.setImageDrawable( R.drawable.intro_twitter );
+        slide.setBgColor( getResources().getColor( R.color.ltBlue ) );
 
         addSlide( AppIntroFragment.newInstance( slide ) );
 
         slide.setTitle( getResources().getString( R.string.intro_titre_4 ) );
         slide.setDescription( getResources().getString( R.string.intro_description_4 ) );
+        slide.setImageDrawable( R.drawable.intro_schedule );
+        slide.setBgColor( getResources().getColor( R.color.ltGreen ) );
 
         addSlide( AppIntroFragment.newInstance( slide ) );
 
         slide.setTitle( getResources().getString( R.string.intro_titre_5 ) );
         slide.setDescription( getResources().getString( R.string.intro_description_5 ) );
+        slide.setImageDrawable( R.drawable.arise );
+        slide.setBgColor( getResources().getColor( R.color.bordeaux ) );
 
         addSlide( AppIntroFragment.newInstance( slide ) );
 
         slide.setTitle( getResources().getString( R.string.intro_titre_6 ) );
         slide.setDescription( getResources().getString( R.string.intro_description_6 ) );
-        slide.setImageDrawable( R.drawable.logo_github );
+        slide.setImageDrawable( R.drawable.intro_github );
+        slide.setBgColor( getResources().getColor( R.color.orange ) );
 
         addSlide( AppIntroFragment.newInstance( slide ) );
-
-        // OPTIONAL METHODS
-        // Override bar/separator color.
-        setBarColor( getResources().getColor( R.color.darkorange ) );
-        setSeparatorColor( colorBlack );
 
         // Hide Skip/Done button.
         showSkipButton( false );
         setProgressButtonEnabled( true );
-        setDoneText( getResources().getString( R.string.intro_ok ) );
+
+        setFadeAnimation();
     }
 
     @Override
@@ -79,6 +86,14 @@ public class IntroActivity extends AppIntro {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
         // Do something when users tap on Done button.
+
+        SharedPreferences.Editor editor = getSharedPreferences(
+                getResources().getString( R.string.app_settings ),
+                Context.MODE_PRIVATE
+        ).edit();
+
+        editor.putBoolean( GlobalState.PrefsConst.FIRST_LAUNCH, false );
+        editor.apply();
 
         startActivity( new Intent( IntroActivity.this, Main.class ) );
         finish();

@@ -108,14 +108,14 @@ public class SplashScreen extends Activity {
             @Override
             public void run () {
 
-                if ( prefs.getBoolean( GlobalState.PrefsConst.FIRST_LAUNCH, true ) ) {
+                Class nextActivity = Main.class;
 
-                    startActivity( new Intent( SplashScreen.this, IntroActivity.class ) );
+                if( prefs.getBoolean( GlobalState.PrefsConst.FIRST_LAUNCH, true ) ) {
 
-                } else {
-
-                    startActivity( new Intent( SplashScreen.this, Main.class ) );
+                    nextActivity = IntroActivity.class;
                 }
+
+                startActivity( new Intent(SplashScreen.this, nextActivity ) );
                 finish();
 
                 if( noPlayServicesDialog != null && noPlayServicesDialog.isShowing() ) noPlayServicesDialog.dismiss();
@@ -150,7 +150,6 @@ public class SplashScreen extends Activity {
                                             Context.MODE_PRIVATE
                                     ).edit();
 
-                                    editor.putBoolean( GlobalState.PrefsConst.FIRST_LAUNCH, false );
                                     editor.putBoolean( GlobalState.PrefsConst.UPDATE_FCM_TOKEN, false );
                                     editor.putString( GlobalState.PrefsConst.APP_TOKEN, response.getString( "token" ) );
                                     editor.apply();
