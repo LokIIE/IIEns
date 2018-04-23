@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:drawableLeft="@drawable/ic_cake"
+        android:drawableLeft="@drawable/fa_birthday_cake"
         android:drawablePadding="4dp"
         android:paddingLeft="8dp"
         android:singleLine="false"

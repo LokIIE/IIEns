@@ -19,7 +19,7 @@
             android:defaultValue="true"/>
 
         <SwitchPreference
-            android:icon="@drawable/dw_cake"
+            android:icon="@drawable/fa_birthday_cake"
             android:key="@string/pref_anniv_key"
             android:title="@string/pref_anniv_title"
             android:summaryOff="@string/pref_deactivated"
@@ -30,7 +30,7 @@
             android:defaultValue="false"/>
 
         <SwitchPreference
-            android:icon="@drawable/dw_school"
+            android:icon="@drawable/ic_school"
             android:key="@string/pref_events_key"
             android:title="@string/pref_events_title"
             android:summaryOff="@string/pref_deactivated"
@@ -41,7 +41,7 @@
             android:defaultValue="true"/>
 
         <ListPreference
-            android:icon="@drawable/dw_warning"
+            android:icon="@drawable/fa_warning"
             android:key="@string/pref_partiel_key"
             android:title="@string/pref_partiel_title"
             android:summary="@string/pref_partiel_summary"
@@ -53,7 +53,7 @@
     <PreferenceCategory android:title="@string/pref_fonctionnement" >
 
         <SwitchPreference
-            android:icon="@drawable/dw_moon"
+            android:icon="@drawable/ic_moon"
             android:key="@string/pref_mode_nuit_key"
             android:title="@string/pref_mode_nuit"
             android:summaryOff="@string/pref_deactivated"
@@ -64,7 +64,7 @@
             android:defaultValue="false"/>
 
         <SwitchPreference
-            android:icon="@drawable/dw_menu"
+            android:icon="@drawable/fa_bars"
             android:key="@string/pref_bottom_nav_key"
             android:title="@string/pref_bottom_nav"
             android:summaryOff="@string/pref_deactivated"

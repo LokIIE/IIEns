@@ -2,7 +2,7 @@
 
     <item
         android:id="@+id/export_to_calendar"
-        android:icon="@drawable/ic_today"
+        android:icon="@drawable/fa_calendar_alt"
         android:title="@string/export_to_calendar_title"/>
 
 </menu>

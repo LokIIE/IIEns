@@ -13,9 +13,9 @@ public class ItvtubeAdapter extends BaseAdapter {
 
     // references to our images
     private Integer[] mThumbIds = {
-            R.drawable.a3ie, R.drawable.a3ie,
-            R.drawable.a3ie, R.drawable.a3ie,
-            R.drawable.a3ie, R.drawable.a3ie
+            R.drawable.aeiie, R.drawable.aeiie,
+            R.drawable.aeiie, R.drawable.aeiie,
+            R.drawable.aeiie, R.drawable.aeiie
     };
 
     public ItvtubeAdapter(Context c) {

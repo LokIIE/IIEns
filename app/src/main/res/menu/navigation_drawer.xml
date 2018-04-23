@@ -15,7 +15,7 @@
         <item
             android:id="@+id/action_nav_edt"
             android:title="@string/menu_edt"
-            android:icon="@drawable/dw_school" />
+            android:icon="@drawable/ic_school" />
 
         <item
             android:id="@+id/action_nav_twitter"
@@ -35,12 +35,12 @@
                 <item
                     android:id="@+id/action_nav_itvtube"
                     android:title="@string/menu_clubs"
-                    android:icon="@drawable/ic_people" />
+                    android:icon="@drawable/fa_users" />
 
                 <item
                     android:id="@+id/action_nav_breviaire"
                     android:title="@string/menu_breviaire"
-                    android:icon="@drawable/ic_music_note"
+                    android:icon="@drawable/fa_music"
                     android:checkable="false" />
 
             </group>
@@ -55,16 +55,16 @@
         <item
             android:id="@+id/action_nav_anniv"
             android:title="@string/menu_anniv"
-            android:icon="@drawable/deciibel"/>
+            android:icon="@drawable/fa_birthday_cake"/>
         <item
             android:id="@+id/action_nav_arise"
             android:title="@string/menu_arise"
-            android:icon="@drawable/arise"/>
+            android:icon="@drawable/fa_plug"/>
 
         <item
             android:id="@+id/action_nav_parametres"
             android:title="@string/menu_settings"
-            android:icon="@drawable/ic_settings" />
+            android:icon="@drawable/fa_cogs" />
 
     </group>
 
