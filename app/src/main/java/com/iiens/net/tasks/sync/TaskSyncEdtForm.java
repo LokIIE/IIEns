@@ -4,10 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.iiens.net.R;
-import com.iiens.net.database.EdtFormDb;
-import com.iiens.net.model.EdtFormItem;
-
-import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,19 +39,19 @@ public class TaskSyncEdtForm extends AsyncTask<Void, Void, Boolean> {
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
 
-            EdtFormDb dal = new EdtFormDb(context);
+            /*EdtSearchDao dal = new EdtSearchDao(context);
 
             while ((line = reader.readLine()) != null) {
 
                 JSONArray jArray = new JSONArray(line);
                 for (int i = 0; i < jArray.length(); i++) {
 
-                    if (!dal.createItem(new EdtFormItem(i, jArray.getJSONObject(i)))) {
+                    if (!dal.createItem(new EdtSearchCategory(i, jArray.getJSONObject(i)))) {
 
                         break;
                     }
                 }
-            }
+            }*/
 
         } catch ( Exception e ) {
 

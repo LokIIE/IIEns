@@ -4,10 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.iiens.net.R;
-import com.iiens.net.database.EdtOptDb;
-import com.iiens.net.model.EdtOptItem;
-
-import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,13 +38,13 @@ public class TaskSyncEdtOptions extends AsyncTask<Void, Void, Boolean> {
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
             String line;
-            EdtOptDb dal = new EdtOptDb(context);
-            while ((line = reader.readLine()) != null) {
-                JSONArray jArray = new JSONArray(line);
-                for (int i = 0; i < jArray.length(); i++) {
-                    dal.createItem(new EdtOptItem(jArray.getJSONObject(i)));
-                }
-            }
+//            EdtOptDb dal = new EdtOptDb(context);
+//            while ((line = reader.readLine()) != null) {
+//                JSONArray jArray = new JSONArray(line);
+//                for (int i = 0; i < jArray.length(); i++) {
+//                    dal.createItem(new EdtSearchOption(jArray.getJSONObject(i)));
+//                }
+//            }
 
         } catch ( Exception e ) {
 
