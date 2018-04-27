@@ -38,7 +38,7 @@ public class Anniv extends BaseFragment {
         this.apiKey = getResources().getString(R.string.apiie_anniv);
         this.dal = AppDb.getAppDb( context ).annivDao();
 
-        this.layoutId = R.layout.listview;
+        this.layoutId = R.layout.home_listview;
     }
 
     private ArrayList<AnnivItem> getItemList ( JSONArray jArray ) {
@@ -63,7 +63,7 @@ public class Anniv extends BaseFragment {
 
     protected void generateView ( final View view ) {
 
-        this.mListView = (ListView) view.findViewById( R.id.listview );
+        this.mListView = (ListView) view.findViewById( R.id.home_listview );
 
         AnnivItem firstItem = dal.getFirst();
 

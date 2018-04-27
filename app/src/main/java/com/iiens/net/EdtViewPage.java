@@ -52,7 +52,7 @@ public class EdtViewPage extends Fragment {
         super.onCreate( savedInstanceState );
 
         View view = inflater.inflate( R.layout.edt_view_page, container, false );
-        ListView mListView = (ListView) view.findViewById( R.id.listview );
+        ListView mListView = (ListView) view.findViewById( R.id.home_listview );
 
         mListView.setAdapter( new EdtItemsAdapter( getActivity().getApplicationContext(), edtItemsList ) );
         mListView.setClickable( true );

@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity(tableName = "news")
-public class NewsItem {
+public class NewsItem extends HomeItem {
 
     @PrimaryKey(autoGenerate = true)
     public int id;
@@ -105,5 +105,15 @@ public class NewsItem {
         formatContenu = formatContenu.replaceAll( pUrl, "<a href =\"" + "$2" + "\">Ici</a>" );
 
         return formatContenu;
+    }
+
+    public String getItemContent () {
+
+        return this.getTitre();
+    }
+
+    public String getItemIcon () {
+
+        return this.getAuteur();
     }
 }

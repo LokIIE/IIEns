@@ -13,13 +13,13 @@ public class Twitter extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.layoutId = R.layout.listview;
+        this.layoutId = R.layout.home_listview;
     }
 
     @Override
     protected void generateView(View view) {
 
-        this.mListView = view.findViewById(R.id.listview);
+        this.mListView = view.findViewById(R.id.home_listview );
         this.mListView.setAdapter( ((GlobalState) getActivity().getApplicationContext()).getTwListAdapter() );
     }
 

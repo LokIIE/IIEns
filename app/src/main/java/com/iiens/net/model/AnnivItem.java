@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 @Entity(tableName = "anniversaires")
-public class AnnivItem {
+public class AnnivItem extends HomeItem {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -86,5 +86,19 @@ public class AnnivItem {
         }
 
         return item;
+    }
+
+    public String getItemContent () {
+
+        String res = this.getDate() + " : ";
+        res += this.getPrenom() + " " + this.getPseudo() + " " + this.getNom();
+        res += " (" + this.getAge().trim() + " ans)";
+
+        return res;
+    }
+
+    public String getItemIcon () {
+
+        return "fa_birthday_cake";
     }
 }

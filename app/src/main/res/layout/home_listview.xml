@@ -6,7 +6,7 @@
     android:backgroundTint="?android:colorBackground">
 
     <ListView
-        android:id="@+id/listview"
+        android:id="@+id/home_listview"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:backgroundTint="?android:colorBackground"/>

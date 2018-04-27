@@ -10,7 +10,7 @@
     android:background="?android:colorBackground">
 
         <TextView
-            android:id="@+id/news_title"
+            android:id="@+id/item_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/aeiie"
