@@ -42,7 +42,7 @@ public class Login extends Activity {
                 (EditText) findViewById( R.id.password )
         );
 
-        uri_request = new JsonObjectRequest( getResources().getString( R.string.url_apiie_login ),
+        uri_request = new JsonObjectRequest( getResources().getString( R.string.url_api_login ),
                 new JSONObject(),
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -95,7 +95,7 @@ public class Login extends Activity {
             postData.put( "logout", "logout" );
 
             JsonObjectRequest destroyClient = new JsonObjectRequest(
-                    getResources().getString( R.string.url_apiie_login ),
+                    getResources().getString( R.string.url_api_login ),
                     postData,
                     new Response.Listener<JSONObject>() {
                         @Override

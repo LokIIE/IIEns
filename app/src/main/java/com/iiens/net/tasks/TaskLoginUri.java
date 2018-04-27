@@ -34,7 +34,7 @@ public class TaskLoginUri extends AsyncTask<Void, Void, String> {
 
         // Request a string response from the provided URL.
         JsonObjectRequest stringRequest = new JsonObjectRequest(
-                context.getResources().getString(R.string.url_apiie_login),
+                context.getResources().getString(R.string.url_api_login ),
                 new JSONObject(),
                 new Response.Listener<JSONObject>() {
                     @Override

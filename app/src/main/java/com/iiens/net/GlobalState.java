@@ -13,8 +13,6 @@ import android.support.v4.content.FileProvider;
 import android.util.ArrayMap;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.iiens.net.tasks.TaskPingArise;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterConfig;
@@ -97,7 +95,19 @@ public class GlobalState extends Application {
 
     public void setCurrentFragment ( Fragment value ) { this.currentFragment = value; }
 
-    public String getScriptURL () { return getResources().getString( R.string.url_apiie ); }
+    public String getApiURL () { return getResources().getString( R.string.url_api ); }
+
+    public String getApiURL ( int apiKeyId ) {
+
+        return this.getApiURL() + getResources().getString( apiKeyId );
+    }
+
+    public String getFcmURL () { return getResources().getString( R.string.url_fcm_api ); }
+
+    public String getFcmURL ( int apiKeyId ) {
+
+        return this.getFcmURL() + getResources().getString( apiKeyId );
+    }
 
     @Override
     public void onCreate () {
@@ -115,8 +125,12 @@ public class GlobalState extends Application {
         );
 
         this.twitterConfig = new TwitterConfig.Builder( this )
-                .twitterAuthConfig( new TwitterAuthConfig( getString(R.string.tw_key), getString(R.string.tw_secret) ) )
-                .build();
+                .twitterAuthConfig(
+                        new TwitterAuthConfig(
+                                getString(R.string.tw_key),
+                                getString(R.string.tw_secret)
+                        )
+                ).build();
         com.twitter.sdk.android.core.Twitter.initialize( this.twitterConfig );
 
         this.twListTimeline = new TwitterListTimeline.Builder()
@@ -178,36 +192,24 @@ public class GlobalState extends Application {
 
     /**
      * Vérifie si l'appareil est connecté à Internet
-     * @return TRUE ou FALSE
+     * @return true si connecté
      */
     public boolean isOnline () {
 
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService( Context.CONNECTIVITY_SERVICE );
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        ConnectivityManager cm = (ConnectivityManager) getSystemService( Context.CONNECTIVITY_SERVICE );
+        NetworkInfo netInfo = ( cm != null ) ? cm.getActiveNetworkInfo() : null;
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     /**
      * Vérifie la disponibilité des services Arise
-     * @return TRUE ou FALSE
+     * @return true si joignable
      * @throws ExecutionException Exception
      * @throws InterruptedException Exception
      */
     public boolean isAriseAvailable () throws ExecutionException, InterruptedException {
 
         return ! ( new TaskPingArise( this ).execute().get() instanceof Exception );
-    }
-
-    /**
-     * Vérifie le APK Google Play Services est disponible
-     * @return TRUE ou FALSE
-     */
-    public boolean checkPlayServices () {
-
-        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-        int resultCode = googleAPI.isGooglePlayServicesAvailable( this );
-        return resultCode == ConnectionResult.SUCCESS;
     }
 
     /*public Thread downloadPdf ( Uri uri ) {
@@ -237,7 +239,10 @@ public class GlobalState extends Application {
                     .setDataAndType( pdfURI, "application/pdf" )
                     .addFlags( Intent.FLAG_GRANT_READ_URI_PERMISSION );
 
-            if ( pdfIntent.resolveActivity( getPackageManager() ) != null ) startActivity( pdfIntent );
+            if ( pdfIntent.resolveActivity( getPackageManager() ) != null ) {
+
+                startActivity( pdfIntent );
+            }
 
         } catch ( Exception e ) {
 
@@ -248,14 +253,7 @@ public class GlobalState extends Application {
     static class PrefsConst {
 
         static String FIRST_LAUNCH = "firstLaunch";
-        static String UPDATE_FCM_TOKEN = "updateFcmToken";
-        static String HAS_PLAY_SERVICES = "hasPlayServices";
-        static String NO_PLAY_SERVICES_DIALOG = "noPlayServicesDialog";
         static String APP_TOKEN = "appToken";
         static String APP_NEW_VERSION = "appNewVersion";
-        static String SAVE_PREFERENCES = "savePreferences";
-        static String SAVE_CREDENTIALS = "saveCredentials";
-        static String SAVED_LOGIN = "savedLogin";
-        static String SAVED_PASSWORD = "savedPassword";
     }
 }

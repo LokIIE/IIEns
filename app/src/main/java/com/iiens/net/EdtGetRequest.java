@@ -43,7 +43,7 @@ public class EdtGetRequest extends AsyncTask<Void, Void, JSONArray> {
         }
 
         // URL avec paramètres de la requête
-        String url = global.getScriptURL() + context.getString(R.string.apiie_edt) + "/" + promo + "/" + week;
+        String url = global.getApiURL() + context.getString(R.string.api_edt ) + "/" + promo + "/" + week;
 
         try {
 

@@ -168,7 +168,7 @@ public class AriseWebViewClient {
 
                 postData.put( "verifier", ariseVerifier );
 
-                JsonObjectRequest loginVerifier = new JsonObjectRequest( context.getResources().getString(R.string.url_apiie_login), postData,
+                JsonObjectRequest loginVerifier = new JsonObjectRequest( context.getResources().getString(R.string.url_api_login ), postData,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {

@@ -35,7 +35,7 @@ public class Anniv extends BaseFragment {
     public void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate( savedInstanceState );
-        this.apiKey = getResources().getString(R.string.apiie_anniv);
+        this.apiKey = getResources().getString(R.string.api_anniv );
         this.dal = AppDb.getAppDb( context ).annivDao();
 
         this.layoutId = R.layout.home_listview;

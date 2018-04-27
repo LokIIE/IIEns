@@ -11,7 +11,8 @@ import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.github.paolorotolo.appintro.model.SliderPage;
 
-public class IntroActivity extends AppIntro2 {
+public class Intro extends AppIntro2 {
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -78,12 +79,14 @@ public class IntroActivity extends AppIntro2 {
 
     @Override
     public void onSkipPressed(Fragment currentFragment) {
+
         super.onSkipPressed(currentFragment);
         // Do something when users tap on Skip button.
     }
 
     @Override
     public void onDonePressed(Fragment currentFragment) {
+
         super.onDonePressed(currentFragment);
         // Do something when users tap on Done button.
 
@@ -95,12 +98,13 @@ public class IntroActivity extends AppIntro2 {
         editor.putBoolean( GlobalState.PrefsConst.FIRST_LAUNCH, false );
         editor.apply();
 
-        startActivity( new Intent( IntroActivity.this, Main.class ) );
+        startActivity( new Intent( Intro.this, Main.class ) );
         finish();
     }
 
     @Override
     public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
+
         super.onSlideChanged(oldFragment, newFragment);
         // Do something when the slide changes.
     }

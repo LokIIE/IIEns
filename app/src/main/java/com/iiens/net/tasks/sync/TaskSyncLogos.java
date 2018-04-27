@@ -29,7 +29,7 @@ public class TaskSyncLogos extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
         int timeout = 5000;
-        String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_logos);
+        String url = context.getString(R.string.url_api ) + context.getString(R.string.api_logos );
 
         BufferedReader reader = null;
         StringBuilder stringBuilder;

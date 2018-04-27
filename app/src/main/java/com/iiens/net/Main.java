@@ -388,7 +388,7 @@ public class Main extends AppCompatActivity
 
     public void openBreviaire () {
 
-        final Uri uri = Uri.parse( appContext.getScriptURL() + appContext.getString(R.string.apiie_breviaire) );
+        final Uri uri = Uri.parse( appContext.getApiURL() + appContext.getString(R.string.api_breviaire ) );
         File breviaire = new File( getExternalFilesDir( Environment.DIRECTORY_DOWNLOADS ), "breviaire.pdf" );
 
         if( breviaire.exists() ) {

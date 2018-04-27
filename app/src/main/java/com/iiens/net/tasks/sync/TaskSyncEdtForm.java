@@ -26,7 +26,7 @@ public class TaskSyncEdtForm extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected Boolean doInBackground(Void... voids) {
 
-        String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_edtForm);
+        String url = context.getString(R.string.url_api ) + context.getString(R.string.api_edtForm );
         BufferedReader reader = null;
 
         try {

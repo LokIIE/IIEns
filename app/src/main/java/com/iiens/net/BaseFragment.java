@@ -73,7 +73,7 @@ abstract class BaseFragment extends Fragment {
     protected void apiRequest ( final View view ) {
 
             RequestQueue queue = Volley.newRequestQueue(context);
-            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, global.getScriptURL() + apiKey, null, new Response.Listener<JSONArray>() {
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, global.getApiURL() + apiKey, null, new Response.Listener<JSONArray>() {
                 @Override
                 public void onResponse(JSONArray response) {
                     displayResult(view, response);

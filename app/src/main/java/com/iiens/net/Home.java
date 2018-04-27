@@ -43,7 +43,7 @@ public class Home extends BaseFragment {
     public void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate( savedInstanceState );
-        this.apiKey = getResources().getString(R.string.apiie_news);
+        this.apiKey = getResources().getString(R.string.api_news );
         AppDb mDb = AppDb.getAppDb( context );
         this.dalNews = mDb.newsDao();
         this.dalAnniv = mDb.annivDao();
@@ -96,7 +96,7 @@ public class Home extends BaseFragment {
     protected void apiRequest ( final View view ) {
 
         RequestQueue queue = Volley.newRequestQueue(context);
-        JsonArrayRequest request = new JsonArrayRequest( Request.Method.GET, global.getScriptURL() + apiKey, null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest request = new JsonArrayRequest( Request.Method.GET, global.getApiURL() + apiKey, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 displayResult(view, response);

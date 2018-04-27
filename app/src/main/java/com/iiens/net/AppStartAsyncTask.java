@@ -32,7 +32,7 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
      */
     private void syncEdtForm () throws IOException, JSONException {
 
-        String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_edtForm);
+        String url = context.getString(R.string.url_api ) + context.getString(R.string.api_edtForm );
         BufferedReader reader = null;
 
         try {
@@ -93,7 +93,7 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
      */
     private void syncEdtOptions () throws IOException, JSONException {
 
-        String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_edtOptions);
+        String url = context.getString(R.string.url_api ) + context.getString(R.string.api_edtOptions );
         BufferedReader reader = null;
 
         try {
@@ -155,7 +155,7 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
         // EdtSearchDao dal = new EdtSearchDao( context );
         int timeout = 5000;
-        String url = context.getString(R.string.url_apiie) + context.getString(R.string.apiie_logos);
+        String url = context.getString(R.string.url_api ) + context.getString(R.string.api_logos );
 
         BufferedReader reader = null;
         StringBuilder stringBuilder;

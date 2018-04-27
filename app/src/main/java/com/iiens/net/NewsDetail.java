@@ -27,7 +27,7 @@ public class NewsDetail extends BaseFragment {
     public void onCreate ( Bundle savedInstanceState ) {
 
         super.onCreate( savedInstanceState );
-        this.apiKey = getResources().getString(R.string.apiie_news);
+        this.apiKey = getResources().getString(R.string.api_news );
     }
 
     @Override

@@ -21,9 +21,9 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <meta-data
+        <!--<meta-data
             android:name="io.fabric.ApiKey"
-            android:value="df274d812a88ccd398c6b5d86b4017c1925c79a8" />
+            android:value="df274d812a88ccd398c6b5d86b4017c1925c79a8" />-->
 
         <!--<service android:name=".fcm.FbMessagingService">-->
             <!--<intent-filter>-->
@@ -56,7 +56,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".IntroActivity"
+        <activity android:name=".Intro"
             android:label="@string/app_name" />
 
         <activity android:name=".Login"
