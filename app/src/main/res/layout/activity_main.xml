@@ -54,8 +54,7 @@
             app:itemBackground="?attr/selectorRef"
             app:itemIconTint="?attr/selectorRef"
             app:itemTextColor="?android:textColor"
-            app:menu="@menu/bottom_navigation"
-            android:visibility="gone"/>
+            app:menu="@menu/bottom_navigation"/>
 
     </RelativeLayout>
 

@@ -29,6 +29,27 @@
     <color name="darkorange">#FF5722</color>
     <color name="intro_news">#FFC442</color>
 
+    <!-- Palette material design -->
+    <!-- Thème clair -->
+    <color name="primaryColor.Light">#ffa726</color>
+    <color name="primaryLightColor.Light">#ffd95b</color>
+    <color name="primaryDarkColor.Light">#c77800</color>
+    <color name="secondaryColor.Light">#0277bd</color>
+    <color name="secondaryLightColor.Light">#58a5f0</color>
+    <color name="secondaryDarkColor.Light">#004c8c</color>
+    <color name="primaryTextColor.Light">#000000</color>
+    <color name="secondaryTextColor.Light">#808080</color>
+
+    <!-- Thème nuit -->
+    <color name="primaryColor.Dark">#37474f</color>
+    <color name="primaryLightColor.Dark">#62727b</color>
+    <color name="primaryDarkColor.Dark">#102027</color>
+    <color name="secondaryColor.Dark">#fb8c00</color>
+    <color name="secondaryLightColor.Dark">#ffbd45</color>
+    <color name="secondaryDarkColor.Dark">#c25e00</color>
+    <color name="primaryTextColor.Dark">#ffffff</color>
+    <color name="secondaryTextColor.Dark">#808080</color>
+
     <!-- Couleurs pour l'edt -->
     <color name="coursback">#f0ffe0</color>
     <color name="courstxt">#009900</color>

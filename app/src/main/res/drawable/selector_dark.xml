@@ -4,5 +4,5 @@
           android:color="@color/orange"
           android:drawable="@drawable/bottom_navigation_border" />
     <item android:color="@color/ltGray"
-          android:drawable="@color/dkGray" />
+          android:drawable="@color/primaryColor.Dark" />
 </selector>

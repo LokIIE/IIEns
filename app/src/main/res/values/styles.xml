@@ -2,75 +2,60 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="IIEnsTheme.Light" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:colorPrimary">@color/orange</item>
-        <item name="android:colorPrimaryDark">@color/orange</item>
-        <item name="android:colorBackground">@color/white</item>
         <item name="android:windowTranslucentStatus">true</item>
-
-        <item name="iconColor">@color/black</item>
-        <item name="colorAccent">@color/darkorange</item>
-
         <item name="android:actionBarStyle">@style/ActionBarLight</item>
-        <item name="navigationDrawerStyle">@style/NavigationDrawer.Light</item>
+        <item name="android:colorPrimary">@color/primaryColor.Light</item>
+        <item name="android:colorPrimaryDark">@color/primaryDarkColor.Light</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:textColor">@color/primaryTextColor.Light</item>
+        <item name="android:textColorSecondary">@color/secondaryTextColor.Light</item>
+        <item name="android:colorAccent">@color/secondaryDarkColor.Light</item>
+        <item name="android:colorControlNormal">@color/gray</item>
+        <item name="android:colorControlActivated">@color/secondaryDarkColor.Light</item>
+
         <item name="bottomNavigationStyle">@style/BottomNavigation.Light</item>
         <item name="selectorRef">@drawable/selector_light</item>
+        <item name="iconColor">@color/secondaryColor.Light</item>
     </style>
 
     <style name="IIEnsTheme.Dark" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:colorPrimary">@color/gray</item>
-        <item name="android:colorPrimaryDark">@color/dkGray</item>
-        <item name="android:colorBackground">@color/dkGray</item>
         <item name="android:windowTranslucentStatus">true</item>
-
-        <item name="iconColor">@color/ltGray</item>
-        <item name="colorAccent">@color/darkorange</item>
-
         <item name="android:actionBarStyle">@style/ActionBarDark</item>
-        <item name="navigationDrawerStyle">@style/NavigationDrawer.Dark</item>
+        <item name="android:colorPrimary">@color/primaryColor.Dark</item>
+        <item name="android:colorPrimaryDark">@color/primaryDarkColor.Dark</item>
+        <item name="android:colorBackground">@color/primaryDarkColor.Dark</item>
+        <item name="android:textColor">@color/primaryTextColor.Dark</item>
+        <item name="android:textColorSecondary">@color/secondaryTextColor.Dark</item>
+        <item name="android:colorAccent">@color/secondaryDarkColor.Dark</item>
+        <item name="android:colorControlNormal">@color/gray</item>
+        <item name="android:colorControlActivated">@color/secondaryDarkColor.Dark</item>
+
         <item name="bottomNavigationStyle">@style/BottomNavigation.Dark</item>
         <item name="selectorRef">@drawable/selector_dark</item>
+        <item name="iconColor">@color/secondaryColor.Dark</item>
     </style>
 
     <style name="ActionBarLight">
-        <item name="android:textColorPrimary">@color/black</item>
-        <item name="android:background">@color/orange</item>
+        <item name="android:textColorPrimary">@color/primaryTextColor.Light</item>
+        <item name="android:background">@color/primaryColor.Light</item>
+
     </style>
 
     <style name="ActionBarDark">
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="android:background">@color/dkGray</item>
-    </style>
-
-    <style name="NavigationDrawer.Light" parent="IIEnsTheme.Light">
-        <item name="android:colorPrimary">@color/ltGray</item>
-        <item name="android:colorPrimaryDark">@color/ltGray</item>
-        <item name="android:colorBackground">@color/white</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:actionMenuTextColor">@color/orange</item>
-    </style>
-
-    <style name="NavigationDrawer.Dark" parent="IIEnsTheme.Dark">
-        <item name="android:colorPrimary">@color/ltGray</item>
-        <item name="android:colorPrimaryDark">@color/gray</item>
-        <item name="android:colorBackground">@color/dkGray</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:actionMenuTextColor">@color/orange</item>
+        <item name="android:textColorPrimary">@color/primaryTextColor.Dark</item>
+        <item name="android:background">@color/primaryColor.Dark</item>
     </style>
 
     <style name="BottomNavigation.Light" parent="IIEnsTheme.Light">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:colorPrimary">@color/white</item>
-        <item name="android:colorPrimaryDark">@color/ltGray</item>
         <item name="android:elevation">4dp</item>
+        <item name="android:colorPrimary">@color/white</item>
+        <item name="android:textColor">@color/gray</item>
     </style>
 
     <style name="BottomNavigation.Dark" parent="IIEnsTheme.Dark">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:colorPrimary">@color/dkGray</item>
-        <item name="android:colorPrimaryDark">@color/ltGray</item>
         <item name="android:elevation">4dp</item>
+        <item name="android:colorPrimary">@color/primaryColor.Dark</item>
+        <item name="android:textColor">@color/ltGray</item>
     </style>
 
     <style name="LoginFormContainer">
@@ -108,7 +93,7 @@
     </style>
 
     <style name="TweetDarkStyle" parent="tw__TweetDarkStyle">
-        <item name="tw__container_bg_color">@color/dkGray</item>
+        <item name="tw__container_bg_color">@color/primaryDarkColor.Dark</item>
     </style>
 
 </resources>
