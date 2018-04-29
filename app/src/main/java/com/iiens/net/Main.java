@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,7 +29,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -235,13 +233,7 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_nav_parametres:
-                    bottomNav.setSelectedItemId( R.id.action_parametres );
-                    break;
-
-                case R.id.action_parametres:
                     openFragment( Settings.class.getName(), null );
-                    navDrawer.setCheckedItem( R.id.action_nav_parametres );
-                    currentSelectedId = id;
                     break;
 
                 default:
@@ -256,11 +248,7 @@ public class Main extends AppCompatActivity
 
     public void onSharedPreferenceChanged ( SharedPreferences sharedPreferences, String key ) {
 
-        if( key.equals( getString( R.string.pref_bottom_nav_key ) ) ) {
-
-            setControlsVisibility( true );
-
-        } else if( key.equals( getString( R.string.pref_mode_nuit_key ) ) ) {
+        if( key.equals( getString( R.string.pref_mode_nuit_key ) ) ) {
 
             recreate();
         }
@@ -335,8 +323,6 @@ public class Main extends AppCompatActivity
         bottomNav = findViewById( R.id.bottom_navigation );
         bottomNav.setOnNavigationItemSelectedListener( this );
 
-        setControlsVisibility( false );
-
         View navDrawerHeader = navDrawer.getHeaderView( 0 );
         navDrawerHeader.findViewById( R.id.nav_connect ).setOnClickListener( new View.OnClickListener() {
 
@@ -359,31 +345,6 @@ public class Main extends AppCompatActivity
             ((TextView) navDrawerHeader.findViewById( R.id.nav_promo ))
                     .setText( String.format( "Promo %s", appContext.getUserInfo( "promo" ) ) );
         }
-    }
-
-    private void setControlsVisibility ( boolean animate ) {
-
-        // Application des paramètres
-        navDrawer.getMenu().setGroupVisible(
-                R.id.navigation_base,
-                ! prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), false )
-        );
-
-        if( animate ) {
-
-            changeBottomNavigationVisibility( prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), true ) );
-        }
-
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mainContainer.getLayoutParams();
-        TypedArray styledAttributes = getTheme().obtainStyledAttributes(new int[] { android.R.attr.actionBarSize });
-        int actionBarSize = (int) styledAttributes.getDimension(0, 0);
-        styledAttributes.recycle();
-        lp.setMargins( 0, 0, 0, prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), true ) ? actionBarSize : 0 );
-        mainContainer.setLayoutParams( lp );
-
-        bottomNav.setVisibility(
-                ( prefs.getBoolean( getString( R.string.pref_bottom_nav_key ), true ) ) ? View.VISIBLE : View.GONE
-        );
     }
 
     public void openBreviaire () {

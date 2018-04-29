@@ -9,6 +9,7 @@
         <SwitchPreference
             android:disableDependentsState="false"
             android:icon="@drawable/dw_chrome_reader_mode"
+            android:iconTint="?attr/iconColor"
             android:key="@string/pref_news_key"
             android:title="@string/pref_news_title"
             android:summaryOff="@string/pref_deactivated"
@@ -20,6 +21,7 @@
 
         <SwitchPreference
             android:icon="@drawable/fa_birthday_cake"
+            android:iconTint="?attr/iconColor"
             android:key="@string/pref_anniv_key"
             android:title="@string/pref_anniv_title"
             android:summaryOff="@string/pref_deactivated"
@@ -31,6 +33,7 @@
 
         <SwitchPreference
             android:icon="@drawable/ic_school"
+            android:iconTint="?attr/iconColor"
             android:key="@string/pref_events_key"
             android:title="@string/pref_events_title"
             android:summaryOff="@string/pref_deactivated"
@@ -42,6 +45,7 @@
 
         <ListPreference
             android:icon="@drawable/fa_warning"
+            android:iconTint="?attr/iconColor"
             android:key="@string/pref_partiel_key"
             android:title="@string/pref_partiel_title"
             android:summary="@string/pref_partiel_summary"
@@ -54,6 +58,7 @@
 
         <SwitchPreference
             android:icon="@drawable/ic_moon"
+            android:iconTint="?attr/iconColor"
             android:key="@string/pref_mode_nuit_key"
             android:title="@string/pref_mode_nuit"
             android:summaryOff="@string/pref_deactivated"
@@ -62,17 +67,6 @@
             android:switchTextOn="@string/pref_activated"
             android:persistent="true"
             android:defaultValue="false"/>
-
-        <SwitchPreference
-            android:icon="@drawable/fa_bars"
-            android:key="@string/pref_bottom_nav_key"
-            android:title="@string/pref_bottom_nav"
-            android:summaryOff="@string/pref_deactivated"
-            android:summaryOn="@string/pref_activated"
-            android:switchTextOff="@string/pref_deactivated"
-            android:switchTextOn="@string/pref_activated"
-            android:persistent="true"
-            android:defaultValue="true" />
 
     </PreferenceCategory>
 

@@ -8,16 +8,10 @@
 
     <item android:id="@+id/action_edt"
         android:title="@string/menu_edt"
-        android:icon="@drawable/ic_school"
-        android:iconTint="?attr/iconColor"/>
+        android:icon="@drawable/ic_school"/>
 
     <item android:id="@+id/action_twitter"
         android:title="@string/menu_twitter"
-        android:icon="@drawable/tw__ic_logo_default"
-        android:iconTint="?attr/iconColor"/>
+        android:icon="@drawable/tw__ic_logo_default"/>
 
-    <item android:id="@+id/action_parametres"
-        android:title="@string/menu_settings"
-        android:icon="@drawable/fa_cogs"
-        android:iconTint="?attr/iconColor"/>
 </menu>
