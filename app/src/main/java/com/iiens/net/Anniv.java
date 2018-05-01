@@ -63,7 +63,7 @@ public class Anniv extends BaseFragment {
 
     protected void generateView ( final View view ) {
 
-        this.mListView = (ListView) view.findViewById( R.id.home_listview );
+        this.mListView = view.findViewById( R.id.home_listview );
 
         AnnivItem firstItem = dal.getFirst();
 
@@ -72,7 +72,7 @@ public class Anniv extends BaseFragment {
 
             DateFormat dateFormat = new SimpleDateFormat( "EEEE dd MMMM", Locale.FRENCH );
             Date firstDate = ( firstItem != null ) ?
-                    dateFormat.parse( firstItem.getDate() ) : null;
+                    dateFormat.parse( firstItem.getAnniv() ) : null;
             Date today = new Date();
 
             // Aucun anniversaire n'est passé

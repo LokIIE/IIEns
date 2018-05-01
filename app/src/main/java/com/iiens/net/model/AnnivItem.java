@@ -16,6 +16,7 @@ public class AnnivItem extends HomeItem {
     private String nom;
     private String prenom;
     private String pseudo;
+    private String anniv;
     private String date;
     private String age;
 
@@ -51,6 +52,14 @@ public class AnnivItem extends HomeItem {
         this.pseudo = pseudo;
     }
 
+    public String getAnniv () {
+        return anniv;
+    }
+
+    public void setAnniv ( String anniv ) {
+        this.anniv = anniv;
+    }
+
     public String getDate () {
         return date;
     }
@@ -77,7 +86,8 @@ public class AnnivItem extends HomeItem {
             item.nom = data.getString( "nom" );
             item.prenom = data.getString( "prenom" );
             item.pseudo = data.getString( "surnom" );
-            item.date = data.getString( "anniv" );
+            item.anniv = data.getString( "anniv" );
+            item.date = data.getString( "date" );
             item.age = data.getString( "age" );
 
         } catch (JSONException e) {

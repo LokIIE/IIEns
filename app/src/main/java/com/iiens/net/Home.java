@@ -6,14 +6,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.iiens.net.adapter.HomeItemsAdapter;
@@ -27,7 +25,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Liste des nouvelles
@@ -72,7 +73,20 @@ public class Home extends BaseFragment {
             } else if ( firstItem != null ) {
 
                 Log.e( TAG, "from database" );
-                this.setListViewContent( new ArrayList<>( dalNews.getAll() ) );
+
+                SimpleDateFormat isoFormat = new SimpleDateFormat( "yyyy-MM-dd", Locale.FRENCH );
+
+                Calendar c = Calendar.getInstance();
+                c.set( Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                String sunday = isoFormat.format( c.getTime() );
+
+                c.set( Calendar.DAY_OF_WEEK, Calendar.SATURDAY );
+                String saturday = isoFormat.format( c.getTime() );
+
+                ArrayList<HomeItem> itemList = new ArrayList<>( dalNews.getAll() );
+                itemList.addAll( new ArrayList<>( dalAnniv.getAllBetweenDates( sunday, saturday ) ) );
+
+                this.setListViewContent( itemList );
 
             } else if ( global.isOnline() ) {
 
@@ -101,23 +115,18 @@ public class Home extends BaseFragment {
             public void onResponse(JSONArray response) {
                 displayResult(view, response);
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(global, apiKey + " : " + getResources().getString( R.string.api_error ), Toast.LENGTH_LONG).show();
-            }
-        });
+        }, error -> Toast.makeText(global, apiKey + " : " + getResources().getString( R.string.api_error ), Toast.LENGTH_LONG).show() );
         queue.add(request);
     }
 
     public void displayResult ( View view, JSONArray jResult ) {
 
-        final ArrayList<NewsItem> itemList = this.jArrayToArrayList( jResult );
+        ArrayList<NewsItem> newsItemsList = getNewsItemList( jResult );
 
         // If the request was successful, save the items to save data consumption and populate listview
         if (jResult != null && jResult.length() > 0) {
 
-            this.setListViewContent( itemList );
+            this.setListViewContent( new ArrayList<>( newsItemsList ) );
         }
 
         // In case the refresh button was triggered, stop the "animation"
@@ -128,44 +137,38 @@ public class Home extends BaseFragment {
 
         dalNews.deleteAll();
 
-        for ( NewsItem item : itemList ) {
+        for ( NewsItem item : newsItemsList ) {
 
             dalNews.insert( item );
         }
     }
 
-    private void setListViewContent ( final ArrayList<? extends HomeItem> itemList ) {
-
-        ArrayList<HomeItem> annivItemList = new ArrayList<>( dalAnniv.getAll() );
-        annivItemList.addAll( itemList );
+    private void setListViewContent ( final ArrayList<HomeItem> itemList ) {
 
         mListView.setAdapter( new HomeItemsAdapter( context, itemList ) );
-        mListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+        mListView.setOnItemClickListener( ( arg0, arg1, position, arg3 ) -> {
 
-                if( itemList.get( position ).getClass() == NewsItem.class ) {
+            if( itemList.get( position ).getClass() == NewsItem.class ) {
 
-                    FragmentManager fm = getActivity().getFragmentManager();
+                FragmentManager fm = getActivity().getFragmentManager();
 
-                    // Création fragment détail
-                    NewsDetail newsDetail = new NewsDetail();
+                // Création fragment détail
+                NewsDetail newsDetail = new NewsDetail();
 
-                    // Envoi de l'item sélectionné au fragment
-                    Bundle bundle = new Bundle();
-                    bundle.putString( "item", ((NewsItem) itemList.get( position ) ).toJsonObject().toString() );
-                    newsDetail.setArguments( bundle );
+                // Envoi de l'item sélectionné au fragment
+                Bundle bundle = new Bundle();
+                bundle.putString( "item", ((NewsItem) itemList.get( position ) ).toJsonObject().toString() );
+                newsDetail.setArguments( bundle );
 
-                    fm.beginTransaction()
-                            .replace( R.id.content_container, newsDetail )
-                            .addToBackStack( null )
-                            .commit();
-                }
+                fm.beginTransaction()
+                        .replace( R.id.content_container, newsDetail )
+                        .addToBackStack( null )
+                        .commit();
             }
-        });
+        } );
     }
 
-    private ArrayList<NewsItem> jArrayToArrayList ( JSONArray jArray ) {
+    private ArrayList<NewsItem> getNewsItemList ( JSONArray jArray ) {
 
         ArrayList<NewsItem> newsItemsList = new ArrayList<>();
 
@@ -186,4 +189,5 @@ public class Home extends BaseFragment {
 
         return newsItemsList;
     }
+
 }

@@ -12,6 +12,9 @@ import java.util.List;
 @Dao
 public interface AnnivDao {
 
+    @Query("SELECT * FROM anniversaires WHERE date BETWEEN :from AND :to ORDER BY date")
+    List<AnnivItem> getAllBetweenDates( String from, String to );
+
     @Query("SELECT * FROM anniversaires")
     List<AnnivItem> getAll();
 
