@@ -50,7 +50,8 @@ public class NewsItem extends HomeItem {
             setTitre( json_data.getString( "titre" ) );
             setContenu( toHtml(json_data.getString( "contenu" ) ) );
             setAuteur( json_data.getString( "par" ) );
-            setDatePublication( json_data.getString( "calDate" ) );
+            setDatePublication( json_data.getString( "poste" ) );
+            setDateEvent( json_data.getString( "calDate" ) );
 
         } catch ( JSONException e ) {
 
@@ -67,7 +68,8 @@ public class NewsItem extends HomeItem {
             jObject.put( "titre", titre );
             jObject.put( "contenu", contenu );
             jObject.put( "par", auteur );
-            jObject.put( "calDate", datePublication );
+            jObject.put( "poste", datePublication );
+            jObject.put( "calDate", dateEvent );
 
         } catch ( JSONException e ) {
 
@@ -115,5 +117,10 @@ public class NewsItem extends HomeItem {
     public String getItemIcon () {
 
         return this.getAuteur();
+    }
+
+    public String getCompareDate () {
+
+        return this.getDatePublication();
     }
 }

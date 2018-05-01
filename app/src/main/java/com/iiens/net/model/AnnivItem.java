@@ -111,4 +111,9 @@ public class AnnivItem extends HomeItem {
 
         return "fa_birthday_cake";
     }
+
+    public String getCompareDate () {
+
+        return this.getDate();
+    }
 }

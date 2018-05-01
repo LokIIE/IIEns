@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Locale;
 
 /**
@@ -85,6 +86,8 @@ public class Home extends BaseFragment {
 
                 ArrayList<HomeItem> itemList = new ArrayList<>( dalNews.getAll() );
                 itemList.addAll( new ArrayList<>( dalAnniv.getAllBetweenDates( sunday, saturday ) ) );
+
+                Collections.sort( itemList );
 
                 this.setListViewContent( itemList );
 
@@ -189,5 +192,4 @@ public class Home extends BaseFragment {
 
         return newsItemsList;
     }
-
 }
