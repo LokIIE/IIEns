@@ -100,7 +100,8 @@ public class AnnivItem extends HomeItem {
 
     public String getItemContent () {
 
-        String res = this.getDate() + " : ";
+        String res = "<small><strong>" + this.getAnniv() + "</strong></small>";
+        res += "<br/>";
         res += this.getPrenom() + " " + this.getPseudo() + " " + this.getNom();
         res += " (" + this.getAge().trim() + " ans)";
 

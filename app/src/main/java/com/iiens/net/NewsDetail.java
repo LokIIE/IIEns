@@ -47,8 +47,8 @@ public class NewsDetail extends BaseFragment {
 
     protected void generateView ( View view ) {
 
-        TextView newsTitle = (TextView) view.findViewById( R.id.item_title );
-        TextView newsDescription = (TextView) view.findViewById( R.id.item_description );
+        TextView newsTitle = view.findViewById( R.id.item_title );
+        TextView newsDescription = view.findViewById( R.id.item_description );
         JSONObject jsonObject = null;
 
         try {

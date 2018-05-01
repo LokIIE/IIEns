@@ -111,7 +111,7 @@ public class NewsItem extends HomeItem {
 
     public String getItemContent () {
 
-        return this.getTitre();
+        return "<strong>" + this.getTitre() + "</strong>";
     }
 
     public String getItemIcon () {

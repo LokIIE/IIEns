@@ -17,9 +17,7 @@
             android:gravity="center"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:paddingTop="8dp"
             android:text="@string/news_title"
             android:textColor="?android:attr/textColor"
-            android:textSize="20sp"
-            android:textStyle="italic" />
+            android:textSize="20sp" />
 </LinearLayout>
