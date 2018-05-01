@@ -77,8 +77,8 @@ public class Home extends BaseFragment {
 
                 SimpleDateFormat isoFormat = new SimpleDateFormat( "yyyy-MM-dd", Locale.FRENCH );
 
-                Calendar c = Calendar.getInstance();
-                c.set( Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+                Calendar c = Calendar.getInstance( Locale.ENGLISH );
+                c.set( Calendar.DAY_OF_WEEK, Calendar.SUNDAY );
                 String sunday = isoFormat.format( c.getTime() );
 
                 c.set( Calendar.DAY_OF_WEEK, Calendar.SATURDAY );
@@ -151,7 +151,7 @@ public class Home extends BaseFragment {
         mListView.setAdapter( new HomeItemsAdapter( context, itemList ) );
         mListView.setOnItemClickListener( ( arg0, arg1, position, arg3 ) -> {
 
-            if( itemList.get( position ).getClass() == NewsItem.class ) {
+            if( itemList.get( position ) instanceof NewsItem ) {
 
                 FragmentManager fm = getActivity().getFragmentManager();
 

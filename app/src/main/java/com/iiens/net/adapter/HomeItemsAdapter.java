@@ -68,9 +68,16 @@ public class HomeItemsAdapter extends BaseAdapter {
 
         HomeItem item = itemsList.get( position );
 
-        if ( item.getItemContent().length() > 0 ) itemTitle.setText( Html.fromHtml( item.getItemContent() ) );
+        if ( item.getItemContent().length() > 0 ) {
+
+            itemTitle.setText( Html.fromHtml( item.getItemContent() ) );
+        }
+
         int logoId = context.getResources().getIdentifier( item.getItemIcon(), "drawable", "com.iiens.net" );
-        if ( logoId != 0 ) itemTitle.setCompoundDrawablesWithIntrinsicBounds( logoId, 0, 0, 0 );
+        if ( logoId != 0 ) {
+
+            itemTitle.setCompoundDrawablesWithIntrinsicBounds( logoId, 0, 0, 0 );
+        }
 
         return convertView;
     }

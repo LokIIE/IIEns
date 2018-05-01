@@ -19,5 +19,6 @@
             android:paddingRight="8dp"
             android:text="@string/news_title"
             android:textColor="?android:attr/textColor"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:typeface="normal"/>
 </LinearLayout>
