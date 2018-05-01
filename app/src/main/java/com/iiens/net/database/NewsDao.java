@@ -12,10 +12,10 @@ import java.util.List;
 @Dao
 public interface NewsDao {
 
-    @Query("SELECT * FROM news ORDER BY id DESC LIMIT 10")
+    @Query("SELECT * FROM news ORDER BY id ASC LIMIT 10")
     List<NewsItem> getAll();
 
-    @Query("SELECT * FROM news ORDER BY id DESC LIMIT 1")
+    @Query("SELECT * FROM news ORDER BY id ASC LIMIT 1")
     NewsItem getFirst();
 
     @Insert
