@@ -53,10 +53,6 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/action_nav_anniv"
-            android:title="@string/menu_anniv"
-            android:icon="@drawable/fa_birthday_cake"/>
-        <item
             android:id="@+id/action_nav_arise"
             android:title="@string/menu_arise"
             android:icon="@drawable/fa_plug"/>

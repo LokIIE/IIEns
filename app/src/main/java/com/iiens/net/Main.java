@@ -32,6 +32,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.iiens.net.tasks.sync.TaskSyncBirthdays;
+
 import java.io.File;
 
 public class Main extends AppCompatActivity
@@ -118,6 +120,9 @@ public class Main extends AppCompatActivity
 
             actionBarDrawerToggle.syncState();
         }
+
+        TaskSyncBirthdays task = new TaskSyncBirthdays( appContext, () -> Log.d( "Splashscreen", "Anniversaires synchronisés") );
+        task.execute();
     }
 
     @Override
@@ -226,10 +231,6 @@ public class Main extends AppCompatActivity
                     Intent i = new Intent( this, ClubPage.class );
                     i.putExtra( "url", getString( R.string.url_arise ) );
                     startActivity( i );
-                    break;
-
-                case R.id.action_nav_anniv:
-                    openFragment( Anniv.class.getName(), null );
                     break;
 
                 case R.id.action_nav_parametres:
