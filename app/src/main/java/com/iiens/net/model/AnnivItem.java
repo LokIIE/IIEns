@@ -78,7 +78,7 @@ public class AnnivItem extends HomeItem {
 
     public AnnivItem () {}
 
-    public static AnnivItem load ( JSONObject data ) {
+    public static AnnivItem from ( JSONObject data ) {
 
         AnnivItem item = new AnnivItem();
         try {
