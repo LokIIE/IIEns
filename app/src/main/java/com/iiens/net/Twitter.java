@@ -28,7 +28,4 @@ public class Twitter extends BaseFragment {
 
     @Override
     protected void apiRequest(final View view) {}
-
-    @Override
-    protected void refreshDisplay() {}
 }

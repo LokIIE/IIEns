@@ -32,9 +32,6 @@ public class Settings extends BaseFragment {
     @Override
     protected void apiRequest (final View view) {}
 
-    @Override
-    protected void refreshDisplay () {}
-
     public static class SettingsFragment extends PreferenceFragment {
 
         @Override

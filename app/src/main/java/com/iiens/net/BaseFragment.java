@@ -87,17 +87,4 @@ abstract class BaseFragment extends Fragment {
      * @param result Données à afficher
      */
     protected abstract void displayResult ( View view, JSONArray result );
-
-    /**
-     * Actualisation des données de la vue courante
-     */
-    protected void refreshDisplay () {
-
-        this.apiRequest( getView() );
-
-        // In case the refresh button was triggered, starts an "animation"
-        if (getView() != null) {
-            getView().setAlpha((float) 0.3);
-        }
-    }
 }
