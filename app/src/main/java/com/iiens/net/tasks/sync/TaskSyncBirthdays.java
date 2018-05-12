@@ -78,6 +78,9 @@ public class TaskSyncBirthdays extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPostExecute (Boolean result) {
 
-        this.post.then();
+        if( this.post != null ) {
+
+            this.post.then();
+        }
     }
 }

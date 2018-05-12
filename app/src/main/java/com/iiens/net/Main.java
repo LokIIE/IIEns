@@ -121,8 +121,7 @@ public class Main extends AppCompatActivity
             actionBarDrawerToggle.syncState();
         }
 
-        TaskSyncBirthdays task = new TaskSyncBirthdays( appContext, () -> Log.d( "Splashscreen", "Anniversaires synchronisés") );
-        task.execute();
+        ( new TaskSyncBirthdays( appContext, null ) ).execute();
     }
 
     @Override
@@ -325,14 +324,7 @@ public class Main extends AppCompatActivity
         bottomNav.setOnNavigationItemSelectedListener( this );
 
         View navDrawerHeader = navDrawer.getHeaderView( 0 );
-        navDrawerHeader.findViewById( R.id.nav_connect ).setOnClickListener( new View.OnClickListener() {
-
-            @Override
-            public void onClick ( View v ) {
-
-                onNavConnectClicked( v );
-            }
-        } );
+        navDrawerHeader.findViewById( R.id.nav_connect ).setOnClickListener( v -> onNavConnectClicked( v ) );
 
         if( appContext.isOauthConnected() ) {
 

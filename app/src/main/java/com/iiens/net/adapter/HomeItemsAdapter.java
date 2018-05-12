@@ -1,18 +1,18 @@
 package com.iiens.net.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.iiens.net.R;
 import com.iiens.net.model.AnnivItem;
 import com.iiens.net.model.HomeItem;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,33 +20,14 @@ import java.util.List;
  * Classe permettant d'adapter les news pour l'affichage
  */
 
-public class HomeItemsAdapter extends BaseAdapter {
+public class HomeItemsAdapter extends ArrayAdapter<HomeItem> {
 
-    private final List<? extends HomeItem> itemsList;
     private final Context context;
 
-    public HomeItemsAdapter ( Context context, ArrayList<? extends HomeItem> items ) {
+    public HomeItemsAdapter ( @NonNull Context context, @NonNull List<HomeItem> objects ) {
 
-        this.itemsList = items;
+        super( context, R.layout.home_item, objects );
         this.context = context;
-    }
-
-    @Override
-    public int getCount () {
-
-        return itemsList.size();
-    }
-
-    @Override
-    public Object getItem ( int arg0 ) {
-
-        return itemsList.get( arg0 );
-    }
-
-    @Override
-    public long getItemId ( int arg0 ) {
-
-        return arg0;
     }
 
     @Override
@@ -57,7 +38,7 @@ public class HomeItemsAdapter extends BaseAdapter {
 
         TextView itemTitle = convertView.findViewById( R.id.item_title );
 
-        if( itemsList.get( position ) instanceof AnnivItem ) {
+        if( this.getItem( position ) instanceof AnnivItem ) {
 
             itemTitle.setTextSize( 16 );
 
@@ -66,7 +47,7 @@ public class HomeItemsAdapter extends BaseAdapter {
             itemTitle.setTextSize( 20 );
         }
 
-        HomeItem item = itemsList.get( position );
+        HomeItem item = this.getItem( position );
 
         if ( item.getItemContent().length() > 0 ) {
 
