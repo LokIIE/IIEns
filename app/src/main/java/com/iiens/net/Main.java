@@ -204,33 +204,18 @@ public class Main extends AppCompatActivity
 
             switch ( id ) {
 
-                case R.id.action_nav_home:
-                    bottomNav.setSelectedItemId( R.id.action_home );
-                    break;
-
                 case R.id.action_home:
                     openFragment( Home.class.getName(), null );
-                    navDrawer.setCheckedItem( R.id.action_nav_home );
                     currentSelectedId = id;
-                    break;
-
-                case R.id.action_nav_edt:
-                    bottomNav.setSelectedItemId( R.id.action_edt );
                     break;
 
                 case R.id.action_edt:
                     openFragment( EdtSearch.class.getName(), null );
-                    navDrawer.setCheckedItem( R.id.action_nav_edt );
                     currentSelectedId = id;
-                    break;
-
-                case R.id.action_nav_twitter:
-                    bottomNav.setSelectedItemId( R.id.action_twitter );
                     break;
 
                 case R.id.action_twitter:
                     openFragment( Twitter.class.getName(), null );
-                    navDrawer.setCheckedItem( R.id.action_nav_twitter );
                     currentSelectedId = id;
                     break;
 
@@ -243,9 +228,17 @@ public class Main extends AppCompatActivity
                     break;
 
                 case R.id.action_nav_arise:
-                    Intent i = new Intent( this, ClubPage.class );
-                    i.putExtra( "url", getString( R.string.url_arise ) );
-                    startActivity( i );
+                    startActivity(
+                        ( new Intent( this, ClubPage.class ) )
+                                .putExtra( "url", getString( R.string.url_arise ) )
+                    );
+                    break;
+
+                case R.id.action_nav_etranger:
+                    startActivity(
+                        ( new Intent( this, ClubPage.class ) )
+                                .putExtra( "url", getString( R.string.url_etranger ) )
+                    );
                     break;
 
                 case R.id.action_nav_parametres:
