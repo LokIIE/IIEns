@@ -1,9 +1,7 @@
 package com.iiens.net;
 
 import android.app.FragmentManager;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -17,8 +15,6 @@ import com.iiens.net.model.HomeItem;
 import com.iiens.net.model.NewsItem;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,9 +22,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Locale;
 
-/**
- * Liste des nouvelles
- */
 public class Home extends BaseFragment {
 
     private final String TAG = getClass().getName();
@@ -74,34 +67,17 @@ public class Home extends BaseFragment {
 
         mListView.setAdapter( new HomeItemsAdapter( context, new ArrayList<>() ) );
 
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences( context );
-        NewsItem firstItem = dalNews.getFirst();
-
         // Get the JSON data for this fragment
         try {
 
-            if ( preferences.getBoolean( getResources().getString( R.string.bool_news_update_name ), false ) && global.isOnline() ) {
-
-                // If there is an update available and we are connected to the internet
-                Log.e( TAG, "from web with save" );
-                this.apiRequest( view );
-                preferences.edit().putBoolean( getResources().getString( R.string.bool_news_update_name ), false ).apply();
-
-            } else if ( firstItem != null ) {
+             if ( dalNews.getFirst() != null ) {
 
                 Log.e( TAG, "from database" );
 
                 this.updateListView();
 
-            } else if ( global.isOnline() ) {
-
-                // If the file doesn't exist yet (first launch for example), fetch the data
-                Log.e( TAG, "from web" );
-                this.apiRequest( view );
-
             } else {
 
-                // If no connection or data stored, can't do anything
                 Toast.makeText( global, getResources().getString(R.string.internet_unavailable), Toast.LENGTH_LONG ).show();
             }
 
@@ -111,17 +87,7 @@ public class Home extends BaseFragment {
         }
     }
 
-    public void displayResult ( View view, JSONArray jResult ) {
-
-        dalNews.deleteAll();
-
-        for ( NewsItem item : getNewsItemsArray( jResult ) ) {
-
-            dalNews.insert( item );
-        }
-
-        this.updateListView();
-    }
+    public void displayResult ( View view, JSONArray jResult ) {}
 
     private void updateListView () {
 
@@ -145,27 +111,5 @@ public class Home extends BaseFragment {
         adapter.clear();
         adapter.addAll( items );
         adapter.notifyDataSetChanged();
-    }
-
-    private ArrayList<NewsItem> getNewsItemsArray ( JSONArray jArray ) {
-
-        ArrayList<NewsItem> newsItemsList = new ArrayList<>();
-
-        try {
-
-            for (int i = 0; i < jArray.length(); i++) {
-
-                JSONObject json_data = jArray.getJSONObject( i );
-                NewsItem newsItem = new NewsItem();
-                newsItem.fromJsonObject( json_data );
-                newsItemsList.add( newsItem );
-            }
-
-        } catch (JSONException e) {
-
-            Log.e(TAG, "Error parsing data " + e.toString());
-        }
-
-        return newsItemsList;
     }
 }

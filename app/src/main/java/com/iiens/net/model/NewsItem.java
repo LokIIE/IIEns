@@ -43,20 +43,23 @@ public class NewsItem extends HomeItem {
 
     public void setDateEvent ( String dateEvent ) { this.dateEvent = dateEvent; }
 
-    public void fromJsonObject ( JSONObject json_data ) {
+    public static NewsItem from ( JSONObject json_data ) {
 
+        NewsItem item = new NewsItem();
         try {
 
-            setTitre( json_data.getString( "titre" ) );
-            setContenu( toHtml(json_data.getString( "contenu" ) ) );
-            setAuteur( json_data.getString( "par" ) );
-            setDatePublication( json_data.getString( "poste" ) );
-            setDateEvent( json_data.getString( "calDate" ) );
+            item.setTitre( json_data.getString( "titre" ) );
+            item.setContenu( item.toHtml(json_data.getString( "contenu" ) ) );
+            item.setAuteur( json_data.getString( "par" ) );
+            item.setDatePublication( json_data.getString( "poste" ) );
+            item.setDateEvent( json_data.getString( "calDate" ) );
 
         } catch ( JSONException e ) {
 
-            Log.e( "newsitem_tag", "Error parsing data " + e.toString() );
+            Log.e( "NewsItem", "Error parsing data " + e.toString() );
         }
+
+        return item;
     }
 
     public JSONObject toJsonObject () {
@@ -73,13 +76,13 @@ public class NewsItem extends HomeItem {
 
         } catch ( JSONException e ) {
 
-            Log.e( "newsitem_tag", "Error parsing data " + e.toString() );
+            Log.e( "NewsItem", "Error parsing data " + e.toString() );
         }
 
         return jObject;
     }
 
-    private String toHtml ( String contenu ) {
+    protected String toHtml ( String contenu ) {
 
         String formatContenu = contenu;
 

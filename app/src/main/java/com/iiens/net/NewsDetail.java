@@ -59,7 +59,8 @@ public class NewsDetail extends BaseFragment {
 
             e.printStackTrace();
         }
-        this.newsItem.fromJsonObject( jsonObject );
+
+        this.newsItem = NewsItem.from( jsonObject );
 
         if ( this.newsItem.getTitre().length() > 0 ) newsTitle.setText( this.newsItem.getTitre() );
         if ( newsItem.getContenu().length() > 0 ) newsDescription.setText( Html.fromHtml( this.newsItem.getContenu() ) );

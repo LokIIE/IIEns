@@ -33,8 +33,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iiens.net.tasks.sync.TaskSyncBirthdays;
+import com.iiens.net.tasks.sync.TaskSyncNews;
 
 import java.io.File;
+import java.util.concurrent.ExecutionException;
 
 public class Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -121,7 +123,19 @@ public class Main extends AppCompatActivity
             actionBarDrawerToggle.syncState();
         }
 
-        ( new TaskSyncBirthdays( appContext, null ) ).execute();
+        try {
+
+            if( appContext.isOnline() && appContext.isAriseAvailable() ) {
+
+                ( new TaskSyncNews( appContext, null ) ).execute();
+                ( new TaskSyncBirthdays( appContext, null ) ).execute();
+            }
+
+        } catch ( ExecutionException e ) {
+            e.printStackTrace();
+        } catch ( InterruptedException e ) {
+            e.printStackTrace();
+        }
     }
 
     @Override
