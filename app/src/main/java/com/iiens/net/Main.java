@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.iiens.net.tasks.sync.TaskSyncBirthdays;
+import com.iiens.net.tasks.sync.TaskSyncEdtSearch;
 import com.iiens.net.tasks.sync.TaskSyncNews;
 
 import java.io.File;
@@ -129,6 +130,7 @@ public class Main extends AppCompatActivity
 
                 ( new TaskSyncNews( appContext, null ) ).execute();
                 ( new TaskSyncBirthdays( appContext, null ) ).execute();
+                ( new TaskSyncEdtSearch( appContext ) ).execute();
             }
 
         } catch ( ExecutionException e ) {

@@ -3,14 +3,11 @@ package com.iiens.net;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import org.json.JSONException;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -25,127 +22,6 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
     public AppStartAsyncTask ( Context context ){
 
         this.context = context;
-    }
-
-    /**
-     * Synchronisation du formulaire de l'emploi du temps
-     */
-    private void syncEdtForm () throws IOException, JSONException {
-
-        String url = context.getString(R.string.url_api ) + context.getString(R.string.api_edtForm );
-        BufferedReader reader = null;
-
-        try {
-
-            // create the HttpURLConnection
-            HttpURLConnection connection = (HttpURLConnection) new URL( url ).openConnection();
-
-            // just want to do an HTTP GET here
-            connection.setRequestMethod( "GET" );
-
-            // give it 5 seconds to respond
-            connection.setReadTimeout( 5000 );
-            connection.connect();
-
-            // read the output from the server
-            reader = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
-            String line;
-
-            // put each item in database
-            // EdtSearchCategoryDao dal = context
-
-//            while ( ( line = reader.readLine() ) != null ) {
-//
-//                JSONArray jArray = new JSONArray( line );
-//                for ( int i = 0; i < jArray.length(); i++ ) {
-//
-//                    if ( !dal.createItem( new EdtSearchCategory( i, jArray.getJSONObject( i ) ) ) ) {
-//                        break;
-//                    }
-//                }
-//            }
-
-        } catch ( Exception e ) {
-
-            e.printStackTrace();
-            throw e;
-
-        } finally {
-
-            // close the reader; this can throw an exception too, so
-            // wrap it in another try/catch block.
-            if ( reader != null ) {
-
-                try {
-
-                    reader.close();
-
-                } catch ( IOException ioe ) {
-
-                    ioe.printStackTrace();
-                }
-            }
-        }
-    }
-
-    /**
-     * Synchronisation du formulaire de l'emploi du temps
-     */
-    private void syncEdtOptions () throws IOException, JSONException {
-
-        String url = context.getString(R.string.url_api ) + context.getString(R.string.api_edtOptions );
-        BufferedReader reader = null;
-
-        try {
-
-            // create the HttpURLConnection
-            HttpURLConnection connection = (HttpURLConnection) new URL( url ).openConnection();
-
-            // just want to do an HTTP GET here
-            connection.setRequestMethod( "GET" );
-
-            // give it 5 seconds to respond
-            connection.setReadTimeout( 5000 );
-            connection.connect();
-
-            // read the output from the server
-            reader = new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
-
-            String line;
-
-//            // put each item in database
-//            EdtOptDb dal = new EdtOptDb( context );
-//
-//            while ( ( line = reader.readLine() ) != null ) {
-//
-//                JSONArray jArray = new JSONArray( line );
-//                for ( int i = 0; i < jArray.length(); i++ ) {
-//
-//                    dal.createItem( new EdtSearchOption( jArray.getJSONObject( i ) ) );
-//                }
-//            }
-
-        } catch ( Exception e ) {
-
-            e.printStackTrace();
-            throw e;
-
-        } finally {
-
-            // close the reader; this can throw an exception too, so
-            // wrap it in another try/catch block.
-            if (reader != null)
-            {
-                try
-                {
-                    reader.close();
-                }
-                catch (IOException ioe)
-                {
-                    ioe.printStackTrace();
-                }
-            }
-        }
     }
 
     /**
@@ -220,9 +96,6 @@ public class AppStartAsyncTask extends AsyncTask<Void, Void, Boolean> {
     protected Boolean doInBackground ( Void... voids ) {
 
 //        try {
-//            new DatabaseHelper(context).createDb(null);
-//            //syncEdtForm();
-//            //syncEdtOptions();
 //            //getAllClubLogo();
 //        } catch (IOException | JSONException e) {
 //            e.printStackTrace();
